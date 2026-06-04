@@ -7,8 +7,8 @@ Content to add:
 
 Rules:
 
-- use existing ScriptableObject patterns
-- create placeholder assets if final art is missing
+- use existing Resource (`.tres`) patterns
+- create placeholder sprites under `art/_placeholders/` if final art is missing
 - do not hardcode content-specific behavior into generic systems
 - update docs if a new mechanic is introduced
-- list Unity setup steps
+- list Godot manual test steps (F5/F6)

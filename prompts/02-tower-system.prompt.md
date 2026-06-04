@@ -14,8 +14,8 @@ Features:
 
 Use:
 
-- TowerData ScriptableObject
-- ProjectileData ScriptableObject
+- TowerData Resource
+- ProjectileData Resource
 - BattleEconomy
 - object pooling if a pool already exists; otherwise write simple code and mark pooling as next step
 

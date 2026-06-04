@@ -1,0 +1,22 @@
+﻿---
+description: Data-driven Godot Resources — stable IDs and content schemas.
+globs: ["scripts/data/**/*.gd", "resources/**/*"]
+alwaysApply: false
+---
+
+Use custom Resource classes (`.gd` + `.tres`) per [docs/design/04-production-roadmap.md](docs/design/04-production-roadmap.md):
+
+- HeroData, TowerData, TowerUpgradeData, EnemyData, WaveData, LevelData / MapData
+- ProjectileData, StatusEffectData, RelicData, FateCardData (or BlessingData), ObjectiveData
+- ShopItemData, EventData, CosmeticData (meta)
+
+**Rules:**
+
+- Shared `.tres` on disk hold **design defaults only** — no runtime mutable state saved back to disk.
+- Copy spawn values into nodes/runtime state at setup.
+- **Stable IDs:** `lowercase_snake_case` (`tower_archer`, `enemy_corrupted_jackal`, `card_flame_of_azar`) for save, analytics, and art pipeline — never use display names as IDs.
+- `@export_group` / typed `@export` for Inspector clarity.
+- Scripts in `scripts/data/`; keep behavior out of resource class definitions.
+- Map resources: routes, build_pads, regions, braziers, camera_anchors, sector rules for large maps.
+
+When adding content for Khan 1 only, scope assets to [docs/design/01-art-phases.md](docs/design/01-art-phases.md) Phase 1 IDs unless the task explicitly expands campaign.

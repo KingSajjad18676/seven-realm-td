@@ -1,13 +1,13 @@
 # Cursor Prompt — Architecture Review
 
-Review the current Unity project for:
+Review the current Godot codebase for:
 
 - overcoupled systems
-- hardcoded data that should be ScriptableObjects
-- runtime allocations in battle
-- unsafe use of FindObjectOfType or GameObject.Find
+- hardcoded data that should be `.tres` Resources
+- runtime allocations in battle hot paths
+- unsafe `get_node` / string path lookups in `_process`
 - UI code controlling deep gameplay directly
-- classes that are too large
+- scripts that are too large
 - missing pooling opportunities
 - missing manual test steps
 

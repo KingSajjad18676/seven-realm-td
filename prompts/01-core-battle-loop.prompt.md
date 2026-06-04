@@ -1,10 +1,10 @@
 # Cursor Prompt — Implement Core Battle Loop
 
-Implement a playable prototype battle loop.
+Implement a playable prototype battle loop in Godot 4.6.
 
 The battle loop should:
 
-1. load LevelData
+1. load LevelData (`.tres`)
 2. spawn waves from WaveData
 3. move enemies along a waypoint path
 4. allow towers to target enemies in range
@@ -29,5 +29,5 @@ Do not add:
 After coding:
 
 - summarize files changed
-- give Unity scene setup instructions
-- give a manual test checklist
+- give Godot scene setup instructions (`scenes/battle/`, autoloads if needed)
+- give a manual test checklist (F5/F6)

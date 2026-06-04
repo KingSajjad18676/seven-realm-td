@@ -10,6 +10,6 @@ Features:
 - blessings modify tower damage, hero cooldown, or starting gold
 - final boss node ends run and grants reward
 
-Use ScriptableObjects for node data and blessing data.
+Use Resources for node data and blessing data.
 
 Keep it separate from campaign progression.

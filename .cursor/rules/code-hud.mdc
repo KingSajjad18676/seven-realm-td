@@ -1,0 +1,25 @@
+﻿---
+description: Mobile landscape HUD — readability, thumbs, progressive disclosure.
+globs: ["scripts/ui/**/*.gd", "scenes/**/*.tscn"]
+alwaysApply: false
+---
+
+Follow [docs/design/02-gameplay-ux.md](docs/design/02-gameplay-ux.md) §16–17 and [docs/art/visual-vfx.md](docs/art/visual-vfx.md).
+
+**Always visible (Khan 1 minimum):** lives/gate, Gold, Sacred Fire, wave, pause, speed, hero portrait/HP/energy/skill, tower build cards, selected-tower context.
+
+**Contextual (progressive disclosure):** cleanse, brazier, Morale/Farr expansion, Forge, repair/sell, objectives, boss phase — not everything on first battle.
+
+**Alert priority (high → low):** gate danger → tower hijack → regional collapse → boss telegraph → objective → wave update → reward.
+
+**Layout (1920×1080 landscape, thumb zones):**
+
+- Top left: lives, gold, Sacred Fire, wave
+- Top right: pause, speed, settings/cleanse when relevant
+- Bottom left: hero portrait and skill
+- Bottom center: tower cards (four starters in slice)
+- Bottom right: contextual tower action
+
+Touch targets ~44×44 dp minimum; icons over long labels during waves. No baked text in image UI assets. Wire **touch** via InputMap/actions, not mouse-only. No full-screen panels during active waves unless paused.
+
+Pardeh Break: illustrated “page turn” feel — Fate choice + brief summary, not a heavy meta spreadsheet.

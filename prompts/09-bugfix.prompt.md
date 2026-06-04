@@ -16,5 +16,5 @@ After coding:
 
 - summarize changed files
 - explain root cause
-- list manual Unity test steps
+- list manual Godot test steps (F5/F6, edge cases)
 - mention any edge cases still not handled

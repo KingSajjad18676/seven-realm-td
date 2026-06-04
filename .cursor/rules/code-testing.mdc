@@ -1,0 +1,32 @@
+﻿---
+description: Godot testing workflow and Khan 1 acceptance checks.
+globs: ["**/*.gd", "tools/**/*", "docs/engineering/**/*.md"]
+alwaysApply: false
+---
+
+When implementing gameplay:
+
+- Debug hooks: `OS.is_debug_build()` or editor-only guards.
+- Inspector-friendly `@export` and node names.
+- No noisy per-frame logs.
+- Simple test `.tres` + small scenes under `scenes/` for isolated systems.
+- Fix root cause, not symptoms.
+
+**Manual test template:**
+
+1. Open repo root (`project.godot`) in Godot 4.6
+2. Scene: boot, battle, or prefab under `scenes/`
+3. **F5** (project) or **F6** (current scene)
+4. Expected behavior
+5. Edge cases (corruption before collapse, hijack recovery, defeat explanation, one-tap replay)
+
+**Khan 1 gate** ([docs/design/02-gameplay-ux.md](docs/design/02-gameplay-ux.md) · [docs/design/00-project-index.md](docs/design/00-project-index.md) §3):
+
+- Four towers distinguishable; route readable in ~2s; Rostam movement matters
+- Sacred Fire and corruption understood; hijack fair
+- Lion boss changes tactics; stable FPS on target device
+- Defeat explains failure; replay is one tap
+
+After tests: note results in PR/comments; update [docs/engineering/project-status.md](docs/engineering/project-status.md) when milestones land.
+
+Do not remove existing behavior unless requested.

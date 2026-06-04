@@ -1,0 +1,22 @@
+﻿---
+description: Ethical monetization and live-ops for Godot meta systems.
+globs: ["scripts/meta/**/*.gd", "docs/liveops/**/*.md", "docs/design/03*.md", "docs/design/05*.md", "docs/product/**/*.md"]
+alwaysApply: false
+---
+
+Follow [docs/design/03-monetization.md](docs/design/03-monetization.md), [docs/design/05-launch-liveops.md](docs/design/05-launch-liveops.md), [docs/liveops/retention.md](docs/liveops/retention.md).
+
+**Launch model (not optional for new store/IAP work):**
+
+- Cosmetics-first, Founder’s Supporter Pack, one-time ad removal, limited **optional** rewarded ads after core loop is fun.
+- **Do not launch:** battle pass, subscription economy, paid combat power, loot boxes, forced in-battle ads, manipulative defeat-screen offers.
+- `PremiumGateway`, subscription, and premium-hero gates in code are **stubs** — defer unless explicitly building soft-launch store per design/03.
+
+**Fair economy:**
+
+- Core campaign playable without paying; no hard paywalls.
+- Gold / Sacred Fire / Farr are **not** premium purchase currencies.
+- Optional ads: small, clearly described rewards; never required to progress.
+- Define reward sources and sinks before adding a new currency.
+- Events and shops: cosmetics and modifiers playable without spending; avoid unlimited direct power sales.
+- Meta services (`SaveSystem`, shop panels) stay behind service boundaries — no battle scripts writing entitlements directly.

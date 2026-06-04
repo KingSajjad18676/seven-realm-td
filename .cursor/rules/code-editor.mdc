@@ -1,0 +1,15 @@
+﻿---
+description: Godot paths and editor defaults for this repo.
+globs: ["**/*.gd", "**/*.tscn", "project.godot"]
+alwaysApply: false
+---
+
+Godot 4.6 — open the folder containing `project.godot` at **repository root**.
+
+- **Run:** F5 (project) or F6 (current scene). Target main scene: `res://scenes/boot/boot.tscn` when boot exists.
+- **Display:** landscape **1920×1080**, Mobile renderer, touch-first input.
+- **Placeholders:** `art/_placeholders/` until [docs/design/01-art-phases.md](docs/design/01-art-phases.md) Phase 0/1.
+- **Status:** [docs/engineering/project-status.md](docs/engineering/project-status.md) — check before coding; update when completing M0–M8.
+- **Structure:** [docs/engineering/architecture.md](docs/engineering/architecture.md) · **Handoff:** [docs/engineering/handoff.md](docs/engineering/handoff.md).
+
+Product canon: [docs/design/00-project-index.md](docs/design/00-project-index.md) and `always-project.mdc`.

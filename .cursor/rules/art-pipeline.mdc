@@ -1,0 +1,25 @@
+﻿---
+description: Shahnameh TD art pipeline — modular prompts, asset IDs, Godot import.
+globs: ["art/**/*", "docs/art/**/*.md", "docs/design/01*.md"]
+alwaysApply: false
+---
+
+Follow [docs/design/01-art-phases.md](docs/design/01-art-phases.md) and [docs/art/pipeline.md](docs/art/pipeline.md). Readability: [docs/art/visual-vfx.md](docs/art/visual-vfx.md).
+
+**Prompt workflow:** GLOBAL visual block → ONE asset-type block → ONE asset spec → GLOBAL negative block. One asset per generation request. Approve base design before animation strips.
+
+**Review → production:** chroma `#00FF00` grid for review; transparent RGBA for runtime. No fake Persian text, logos, or watermarks in assets.
+
+**Technical defaults:**
+
+- Pivots: characters/towers/enemies **bottom-center**; projectiles/VFX/UI icons **center**.
+- Animation strips: typically **8×1** per action; equal cells; no crop of limbs/weapons/tails.
+- Maps: layered TileMaps (128×128 tiles); separable corruption/light/path overlays.
+- Every production asset has a **stable asset ID** in `.tres` — never guess paths in gameplay code.
+
+**Production gates:**
+
+- **Phase 0:** Rostam style lock, prototype HUD, Khan 1 map readable at mobile zoom.
+- **Phase 1:** four starter towers, jackal/boar/Lion, core VFX — before mass Phase 2–7 catalog.
+
+Placeholders: `art/_placeholders/` until approved art lands. Organize under Heroes, Enemies, Towers, UI, Maps, VFX.

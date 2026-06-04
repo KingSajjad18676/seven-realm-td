@@ -1,21 +1,23 @@
-# Cursor Prompt — Start the Unity Project
+﻿# Cursor Prompt — Start the Godot project
 
-You are working inside a Unity 2D mobile landscape Tower Defense project called ShahnamehTD.
+You are working inside **Shahnameh TD**, a Godot 4.6 mobile landscape tower-defense roguelite.
 
 Read:
 
-- docs/PRD.md
-- docs/GAMEPLAY_SPEC.md
-- docs/TECHNICAL_DESIGN.md
-- docs/UNITY_ARCHITECTURE.md
+- docs/product/prd.md
+- docs/spec/gameplay.md
+- docs/engineering/technical-design.md
+- docs/engineering/architecture.md
+- docs/engineering/project-status.md
+- docs/index.md
 - .cursor/rules/
 
 Task:
-Create the initial Unity folder structure and core C# script skeletons for the MVP battle loop.
+Create the initial Godot folder structure and core GDScript skeletons for the MVP battle loop.
 
 Implement only safe starter code. Do not overbuild.
 
-Create scripts for:
+Create scripts under `scripts/` for:
 
 - BattleStateController
 - WaveManager
@@ -29,7 +31,7 @@ Create scripts for:
 - LivesController
 - BattleHUDController
 
-Also create ScriptableObject data classes:
+Also create Resource data classes (`.gd` + sample `.tres`):
 
 - EnemyData
 - TowerData
@@ -39,9 +41,8 @@ Also create ScriptableObject data classes:
 
 Requirements:
 
-- use namespace ShahnamehTD
-- use serialized fields
-- avoid FindObjectOfType
+- GDScript with typed exports where useful
+- cache node references in `_ready()`; avoid `find_child` in hot paths
 - keep logic simple and readable
 - include comments only where useful
-- list manual Unity setup steps after coding
+- list manual Godot test steps after coding (F5/F6)

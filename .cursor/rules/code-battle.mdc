@@ -1,0 +1,31 @@
+﻿---
+description: Battle architecture — TD loop, corruption, hijack, hero-led play.
+globs: ["scripts/battle/**/*.gd", "scripts/enemies/**/*.gd", "scripts/heroes/**/*.gd", "scripts/towers/**/*.gd", "scripts/projectiles/**/*.gd"]
+alwaysApply: false
+---
+
+Tower Defense architecture — [docs/design/02-gameplay-ux.md](docs/design/02-gameplay-ux.md), [docs/engineering/technical-design.md](docs/engineering/technical-design.md):
+
+**Ownership:**
+
+- `WaveManager` — wave timing/state only, not enemy combat logic.
+- `EnemySpawner` — spawns from `WaveData`; stats from `EnemyData`.
+- `EnemyController` — movement, HP, status, death, rewards.
+- `TowerController` — targeting, cooldown, upgrades, **hijack** when region light = 0.
+- `ProjectileController` — movement and hit resolution.
+- `HeroController` — movement, combat, ability, energy, **Sacred Tether** (separate from build UI taps).
+- Regional light / corruption — dedicated manager (e.g. `MapLightManager`); not scattered in tower scripts.
+- `BattleEconomy` — in-battle **Gold** and **Sacred Fire** spend rules.
+- `BattleStateController` — win/loss/pause only.
+
+**Signature flows (Khan 1+):**
+
+- Corruption: visible Pressured → Critical → Collapsed before harsh punishment; fair hijack warning → rescue window → cleanse/recovery.
+- Every **5 waves:** Pardeh Break — Fate draft (3 cards), optional objective; keep UI under ~40s, not spreadsheet-heavy.
+
+**Avoid:**
+
+- Towers or enemies driving HUD directly; use signals/services.
+- Projectiles advancing waves or meta progression.
+- UI buttons mutating deep state without a controller.
+- Silent tower disable on hijack — always telegraph and recoverable.

@@ -1,0 +1,29 @@
+﻿---
+description: How Cursor should work on Godot tasks in this project.
+alwaysApply: true
+---
+
+Before coding:
+
+- Read [docs/index.md](docs/index.md); design intent in `docs/design/00`–`05`.
+- Read [docs/engineering/project-status.md](docs/engineering/project-status.md) — do not assume `scripts/` or `scenes/` exist until listed there.
+- Use [docs/engineering/implementation-tracker.md](docs/engineering/implementation-tracker.md) for feature-level target vs built.
+- Respect **Khan 1 gate** ([docs/design/00-project-index.md](docs/design/00-project-index.md) §3) unless explicitly scoped wider.
+- Smallest useful change; ask only when blocked.
+
+When coding:
+
+- Work at **repo root** (`project.godot`); `res://` paths in scenes and resources.
+- Target layout: [docs/engineering/architecture.md](docs/engineering/architecture.md).
+- Stable `.tres` IDs — never display names or filename guessing in gameplay code.
+- After milestones: update [docs/engineering/project-status.md](docs/engineering/project-status.md) and flip rows in [implementation-tracker.md](docs/engineering/implementation-tracker.md).
+- No new paid power, battle pass, or forced ads ([docs/design/03-monetization.md](docs/design/03-monetization.md)).
+- TODO comments only for real follow-up.
+
+After coding:
+
+- Summarize changed files.
+- Test: Godot 4.6 → F5/F6 → expected behavior + edge cases.
+- Note gaps vs design canon; suggest next M0–M8 step ([docs/design/04-production-roadmap.md](docs/design/04-production-roadmap.md)).
+
+Placeholders: `art/_placeholders/` until [docs/design/01-art-phases.md](docs/design/01-art-phases.md) art lands.

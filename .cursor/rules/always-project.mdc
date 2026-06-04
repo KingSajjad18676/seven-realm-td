@@ -1,0 +1,61 @@
+﻿---
+description: Always-on Shahnameh TD identity, docs layout, and Godot-only development.
+alwaysApply: true
+---
+
+You are helping build **Shahnameh TD**: a Godot 4.6 **active 2D tower-defense roguelite** (landscape mobile) inspired by the Shahnameh, Persian miniature art, and Zoroastrian Sacred Fire vs corruption.
+
+**Project root:** repository folder containing `project.godot` (Godot 4.6 → **F5** / **F6**).
+
+**Code & data:** GDScript (`.gd`), scenes (`.tscn`), design Resources (`.tres`).
+
+## Documentation (`docs/`)
+
+| Path | Use |
+|------|-----|
+| [docs/index.md](docs/index.md) | Reading order and folder map |
+| [docs/design/00-project-index.md](docs/design/00-project-index.md) | Locked decisions, Khan 1 gate |
+| [docs/design/02-gameplay-ux.md](docs/design/02-gameplay-ux.md) | Combat, UX, replayability |
+| [docs/design/03-monetization.md](docs/design/03-monetization.md) | Fair monetization (no P2W at launch) |
+| [docs/design/04-production-roadmap.md](docs/design/04-production-roadmap.md) | Milestones M0–M8 |
+| [docs/engineering/project-status.md](docs/engineering/project-status.md) | **Repo truth** — what exists on disk today |
+| [docs/engineering/implementation-tracker.md](docs/engineering/implementation-tracker.md) | Design target vs built |
+| [docs/engineering/handoff.md](docs/engineering/handoff.md) | Onboarding + target code map |
+
+Renamed docs: [docs/RENAME_MAP.md](docs/RENAME_MAP.md). Rule names: [RULES_MAP.md](RULES_MAP.md).
+
+## Cursor rules (`.cursor/rules/`)
+
+| File | Topic |
+|------|--------|
+| `always-project.mdc` | Identity + docs (this file) |
+| `always-workflow.mdc` | Agent workflow |
+| `code-editor.mdc` | Godot editor defaults |
+| `code-gdscript.mdc` | GDScript standards |
+| `code-battle.mdc` | Battle architecture |
+| `code-resources.mdc` | `.tres` / stable IDs |
+| `code-performance.mdc` | Mobile performance |
+| `code-hud.mdc` | Landscape HUD / UX |
+| `code-testing.mdc` | Testing / Khan 1 checks |
+| `art-pipeline.mdc` | Art import and phases |
+| `liveops-economy.mdc` | Live-ops / monetization |
+| `docs-editing.mdc` | Editing markdown docs |
+
+## Locked product decisions
+
+- **Campaign:** Seven Khans + Damavand Binding (**8 maps**).
+- **First production target:** **Khan 1 vertical slice** until voluntary replay is proven.
+- **Starter content:** Rostam; Archer, Sacred Fire, Heavy, Control towers; Lion of the First Khan.
+- **Signature systems:** regional corruption, tower hijacking, Sacred Fire, Pardeh Break / Fate cards.
+- **Currencies:** Gold (battle), Sacred Fire (tactical), Farr (meta, not purchasable).
+- **Launch monetization:** cosmetics-first only; no paid combat power or forced battle ads.
+
+## Development priorities
+
+1. Check [project-status.md](docs/engineering/project-status.md) before assuming code exists.
+2. Prove Khan 1 on real devices (readability, corruption, hijack, replay).
+3. Data-driven `.tres` with stable `lowercase_snake_case` IDs.
+4. Modular battle architecture; decoupled UI.
+5. No mass campaign content before Khan 1 replay is proven.
+
+Never replace working code with a large rewrite unless explicitly asked.

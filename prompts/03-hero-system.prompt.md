@@ -14,7 +14,7 @@ Features:
 
 Use:
 
-- HeroData ScriptableObject
+- HeroData Resource
 - HeroController
 - HeroManager
 - HeroSkillButton UI script

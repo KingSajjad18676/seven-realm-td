@@ -1,0 +1,21 @@
+﻿---
+description: Mobile performance and memory rules for Godot.
+globs: ["**/*.gd", "scenes/**/*.tscn"]
+alwaysApply: false
+---
+
+Mobile performance ([docs/design/04-production-roadmap.md](docs/design/04-production-roadmap.md) §7):
+
+- Target stable 60 FPS on mid-range mobile when possible; 30 FPS fallback acceptable.
+- Large maps: layered TileMaps and staged sectors — not single huge bitmaps.
+- Use the Mobile renderer and project settings tuned for handheld (`project.godot`).
+- Pool enemies, projectiles, VFX, damage numbers, and UI popups — avoid `queue_free()` churn during active waves.
+- Avoid per-frame array/dictionary churn and unnecessary `.duplicate()` in gameplay loops.
+- Avoid instancing/freeing nodes during active waves except early prototype.
+- Avoid `get_node()` / `get_child()` in combat loops; cache in `_ready()`.
+- Keep texture atlases organized: heroes, enemies, towers, UI, VFX.
+- Keep VFX readable and limited; do not flood the screen.
+- Use `Area2D`, simple colliders, or squared-distance range checks; avoid heavy physics.
+- Avoid rebuilding large Control trees every frame; split static and dynamic UI.
+- Compressed textures suitable for mobile after prototype.
+- `MultiMeshInstance2D` or batching when profiling shows need.

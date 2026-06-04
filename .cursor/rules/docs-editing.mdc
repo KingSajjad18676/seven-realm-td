@@ -1,0 +1,31 @@
+﻿---
+description: When editing docs, use the folder layout and honest project status.
+globs: ["docs/**/*.md"]
+alwaysApply: false
+---
+
+## Doc folders
+
+| Folder | Files | Role |
+|--------|-------|------|
+| `docs/` | [index.md](docs/index.md) | Entry point |
+| `docs/design/` | `00`–`05` | Locked product canon (from PDFs) |
+| `docs/engineering/` | `project-status`, `implementation-tracker`, `handoff`, `architecture`, … | Godot build truth + specs |
+| `docs/product/` | `prd.md`, `roadmap.md` | PRD and milestone summary |
+| `docs/spec/` | `gameplay.md` | Full mechanics (incl. post–Khan 1) |
+| `docs/art/` | `pipeline.md`, `visual-vfx.md`, `content-checklist.md` | Assets |
+| `docs/liveops/` | `retention.md` | Events and retention |
+| `docs/_source/` | `*.txt` | PDF extracts — reference only, do not treat as canon over `design/` |
+
+Legacy paths: [docs/RENAME_MAP.md](docs/RENAME_MAP.md).
+
+## Editing rules
+
+- **Repo truth:** [docs/engineering/project-status.md](docs/engineering/project-status.md) — update first when the codebase changes.
+- **Feature tables:** [docs/engineering/implementation-tracker.md](docs/engineering/implementation-tracker.md) — label Built vs Target; never mark ✅ without matching `scripts/`, `scenes/`, or `resources/`.
+- **Design canon:** do not contradict `docs/design/00`–`05` without explicit product decision.
+- **Cross-links:** use paths relative to `docs/` root in [index.md](docs/index.md); from subfolders use `../engineering/…`, `../design/…`, etc.
+- **Test instructions:** Godot F5/F6 at repo root only.
+- **Khan 1 gate:** one map until voluntary replay is proven ([design/00-project-index.md](docs/design/00-project-index.md)).
+
+Do not reference deprecated doc or rule filenames (`GODOT_PORT_STATUS`, `README_00_*`, `UNITY_*`, numbered rules like `14-performance.mdc`). Use current names in [RULES_MAP.md](RULES_MAP.md).
