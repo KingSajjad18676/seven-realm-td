@@ -1,0 +1,17 @@
+---
+description: ARCHIVED — Unity mobile performance (_archive/unity only).
+globs: ["_archive/unity/**/*.cs"]
+alwaysApply: false
+---
+
+**Godot:** `14-godot-mobile-performance.mdc`.
+
+Mobile performance rules:
+
+- Target stable 60 FPS on mid-range mobile when possible.
+- Pool enemies, projectiles, VFX, damage numbers, and UI popups.
+- Avoid per-frame LINQ in gameplay.
+- Avoid Instantiate/Destroy during active waves except early prototype.
+- Avoid GetComponent calls in combat loops.
+- Prefer squared distance checks for ranges.
+- Keep VFX restrained; do not flood the screen.

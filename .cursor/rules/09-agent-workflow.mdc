@@ -1,0 +1,30 @@
+---
+description: Archived Unity agent workflow (use rule 19 for Godot).
+globs: ["_archive/unity/**/*"]
+alwaysApply: false
+---
+
+**Deprecated for active work.** Use `19-godot-agent-workflow.mdc` and [docs/DOC_INDEX.md](docs/DOC_INDEX.md).
+
+Before coding (_archive/unity/ only):
+
+- Read relevant docs in /docs.
+- Identify the smallest useful change.
+- Ask only if a decision blocks implementation.
+
+When coding (Unity archive only — `_archive/unity/`):
+
+- Keep changes focused.
+- Prefer adding new files over large rewrites when safe.
+- Preserve public APIs unless the task requires changing them.
+- Update docs when architecture or data contracts change.
+- Use TODO comments sparingly and only for real follow-up work.
+
+After coding:
+
+- Summarize changed files.
+- Explain how to test in Unity.
+- Mention known limitations.
+- Suggest the next best development step.
+
+Do not invent unavailable assets. Use placeholder sprites/prefabs when needed and mark them clearly.

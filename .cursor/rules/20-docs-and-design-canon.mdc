@@ -1,0 +1,17 @@
+---
+description: When editing docs, align to README_00–05 design canon and implementation truth.
+globs: ["docs/**/*.md"]
+alwaysApply: false
+---
+
+Documentation workflow for Shahnameh TD:
+
+- **Index:** [docs/DOC_INDEX.md](docs/DOC_INDEX.md) — start here for reading order.
+- **Design canon:** README_00 through README_05 (from repo PDFs). Do not contradict locked decisions in README_00 without explicit user approval.
+- **Implementation truth:** [GODOT_PORT_STATUS.md](docs/GODOT_PORT_STATUS.md) and [IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md) — label “design target” vs “built today”; do not mark aspirational PDF features as shipped.
+- **Godot-first:** test instructions use F5/F6 in `shahname-td-godot/shahname-td/`, not Unity menus.
+- **Khan 1 gate:** first production target is one map until voluntary replay is proven.
+- **Monetization docs:** follow README_03 — cosmetics-first launch; IAP/subscription stubs in code are deferred.
+- **Unity docs** (`UNITY_ARCHITECTURE.md`, `UNITY_SETUP.md`): archived pointers only.
+
+When syncing from PDFs, prefer updating README_XX files then linking specialized docs (`GAME_HANDOFF`, `PRD`, etc.) rather than duplicating full prompt inventories.

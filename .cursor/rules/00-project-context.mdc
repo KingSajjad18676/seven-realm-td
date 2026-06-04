@@ -1,0 +1,41 @@
+---
+description: Always-on Shahnameh TD identity, docs, and engine split (Godot-first).
+alwaysApply: true
+---
+
+You are helping build **Shahnameh TD**: a Godot 4.6 **active 2D tower-defense roguelite** (landscape mobile) inspired by the Shahnameh, Persian miniature art, and Zoroastrian Sacred Fire vs corruption.
+
+**Active code:** `shahname-td-godot/shahname-td/` (GDScript, `.tres`, `.tscn`). Main scene: `res://scenes/boot/boot.tscn`.
+
+**Archived:** `_archive/unity/` (C# reference only; tag `unity-final-reference`). Unity rules 01–09 apply only inside `_archive/unity/`.
+
+## Design canon (read before large features)
+
+| Doc | Use |
+|-----|-----|
+| [docs/DOC_INDEX.md](docs/DOC_INDEX.md) | Reading order |
+| [docs/README_00_MASTER_PROJECT_INDEX.md](docs/README_00_MASTER_PROJECT_INDEX.md) | Locked decisions, Khan 1 gate, work order |
+| [docs/README_02_GAMEPLAY_VISUAL_UX_REPLAYABILITY.md](docs/README_02_GAMEPLAY_VISUAL_UX_REPLAYABILITY.md) | Combat, UX, replayability |
+| [docs/README_03_ETHICAL_MONETIZATION_BUSINESS.md](docs/README_03_ETHICAL_MONETIZATION_BUSINESS.md) | Fair monetization (no P2W at launch) |
+| [docs/README_04_DEVELOPMENT_PRODUCTION_ROADMAP.md](docs/README_04_DEVELOPMENT_PRODUCTION_ROADMAP.md) | Milestones M0–M8 |
+
+**Implementation truth:** [docs/GODOT_PORT_STATUS.md](docs/GODOT_PORT_STATUS.md) · [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md) · [docs/GAME_HANDOFF.md](docs/GAME_HANDOFF.md)
+
+## Locked product decisions
+
+- **Campaign:** Seven Khans + Damavand Binding (**8 maps**, grids 32×18 → 64×36).
+- **First production target:** **Khan 1 vertical slice only** until testers voluntarily replay without prompting.
+- **Starter content:** Rostam; towers Archer, Sacred Fire, Heavy, Control; Khan 1 enemies + Lion of the First Khan.
+- **Signature systems:** regional corruption, tower hijacking, Sacred Fire cleanse, Pardeh Break / Fate cards.
+- **Currencies:** Gold (battle), Sacred Fire (tactical), Farr (meta, not purchasable).
+- **Monetization at launch:** cosmetics-first, supporter pack, ad removal, limited optional rewarded ads — **not** battle pass, paid combat power, or forced battle ads. IAP/subscription code may exist as **stubs**; do not treat as launch catalog.
+
+## Development priorities
+
+1. Prove Khan 1 loop (readability, corruption, hijack, replay) on real devices.
+2. Data-driven `.tres` resources with stable `lowercase_snake_case` IDs.
+3. Modular battle code; no UI/gameplay spaghetti.
+4. Mobile touch UX and performance (pooling, minimal per-frame work).
+5. No mass art or campaign expansion before Khan 1 replay is proven.
+
+Never replace working code with a large rewrite unless explicitly asked. Explain what changed and how to test (Godot F5/F6).

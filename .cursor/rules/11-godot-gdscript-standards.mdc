@@ -1,0 +1,23 @@
+---
+description: Godot GDScript coding standards for gameplay code.
+globs: ["shahname-td-godot/**/*.gd"]
+alwaysApply: false
+---
+
+GDScript rules:
+
+- Use clear, small nodes/scripts with single responsibility.
+- Prefer composition over deep inheritance; use `@tool` only when editor tooling needs it.
+- Use `class_name` for shared types referenced across scenes and resources.
+- Prefer typed GDScript: typed variables, parameters, and return types where practical.
+- Use custom Resource classes for static design data; avoid hardcoded gameplay values in scripts when the value belongs in data.
+- Do not use `get_node()`, `$NodePath`, or string-based lookups in runtime hot paths (`_process`, `_physics_process`, combat loops).
+- Cache node and component references in `_ready()` or an explicit `initialize()` called once at setup.
+- Use signals, autoloads, or small service nodes for decoupled systems — avoid spaghetti callbacks.
+- Avoid static mutable global state except for carefully controlled autoload bootstrap services.
+- Avoid allocations in `_process`, `_physics_process`, and frequently called combat methods.
+- Use object pooling for enemies, projectiles, floating text, and VFX.
+- Keep `_process` / `_physics_process` minimal; prefer timers and signal-driven updates when possible.
+- Prefer `@export` and `@export_group` over public mutable fields without intent.
+- Use `@export var` with typed resources (`TowerData`, `EnemyData`, etc.) instead of loose dictionaries for design data.
+- Validate exported references in `_ready()` or editor `@tool` checks where useful.

@@ -1,0 +1,31 @@
+---
+description: How Cursor should work on Godot port tasks in this project.
+alwaysApply: true
+---
+
+Before coding:
+
+- Start from [docs/DOC_INDEX.md](docs/DOC_INDEX.md); use README_00–05 for design intent.
+- Check [docs/GODOT_PORT_STATUS.md](docs/GODOT_PORT_STATUS.md) and [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md) — do not assume PDF features are built.
+- Respect **Khan 1 gate** ([README_00](docs/README_00_MASTER_PROJECT_INDEX.md)): no full campaign art, maps 2–8 polish, or launch monetization unless the task explicitly scopes it.
+- Identify the smallest useful change; ask only if a decision blocks implementation.
+- Unity parity: compare `_archive/unity/Assets/_Project/` when requested — paths and APIs differ.
+
+When coding:
+
+- Work in `shahname-td-godot/shahname-td/` unless the task is shared `/docs` or cross-cutting design.
+- Keep changes focused; prefer new files over large rewrites when safe.
+- Preserve public APIs unless the task requires changing them.
+- Reference content by **stable resource IDs**, not display names or filename guessing ([README_04](docs/README_04_DEVELOPMENT_PRODUCTION_ROADMAP.md)).
+- Update docs when architecture or data contracts change; update `GODOT_PORT_STATUS.md` for port milestones.
+- Do not wire new **paid power**, battle pass, or forced ads — align with [README_03](docs/README_03_ETHICAL_MONETIZATION_BUSINESS.md).
+- TODO comments only for real follow-up work.
+
+After coding:
+
+- Summarize changed files.
+- Test steps: Godot 4.6 → open project → F5/F6 → expected behavior + edge cases.
+- Mention known limitations vs design canon.
+- Suggest next step aligned to milestones M0–M8 (usually M1–M4 until Khan 1 replay is proven).
+
+Do not invent final art. Use `art/_placeholders/` and mark placeholders clearly.

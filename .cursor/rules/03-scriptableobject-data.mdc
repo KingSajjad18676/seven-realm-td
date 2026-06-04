@@ -1,0 +1,20 @@
+---
+description: ARCHIVED — Unity ScriptableObject rules (_archive/unity only).
+globs: ["_archive/unity/**/Scripts/Data/**/*.cs", "_archive/unity/**/ScriptableObjects/**/*"]
+alwaysApply: false
+---
+
+**Godot:** `13-godot-resource-data.mdc`.
+
+Use ScriptableObjects for design data:
+
+- HeroData, TowerData, TowerUpgradeData, EnemyData, WaveData, LevelData
+- ProjectileData, StatusEffectData, RelicData, QuestData, ShopItemData, EventData
+
+Rules:
+
+- Runtime state must not be stored inside shared ScriptableObject assets.
+- ScriptableObjects define base values and references only.
+- Runtime instances should copy required data into runtime state classes.
+- Include stable string IDs (`lowercase_snake_case`) for save and analytics.
+- Do not use display names as IDs.

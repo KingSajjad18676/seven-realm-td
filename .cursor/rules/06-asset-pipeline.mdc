@@ -1,0 +1,15 @@
+---
+description: ARCHIVED Unity art paths + shared asset doc pointers.
+globs: ["_archive/unity/**/Art/**/*", "docs/ASSET_PIPELINE.md", "docs/README_01*.md"]
+alwaysApply: false
+---
+
+**Godot art:** `16-godot-asset-pipeline.mdc` · [docs/README_01](docs/README_01_PHASE_BASED_ASSET_GENERATION.md).
+
+Asset pipeline rules:
+
+- Modular AI prompts: global visual → asset type → spec → negative block.
+- Review grid `#00FF00`; production transparent RGBA.
+- Stable asset IDs in data; one asset type per generation request.
+- Pivots: characters/towers bottom-center; VFX/projectiles center.
+- Phase 0/1 gates before mass campaign art.
