@@ -18,6 +18,9 @@ var _bridge: BattleContextBridge = null
 var _build_spot_scene: PackedScene = preload("res://scenes/prefabs/build_spot.tscn")
 var _tutorial_overlay_scene: PackedScene = preload("res://scenes/ui/tutorial_overlay.tscn")
 var _contextual_hint_scene: PackedScene = preload("res://scenes/ui/contextual_hint_overlay.tscn")
+var _touch_pending: bool = false
+var _touch_start_screen: Vector2 = Vector2.ZERO
+var _touch_start_world: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
@@ -353,30 +356,44 @@ func _unhandled_input(event: InputEvent) -> void:
 func _handle_battlefield_tap(event: InputEvent) -> void:
 	if _context == null or _context.hero_manager == null:
 		return
-	if _camera and _camera.should_block_battlefield_tap():
-		return
 	if _hud and _hud.has_method("is_tower_radial_open") and _hud.is_tower_radial_open():
 		return
 	if _context.tutorial_active and not _context.tutorial_allows("battlefield") \
 			and not _context.tutorial_allows("build_pads"):
 		return
-	var world: Vector2 = Vector2.ZERO
-	var pressed := false
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		world = _screen_to_world(event.position)
-		pressed = true
-	elif event is InputEventScreenTouch and event.pressed:
-		world = _screen_to_world(event.position)
-		pressed = true
-	if not pressed:
+	if event is InputEventScreenTouch:
+		_handle_screen_touch_tap(event as InputEventScreenTouch)
 		return
-	if _context.tower_manager and _context.tower_manager.try_select_spot_at_world(world):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		if _camera and _camera.should_block_battlefield_tap():
+			return
+		_apply_battlefield_tap(_screen_to_world(event.position))
 		get_viewport().set_input_as_handled()
+
+
+func _handle_screen_touch_tap(event: InputEventScreenTouch) -> void:
+	if event.pressed:
+		_touch_pending = true
+		_touch_start_screen = event.position
+		_touch_start_world = _screen_to_world(event.position)
+		return
+	if not _touch_pending:
+		return
+	_touch_pending = false
+	if _camera and _camera.should_block_battlefield_tap():
+		return
+	if event.position.distance_to(_touch_start_screen) >= TouchCamera.DRAG_THRESHOLD:
+		return
+	_apply_battlefield_tap(_touch_start_world)
+	get_viewport().set_input_as_handled()
+
+
+func _apply_battlefield_tap(world: Vector2) -> void:
+	if _context.tower_manager and _context.tower_manager.try_select_spot_at_world(world):
 		return
 	if _context.tutorial_active and not _context.tutorial_allows("battlefield"):
 		return
 	_context.hero_manager.handle_ground_tap(world)
-	get_viewport().set_input_as_handled()
 
 
 func _apply_difficulty_and_unlocks(launch: BattleLaunchData, level: LevelData) -> void:

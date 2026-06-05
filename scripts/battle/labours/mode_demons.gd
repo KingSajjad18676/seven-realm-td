@@ -15,9 +15,9 @@ func on_wave_completed(wave_index: int) -> void:
 	_cave_opened = true
 	if context.enemy_spawner and context.path_points.size() > 2:
 		var cave_pos := context.path_points[context.path_points.size() / 2]
-		for i in 5:
-			context.enemy_spawner.spawn_enemy_at("enemy_div_infantry", cave_pos + Vector2(0, i * 12))
+		for i in 6:
+			context.enemy_spawner.spawn_enemy_at("enemy_boar", cave_pos + Vector2(0, i * 12))
 		for i in 2:
-			context.enemy_spawner.spawn_enemy_at("enemy_div_brute", cave_pos + Vector2(40, i * 20))
+			context.enemy_spawner.spawn_enemy_at("enemy_boar", cave_pos + Vector2(40, i * 20))
 	if context.bridge:
-		context.bridge.alert_message.emit("A second cave front opens — split your defense!", 65)
+		context.bridge.alert_message.emit("A second cave front opens — boars flood the split!", 65)

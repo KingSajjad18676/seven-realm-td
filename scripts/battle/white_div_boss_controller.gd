@@ -34,7 +34,7 @@ func tick(delta: float) -> void:
 			if _enemy and _enemy.context and _enemy.context.hero_manager:
 				var hero := _enemy.context.hero_manager.hero
 				if hero and hero.global_position.distance_to(_enemy.global_position) < 85.0:
-					hero.take_damage(28.0)
+					hero.take_damage(_enemy.scaled_boss_damage(28.0))
 					if _enemy.context:
 						_enemy.context.runtime_modifiers["hero_move_speed_mult"] = 0.6
 						_enemy.get_tree().create_timer(2.5).timeout.connect(func() -> void:

@@ -6,6 +6,7 @@ var current_state: GameEnums.BattleState = GameEnums.BattleState.PRE_BATTLE
 var speed_multiplier: float = 1.0
 var _active_enemies: int = 0
 var all_waves_spawned: bool = false
+var _paused_from_state: GameEnums.BattleState = GameEnums.BattleState.WAVE_ACTIVE
 
 
 func initialize(ctx: BattleContext) -> void:
@@ -24,13 +25,15 @@ func start_battle() -> void:
 
 
 func pause_battle() -> void:
-	if current_state == GameEnums.BattleState.WAVE_ACTIVE:
+	if current_state == GameEnums.BattleState.WAVE_ACTIVE \
+			or current_state == GameEnums.BattleState.PRE_BATTLE:
+		_paused_from_state = current_state
 		_set_state(GameEnums.BattleState.PAUSED)
 
 
 func resume_battle() -> void:
 	if current_state == GameEnums.BattleState.PAUSED:
-		_set_state(GameEnums.BattleState.WAVE_ACTIVE)
+		_set_state(_paused_from_state)
 
 
 func set_speed_multiplier(mult: float) -> void:

@@ -646,7 +646,7 @@ static func build_khan_level(
 		level.camera_anchors = [Vector2(640, 360), Vector2(900, 400), Vector2(400, 320)]
 	var pad_count := 4 if not large_cam else 6
 	level.build_spot_positions = _pads_along_path(path, pad_count)
-	level.waves = _generate_campaign_waves(id, boss_id)
+	level.waves = CampaignWaveTemplates.generate(id, boss_id)
 	level.block_size = 10
 	level.default_objective_id = _default_objective_for(id)
 	level.labour_mode_id = LabourModeFactory.labour_mode_id_for_level(id)
@@ -713,6 +713,17 @@ static func wave_count_for(level_id: String) -> int:
 	return 20 + idx * 10
 
 
+## Extra multipliers applied on the campaign final wave boss spawn (after Khan difficulty).
+static func final_boss_hp_mult(level_id: String) -> float:
+	var idx := khan_index(level_id)
+	return 2.0 + float(maxi(0, idx - 1)) * 0.25
+
+
+static func final_boss_damage_mult(level_id: String) -> float:
+	var idx := khan_index(level_id)
+	return 1.6 + float(maxi(0, idx - 1)) * 0.2
+
+
 static func mini_boss_for(level_id: String) -> String:
 	match level_id:
 		"level_01":
@@ -736,98 +747,7 @@ static func mini_boss_for(level_id: String) -> String:
 
 
 static func _generate_campaign_waves(level_id: String, boss_id: String) -> Array[WaveData]:
-	var count := wave_count_for(level_id)
-	var roster := get_horde_roster(level_id)
-	var mini_boss := mini_boss_for(level_id)
-	var diff := khan_difficulty(level_id)
-	var mult := float(diff.count_mult)
-	var waves: Array[WaveData] = []
-	for i in range(1, count + 1):
-		var wave_id := "%s_wave_%d" % [level_id, i]
-		var delay := 1.5 if i % 10 != 0 else 2.0
-		if i > 20:
-			delay = 1.2
-		if i == count:
-			waves.append(_make_wave(wave_id, [{"enemy_id": boss_id, "count": 1}], 2.5, true))
-		elif i % 10 == 0:
-			var escort_count := maxi(2, int((3 + i / 10) * mult))
-			var groups: Array = [
-				{"enemy_id": mini_boss, "count": 1},
-				{"enemy_id": roster[0], "count": escort_count},
-			]
-			var w := _make_wave(wave_id, groups, delay, false)
-			w.display_name = "Mini-boss"
-			waves.append(w)
-		else:
-			var primary: String = roster[(i - 1) % roster.size()]
-			var base_count := maxi(3, int((4.0 + float(i) * 0.35) * mult))
-			var groups: Array = [{"enemy_id": primary, "count": base_count}]
-			if roster.size() > 1 and i % 3 == 0:
-				var secondary: String = roster[i % roster.size()]
-				if secondary != primary:
-					groups.append({"enemy_id": secondary, "count": maxi(1, int(float(base_count) * 0.4))})
-			var interval := 0.0
-			if primary in ["enemy_mirage_shade", "enemy_illusion_attendant", "enemy_white_div_thrall"]:
-				interval = maxf(0.08, 0.2 - float(i) * 0.001)
-			waves.append(_make_wave(wave_id, groups, delay, false, interval))
-	return waves
-
-
-static func _scale_waves_for_khan(waves: Array[WaveData], level_id: String) -> Array[WaveData]:
-	var diff := khan_difficulty(level_id)
-	var mult := float(diff.count_mult)
-	var out: Array[WaveData] = []
-	for wave in waves:
-		var copy := WaveData.new()
-		copy.wave_id = wave.wave_id
-		copy.display_name = wave.display_name
-		copy.pre_wave_delay = wave.pre_wave_delay
-		copy.spawn_interval = wave.spawn_interval
-		copy.is_boss_wave = wave.is_boss_wave
-		var groups: Array[Dictionary] = []
-		for group in wave.spawn_groups:
-			var g: Dictionary = group.duplicate()
-			var base_count := int(g.get("count", 1))
-			if wave.is_boss_wave:
-				g["count"] = base_count
-			else:
-				g["count"] = maxi(1, int(round(float(base_count) * mult)))
-			groups.append(g)
-		copy.spawn_groups = groups
-		out.append(copy)
-	return out
-
-
-static func _campaign_waves_for_khan(level_id: String, boss_id: String) -> Array[WaveData]:
-	match level_id:
-		"level_01":
-			return _waves_khan_01(boss_id)
-		"level_02":
-			return _waves_khan_02(boss_id)
-		"level_03":
-			return _waves_khan_03(boss_id)
-		"level_04":
-			return _waves_khan_04(boss_id)
-		"level_05":
-			return _waves_khan_05(boss_id)
-		"level_06":
-			return _waves_khan_06(boss_id)
-		"level_07":
-			return _waves_khan_07(boss_id)
-		"level_08_damavand":
-			return _waves_damavand(boss_id)
-		_:
-			return _waves_generic(level_id, boss_id)
-
-
-static func _make_wave(wave_id: String, groups: Array, delay: float = 2.0, boss: bool = false, interval: float = 0.0) -> WaveData:
-	var w := WaveData.new()
-	w.wave_id = wave_id
-	w.pre_wave_delay = delay
-	w.spawn_groups = _spawn_groups(groups)
-	w.is_boss_wave = boss
-	w.spawn_interval = interval
-	return w
+	return CampaignWaveTemplates.generate(level_id, boss_id)
 
 
 static func _spawn_groups(entries: Array) -> Array[Dictionary]:
@@ -835,90 +755,6 @@ static func _spawn_groups(entries: Array) -> Array[Dictionary]:
 	for entry in entries:
 		groups.append(entry as Dictionary)
 	return groups
-
-
-static func _waves_khan_01(boss_id: String) -> Array[WaveData]:
-	return [
-		_make_wave("level_01_wave_1", [{"enemy_id": "enemy_jackal", "count": 10}], 2.5),
-		_make_wave("level_01_wave_2", [{"enemy_id": "enemy_jackal", "count": 12}, {"enemy_id": "enemy_boar", "count": 2}], 2.0),
-		_make_wave("level_01_wave_3", [{"enemy_id": "enemy_jackal", "count": 10}, {"enemy_id": "enemy_corruptor", "count": 2}], 2.0),
-		_make_wave("level_01_wave_4", [{"enemy_id": "enemy_boar", "count": 3}, {"enemy_id": "enemy_corruptor", "count": 3}], 2.0),
-		_make_wave("level_01_wave_5", [{"enemy_id": boss_id, "count": 1}], 2.0, true),
-	]
-
-
-static func _waves_khan_02(boss_id: String) -> Array[WaveData]:
-	return [
-		_make_wave("level_02_wave_1", [{"enemy_id": "enemy_mirage_shade", "count": 14}], 2.5, false, 0.18),
-		_make_wave("level_02_wave_2", [{"enemy_id": "enemy_mirage_shade", "count": 10}, {"enemy_id": "enemy_salt_crust_brute", "count": 3}], 2.0),
-		_make_wave("level_02_wave_3", [{"enemy_id": "enemy_corruptor", "count": 3}, {"enemy_id": "enemy_mirage_shade", "count": 12}], 2.0),
-		_make_wave("level_02_wave_4", [{"enemy_id": "enemy_salt_crust_brute", "count": 4}, {"enemy_id": "enemy_corruptor", "count": 3}], 2.0),
-		_make_wave("level_02_wave_5", [{"enemy_id": boss_id, "count": 1}], 2.0, true),
-	]
-
-
-static func _waves_khan_03(boss_id: String) -> Array[WaveData]:
-	return [
-		_make_wave("level_03_wave_1", [{"enemy_id": "enemy_canyon_serpent", "count": 6}, {"enemy_id": "enemy_scorched_hound", "count": 6}], 2.5),
-		_make_wave("level_03_wave_2", [{"enemy_id": "enemy_scorched_hound", "count": 12}], 2.0, false, 0.15),
-		_make_wave("level_03_wave_3", [{"enemy_id": "enemy_canyon_serpent", "count": 8}, {"enemy_id": "enemy_corruptor", "count": 3}], 2.0),
-		_make_wave("level_03_wave_4", [{"enemy_id": "enemy_salt_crust_brute", "count": 3}, {"enemy_id": "enemy_canyon_serpent", "count": 6}], 2.0),
-		_make_wave("level_03_wave_5", [{"enemy_id": boss_id, "count": 1}], 2.0, true),
-	]
-
-
-static func _waves_khan_04(boss_id: String) -> Array[WaveData]:
-	return [
-		_make_wave("level_04_wave_1", [{"enemy_id": "enemy_illusion_attendant", "count": 16}], 2.5, false, 0.12),
-		_make_wave("level_04_wave_2", [{"enemy_id": "enemy_feast_shade", "count": 5}, {"enemy_id": "enemy_illusion_attendant", "count": 10}], 2.0),
-		_make_wave("level_04_wave_3", [{"enemy_id": "enemy_jackal", "count": 10}, {"enemy_id": "enemy_feast_shade", "count": 4}], 2.0),
-		_make_wave("level_04_wave_4", [{"enemy_id": "enemy_illusion_attendant", "count": 14}, {"enemy_id": "enemy_feast_shade", "count": 5}], 2.0),
-		_make_wave("level_04_wave_5", [{"enemy_id": boss_id, "count": 1}], 2.0, true),
-	]
-
-
-static func _waves_khan_05(boss_id: String) -> Array[WaveData]:
-	return [
-		_make_wave("level_05_wave_1", [{"enemy_id": "enemy_mountain_raider", "count": 14}, {"enemy_id": "enemy_mountain_archer", "count": 6}], 2.5, false, 0.14),
-		_make_wave("level_05_wave_2", [{"enemy_id": "enemy_mountain_archer", "count": 10}, {"enemy_id": "enemy_boar", "count": 3}], 2.0),
-		_make_wave("level_05_wave_3", [{"enemy_id": "enemy_mountain_raider", "count": 18}], 2.0, false, 0.1),
-		_make_wave("level_05_wave_4", [{"enemy_id": "enemy_mountain_raider", "count": 12}, {"enemy_id": "enemy_corruptor", "count": 4}], 2.0),
-		_make_wave("level_05_wave_5", [{"enemy_id": boss_id, "count": 1}], 2.0, true),
-	]
-
-
-static func _waves_khan_06(boss_id: String) -> Array[WaveData]:
-	return [
-		_make_wave("level_06_wave_1", [{"enemy_id": "enemy_div_infantry", "count": 12}, {"enemy_id": "enemy_div_corruptor", "count": 2}], 2.5),
-		_make_wave("level_06_wave_2", [{"enemy_id": "enemy_div_corruptor", "count": 5}], 2.0),
-		_make_wave("level_06_wave_3", [{"enemy_id": "enemy_div_brute", "count": 4}, {"enemy_id": "enemy_div_infantry", "count": 10}], 2.0),
-		_make_wave("level_06_wave_4", [{"enemy_id": "enemy_div_brute", "count": 3}, {"enemy_id": "enemy_div_corruptor", "count": 4}, {"enemy_id": "enemy_div_infantry", "count": 12}], 2.0),
-		_make_wave("level_06_wave_5", [{"enemy_id": boss_id, "count": 1}], 2.0, true),
-	]
-
-
-static func _waves_khan_07(boss_id: String) -> Array[WaveData]:
-	return [
-		_make_wave("level_07_wave_1", [{"enemy_id": "enemy_white_div_thrall", "count": 18}], 2.5, false, 0.08),
-		_make_wave("level_07_wave_2", [{"enemy_id": "enemy_cavern_boulder_brute", "count": 4}, {"enemy_id": "enemy_corruptor", "count": 3}], 2.0),
-		_make_wave("level_07_wave_3", [{"enemy_id": "enemy_white_div_thrall", "count": 16}, {"enemy_id": "enemy_cavern_boulder_brute", "count": 3}], 2.0),
-		_make_wave("level_07_wave_4", [{"enemy_id": "enemy_cavern_boulder_brute", "count": 4}, {"enemy_id": "enemy_div_corruptor", "count": 4}], 2.0),
-		_make_wave("level_07_wave_5", [{"enemy_id": boss_id, "count": 1}], 2.0, true),
-	]
-
-
-static func _waves_damavand(boss_id: String) -> Array[WaveData]:
-	return [
-		_make_wave("level_08_wave_1", [{"enemy_id": "enemy_zahhak_serpent_guard", "count": 6}, {"enemy_id": "enemy_corruptor", "count": 3}], 2.5),
-		_make_wave("level_08_wave_2", [{"enemy_id": "enemy_zahhak_serpent_guard", "count": 8}, {"enemy_id": "enemy_div_infantry", "count": 10}], 2.0),
-		_make_wave("level_08_wave_3", [{"enemy_id": "enemy_zahhak_serpent_guard", "count": 10}], 2.0, false, 0.2),
-		_make_wave("level_08_wave_4", [{"enemy_id": "enemy_chainbreaker_div", "count": 4}, {"enemy_id": "enemy_div_brute", "count": 3}], 2.0),
-		_make_wave("level_08_wave_5", [{"enemy_id": boss_id, "count": 1}], 2.5, true),
-	]
-
-
-static func _waves_generic(level_id: String, boss_id: String) -> Array[WaveData]:
-	return _waves_khan_01(boss_id)
 
 
 static func _pads_along_path(path: Array[Vector2], count: int) -> Array[Vector2]:

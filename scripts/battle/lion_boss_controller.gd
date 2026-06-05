@@ -70,7 +70,7 @@ func _execute_pounce() -> void:
 	if _enemy and _enemy.context and _enemy.context.hero_manager:
 		var hero := _enemy.context.hero_manager.hero
 		if hero and hero.global_position.distance_to(_enemy.global_position) < 100.0:
-			hero.take_damage(25.0)
+			hero.take_damage(_enemy.scaled_boss_damage(25.0))
 	_phase = Phase.ROAR if _roar_cooldown <= 0.0 else Phase.PATROL
 	_phase_timer = 2.0 if _phase == Phase.ROAR else 4.0
 

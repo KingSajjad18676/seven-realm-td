@@ -86,7 +86,7 @@ func _spawn_next_wave() -> void:
 			context.morale.on_wave_cleared()
 		if context.objectives:
 			context.objectives.on_wave_cleared()
-	if current_wave_index == 3 and context.bridge:
+	if _should_offer_pardeh() and context.bridge:
 		context.bridge.pardeh_break_requested.emit()
 		while context.state_controller and context.state_controller.current_state == GameEnums.BattleState.PAUSED:
 			await get_tree().process_frame
@@ -164,27 +164,17 @@ func _spawn_horde_wave() -> void:
 		_spawn_horde_wave()
 
 
+func _should_offer_pardeh() -> bool:
+	if _endless_mode or _horde_mode:
+		return false
+	var cleared := current_wave_index + 1
+	if cleared % 5 != 0:
+		return false
+	return current_wave_index < total_waves - 1
+
+
 func _build_horde_wave_data(wave_num: int, level_id: String) -> WaveData:
-	var wave := WaveData.new()
-	wave.wave_id = "horde_%s_%d" % [level_id, wave_num]
-	wave.pre_wave_delay = 1.8
-	var diff := ContentCatalog.khan_difficulty(level_id)
-	var roster := ContentCatalog.get_horde_roster(level_id)
-	var count := int((8 + wave_num * 2) * float(diff.count_mult))
-	var groups: Array[Dictionary] = []
-	groups.append({"enemy_id": roster[0], "count": count})
-	if wave_num % 2 == 0 and roster.size() > 1:
-		groups.append({"enemy_id": roster[1], "count": int(1 + wave_num / 2)})
-	if wave_num % 3 == 0 and roster.size() > 2:
-		groups.append({"enemy_id": roster[2], "count": int(1 + wave_num / 4)})
-	if wave_num % 5 == 0 and context and context.level_data:
-		var boss_id := context.level_data.boss_enemy_id
-		if boss_id != "":
-			wave.is_boss_wave = true
-			groups.append({"enemy_id": boss_id, "count": 1})
-	wave.spawn_groups = groups
-	wave.spawn_interval = maxf(0.05, 0.25 - float(ContentCatalog.khan_index(level_id)) * 0.02)
-	return wave
+	return CampaignWaveTemplates.generate_horde_slice(level_id, wave_num)
 
 
 func _build_endless_wave_data(wave_num: int) -> WaveData:

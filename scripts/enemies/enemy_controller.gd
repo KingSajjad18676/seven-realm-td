@@ -203,6 +203,17 @@ func get_effective_max_hp() -> float:
 	return _effective_max_hp()
 
 
+func scaled_boss_damage(base: float) -> float:
+	if context == null:
+		return base
+	var mult := float(context.runtime_modifiers.get("campaign_boss_damage_mult", 1.0))
+	return base * mult
+
+
+func scaled_boss_gate_leak(base: int = 2) -> int:
+	return maxi(1, int(round(float(base) * scaled_boss_damage(1.0))))
+
+
 func _effective_max_hp() -> float:
 	var base := data.max_hp * _hp_multiplier()
 	if _max_hp_override > 0.0:
@@ -237,7 +248,7 @@ func _die() -> void:
 
 func _on_reached_gate() -> void:
 	if context and context.lives:
-		var leak_damage := 2 if data.is_boss else 1
+		var leak_damage := scaled_boss_gate_leak() if data.is_boss else 1
 		context.lives.lose_life(leak_damage)
 	reached_gate.emit(self)
 	if context and context.enemy_spawner:

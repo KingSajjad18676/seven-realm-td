@@ -9,7 +9,7 @@ func test_wave_count_scales_by_khan() -> void:
 
 
 func test_generated_waves_have_mini_boss_every_tenth() -> void:
-	var waves := ContentCatalog._generate_campaign_waves("level_01", "enemy_lion_boss")
+	var waves := CampaignWaveTemplates.generate("level_01", "enemy_lion_boss")
 	assert_eq(waves.size(), 30)
 	for i in range(waves.size()):
 		var wave_num := i + 1
@@ -26,9 +26,31 @@ func test_generated_waves_have_mini_boss_every_tenth() -> void:
 			assert_true(has_mini, "Wave %d should include mini-boss" % wave_num)
 
 
+func test_level_one_first_wave_uses_boar_intro() -> void:
+	var waves := CampaignWaveTemplates.generate("level_01", "enemy_lion_boss")
+	var has_boar := false
+	for group in waves[0].spawn_groups:
+		if str(group.get("enemy_id", "")) == "enemy_boar":
+			has_boar = true
+	assert_true(has_boar)
+
+
 func test_final_wave_uses_campaign_boss() -> void:
 	var boss_id := "enemy_zahhak"
-	var waves := ContentCatalog._generate_campaign_waves("level_08_damavand", boss_id)
+	var waves := CampaignWaveTemplates.generate("level_08_damavand", boss_id)
 	var final_wave: WaveData = waves[waves.size() - 1]
 	assert_true(final_wave.is_boss_wave)
 	assert_eq(final_wave.spawn_groups[0].get("enemy_id"), boss_id)
+	assert_eq(final_wave.display_name, "Final Boss")
+
+
+func test_final_boss_stat_mults_scale_by_khan() -> void:
+	assert_gt(ContentCatalog.final_boss_hp_mult("level_01"), 1.5)
+	assert_gt(
+		ContentCatalog.final_boss_hp_mult("level_07"),
+		ContentCatalog.final_boss_hp_mult("level_01")
+	)
+	assert_gt(
+		ContentCatalog.final_boss_damage_mult("level_08_damavand"),
+		ContentCatalog.final_boss_damage_mult("level_01")
+	)

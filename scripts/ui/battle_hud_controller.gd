@@ -12,6 +12,7 @@ var _last_tutorial_allowed: PackedStringArray = PackedStringArray()
 var _pending_victory: bool = false
 var _pending_reason: String = ""
 var _pending_summary: Dictionary = {}
+var _user_pause_modal_visible: bool = false
 @onready var _gold_label: Label = %GoldLabel
 @onready var _sf_label: Label = %SacredFireLabel
 @onready var _lives_label: Label = %LivesLabel
@@ -38,6 +39,10 @@ var _pending_summary: Dictionary = {}
 @onready var _pardeh_panel: Panel = %PardehPanel
 @onready var _minimap: MinimapController = %MinimapPanel
 @onready var _threat_indicator: ThreatIndicatorController = %ThreatIndicators
+@onready var _pause_overlay: ColorRect = %PauseOverlay
+@onready var _pause_panel: Panel = %PausePanel
+@onready var _pause_resume_btn: Button = %PauseResumeButton
+@onready var _pause_exit_btn: Button = %PauseExitButton
 var _forge_wired: bool = false
 var _spell_row: HBoxContainer = null
 var _spell_buttons: Array[Button] = []
@@ -85,6 +90,7 @@ func initialize(ctx: BattleContext, fate_draft: FateDraftController, vow_offer: 
 		_replay_btn.visible = false
 	if _map_btn:
 		_map_btn.visible = false
+	_hide_pause_modal()
 func _ready() -> void:
 	if _start_btn:
 		_start_btn.pressed.connect(_on_start)
@@ -102,6 +108,10 @@ func _ready() -> void:
 		_map_btn.pressed.connect(_on_map)
 	if _early_call_btn:
 		_early_call_btn.pressed.connect(_on_early_call)
+	if _pause_resume_btn:
+		_pause_resume_btn.pressed.connect(_on_pause_resume)
+	if _pause_exit_btn:
+		_pause_exit_btn.pressed.connect(_on_pause_exit)
 func get_highlight_target(key: String) -> Control:
 	match key:
 		"build_pads":
@@ -335,10 +345,44 @@ func _on_start() -> void:
 func _on_pause() -> void:
 	if context == null or context.state_controller == null:
 		return
+	var state := context.state_controller.current_state
+	if state != GameEnums.BattleState.WAVE_ACTIVE and state != GameEnums.BattleState.PRE_BATTLE:
+		return
+	context.state_controller.pause_battle()
+	_show_pause_modal()
+
+
+func _on_pause_resume() -> void:
+	if context == null or context.state_controller == null:
+		return
+	_hide_pause_modal()
 	if context.state_controller.current_state == GameEnums.BattleState.PAUSED:
 		context.state_controller.resume_battle()
-	else:
-		context.state_controller.pause_battle()
+
+
+func _on_pause_exit() -> void:
+	_hide_pause_modal()
+	var level_id := context.level_data.level_id if context and context.level_data else "level_01"
+	AnalyticsService.battle_exit_to_map(level_id, false)
+	SceneFlowController.go_to_world_map()
+
+
+func _show_pause_modal() -> void:
+	_user_pause_modal_visible = true
+	if _pause_overlay:
+		_pause_overlay.visible = true
+	if _pause_panel:
+		_pause_panel.visible = true
+
+
+func _hide_pause_modal() -> void:
+	_user_pause_modal_visible = false
+	if _pause_overlay:
+		_pause_overlay.visible = false
+	if _pause_panel:
+		_pause_panel.visible = false
+
+
 func _on_speed() -> void:
 	if context == null or context.state_controller == null:
 		return
@@ -479,6 +523,8 @@ func _on_early_call() -> void:
 	if _early_call_btn:
 		_early_call_btn.disabled = true
 func _on_state(state: GameEnums.BattleState) -> void:
+	if state == GameEnums.BattleState.VICTORY or state == GameEnums.BattleState.DEFEAT:
+		_hide_pause_modal()
 	if state == GameEnums.BattleState.PRE_BATTLE and _start_btn and not _tutorial_gating:
 		_start_btn.disabled = false
 	elif state == GameEnums.BattleState.PRE_BATTLE and _tutorial_gating:
@@ -536,6 +582,7 @@ func _on_vow_status(text: String, state: int) -> void:
 		_:
 			_vow_label.modulate = Color(0.85, 0.75, 0.45)
 func _on_results(victory: bool, reason: String) -> void:
+	_hide_pause_modal()
 	_last_victory = victory
 	_pending_victory = victory
 	_pending_reason = reason

@@ -24,7 +24,7 @@ func tick(delta: float) -> void:
 			_alert("Olad charges the gate!", 90)
 		Phase.CHARGE:
 			if _enemy and _enemy.context and _enemy.context.lives:
-				_enemy.context.lives.lose_life(1)
+				_enemy.context.lives.lose_life(_enemy.scaled_boss_gate_leak(1))
 			_phase = Phase.RALLY
 			_phase_timer = 1.5
 			_alert("Champion rally — corruption along route!", 85)

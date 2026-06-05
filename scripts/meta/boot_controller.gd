@@ -4,6 +4,8 @@ extends Node
 
 
 func _ready() -> void:
+	if DisplayServer.has_feature(DisplayServer.FEATURE_ORIENTATION):
+		DisplayServer.screen_set_orientation(DisplayServer.SCREEN_LANDSCAPE)
 	AnalyticsService.session_start()
 	if _status:
 		_status.text = "Loading Rostam 7 Labours..."

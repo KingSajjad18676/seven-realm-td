@@ -49,8 +49,8 @@
 3. **Start wave** → enemies spawn, path to gate.
 4. Towers attack; corruptors pressure regions; at light **0** tower **hijacks** (attacks allies) until cleansed.
 5. Hero fights + skill; leaks reduce **lives**.
-6. After wave 4 → **Pardeh Break** → pick 1 of 3 **Fate cards** → wave 5 **Lion boss**.
-7. Victory → forge materials banked → **Replay** or return to world map.
+6. Every **5 cleared waves** → **Pardeh Break** → pick 1 of 3 **Fate cards** (campaign; tutorial uses a scripted break).
+7. Mini-boss every 10th wave; campaign boss on final wave → **Replay** or return to world map.
 
 **Currencies in battle**
 
@@ -293,7 +293,7 @@ Eight campaign battlefields + tutorial graybox ([design/00](../design/00-project
 | Regional light & corruption | `MapLightManager` (via `BattleContext`) |
 | Tower hijack warning → hijack → cleanse recovery | `TowerController` + build spots |
 | Hero move + skill | `HeroController` |
-| Pardeh Break + Fate draft | After wave 4 on Khan 1 |
+| Pardeh Break + Fate draft | Every 5 cleared waves (campaign); tutorial scripted |
 | Lion boss wave | `enemy_lion_boss` |
 | Kaveh's Forge meta | `ForgeService`, Star Iron per tower material |
 | Tutorial mission | `level_00_tutorial`, gates Khan 1 |
@@ -487,7 +487,7 @@ Full map list: **§6**.
 | `ui_battle_hud` | Production HUD | P1 | `battle_hud` — lives, gold, SF, wave, tower cards |
 | HUD icon set | pause, 1×/2×, settings, cleanse, brazier | P1 | replaces text buttons |
 | Hero portrait | Rostam HUD | P1 | bottom-left |
-| Pardeh / Fate UI | 3 card frames + `card_*` art | P1 | wave 4 break |
+| Pardeh / Fate UI | 3 card frames + `card_*` art | P1 | every 5-wave block break |
 | Victory / defeat frame | Results panel | P1 | end of run |
 | Tutorial overlay art | First-launch training | P1 | `tutorial_overlay.tscn` |
 | Company splash / main menu BG | Boot flow | P2 | meta |

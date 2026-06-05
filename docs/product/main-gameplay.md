@@ -132,6 +132,27 @@ A **map** is a battlefield (`level_id`). A **mode** is how you launch that map (
 **Wave formula (campaign):** `20 + (Labour index × 10)` — e.g. Labour 1 = 30 waves, Labour 7 = 90, Damavand = 100.  
 **Difficulty scaling:** Each Labour raises enemy HP, speed, and spawn count (~12% / 4% / 15% per step).
 
+**5-wave micro-loop (campaign):** Every map repeats escalating **5-wave blocks** — intro (waves 1–2), escalation (3–4), climax (5) — then **Pardeh Break** (Fate card pick). Mini-boss on every 10th wave; Hero's Vow every 10-wave block. Templates live in `scripts/meta/campaign_wave_templates.gd`.
+
+| Block role | Waves in block | Purpose |
+|------------|----------------|---------|
+| Intro | 1–2 | New enemy type or lighter Labour hazard |
+| Escalation | 3–4 | Swarms + pairings; corruptors tax Sacred Fire on hijack maps |
+| Climax | 5 | Push Labour hazard before Pardeh; wave 10/20 = mini-boss climax |
+
+**Labour + wave synergy (block 1 teaching beats):**
+
+| Map | Wave design hook | Labour hazard sync |
+|-----|------------------|-------------------|
+| L1 Lion | Boars distract path; jackals swarm | Rakhsh ambush wave 1 |
+| L2 Thirst | Mirage shades | Oasis pulse spawns mirages — heal or defend |
+| L3 Dragon | Hounds rush while serpents burrow | 12s burrow cycle |
+| L4 Temptress | Feast shades after decoys | Cleanse dispels illusions |
+| L5 Olad | Raider funnel then boar flood | Second cave opens after wave 3 |
+| L6 Rescue | Div corruptor floods | Wave 3 corruption spike + captive objective |
+| L7 Blindness | Boulder brutes in darkness | 6s blind every 14s; cleanse shortens |
+| Damavand | Serpent guards → chainbreakers | Binding progress (campaign) |
+
 **Map size:** Labours 1–2 are medium maps; 3–4 medium-large; 5–7 large / very large with camera anchors; Damavand is the largest.
 
 ---
@@ -269,7 +290,8 @@ Horde: 8/8 maps cleared
 | Launch flags (Horde, Hunt, …) | `scripts/battle/battle_launch_data.gd` |
 | World map UI + unlocks | `scripts/meta/world_map_controller.gd` |
 | Campaign-only Labour attach | `scripts/battle/battle_bootstrap.gd` → `_attach_labour_mode()` |
-| Wave count + procedural waves | `scripts/meta/content_catalog.gd` → `wave_count_for()`, `_generate_campaign_waves()` |
+| Wave count + 5-wave block templates | `scripts/meta/campaign_wave_templates.gd` + `content_catalog.gd` → `wave_count_for()` |
+| Pardeh cadence (every 5 waves) | `scripts/battle/wave_manager.gd` → `_should_offer_pardeh()` |
 
 ---
 

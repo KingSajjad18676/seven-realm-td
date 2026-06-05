@@ -61,3 +61,7 @@ func on_cleanse(_region_id: String) -> void:
 		_darkness_remaining = maxf(0.0, _darkness_remaining - 2.0)
 		if _darkness_remaining <= 0.0:
 			_clear_darkness()
+
+
+func is_darkness_active() -> bool:
+	return _darkness_active

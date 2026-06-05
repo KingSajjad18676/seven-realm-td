@@ -53,6 +53,20 @@ func _pulse_fountain() -> void:
 			hero.current_hp = minf(hero.current_hp + 40.0, hero.data.max_hp if hero.data else 220.0)
 			if context.bridge:
 				context.bridge.alert_message.emit("Oasis found — strength restored!", 45)
+	_spawn_mirage_at_fountain()
+
+
+func _spawn_mirage_at_fountain() -> void:
+	if context == null or context.enemy_spawner == null:
+		return
+	var count := 5
+	for i in count:
+		context.enemy_spawner.spawn_enemy_at(
+			"enemy_mirage_shade",
+			_fountain_pos + Vector2(-60 + i * 24, 20)
+		)
+	if context.bridge:
+		context.bridge.alert_message.emit("Mirages rise from the heat — defend the oasis!", 50)
 
 
 func on_cleanse(_region_id: String) -> void:

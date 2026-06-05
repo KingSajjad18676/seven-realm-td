@@ -34,7 +34,7 @@ func tick(delta: float) -> void:
 			if _enemy and _enemy.context and _enemy.context.hero_manager:
 				var hero := _enemy.context.hero_manager.hero
 				if hero and hero.global_position.distance_to(_enemy.global_position) < 100.0:
-					hero.take_damage(35.0)
+					hero.take_damage(_enemy.scaled_boss_damage(35.0))
 			_phase = Phase.PATROL
 			_phase_timer = 5.0
 

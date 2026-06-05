@@ -16,6 +16,11 @@ func initialize(ctx: BattleContext, root: Node2D) -> void:
 func spawn_wave(wave: WaveData) -> void:
 	if wave == null or context == null:
 		return
+	if wave.is_boss_wave and context.level_data:
+		var level_id := context.level_data.level_id
+		context.runtime_modifiers["campaign_boss_damage_mult"] = (
+			ContentCatalog.final_boss_damage_mult(level_id)
+		)
 	for group in wave.spawn_groups:
 		var enemy_id: String = str(group.get("enemy_id", ""))
 		var count: int = int(group.get("count", 1))
@@ -24,9 +29,20 @@ func spawn_wave(wave: WaveData) -> void:
 			continue
 		for i in count:
 			var data := catalog_data.duplicate(true) as EnemyData
+			if wave.is_boss_wave and data.is_boss:
+				data = _scale_final_boss_data(data)
 			_spawn_enemy(data, group)
 			if wave.spawn_interval > 0.0:
 				await get_tree().create_timer(wave.spawn_interval).timeout
+
+
+func _scale_final_boss_data(data: EnemyData) -> EnemyData:
+	if context == null or context.level_data == null:
+		return data
+	var hp_mult := ContentCatalog.final_boss_hp_mult(context.level_data.level_id)
+	data.max_hp *= hp_mult
+	data.armor *= 1.0 + (hp_mult - 1.0) * 0.5
+	return data
 
 
 func _spawn_enemy(data: EnemyData, spawn_group: Dictionary = {}) -> void:

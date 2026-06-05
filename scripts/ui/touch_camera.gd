@@ -90,9 +90,11 @@ func get_visible_world_rect() -> Rect2:
 
 
 func should_block_battlefield_tap() -> bool:
+	if _touch_count >= 2 or _pinch_active:
+		return true
 	if _camera_locked:
 		return false
-	return _touch_count >= 2 or _pinch_active or _pan_moved
+	return _pan_moved
 
 
 func get_touch_count() -> int:
@@ -109,50 +111,70 @@ func _process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if _handle_desktop_zoom(event):
 		return
-	if _camera_locked:
-		return
 	if event is InputEventScreenTouch:
-		if event.pressed:
-			_touch_count += 1
-			if _touch_count == 1:
-				_dragging = true
-				_last_pos = event.position
-				_pan_start_pos = event.position
-				_pan_moved = false
-			else:
-				_dragging = false
-		else:
-			_touch_count = maxi(0, _touch_count - 1)
-			if _touch_count == 0:
-				_dragging = false
-	elif event is InputEventScreenDrag and _dragging and _touch_count == 1 and not _pinch_active:
-		if event.position.distance_to(_pan_start_pos) >= DRAG_THRESHOLD:
-			_pan_moved = true
-		var delta: Vector2 = (event.position - _last_pos) * pan_speed
-		global_position -= delta / zoom
-		_last_pos = event.position
-		_clamp_position()
+		_handle_screen_touch(event as InputEventScreenTouch)
 	elif event is InputEventMagnifyGesture:
 		_pinch_active = true
 		_pinch_cooldown = PINCH_COOLDOWN
 		_dragging = false
 		_apply_zoom_at(event.position, event.factor)
-	elif event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			if event.pressed:
-				_dragging = true
-				_last_pos = event.position
-				_pan_start_pos = event.position
-				_pan_moved = false
-			else:
-				_dragging = false
-	elif event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and _dragging:
-		if event.position.distance_to(_pan_start_pos) >= DRAG_THRESHOLD:
-			_pan_moved = true
-		var delta: Vector2 = (event.position - _last_pos) * pan_speed
-		global_position -= delta / zoom
+	elif not _camera_locked:
+		if event is InputEventScreenDrag:
+			_handle_screen_drag(event as InputEventScreenDrag)
+		elif event is InputEventMouseButton:
+			_handle_mouse_button(event as InputEventMouseButton)
+		elif event is InputEventMouseMotion:
+			_handle_mouse_motion(event as InputEventMouseMotion)
+
+
+func _handle_screen_touch(event: InputEventScreenTouch) -> void:
+	if event.pressed:
+		_touch_count += 1
+		if _touch_count == 1:
+			_dragging = not _camera_locked
+			_last_pos = event.position
+			_pan_start_pos = event.position
+			_pan_moved = false
+		else:
+			_dragging = false
+	else:
+		_touch_count = maxi(0, _touch_count - 1)
+		if _touch_count == 0:
+			_dragging = false
+
+
+func _handle_screen_drag(event: InputEventScreenDrag) -> void:
+	if not _dragging or _touch_count != 1 or _pinch_active:
+		return
+	if event.position.distance_to(_pan_start_pos) >= DRAG_THRESHOLD:
+		_pan_moved = true
+	var delta: Vector2 = (event.position - _last_pos) * pan_speed
+	global_position -= delta / zoom
+	_last_pos = event.position
+	_clamp_position()
+
+
+func _handle_mouse_button(event: InputEventMouseButton) -> void:
+	if event.button_index != MOUSE_BUTTON_LEFT:
+		return
+	if event.pressed:
+		_dragging = true
 		_last_pos = event.position
-		_clamp_position()
+		_pan_start_pos = event.position
+		_pan_moved = false
+	else:
+		_dragging = false
+
+
+func _handle_mouse_motion(event: InputEventMouseMotion) -> void:
+	if not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or not _dragging:
+		return
+	if event.position.distance_to(_pan_start_pos) >= DRAG_THRESHOLD:
+		_pan_moved = true
+	var delta: Vector2 = (event.position - _last_pos) * pan_speed
+	global_position -= delta / zoom
+	_last_pos = event.position
+	_clamp_position()
 
 
 func _handle_desktop_zoom(event: InputEvent) -> bool:

@@ -52,7 +52,7 @@ UI listens to `BattleContextBridge` signals — controllers do not drive HUD dir
 
 - **Corruption:** Pressured → Critical → Collapsed; telegraph before harsh punishment.
 - **Hijack:** Warning → rescue window → cleanse/recovery; never silent tower disable.
-- **Pardeh Break:** Wave 4 cleared → Fate draft; keep UI under ~40s.
+- **Pardeh Break:** Every 5 cleared waves → Fate draft; keep UI under ~40s.
 - **Objectives:** `no_leaks`, `no_hijack`, `cleanse_twice` — failure on event; success at victory eval.
 
 ## Boss brains

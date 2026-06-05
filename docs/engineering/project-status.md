@@ -13,7 +13,7 @@
 | Main menu → world map → battle | ✅ Campaign, roguelite, endless, **horde**, hunt, daily tale                                                                                                                 |
 | Tutorial gate                  | ✅ Khan 1 locked until tutorial cleared                                                                                                                           |
 | Khan 1 onboarding              | ✅ Tutorial teaches objective/morale/boss; one-time contextual hints in battle (tower panel, forge, early call, tether)                                           |
-| Campaign levels                | ✅ Tutorial + **Labours 1–7** + Damavand; **30–100 procedural waves** (+10 per Labour), mini-boss every 10th wave |
+| Campaign levels                | ✅ Tutorial + **Labours 1–7** + Damavand; **30–100 block-templated waves** (+10 per Labour), **Pardeh every 5 waves**, mini-boss every 10th wave |
 | **Labour Modes (campaign)**    | ✅ Additive per-map story overlays (`scripts/battle/labours/`) — Lion, Thirst, Dragon, Temptress, Demons, Rescue, Blindness, Zahhak |
 | **Rostam Tahmtan Barracks**    | ✅ Unlock at 7 Labour seals or store IAP; summons Zabul Vanguard / Bull-Mace Bearer allies (in-battle upgrade) |
 | **Serpent Spire behavior**     | ✅ Twin-target venom + Hunger attack-speed (horde-clear or store unlock; no Star Iron forge) |
@@ -25,7 +25,7 @@
 | Kaveh's Forge                  | ✅ World map link; Elite notification unlocks Hunt                                                                                                                |
 | Save v4                        | ✅ Hunt best, forge notification, roguelite run state, mode-aware battle saves                                                                                    |
 | Save v5                        | ✅ Forge Tokens, spells owned, horde progress, unlocked towers, paid entitlements                                                                                 |
-| Khan difficulty scaling        | ✅ Per-Khan HP/speed/count mults; procedural wave generator (`ContentCatalog._generate_campaign_waves`) |
+| Khan difficulty scaling        | ✅ Per-Khan HP/speed/count mults; **5-wave block wave generator** (`CampaignWaveTemplates`) |
 | Horde mode                     | ✅ 15 waves per Khan; clear all 8 unlocks Serpent Spire tower                                                                                                     |
 | Forge Tokens + Spells          | ✅ Earn on victory; buy in Kaveh's Forge; cast in battle HUD                                                                                                      |
 | Paid power store (stub IAP)    | ✅ Tower, spells, token packs via StoreService                                                                                                                      |
@@ -85,6 +85,7 @@ In the editor: **Project → Tools → GUT** (bottom panel) → Run All.
 - **Rostam 7 Labours rebrand:** player-facing "Khan" → "Labour"; project title `Rostam 7 Labours: Shahname TD`
 - **LabourMode framework:** campaign-only additive hazards wired in `battle_bootstrap._attach_labour_mode`
 - **Reward towers:** Barracks (7 seals / IAP); Serpent Spire twin venom + Hunger (8 horde clears / IAP); neither uses Star Iron forge materials
+- **5-wave block campaign waves:** `CampaignWaveTemplates` replaces flat procedural generator; Pardeh every 5 cleared waves (not wave 4 only)
 
 ## Known deferrals
 

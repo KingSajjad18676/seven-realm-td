@@ -43,13 +43,61 @@ func test_should_block_battlefield_tap_when_multi_touch_on_large_map() -> void:
 	assert_true(_camera.should_block_battlefield_tap())
 
 
-func test_should_not_block_battlefield_tap_when_camera_locked() -> void:
+func test_pan_moved_does_not_block_tap_when_camera_locked() -> void:
 	var level := LevelData.new()
 	level.path_points = [Vector2(80, 360), Vector2(1180, 360)]
 	level.minimap_bounds = MapCameraUtils.compute_world_bounds(level)
 	_camera.configure_from_level(level)
 	_camera._pan_moved = true
 	assert_false(_camera.should_block_battlefield_tap())
+
+
+func test_should_block_multi_touch_when_camera_locked() -> void:
+	var level := LevelData.new()
+	level.path_points = [Vector2(80, 360), Vector2(1180, 360)]
+	_camera.configure_from_level(level)
+	assert_true(_camera.is_camera_locked())
+	_camera._touch_count = 2
+	assert_true(_camera.should_block_battlefield_tap())
+
+
+func test_should_block_pinch_when_camera_locked() -> void:
+	var level := LevelData.new()
+	level.path_points = [Vector2(80, 360), Vector2(1180, 360)]
+	_camera.configure_from_level(level)
+	_camera._pinch_active = true
+	assert_true(_camera.should_block_battlefield_tap())
+
+
+func test_magnify_gesture_zooms_locked_camera() -> void:
+	var level := LevelData.new()
+	level.path_points = [Vector2(80, 360), Vector2(1180, 360)]
+	_camera.configure_from_level(level)
+	assert_true(_camera.is_camera_locked())
+	var start_z := _camera.zoom.x
+	var ev := InputEventMagnifyGesture.new()
+	ev.factor = 1.15
+	ev.position = Vector2(640, 360)
+	_camera._unhandled_input(ev)
+	assert_gt(_camera.zoom.x, start_z)
+
+
+func test_screen_touch_tracks_count_when_camera_locked() -> void:
+	var level := LevelData.new()
+	level.path_points = [Vector2(80, 360), Vector2(1180, 360)]
+	_camera.configure_from_level(level)
+	var press := InputEventScreenTouch.new()
+	press.pressed = true
+	press.position = Vector2(100, 100)
+	_camera._unhandled_input(press)
+	assert_eq(_camera.get_touch_count(), 1)
+	var second := InputEventScreenTouch.new()
+	second.pressed = true
+	second.position = Vector2(200, 200)
+	second.index = 1
+	_camera._unhandled_input(second)
+	assert_eq(_camera.get_touch_count(), 2)
+	assert_true(_camera.should_block_battlefield_tap())
 
 
 func test_locked_camera_can_zoom_in_when_apply_zoom() -> void:

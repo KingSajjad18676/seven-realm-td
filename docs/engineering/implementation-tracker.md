@@ -14,7 +14,7 @@
 | Khan 1 onboarding (tutorial + hints) | ✅ | `tutorial_controller.gd`, `contextual_hint_controller.gd`, `seen_hints` in save |
 | Tower place / upgrade / sell | ✅ | Build radial on empty pad (unaffordable towers disabled); manage radial on occupied pad (level, upgrade, sell, purify); **range ring** on select (`tower_range_ring.gd`) |
 | Waves + spawner + win/loss | ✅ | [spec/gameplay.md](../spec/gameplay.md) |
-| **Scaled campaign waves** | ✅ | Khan 1 = 30 waves, +10 per mission to Damavand 100; mini-boss every 10th; final boss wave |
+| **Scaled campaign waves** | ✅ | 5-wave block templates per map; Pardeh every 5 cleared waves; mini-boss every 10th; final boss wave |
 | **Hero's Vow (10-wave blocks)** | ✅ | `VowOfferController`, `ObjectiveController` vow types, HUD chip, results tally |
 | Hero move + skill | ✅ | Rostam + Zal (Khans 2–3) |
 | Lion boss (Khan 1 finale) | ✅ | Wave 30 of Khan 1 |
@@ -31,7 +31,7 @@
 | Tower hijack | ✅ | |
 | Sacred Tether | ✅ | Tower spot panel button when hero in range |
 | Morale meter | ✅ | Multiplier applied at battle start |
-| Pardeh Break / Fate | ✅ | Pick or skip; 8 cards with catalog-aligned effects |
+| Pardeh Break / Fate | ✅ | Pick or skip every 5 cleared waves; 8 cards with catalog-aligned effects |
 | Ancestral Forge | ✅ | `tower_flame_archer`, `tower_volcano_ram` replace pads |
 | Kaveh's Forge (meta) | ✅ | Elite gate for Hunt only |
 
