@@ -44,6 +44,11 @@ func blocks_tower_damage() -> bool:
 	return _phase == Phase.ROAR
 
 
+func cleanup() -> void:
+	if _enemy and _enemy.context:
+		_enemy.context.runtime_modifiers.erase("tower_damage_mult")
+
+
 func _start_telegraph(next: Phase, msg: String) -> void:
 	_phase = next
 	_phase_timer = 1.2

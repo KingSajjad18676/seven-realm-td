@@ -202,7 +202,7 @@ func _show_step(index: int) -> void:
 	elif _got_it_btn:
 		_got_it_btn.visible = false
 	if _dim:
-		var needs_map := step.advance in [
+		var needs_map: bool = step.advance in [
 			StepAdvance.TOWER_BUILT,
 			StepAdvance.HERO_MOVED,
 		]

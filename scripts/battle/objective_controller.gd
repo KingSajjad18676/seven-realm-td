@@ -6,7 +6,8 @@ var active_objective: ObjectiveData = null
 var progress: int = 0
 var completed: bool = false
 var failed: bool = false
-var _leaks: int = 0
+var _total_leaks: int = 0
+var _hijack_count: int = 0
 
 
 func initialize(ctx: BattleContext) -> void:
@@ -25,7 +26,8 @@ func _reset() -> void:
 	progress = 0
 	completed = false
 	failed = false
-	_leaks = 0
+	_total_leaks = 0
+	_hijack_count = 0
 
 
 func on_cleanse() -> void:
@@ -38,22 +40,34 @@ func on_cleanse() -> void:
 
 
 func on_gate_leak() -> void:
-	_leaks += 1
-	if active_objective and active_objective.goal_type == "no_leaks" and _leaks > 0:
+	_total_leaks += 1
+	if active_objective and active_objective.goal_type == "no_leaks":
 		failed = true
 
 
 func on_hijack() -> void:
+	_hijack_count += 1
 	if active_objective and active_objective.goal_type == "no_hijack":
 		failed = true
 
 
 func on_wave_cleared() -> void:
+	pass
+
+
+func evaluate_at_victory() -> void:
 	if active_objective == null or completed or failed:
 		return
-	if active_objective.goal_type == "no_leaks" and _leaks == 0:
-		_complete()
-	_leaks = 0
+	match active_objective.goal_type:
+		"no_leaks":
+			if _total_leaks == 0:
+				_complete()
+		"no_hijack":
+			if _hijack_count == 0:
+				_complete()
+		"cleanse_twice":
+			if progress >= active_objective.goal_count:
+				_complete()
 
 
 func _complete() -> void:

@@ -38,6 +38,18 @@ func _ready() -> void:
 	if _forge_btn:
 		_forge_btn.pressed.connect(_on_forge)
 	_refresh_mode_buttons()
+	_show_pending_alert()
+
+
+func _show_pending_alert() -> void:
+	if SceneFlowController == null or _seals_label == null:
+		return
+	var msg := SceneFlowController.consume_pending_alert()
+	var seals := SaveSystem.get_khan_seals() if SaveSystem else 0
+	if msg != "":
+		_seals_label.text = "%s\nKhan seals: %d/7" % [msg, seals]
+	else:
+		_seals_label.text = "Khan seals: %d/7" % seals
 
 
 func _build_campaign_nodes() -> void:
@@ -136,7 +148,10 @@ func _on_level(level_id: String) -> void:
 
 
 func _on_roguelite() -> void:
-	SceneFlowController.go_to_roguelite_map(true)
+	var has_active_run := SceneFlowController.pending_roguelite_run != null
+	if not has_active_run and SaveSystem:
+		has_active_run = not SaveSystem.get_roguelite_run().is_empty()
+	SceneFlowController.go_to_roguelite_map(not has_active_run)
 
 
 func _on_endless() -> void:
@@ -154,7 +169,7 @@ func _on_hunt() -> void:
 
 
 func _on_forge() -> void:
-	SceneFlowController.go_to_forge()
+	SceneFlowController.go_to_forge(true)
 
 
 func _on_back() -> void:

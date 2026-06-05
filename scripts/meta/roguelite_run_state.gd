@@ -29,3 +29,27 @@ func get_current_node() -> Dictionary:
 func advance() -> bool:
 	current_index += 1
 	return current_index < nodes.size()
+
+
+func to_dict() -> Dictionary:
+	return {
+		"seed": seed,
+		"nodes": nodes.duplicate(true),
+		"current_index": current_index,
+		"relic_ids": relic_ids.duplicate(),
+	}
+
+
+static func from_dict(data: Dictionary) -> RogueliteRunState:
+	var run := RogueliteRunState.new()
+	run.seed = int(data.get("seed", 0))
+	var saved_nodes: Variant = data.get("nodes", [])
+	if saved_nodes is Array:
+		run.nodes = saved_nodes.duplicate(true)
+	run.current_index = int(data.get("current_index", 0))
+	run.relic_ids.clear()
+	var saved_relics: Variant = data.get("relic_ids", [])
+	if saved_relics is Array:
+		for relic_id in saved_relics:
+			run.relic_ids.append(str(relic_id))
+	return run

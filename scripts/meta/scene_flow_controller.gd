@@ -10,6 +10,7 @@ const ROGUELITE_MAP := "res://scenes/roguelite_map/roguelite_map.tscn"
 var pending_launch: BattleLaunchData = null
 var pending_roguelite_run: RogueliteRunState = null
 var pending_alert: String = ""
+var forge_return_path: String = MAIN_MENU
 var _fade_layer: CanvasLayer = null
 var _fade_rect: ColorRect = null
 var _is_transitioning: bool = false
@@ -47,7 +48,8 @@ func go_to_world_map() -> void:
 	_change_scene(WORLD_MAP)
 
 
-func go_to_forge() -> void:
+func go_to_forge(from_world_map: bool = false) -> void:
+	forge_return_path = WORLD_MAP if from_world_map else MAIN_MENU
 	_change_scene(FORGE)
 
 
@@ -55,11 +57,23 @@ func go_to_roguelite_map(start_new_run: bool = false) -> void:
 	if start_new_run:
 		pending_roguelite_run = RogueliteRunState.new()
 		pending_roguelite_run.generate_run()
+		persist_roguelite_run()
+	elif pending_roguelite_run == null and SaveSystem:
+		var saved := SaveSystem.get_roguelite_run()
+		if not saved.is_empty():
+			pending_roguelite_run = RogueliteRunState.from_dict(saved)
 	_change_scene(ROGUELITE_MAP)
 
 
 func clear_roguelite_run() -> void:
 	pending_roguelite_run = null
+	if SaveSystem:
+		SaveSystem.clear_roguelite_run()
+
+
+func persist_roguelite_run() -> void:
+	if SaveSystem and pending_roguelite_run:
+		SaveSystem.set_roguelite_run(pending_roguelite_run.to_dict())
 
 
 func consume_pending_alert() -> String:
@@ -70,6 +84,10 @@ func consume_pending_alert() -> String:
 
 func go_to_battle(launch: BattleLaunchData) -> void:
 	if launch and launch.is_hunt_mode and ForgeService and ForgeService.is_damavand_level(launch.level_id):
+		if SaveSystem and not SaveSystem.has_all_khan_seals():
+			pending_alert = "Collect all 7 Khan seals before Hunt for Zahhak."
+			go_to_world_map()
+			return
 		if not ForgeService.can_enter_damavand():
 			pending_alert = "Forge an Elite tower at Kaveh's Forge before Hunt for Zahhak."
 			go_to_world_map()

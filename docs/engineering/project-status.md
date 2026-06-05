@@ -1,6 +1,6 @@
 # Project Status (Godot)
 
-**Last updated:** 2026-06-05 (complete game logic roadmap)  
+**Last updated:** 2026-06-05 (game logic audit fixes)  
 **Milestones:** [design/04-production-roadmap.md](../design/04-production-roadmap.md) · **Identity:** [design/00-project-index.md](../design/00-project-index.md)
 
 ---
@@ -13,12 +13,12 @@
 | Main menu → world map → battle | ✅ Campaign, roguelite, endless, hunt, daily tale |
 | Tutorial gate | ✅ Khan 1 locked until tutorial cleared |
 | Campaign levels | ✅ Tutorial + Khans 1–7 + Damavand with per-Khan enemy rosters |
-| Signature systems | ✅ Corruption, hijack, Pardeh/Fate (pick required), Morale combat, Ancestral Forge hybrids |
-| Roguelite 5-node run | ✅ Run persists across battles; defeat clears run |
-| Hunt for Zahhak | ✅ Requires 7 seals + Elite forge; binding shards weaken Zahhak |
+| Signature systems | ✅ Corruption, hijack (SF purify), Pardeh/Fate (skip or pick), Morale at start, Sacred Tether via tower panel, Ancestral Forge nearest-pad fusion |
+| Roguelite 5-node run | ✅ Persisted to save v4; resume from world map; defeat clears run |
+| Hunt for Zahhak | ✅ 7 seals + Elite forge enforced in scene flow; binding shards weaken Zahhak |
 | Campaign Damavand | ✅ After Khan 7 clear; binding guards + chainbreakers before boss |
 | Kaveh's Forge | ✅ World map link; Elite notification unlocks Hunt |
-| Save v4 | ✅ Hunt best, forge notification flag, mode-aware battle saves |
+| Save v4 | ✅ Hunt best, forge notification, roguelite run state, mode-aware battle saves |
 
 ---
 
@@ -51,9 +51,18 @@ godot --headless --path . --script res://tools/smoke_test.gd
 
 ---
 
+## Logic fixes (2026-06-05 audit)
+
+- Wave manager waits for enemy clear before Pardeh / next wave
+- Per-spawn `EnemyData`/`HeroData` duplicate — no shared catalog mutation
+- Boss debuffs cleared on death; pool reuse resets boss controller
+- Tutorial Continue requires victory; world map shows hunt/forge alerts
+- Objectives evaluated at victory (no_leaks / no_hijack / cleanse_twice)
+
 ## Known deferrals
 
 - Production art/audio (placeholders sufficient for logic QA)
+- Projectile-on-impact damage (instant damage today; cosmetic projectiles)
 - Full 43 Fate card pool; extra heroes (Gordafarid, Esfandiyar, …)
 - Company splash scene (boot → menu directly today)
 - Platform IAP, crash SDK, Simorgh continue, Zervan Dial rewind

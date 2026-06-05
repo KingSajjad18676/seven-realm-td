@@ -24,7 +24,7 @@ func tick(delta: float) -> void:
 			_alert("Azhdaha coils — armor hardens!", 85)
 		Phase.COIL:
 			if _enemy:
-				_enemy.data.armor += 2.0
+				_enemy.add_armor_delta(2.0)
 			_phase = Phase.BREATH
 			_phase_timer = 1.2
 			_alert("Poison breath along the route!", 88)

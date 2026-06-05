@@ -65,8 +65,6 @@ func _process(delta: float) -> void:
 func on_region_light_changed(light: int) -> void:
 	if light <= 0:
 		_start_hijack_warning()
-	elif hijack_phase != GameEnums.HijackPhase.NONE:
-		_recover_from_hijack()
 	else:
 		_efficiency = 1.0 if light >= 30 else float(light) / 30.0
 
@@ -233,6 +231,11 @@ func _start_hijack_warning() -> void:
 	AnalyticsService.tower_hijack_started(spot_id)
 	if context and context.objectives:
 		context.objectives.on_hijack()
+
+
+func force_enter_hijacked() -> void:
+	if hijack_phase == GameEnums.HijackPhase.WARNING:
+		_enter_hijacked()
 
 
 func _enter_hijacked() -> void:

@@ -53,6 +53,7 @@ func _spawn_next_wave() -> void:
 	if context.enemy_spawner:
 		await context.enemy_spawner.spawn_wave(wave)
 	is_spawning = false
+	await _wait_for_wave_clear()
 	CombatEvents.wave_completed.emit(current_wave_index)
 	if context:
 		if context.morale:
@@ -107,11 +108,24 @@ func _spawn_endless_wave() -> void:
 	if context.enemy_spawner:
 		await context.enemy_spawner.spawn_wave(wave)
 	is_spawning = false
+	await _wait_for_wave_clear()
 	if context and context.morale:
 		context.morale.on_wave_cleared()
 	await get_tree().create_timer(2.0 / _time_scale()).timeout
 	if context.state_controller and context.state_controller.current_state == GameEnums.BattleState.WAVE_ACTIVE:
 		_spawn_endless_wave()
+
+
+func _wait_for_wave_clear() -> void:
+	if context == null or context.state_controller == null:
+		return
+	while context.state_controller.get_active_enemy_count() > 0:
+		if context.state_controller.current_state in [
+			GameEnums.BattleState.DEFEAT,
+			GameEnums.BattleState.VICTORY,
+		]:
+			return
+		await get_tree().process_frame
 
 
 func _time_scale() -> float:

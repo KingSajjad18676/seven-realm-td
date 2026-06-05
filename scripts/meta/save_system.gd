@@ -50,6 +50,8 @@ func _migrate_save() -> void:
 			_data["hunt_best_binding"] = 0
 		if not _data.has("damavand_forge_notified"):
 			_data["damavand_forge_notified"] = false
+		if not _data.has("roguelite_run"):
+			_data["roguelite_run"] = {}
 		_data["save_version"] = 4
 		save_game()
 
@@ -85,6 +87,7 @@ func _default_data() -> Dictionary:
 		"endless_best": 0,
 		"hunt_best_binding": 0,
 		"damavand_forge_notified": false,
+		"roguelite_run": {},
 		"relics_owned": [],
 		"cosmetic_entitlements": [],
 	}
@@ -141,6 +144,21 @@ func get_khan_seals() -> int:
 
 func has_all_khan_seals() -> bool:
 	return get_khan_seals() >= 7
+
+
+func get_roguelite_run() -> Dictionary:
+	var state: Variant = _data.get("roguelite_run", {})
+	return state if state is Dictionary else {}
+
+
+func set_roguelite_run(run_data: Dictionary) -> void:
+	_data["roguelite_run"] = run_data.duplicate(true)
+	save_game()
+
+
+func clear_roguelite_run() -> void:
+	_data["roguelite_run"] = {}
+	save_game()
 
 
 func get_daily_tale_state() -> Dictionary:

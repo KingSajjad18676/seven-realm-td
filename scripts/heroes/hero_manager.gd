@@ -10,9 +10,10 @@ var heroes_root: Node2D = null
 func initialize(ctx: BattleContext, root: Node2D) -> void:
 	context = ctx
 	heroes_root = root
-	var hero_data := ContentRegistry.get_hero(ctx.level_data.hero_id if ctx.level_data else "rostam")
-	if hero_data == null:
+	var catalog_hero := ContentRegistry.get_hero(ctx.level_data.hero_id if ctx.level_data else "rostam")
+	if catalog_hero == null:
 		return
+	var hero_data := catalog_hero.duplicate(true) as HeroData
 	hero = hero_scene.instantiate() as HeroController
 	heroes_root.add_child(hero)
 	var start := ctx.level_data.spawn_position + Vector2(0, 80) if ctx.level_data else Vector2.ZERO

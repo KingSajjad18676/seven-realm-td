@@ -56,20 +56,16 @@ func get_speed_mult() -> float:
 
 
 func blocks_tower_damage() -> bool:
-	return _phase == Phase.REVEALED and _enemy and _enemy.current_hp > _enemy.data.max_hp * 0.25
+	return _phase == Phase.REVEALED and _enemy and _enemy.current_hp > _enemy.get_effective_max_hp() * 0.25
 
 
 func _transform_revealed() -> void:
 	_revealed = true
 	_phase = Phase.REVEALED
 	_phase_timer = 1.0
-	if _enemy == null or _enemy.data == null:
+	if _enemy == null:
 		return
-	_enemy.data.display_name = "Sorceress (Revealed Fiend)"
-	_enemy.data.max_hp = maxf(_enemy.current_hp, _enemy.data.max_hp * 0.6)
-	_enemy.data.move_speed += 15.0
-	if _enemy._sprite:
-		_enemy._sprite.color = Color(0.85, 0.15, 0.35)
+	_enemy.apply_boss_reveal()
 	_alert("Illusion shattered — the fiend is revealed!", 92)
 
 

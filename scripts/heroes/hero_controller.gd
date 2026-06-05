@@ -107,7 +107,10 @@ func _physics_process(delta: float) -> void:
 		if dist < 6.0:
 			_has_target = false
 		else:
-			velocity = dir * data.move_speed
+			var speed := data.move_speed
+			if context and context.runtime_modifiers.has("hero_move_speed_mult"):
+				speed *= float(context.runtime_modifiers["hero_move_speed_mult"])
+			velocity = dir * speed
 			move_and_slide()
 	_intercept_leaks()
 	_attack_nearby(delta)

@@ -20,15 +20,23 @@ func try_fuse_any_adjacent_pair() -> bool:
 		return false
 	var spots := context.tower_manager.build_spots
 	for i in range(spots.size()):
-		for j in range(i + 1, spots.size()):
-			var a: BuildSpot = spots[i]
+		var a: BuildSpot = spots[i]
+		if a.tower == null:
+			continue
+		var nearest: BuildSpot = null
+		var nearest_dist := INF
+		for j in range(spots.size()):
+			if i == j:
+				continue
 			var b: BuildSpot = spots[j]
-			if a.tower == null or b.tower == null:
+			if b.tower == null:
 				continue
-			if a.global_position.distance_to(b.global_position) > 160.0:
-				continue
-			if try_fuse_adjacent(a, b):
-				return true
+			var dist := a.global_position.distance_to(b.global_position)
+			if dist < nearest_dist:
+				nearest_dist = dist
+				nearest = b
+		if nearest and try_fuse_adjacent(a, nearest):
+			return true
 	return false
 
 

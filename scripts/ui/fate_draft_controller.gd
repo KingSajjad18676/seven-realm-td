@@ -17,6 +17,9 @@ func initialize(ctx: BattleContext, panel: Control) -> void:
 	_panel = panel
 	if _panel:
 		_panel.visible = false
+		var skip := _panel.get_node_or_null("SkipButton") as Button
+		if skip and not skip.pressed.is_connected(_on_skip_pressed):
+			skip.pressed.connect(_on_skip_pressed)
 
 
 func show_draft() -> void:
@@ -57,16 +60,17 @@ func _build_pardeh_ui() -> void:
 	_populate_cards(card_row)
 	var obj_row := HBoxContainer.new()
 	obj_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	var obj := ContentRegistry.get_random_objective() if ContentRegistry else null
-	if obj:
-		var accept_obj := Button.new()
-		accept_obj.text = "Accept: %s" % obj.title
-		accept_obj.pressed.connect(_on_accept_objective.bind(obj))
-		obj_row.add_child(accept_obj)
-		var decline_obj := Button.new()
-		decline_obj.text = "Decline objective"
-		decline_obj.pressed.connect(func() -> void: _objective_accepted = true)
-		obj_row.add_child(decline_obj)
+	if ContentRegistry:
+		var obj: ObjectiveData = ContentRegistry.get_random_objective()
+		if obj:
+			var accept_obj := Button.new()
+			accept_obj.text = "Accept: %s" % obj.title
+			accept_obj.pressed.connect(_on_accept_objective.bind(obj))
+			obj_row.add_child(accept_obj)
+			var decline_obj := Button.new()
+			decline_obj.text = "Decline objective"
+			decline_obj.pressed.connect(func() -> void: _objective_accepted = true)
+			obj_row.add_child(decline_obj)
 	vbox.add_child(obj_row)
 	var strat_row := HBoxContainer.new()
 	strat_row.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -161,10 +165,14 @@ func _on_card_picked(card: FateCardData) -> void:
 
 
 func _apply_fate_effects(card: FateCardData) -> void:
+	if context == null:
+		return
 	match card.card_id:
 		"card_derafsh_oath":
 			if context.morale:
 				context.morale.add(15)
+			if context.economy and card.boon_sacred_fire_bonus > 0:
+				context.economy.add_sacred_fire(card.boon_sacred_fire_bonus)
 			if card.curse_corruption_rate > 0.0:
 				context.runtime_modifiers["corruption_rate_bonus"] = card.curse_corruption_rate
 		"card_qanat_blessing":
@@ -181,20 +189,34 @@ func _apply_fate_effects(card: FateCardData) -> void:
 				context.economy.add_gold(card.boon_gold_bonus)
 		"card_iron_rain":
 			context.runtime_modifiers["tower_attack_rate_mult"] = 1.2
+			context.runtime_modifiers["attack_mult"] = card.boon_attack_mult
 			context.runtime_modifiers["enemy_speed_mult"] = 1.05
 			if card.curse_enemy_hp_mult != 1.0:
 				context.runtime_modifiers["enemy_hp_mult"] = card.curse_enemy_hp_mult
 		_:
-			if card.boon_gold_bonus > 0 and context.economy:
-				context.economy.add_gold(card.boon_gold_bonus)
-			if card.boon_sacred_fire_bonus > 0 and context.economy:
-				context.economy.add_sacred_fire(card.boon_sacred_fire_bonus)
-			if card.boon_attack_mult != 1.0:
-				context.runtime_modifiers["attack_mult"] = card.boon_attack_mult
-			if card.curse_enemy_hp_mult != 1.0:
-				context.runtime_modifiers["enemy_hp_mult"] = card.curse_enemy_hp_mult
-			if card.curse_corruption_rate > 0.0:
-				context.runtime_modifiers["corruption_rate_bonus"] = card.curse_corruption_rate
+			_apply_default_fate_effects(card)
+
+
+func _apply_default_fate_effects(card: FateCardData) -> void:
+	if card.boon_gold_bonus > 0 and context.economy:
+		context.economy.add_gold(card.boon_gold_bonus)
+	if card.boon_gold_bonus < 0 and context.economy:
+		context.runtime_modifiers["wave_gold_penalty"] = card.boon_gold_bonus
+	if card.boon_sacred_fire_bonus > 0 and context.economy:
+		context.economy.add_sacred_fire(card.boon_sacred_fire_bonus)
+	if card.boon_attack_mult != 1.0:
+		context.runtime_modifiers["attack_mult"] = card.boon_attack_mult
+	if card.curse_enemy_hp_mult != 1.0:
+		context.runtime_modifiers["enemy_hp_mult"] = card.curse_enemy_hp_mult
+	if card.curse_corruption_rate > 0.0:
+		context.runtime_modifiers["corruption_rate_bonus"] = card.curse_corruption_rate
+
+
+func _on_skip_pressed() -> void:
+	_card_picked = true
+	if context and context.bridge:
+		context.bridge.alert_message.emit("Fate declined — no boon or curse", 30)
+	_finish_draft()
 
 
 func _on_continue_pressed() -> void:
@@ -202,6 +224,10 @@ func _on_continue_pressed() -> void:
 		if context and context.bridge:
 			context.bridge.alert_message.emit("Choose a Fate card first", 50)
 		return
+	_finish_draft()
+
+
+func _finish_draft() -> void:
 	if _panel:
 		_panel.visible = false
 		for child in _panel.get_children():

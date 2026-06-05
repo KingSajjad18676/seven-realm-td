@@ -25,6 +25,7 @@ var _last_victory: bool = false
 @onready var _pardeh_panel: Panel = %PardehPanel
 @onready var _tower_buttons: HBoxContainer = %TowerButtons
 var _forge_btn: Button = null
+var _tower_button_group: ButtonGroup = null
 
 
 func initialize(ctx: BattleContext, fate_draft: FateDraftController) -> void:
@@ -136,6 +137,8 @@ func refresh_skill_label() -> void:
 func _setup_tower_buttons() -> void:
 	if _tower_buttons == null or context == null or context.level_data == null:
 		return
+	if _tower_button_group == null:
+		_tower_button_group = ButtonGroup.new()
 	for child in _tower_buttons.get_children():
 		child.queue_free()
 	for tid in context.level_data.available_tower_ids:
@@ -145,12 +148,7 @@ func _setup_tower_buttons() -> void:
 		var btn := Button.new()
 		btn.text = "%s\n%dG" % [td.display_name, td.build_cost]
 		btn.toggle_mode = true
-		btn.button_group = _tower_buttons.get_node_or_null("TowerGroup") as ButtonGroup
-		if btn.button_group == null:
-			var group := ButtonGroup.new()
-			group.name = "TowerGroup"
-			_tower_buttons.add_child(group)
-			btn.button_group = group
+		btn.button_group = _tower_button_group
 		btn.pressed.connect(func() -> void:
 			if context.tower_manager:
 				context.tower_manager.selected_tower_id = tid
@@ -225,14 +223,26 @@ func _on_skill() -> void:
 
 
 func _on_replay() -> void:
-	var launch := _get_current_launch()
-	var level_id := launch.level_id if launch else (
-		context.level_data.level_id if context and context.level_data else "level_01"
-	)
+	var launch = _get_current_launch()
+	var level_id: String = "level_01"
+	if launch:
+		level_id = launch.level_id
+	elif context and context.level_data:
+		level_id = context.level_data.level_id
 	if context and context.level_data and context.level_data.is_tutorial:
-		if SaveSystem and not SaveSystem.is_tutorial_completed():
+		if _last_victory and SaveSystem and not SaveSystem.is_tutorial_completed():
 			SaveSystem.mark_tutorial_completed()
-		SceneFlowController.go_to_world_map()
+			SceneFlowController.go_to_world_map()
+		elif not _last_victory:
+			var launch := _get_current_launch()
+			if launch:
+				SceneFlowController.go_to_battle(launch.duplicate_launch())
+			else:
+				var fresh := BattleLaunchData.new()
+				fresh.level_id = "level_00_tutorial"
+				SceneFlowController.go_to_battle(fresh)
+		else:
+			SceneFlowController.go_to_world_map()
 		return
 	AnalyticsService.replay_selected(level_id)
 	if SaveSystem:
@@ -245,10 +255,12 @@ func _on_replay() -> void:
 		SceneFlowController.go_to_battle(fresh)
 
 
-func _get_current_launch() -> BattleLaunchData:
+func _get_current_launch():
 	if context and context.launch_data:
 		return context.launch_data
-	return SceneFlowController.pending_launch
+	if SceneFlowController:
+		return SceneFlowController.pending_launch
+	return null
 
 
 func _on_map() -> void:
@@ -258,6 +270,7 @@ func _on_map() -> void:
 	if launch and launch.is_roguelite_run:
 		if _last_victory and SceneFlowController.pending_roguelite_run:
 			if SceneFlowController.pending_roguelite_run.advance():
+				SceneFlowController.persist_roguelite_run()
 				SceneFlowController.go_to_roguelite_map()
 			else:
 				SceneFlowController.clear_roguelite_run()

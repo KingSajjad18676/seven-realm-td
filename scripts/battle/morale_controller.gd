@@ -10,18 +10,24 @@ var current: int = 50
 func initialize(ctx: BattleContext) -> void:
 	context = ctx
 	current = 50
+	_sync_modifiers()
 	_emit()
 
 
 func add(amount: int) -> void:
 	current = clampi(current + amount, 0, MAX_MORALE)
+	_sync_modifiers()
 	_emit()
-	if context:
-		context.runtime_modifiers["morale_mult"] = 1.0 + float(current) * 0.002
-		if current < 25:
-			context.runtime_modifiers["morale_rate_penalty"] = 0.85
-		else:
-			context.runtime_modifiers.erase("morale_rate_penalty")
+
+
+func _sync_modifiers() -> void:
+	if context == null:
+		return
+	context.runtime_modifiers["morale_mult"] = 1.0 + float(current) * 0.002
+	if current < 25:
+		context.runtime_modifiers["morale_rate_penalty"] = 0.85
+	else:
+		context.runtime_modifiers.erase("morale_rate_penalty")
 
 
 static func get_damage_mult(ctx: BattleContext) -> float:

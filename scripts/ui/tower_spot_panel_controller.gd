@@ -9,6 +9,7 @@ var _spot: BuildSpot = null
 @onready var _sell_btn: Button = %SellButton
 @onready var _purify_btn: Button = %PurifyButton
 @onready var _close_btn: Button = %CloseButton
+var _tether_btn: Button = null
 
 
 func initialize(ctx: BattleContext) -> void:
@@ -22,6 +23,7 @@ func initialize(ctx: BattleContext) -> void:
 		_purify_btn.pressed.connect(_on_purify)
 	if _close_btn:
 		_close_btn.pressed.connect(_on_close)
+	_ensure_tether_button()
 
 
 func show_for_spot(spot: BuildSpot) -> void:
@@ -76,6 +78,11 @@ func _refresh() -> void:
 		_sell_btn.text = "Sell  +%dG" % tower.get_sell_refund()
 		_sell_btn.disabled = not actions_enabled or hijacked
 
+	if _tether_btn:
+		var in_range := _hero_can_tether()
+		_tether_btn.visible = not hijacked and _spot.occupied
+		_tether_btn.disabled = not actions_enabled or not in_range
+
 
 func _can_act() -> bool:
 	if context == null or context.state_controller == null:
@@ -103,6 +110,38 @@ func _on_purify() -> void:
 		return
 	if _spot.tower.try_recover_hijack():
 		_refresh()
+
+
+func _ensure_tether_button() -> void:
+	if _tether_btn != null:
+		return
+	_tether_btn = Button.new()
+	_tether_btn.name = "TetherButton"
+	_tether_btn.text = "Sacred Tether"
+	_tether_btn.offset_left = 8.0
+	_tether_btn.offset_top = 120.0
+	_tether_btn.offset_right = 232.0
+	_tether_btn.offset_bottom = 152.0
+	add_child(_tether_btn)
+	_tether_btn.pressed.connect(_on_tether)
+
+
+func _hero_can_tether() -> bool:
+	if context == null or context.hero_manager == null or context.hero_manager.hero == null or _spot == null:
+		return false
+	var hero := context.hero_manager.hero
+	if hero.data == null:
+		return false
+	return hero.global_position.distance_to(_spot.global_position) <= hero.data.tether_radius * 1.2
+
+
+func _on_tether() -> void:
+	if _spot == null or _spot.tower == null or context == null or context.hero_manager == null:
+		return
+	var hero := context.hero_manager.hero
+	if hero:
+		hero.tether_to_tower(_spot.tower)
+		hide_panel()
 
 
 func _on_close() -> void:

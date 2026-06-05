@@ -13,6 +13,10 @@ var _slow_mult: float = 1.0
 var _slow_timer: float = 0.0
 var _is_boss: bool = false
 var _boss_controller: RefCounted = null
+var _armor_delta: float = 0.0
+var _move_speed_bonus: float = 0.0
+var _max_hp_override: float = -1.0
+var _revealed_form: bool = false
 
 @onready var _sprite: ColorRect = $Sprite
 @onready var _hp_bar: ProgressBar = $HPBar
@@ -21,7 +25,12 @@ var _boss_controller: RefCounted = null
 func initialize(ctx: BattleContext, enemy_data: EnemyData, path: PackedVector2Array) -> void:
 	context = ctx
 	data = enemy_data
-	current_hp = enemy_data.max_hp * _hp_multiplier()
+	_boss_controller = null
+	_armor_delta = 0.0
+	_move_speed_bonus = 0.0
+	_max_hp_override = -1.0
+	_revealed_form = false
+	current_hp = _effective_max_hp()
 	_follower.setup(path)
 	_burn_timer = 0.0
 	_slow_mult = 1.0
@@ -41,9 +50,9 @@ func initialize(ctx: BattleContext, enemy_data: EnemyData, path: PackedVector2Ar
 
 func setup_as_boss() -> void:
 	_is_boss = true
-	if _boss_controller == null and data:
+	if data:
 		_boss_controller = BossControllerFactory.create(data.enemy_id)
-		if _boss_controller.has_method("attach"):
+		if _boss_controller and _boss_controller.has_method("attach"):
 			_boss_controller.attach(self)
 
 
@@ -52,14 +61,14 @@ func _process(delta: float) -> void:
 		return
 	if context.state_controller.current_state != GameEnums.BattleState.WAVE_ACTIVE:
 		return
-	var speed := data.move_speed * _slow_mult
+	var speed := (data.move_speed + _move_speed_bonus) * _slow_mult
 	if context and context.runtime_modifiers.has("enemy_speed_mult"):
 		speed *= float(context.runtime_modifiers["enemy_speed_mult"])
 	if _is_boss and _boss_controller and _boss_controller.has_method("get_speed_mult"):
 		speed *= _boss_controller.get_speed_mult()
 	global_position = _follower.advance(speed * delta)
-	if data.tags.has("regen") and current_hp < data.max_hp * _hp_multiplier():
-		current_hp = minf(current_hp + 3.0 * delta, data.max_hp * _hp_multiplier())
+	if data.tags.has("regen") and current_hp < _effective_max_hp():
+		current_hp = minf(current_hp + 3.0 * delta, _effective_max_hp())
 	if _burn_timer > 0.0:
 		_burn_timer -= delta
 		take_damage(4.0 * delta, false)
@@ -76,7 +85,7 @@ func _process(delta: float) -> void:
 
 
 func take_damage(amount: float, from_tower: bool = true) -> void:
-	var dmg := maxf(1.0, amount - data.armor * 0.5)
+	var dmg := maxf(1.0, amount - _effective_armor() * 0.5)
 	if _is_boss and from_tower and _boss_controller and _boss_controller.has_method("blocks_tower_damage") and _boss_controller.blocks_tower_damage():
 		dmg *= 0.5
 	current_hp -= dmg
@@ -96,10 +105,42 @@ func apply_slow(mult: float, duration: float) -> void:
 
 
 func apply_armor_break() -> void:
-	data.armor = maxf(0.0, data.armor - 2.0)
+	_armor_delta -= 2.0
+
+
+func add_armor_delta(delta: float) -> void:
+	_armor_delta += delta
+
+
+func apply_boss_reveal() -> void:
+	_revealed_form = true
+	_move_speed_bonus += 15.0
+	_max_hp_override = maxf(current_hp, _effective_max_hp() * 0.6)
+	if _sprite:
+		_sprite.color = Color(0.85, 0.15, 0.35)
+	if _hp_bar:
+		_hp_bar.max_value = _effective_max_hp()
+		_hp_bar.value = current_hp
+
+
+func _effective_armor() -> float:
+	return maxf(0.0, data.armor + _armor_delta)
+
+
+func get_effective_max_hp() -> float:
+	return _effective_max_hp()
+
+
+func _effective_max_hp() -> float:
+	var base := data.max_hp * _hp_multiplier()
+	if _max_hp_override > 0.0:
+		return _max_hp_override
+	return base
 
 
 func _die() -> void:
+	if _is_boss and _boss_controller and _boss_controller.has_method("cleanup"):
+		_boss_controller.cleanup()
 	if _is_boss and context and context.morale:
 		context.morale.on_boss_defeated()
 	if context and context.hunt and data:

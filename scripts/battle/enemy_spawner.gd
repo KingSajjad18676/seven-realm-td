@@ -19,10 +19,11 @@ func spawn_wave(wave: WaveData) -> void:
 	for group in wave.spawn_groups:
 		var enemy_id: String = str(group.get("enemy_id", ""))
 		var count: int = int(group.get("count", 1))
-		var data := ContentRegistry.get_enemy(enemy_id)
-		if data == null:
+		var catalog_data := ContentRegistry.get_enemy(enemy_id)
+		if catalog_data == null:
 			continue
 		for i in count:
+			var data := catalog_data.duplicate(true) as EnemyData
 			_spawn_enemy(data)
 			if wave.spawn_interval > 0.0:
 				await get_tree().create_timer(wave.spawn_interval).timeout

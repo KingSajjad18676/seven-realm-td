@@ -256,6 +256,7 @@ grow_vertical = 0
 text = "World Map"
 
 [node name="PardehPanel" type="Panel" parent="CanvasLayer"]
+unique_name_in_owner = true
 offset_left = 200.0
 offset_top = 180.0
 offset_right = 1080.0

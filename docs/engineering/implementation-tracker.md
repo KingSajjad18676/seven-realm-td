@@ -1,6 +1,6 @@
 # Implementation Tracker
 
-**Last updated:** 2026-06-05 (complete game logic roadmap)  
+**Last updated:** 2026-06-05 (game logic audit fixes)  
 **Repo truth:** [project-status.md](project-status.md)
 
 ---
@@ -26,9 +26,9 @@
 | Regional light + corruption | ✅ | `MapLightManager` |
 | Sacred Fire + cleanse | ✅ | |
 | Tower hijack | ✅ | |
-| Sacred Tether | ✅ | |
-| Morale meter | ✅ | Affects tower/hero damage and attack rate |
-| Pardeh Break / Fate | ✅ | Pick required; 8 cards with aligned effects |
+| Sacred Tether | ✅ | Tower spot panel button when hero in range |
+| Morale meter | ✅ | Multiplier applied at battle start |
+| Pardeh Break / Fate | ✅ | Pick or skip; 8 cards with catalog-aligned effects |
 | Ancestral Forge | ✅ | `tower_flame_archer`, `tower_volcano_ram` replace pads |
 | Kaveh's Forge (meta) | ✅ | Elite gate for Hunt only |
 
@@ -41,9 +41,9 @@
 | Khans 1–7 + Damavand data | ✅ Per-Khan enemy IDs + wave tables |
 | World map unlock chain | ✅ Tutorial → Khan 1 → … → Damavand |
 | Khan seals (7) | ✅ Campaign clears only |
-| Roguelite 5-node run | ✅ Persisted via `SceneFlowController.pending_roguelite_run` |
+| Roguelite 5-node run | ✅ `save_system.gd` + `SceneFlowController`; resume from world map |
 | Endless mode | ✅ No campaign progress on victory |
-| Hunt Zahhak | ✅ Elite forge + 7 seals; binding shards |
+| Hunt Zahhak | ✅ Elite forge + 7 seals in UI and `go_to_battle()` gate |
 
 ---
 

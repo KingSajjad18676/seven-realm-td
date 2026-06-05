@@ -16,6 +16,7 @@ func _ready() -> void:
 		_run.generate_run()
 		if SceneFlowController:
 			SceneFlowController.pending_roguelite_run = _run
+			SceneFlowController.persist_roguelite_run()
 	_refresh()
 	if _action_btn:
 		_action_btn.pressed.connect(_on_action)
@@ -66,7 +67,9 @@ func _on_action() -> void:
 
 
 func _pick_relic() -> void:
-	var relics := ContentRegistry.get_all_relics() if ContentRegistry else []
+	var relics: Array[RelicData] = []
+	if ContentRegistry:
+		relics = ContentRegistry.get_all_relics()
 	if relics.is_empty():
 		_advance_run()
 		return
@@ -84,11 +87,14 @@ func _start_battle(level_id: String) -> void:
 	launch.active_relic_ids = _run.relic_ids.duplicate()
 	launch.roguelite_node_index = _run.current_index
 	SceneFlowController.pending_roguelite_run = _run
+	SceneFlowController.persist_roguelite_run()
 	SceneFlowController.go_to_battle(launch)
 
 
 func _advance_run() -> void:
 	if not _run.advance():
+		if SceneFlowController:
+			SceneFlowController.clear_roguelite_run()
 		if _desc:
 			_desc.text = "Run complete! Return to campaign."
 		if _action_btn:
@@ -99,6 +105,8 @@ func _advance_run() -> void:
 				SceneFlowController.go_to_world_map()
 			)
 		return
+	if SceneFlowController:
+		SceneFlowController.persist_roguelite_run()
 	_refresh()
 
 

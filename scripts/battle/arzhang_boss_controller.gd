@@ -47,6 +47,11 @@ func blocks_tower_damage() -> bool:
 	return _phase == Phase.FORTIFY
 
 
+func cleanup() -> void:
+	if _enemy and _enemy.context:
+		_enemy.context.runtime_modifiers.erase("tower_damage_mult")
+
+
 func _alert(msg: String, prio: int) -> void:
 	if _enemy and _enemy.context and _enemy.context.bridge:
 		_enemy.context.bridge.alert_message.emit(msg, prio)

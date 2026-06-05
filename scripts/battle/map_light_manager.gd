@@ -194,3 +194,14 @@ func process_hijack_timers(delta: float) -> void:
 			done.append(spot_id)
 	for spot_id in done:
 		_hijack_timers.erase(spot_id)
+		_force_hijack_at_spot(spot_id)
+
+
+func _force_hijack_at_spot(spot_id: String) -> void:
+	if context == null or context.tower_manager == null:
+		return
+	for spot in context.tower_manager.build_spots:
+		if spot.spot_id == spot_id and spot.tower:
+			if spot.tower.hijack_phase == GameEnums.HijackPhase.WARNING:
+				spot.tower.force_enter_hijacked()
+			return

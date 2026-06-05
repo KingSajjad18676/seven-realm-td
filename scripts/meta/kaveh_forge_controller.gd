@@ -91,7 +91,12 @@ func _build_tower_row(tower_id: String) -> PanelContainer:
 
 
 func _on_back() -> void:
-	SceneFlowController.go_to_main_menu()
+	if SceneFlowController == null:
+		return
+	if SceneFlowController.forge_return_path == SceneFlowController.WORLD_MAP:
+		SceneFlowController.go_to_world_map()
+	else:
+		SceneFlowController.go_to_main_menu()
 
 
 func _on_elite_forged() -> void:

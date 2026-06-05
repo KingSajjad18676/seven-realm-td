@@ -47,6 +47,10 @@ func register_enemy_removed() -> void:
 	_check_victory()
 
 
+func get_active_enemy_count() -> int:
+	return _active_enemies
+
+
 func notify_all_waves_spawned() -> void:
 	all_waves_spawned = true
 	_check_victory()
@@ -55,6 +59,8 @@ func notify_all_waves_spawned() -> void:
 func trigger_victory(reason: String = "waves_cleared") -> void:
 	if current_state == GameEnums.BattleState.VICTORY:
 		return
+	if context and context.objectives:
+		context.objectives.evaluate_at_victory()
 	_set_state(GameEnums.BattleState.VICTORY)
 	Engine.time_scale = 0.0
 	if context.bridge:
@@ -62,7 +68,7 @@ func trigger_victory(reason: String = "waves_cleared") -> void:
 	var level_id := context.level_data.level_id if context.level_data else ""
 	CombatEvents.battle_completed.emit(true, level_id)
 	AnalyticsService.battle_completed(true, level_id)
-	var launch := context.launch_data if context else null
+	var launch = context.launch_data if context else null
 	if SaveSystem and context.level_data and launch and launch.is_campaign_mode():
 		var lid := context.level_data.level_id
 		SaveSystem.mark_level_cleared(lid)

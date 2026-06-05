@@ -35,12 +35,11 @@ func tick(delta: float) -> void:
 				var hero := _enemy.context.hero_manager.hero
 				if hero and hero.global_position.distance_to(_enemy.global_position) < 85.0:
 					hero.take_damage(28.0)
-					if hero.data and _enemy:
-						var orig := hero.data.move_speed
-						hero.data.move_speed *= 0.6
+					if _enemy.context:
+						_enemy.context.runtime_modifiers["hero_move_speed_mult"] = 0.6
 						_enemy.get_tree().create_timer(2.5).timeout.connect(func() -> void:
-							if is_instance_valid(hero) and hero.data:
-								hero.data.move_speed = orig
+							if _enemy and _enemy.context:
+								_enemy.context.runtime_modifiers.erase("hero_move_speed_mult")
 						, CONNECT_ONE_SHOT)
 			_phase = Phase.PATROL
 			_phase_timer = 4.8
@@ -52,6 +51,12 @@ func get_speed_mult() -> float:
 
 func blocks_tower_damage() -> bool:
 	return _phase == Phase.BLIZZARD
+
+
+func cleanup() -> void:
+	if _enemy and _enemy.context:
+		_enemy.context.runtime_modifiers.erase("tower_attack_rate_mult")
+		_enemy.context.runtime_modifiers.erase("hero_move_speed_mult")
 
 
 func _alert(msg: String, prio: int) -> void:
