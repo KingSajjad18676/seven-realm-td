@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LevelData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/level_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+level_id = "level_02"
+display_name = "Khan 2 — Desert of Thirst (data override)"
+starting_gold = 175
+starting_sacred_fire = 6
+default_objective_id = "obj_cleanse_twice"

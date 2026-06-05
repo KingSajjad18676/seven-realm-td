@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://fps_overlay"]
+
+[ext_resource type="Script" path="res://scripts/ui/fps_overlay.gd" id="1_fps"]
+
+[node name="FPSOverlay" type="CanvasLayer"]
+layer = 90
+script = ExtResource("1_fps")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 120.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.8)
+text = "FPS: --"

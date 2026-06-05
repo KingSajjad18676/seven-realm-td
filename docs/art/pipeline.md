@@ -18,7 +18,8 @@ For each generation request, paste **in order** (do not repeat the full visual b
 
 **One asset per request.** Approve isolated base design before animation strips.
 
-Full prompt text and phase inventories: [design/01](../design/01-art-phases.md) · extract [_source/design/00_01_extracted.txt](_source/design/00_01_extracted.txt).
+**Copy-paste prompt pack:** [prompts/README.md](../../prompts/README.md) (phase 0–7, green review sprites).  
+Design summaries: [design/01](../design/01-art-phases.md) · extract [_source/design/00_01_extracted.txt](_source/design/00_01_extracted.txt).
 
 ---
 

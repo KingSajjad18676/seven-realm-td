@@ -1,0 +1,18 @@
+class_name BattleContextBridge
+extends Node
+
+signal gold_changed(amount: int)
+signal sacred_fire_changed(amount: int)
+signal lives_changed(current: int, max_lives: int)
+signal wave_changed(current: int, total: int)
+signal battle_state_changed(state: GameEnums.BattleState)
+signal alert_message(message: String, priority: int)
+signal region_light_changed(region_id: String, light: int, state: GameEnums.RegionLightState)
+signal region_selected(region_id: String, light: int)
+signal tower_hijack_warning(spot_id: String)
+signal pardeh_break_requested
+signal results_requested(victory: bool, reason: String)
+signal morale_changed(current: int, max_morale: int)
+signal run_summary_ready(summary: Dictionary)
+
+var context: BattleContext = null

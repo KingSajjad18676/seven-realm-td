@@ -21,6 +21,22 @@ This document includes **advanced and post-launch** systems (rewind, tribute, pr
 10. Boss **Khan phases** (every 15% HP) trigger adaptive counters and map modifiers.
 11. Roguelite finale: **Zahhak** (infinite HP) dragged to **Damavand** with Forge chains — or standard wave clear victory.
 
+### Kaveh's Forge (meta — implemented)
+
+| Step | Behavior |
+|------|----------|
+| Battle kills | Each enemy may drop a **forge material** (`forge_material_id` / `forge_material_drop` on `EnemyData`) |
+| Victory | `BattleEconomy.forge_materials_earned` committed to save `star_iron` |
+| Main menu | **Kaveh's Forge** screen — per starter tower row |
+| Normal forge | Levels 1→30; cost scales per level; +4% damage / +1% range per level |
+| Visual tier | Every 10 levels → design tier 1–3 (graybox color/size) |
+| Elite forge | After level 30, 5 elite levels; large bonus at elite 5 |
+| Damavand | `level_08_damavand` launch blocked unless `ForgeService.can_enter_damavand()` (≥1 elite tower) |
+
+**Material mapping (Khan 1 slice):** Jackal → Falcon (Archer); Corruptor → Ember (Sacred Fire); Boar → Anvil (Heavy); Lion boss → Frost (Control).
+
+**Not the same as:** Ancestral Forge (adjacent tower hybrids in battle).
+
 ### Input rules (mobile)
 
 | Gesture | Action |

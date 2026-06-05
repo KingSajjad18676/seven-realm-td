@@ -1,0 +1,3417 @@
+# ALL READY-TO-PASTE IMAGE PROMPTS — phase_04_meta_narrative
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — character_base_bizhan
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `character_base_bizhan`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait_or_codex_base`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Read: Agile prince fighter, lighter armor.
+
+## Asset-type contract
+Create one isolated full-body sprite unless the asset is explicitly a bust/codex portrait. Keep the full silhouette visible with safe padding. Use bottom-center pivot intent for gameplay sprites. Do not bake a ground plane or cast shadow into the sprite.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `character_base_bizhan` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — character_base_fereydun
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `character_base_fereydun`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait_or_codex_base`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Read: Legendary binder hero, ox-headed mace reference subtle.
+
+## Asset-type contract
+Create one isolated full-body sprite unless the asset is explicitly a bust/codex portrait. Keep the full silhouette visible with safe padding. Use bottom-center pivot intent for gameplay sprites. Do not bake a ground plane or cast shadow into the sprite.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `character_base_fereydun` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — character_base_giv
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `character_base_giv`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait_or_codex_base`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Read: Elder warrior mentor, white beard, armor under cloak.
+
+## Asset-type contract
+Create one isolated full-body sprite unless the asset is explicitly a bust/codex portrait. Keep the full silhouette visible with safe padding. Use bottom-center pivot intent for gameplay sprites. Do not bake a ground plane or cast shadow into the sprite.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `character_base_giv` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — character_base_goudarz
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `character_base_goudarz`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait_or_codex_base`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Read: Veteran commander, weathered face.
+
+## Asset-type contract
+Create one isolated full-body sprite unless the asset is explicitly a bust/codex portrait. Keep the full silhouette visible with safe padding. Use bottom-center pivot intent for gameplay sprites. Do not bake a ground plane or cast shadow into the sprite.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `character_base_goudarz` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — character_base_kaveh
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `character_base_kaveh`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait_or_codex_base`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Read: Blacksmith revolutionary, apron and hammer.
+
+## Asset-type contract
+Create one isolated full-body sprite unless the asset is explicitly a bust/codex portrait. Keep the full silhouette visible with safe padding. Use bottom-center pivot intent for gameplay sprites. Do not bake a ground plane or cast shadow into the sprite.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `character_base_kaveh` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — character_base_kay_khosrow
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `character_base_kay_khosrow`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait_or_codex_base`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Read: Crown prince, royal teal/crimson, young king dignity.
+
+## Asset-type contract
+Create one isolated full-body sprite unless the asset is explicitly a bust/codex portrait. Keep the full silhouette visible with safe padding. Use bottom-center pivot intent for gameplay sprites. Do not bake a ground plane or cast shadow into the sprite.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `character_base_kay_khosrow` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — character_base_simorgh
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `character_base_simorgh`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait_or_codex_base`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Read: Bird spirit dignified portrait — eyes readable. ---
+
+## Asset-type contract
+Create one isolated full-body sprite unless the asset is explicitly a bust/codex portrait. Keep the full silhouette visible with safe padding. Use bottom-center pivot intent for gameplay sprites. Do not bake a ground plane or cast shadow into the sprite.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `character_base_simorgh` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — character_base_sohrab
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `character_base_sohrab`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait_or_codex_base`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Read: Young hero, Rostam lineage, dignified — base 256×256 for codex.
+
+## Asset-type contract
+Create one isolated full-body sprite unless the asset is explicitly a bust/codex portrait. Keep the full silhouette visible with safe padding. Use bottom-center pivot intent for gameplay sprites. Do not bake a ground plane or cast shadow into the sprite.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `character_base_sohrab` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — icon_iron_anvil
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `icon_iron_anvil`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `ui_icon`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Asset-specific direction
+Kaveh forge material icon: Star Iron anvil motif; strong simple silhouette.
+
+## Asset-type contract
+Create one icon with strong silhouette, clean spacing, and no readable text. Center pivot intent. Use the specified grid exactly.
+
+## Exact technical export contract
+- Exact canvas: 128×128px.
+- Grid: 1 columns × 1 rows. Cell size: 128×128px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/icons/`. Use stable asset ID `icon_iron_anvil` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — icon_iron_ember
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `icon_iron_ember`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `ui_icon`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Asset-specific direction
+Kaveh forge material icon: Star Iron ember motif; strong simple silhouette.
+
+## Asset-type contract
+Create one icon with strong silhouette, clean spacing, and no readable text. Center pivot intent. Use the specified grid exactly.
+
+## Exact technical export contract
+- Exact canvas: 128×128px.
+- Grid: 1 columns × 1 rows. Cell size: 128×128px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/icons/`. Use stable asset ID `icon_iron_ember` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — icon_iron_falcon
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `icon_iron_falcon`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `ui_icon`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Asset-specific direction
+Kaveh forge material icon: Star Iron falcon motif; strong simple silhouette.
+
+## Asset-type contract
+Create one icon with strong silhouette, clean spacing, and no readable text. Center pivot intent. Use the specified grid exactly.
+
+## Exact technical export contract
+- Exact canvas: 128×128px.
+- Grid: 1 columns × 1 rows. Cell size: 128×128px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/icons/`. Use stable asset ID `icon_iron_falcon` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — icon_iron_frost
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `icon_iron_frost`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `ui_icon`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Asset-specific direction
+Kaveh forge material icon: Star Iron frost motif; strong simple silhouette.
+
+## Asset-type contract
+Create one icon with strong silhouette, clean spacing, and no readable text. Center pivot intent. Use the specified grid exactly.
+
+## Exact technical export contract
+- Exact canvas: 128×128px.
+- Grid: 1 columns × 1 rows. Cell size: 128×128px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/icons/`. Use stable asset ID `icon_iron_frost` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_arash
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_arash`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Arash. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_arash` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_bahram
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_bahram`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Bahram. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_bahram` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_bastwar
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_bastwar`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Bastwar. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_bastwar` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_behafarid
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_behafarid`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Behafarid. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_behafarid` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_boss_arzhang_div
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_boss_arzhang_div`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_boss_arzhang_div` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_boss_azhdaha
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_boss_azhdaha`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_boss_azhdaha` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_boss_div_e_sepid
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_boss_div_e_sepid`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_boss_div_e_sepid` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_boss_manifestation_of_thirst
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_boss_manifestation_of_thirst`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_boss_manifestation_of_thirst` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_boss_olad_champion
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_boss_olad_champion`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_boss_olad_champion` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_boss_sorceress
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_boss_sorceress`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_boss_sorceress` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_boss_zahhak
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_boss_zahhak`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Output (all boss portraits): 256×256 bust, ornate manuscript oval frame optional on separate layer, a deliberate non-chroma full-canvas base. ---
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_boss_zahhak` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_esfandiyar
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_esfandiyar`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Esfandiyar: armored champion. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_esfandiyar` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_faramarz
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_faramarz`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Faramarz. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_faramarz` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_farangis
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_farangis`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Farangis. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_farangis` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_gordafarid
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_gordafarid`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Gordafarid: commanding warrior defender. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_gordafarid` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_gostaham
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_gostaham`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Gostaham. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_gostaham` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_homan
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_homan`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Homan. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_homan` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_homay
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_homay`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Homay. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_homay` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_hushang
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_hushang`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Hushang. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_hushang` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_jamshid
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_jamshid`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Jamshid. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_jamshid` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_katayun
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_katayun`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Katayun. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_katayun` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_kaveh
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_kaveh`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Kaveh the Blacksmith: forge-meta identity. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_kaveh` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_kay_kavus
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_kay_kavus`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Kay Kavus. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_kay_kavus` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_kay_qobad
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_kay_qobad`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Kay Qobad. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_kay_qobad` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_lion_khan
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_lion_khan`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Lion of the First Khan: boss trophy portrait. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_lion_khan` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_lohrasp
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_lohrasp`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Lohrasp. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_lohrasp` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_manijeh
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_manijeh`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Manijeh. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_manijeh` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_narrator
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_narrator`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Narrator of the Shahnameh: manuscript elder. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_narrator` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_pashotan
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_pashotan`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Pashotan. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_pashotan` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_piran
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_piran`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Piran. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_piran` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_qaren
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_qaren`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Qaren. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_qaren` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_rohham
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_rohham`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Rohham. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_rohham` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_rostam
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_rostam`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Rostam-specific identity markers — mandatory:
+- He must read instantly as **Rostam**, the legendary champion of the Shahnameh.
+- Give him a powerful mature heroic presence, commanding face, dark beard, and unmistakably Persian epic stature.
+- Include clear **Babr-e Bayan / tiger-or-leopard motif** influence in textile or armor details.
+- His loadout and symbolism should support **sword + lasso + heroic mace association** with Iranian epic armor and rich Persian textile accents.
+- He must never read as a generic palace guard, MMO warrior, or random medieval soldier.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Rostam; may visually match hero_portrait_rostam. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_rostam` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_rudabeh
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_rudabeh`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Rudabeh. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_rudabeh` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_sam
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_sam`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Sam. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_sam` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_sindokht
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_sindokht`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Sindokht. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_sindokht` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_siyavash
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_siyavash`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Siyavash. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_siyavash` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_tahmineh
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_tahmineh`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Tahmineh. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_tahmineh` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_tahmuras
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_tahmuras`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Tahmuras. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_tahmuras` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_zal
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_zal`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Zal: wise elder with white hair. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_zal` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_zarir
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_zarir`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Zarir. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_zarir` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — portrait_zavareh
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `portrait_zavareh`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `portrait`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Mandatory Shahnameh character reference — highest priority
+This asset must visibly belong to the world of **Ferdowsi's Shahnameh**. Do **not** design a generic fantasy soldier, random mobile-RPG hero, anonymous medieval guard, or generic Western warrior.
+
+Character-design rules:
+- Base the character on **Persian epic / Iranian heroic design language** filtered through **Shahnameh manuscript imagination** and **Persian miniature painting**, adapted into clean readable 2D game art.
+- Human or human-like figures must use **Iranian/Persian-inspired costume and armor**: lamellar or scale armor, bronze/copper/gold/brass plates, quilted underlayers, long decorated tunic panels, sash belts, fitted trousers, leather boots, armguards, and Persian-style conical or rounded helmets.
+- Use **Persian ornamental motifs** where appropriate: sun-disc medallions, rosettes, floral-geometric trims, engraved metalwork, lion, tiger, leopard, horse, or Simurgh-inspired motifs.
+- Faces must feel **Iranian/Persian and heroic**: noble features, strong brows, expressive almond-shaped eyes, dark hair, beard or moustache when appropriate, and a dignified epic presence. Avoid blank mannequin faces.
+- The overall silhouette must feel **Shahnameh / Persian epic**, not European knight, crusader, Viking, Roman legionary, samurai, or generic fantasy guard.
+- If the subject is a mythic beast, companion, boss, or monster, its design must still be filtered through **Iranian epic / Shahnameh aesthetics** rather than generic Western monster design.
+- Corruption, magic, darkness, or boss transformations are only **overlays**; they must never erase the underlying Shahnameh / Persian identity.
+
+Portrait identity rule:
+- The portrait must clearly communicate **Shahnameh identity, Persian epic costume language, and Iranian heroic facial character** rather than a generic fantasy portrait.
+
+## Asset-specific direction
+This asset must read unmistakably as part of the **Shahnameh / Persian epic world**. Prioritize Persian identity over generic fantasy readability whenever there is any conflict.
+
+Narrator's book or codex portrait. Subject: Zavareh. Preserve Iranian-epic dignity and make the face readable at 64px.
+
+## Asset-type contract
+Create one bust portrait with readable eyes and silhouette. Keep the subject centered with safe padding. Any ornate frame must be on a separate visual layer or clearly separable from the portrait.
+
+## Exact technical export contract
+- Exact canvas: 256×256px.
+- Grid: 1 columns × 1 rows. Cell size: 256×256px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/portraits/`. Use stable asset ID `portrait_zavareh` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames, generic medieval guard, generic mobile-game warrior, generic teal-armored soldier, anonymous fantasy mercenary, faceless mannequin hero, non-Persian costume language, culturally generic armor silhouette.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — ui_ancestral_forge
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `ui_ancestral_forge`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `ui_asset`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Asset-specific direction
+Purpose: In-battle hybrid forge UI (adjacent tower combos — deferred code). Gameplay read: Distinct from Kaveh meta forge — two tower silhouettes merge slot, phoenix/hybrid preview. Output: 2048×1024 panel as a complete no-green full-canvas asset, no text. ---
+
+## Asset-type contract
+Create a landscape-mobile UI asset or illustration with ornate Persian-manuscript influence, blank plaques, and icon slots only. Do not bake readable text into the art. Keep important UI-safe areas uncluttered.
+
+## Exact technical export contract
+- Exact canvas: 2048×1024px.
+- Grid: 1 columns × 1 rows. Cell size: 2048×1024px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/`. Use stable asset ID `ui_ancestral_forge` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — ui_hero_hall
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `ui_hero_hall`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `ui_asset`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Asset-specific direction
+Purpose: Hero collection / selection. Output: 4096×2304 — portrait slots, empty plaques, ornate hall architecture as a complete no-green full-canvas asset. ---
+
+## Asset-type contract
+Create a landscape-mobile UI asset or illustration with ornate Persian-manuscript influence, blank plaques, and icon slots only. Do not bake readable text into the art. Keep important UI-safe areas uncluttered.
+
+## Exact technical export contract
+- Exact canvas: 4096×2304px.
+- Grid: 1 columns × 1 rows. Cell size: 4096×2304px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/`. Use stable asset ID `ui_hero_hall` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — ui_kaveh_forge
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `ui_kaveh_forge`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `ui_asset`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Asset-specific direction
+Purpose: Meta forge (kaveh_forge.tscn) — Star Iron upgrades. Gameplay read: Blacksmith forge, anvil, star-iron sparks, per-tower material icons (falcon, ember, anvil, frost). Output: 4096×2304 forge screen as a complete no-green full-canvas asset; separate icon atlas for materials and tier pips (levels 1–30 + elite). Forge material icons: icon_iron_falcon, icon_iron_ember, icon_iron_anvil, icon_iron_frost — 128×128 each. ---
+
+## Asset-type contract
+Create a landscape-mobile UI asset or illustration with ornate Persian-manuscript influence, blank plaques, and icon slots only. Do not bake readable text into the art. Keep important UI-safe areas uncluttered.
+
+## Exact technical export contract
+- Exact canvas: 4096×2304px.
+- Grid: 1 columns × 1 rows. Cell size: 4096×2304px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/`. Use stable asset ID `ui_kaveh_forge` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — ui_narrative_frames
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `ui_narrative_frames`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `ui_asset`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Asset-specific direction
+Purpose: Shared dialogue frame set. Output: Plaques for ally, enemy, narrator, boss — 1024×512 each as a complete no-green full-canvas asset, no text. --- Meta UI: see 05-phase-4-meta-narrative.prompt.md Next: 07-phase-6-polish-accessibility-audio.prompt.md
+
+## Asset-type contract
+Create a landscape-mobile UI asset or illustration with ornate Persian-manuscript influence, blank plaques, and icon slots only. Do not bake readable text into the art. Keep important UI-safe areas uncluttered.
+
+## Exact technical export contract
+- Exact canvas: 1024×512px.
+- Grid: 1 columns × 1 rows. Cell size: 1024×512px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/`. Use stable asset ID `ui_narrative_frames` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — ui_narrators_book
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `ui_narrators_book`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `ui_asset`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Asset-specific direction
+Purpose: Story / lore chapters. Output: Open book spread, illumination margins, blank text lines only. ---
+
+## Asset-type contract
+Create a landscape-mobile UI asset or illustration with ornate Persian-manuscript influence, blank plaques, and icon slots only. Do not bake readable text into the art. Keep important UI-safe areas uncluttered.
+
+## Exact technical export contract
+- Exact canvas: 4096×2304px.
+- Grid: 1 columns × 1 rows. Cell size: 4096×2304px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/`. Use stable asset ID `ui_narrators_book` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — ui_relic_collection
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `ui_relic_collection`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `ui_asset`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Asset-specific direction
+Purpose: Relic museum grid. Output: Relic pedestal slots, manuscript borders. ---
+
+## Asset-type contract
+Create a landscape-mobile UI asset or illustration with ornate Persian-manuscript influence, blank plaques, and icon slots only. Do not bake readable text into the art. Keep important UI-safe areas uncluttered.
+
+## Exact technical export contract
+- Exact canvas: 4096×2304px.
+- Grid: 1 columns × 1 rows. Cell size: 4096×2304px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/`. Use stable asset ID `ui_relic_collection` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — ui_roguelite_map_full
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `ui_roguelite_map_full`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `ui_asset`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Asset-specific direction
+Purpose: Node-graph overworld between battles. Output: 4096×2304 map background + node socket art; use icons from Phase 3 ui_roguelite_node_icons. ---
+
+## Asset-type contract
+Create a landscape-mobile UI asset or illustration with ornate Persian-manuscript influence, blank plaques, and icon slots only. Do not bake readable text into the art. Keep important UI-safe areas uncluttered.
+
+## Exact technical export contract
+- Exact canvas: 4096×2304px.
+- Grid: 1 columns × 1 rows. Cell size: 4096×2304px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/`. Use stable asset ID `ui_roguelite_map_full` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — ui_tower_codex
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `ui_tower_codex`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `ui_asset`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Asset-specific direction
+Purpose: Tower encyclopedia. Output: Grid slots for tower silhouettes, family color coding (teal archer, orange fire, etc.). ---
+
+## Asset-type contract
+Create a landscape-mobile UI asset or illustration with ornate Persian-manuscript influence, blank plaques, and icon slots only. Do not bake readable text into the art. Keep important UI-safe areas uncluttered.
+
+## Exact technical export contract
+- Exact canvas: 4096×2304px.
+- Grid: 1 columns × 1 rows. Cell size: 4096×2304px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/`. Use stable asset ID `ui_tower_codex` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames.
+
+---
+
+# READY-TO-PASTE IMAGE PROMPT — ui_world_map_campaign
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `ui_world_map_campaign`
+- Project phase: Phase 4 — Meta, Narrative, Portraits
+- Deliverable mode: **FULL-CANVAS NO-GREEN GODOT EXPORT**
+- Asset class: `ui_asset`
+
+## Background policy — highest priority
+This asset must **not** use a chroma-green background. Do **not** present it as a transparent cut-out. Render the intended artwork across the complete requested canvas and preserve the exact dimensions. Do not crop the map, layer, tile atlas, interface panel, card, icon, portrait, or illustration to only its active shape. For maps and technical map layers, preserve the full tile-aligned rectangle from corner to corner, including inactive tiles, so every export remains coordinate-locked for Godot. For tilesets and icon atlases, fully populate the intended cells and preserve tile boundaries without printing visible guide lines into the final image. For UI, card, portrait, and illustration assets, use a deliberate complete composition or suitable designed background/frame. Do not add chroma green merely to fill unused space.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Asset-specific direction
+Purpose: Seven Khans + Damavand node map (production art). Output: Illustrated map with 8 node sockets, path lines, no labels. ---
+
+## Asset-type contract
+Create a landscape-mobile UI asset or illustration with ornate Persian-manuscript influence, blank plaques, and icon slots only. Do not bake readable text into the art. Keep important UI-safe areas uncluttered.
+
+## Exact technical export contract
+- Exact canvas: 4096×2304px.
+- Grid: 1 columns × 1 rows. Cell size: 4096×2304px.
+- Pivot intent for Godot: center.
+- FULL-CANVAS EXPORT: do not use chroma green and do not use a transparent cut-out presentation. Fill the complete requested canvas with the intended artwork or a layer-appropriate full-canvas base. Preserve exact dimensions and coordinates. Do not crop to active shapes. Do not draw visible grid guide lines in the final export.
+- Godot target folder: `art/ui/`. Use stable asset ID `ui_world_map_campaign` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames.

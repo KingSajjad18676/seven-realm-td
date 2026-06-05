@@ -99,8 +99,18 @@ Should feel like turning a page in an illustrated epic, not managing a spreadshe
 | **Sacred Fire** | Cleanse, braziers, prevent collapse, recover hijacks, hero skills, Sacred Fire towers, map actions | No |
 | **Morale** | Tower responsiveness, auras, objective rewards, comeback, card synergies — visually secondary early | No |
 | **Farr** | Account progression, unlocks, collections, mastery, cosmetic recognition — **not** paid power | No direct purchase |
+| **Star Iron (per tower)** | Meta forge currency — each starter tower has its own material (Falcon, Ember, Anvil, Frost) | No |
 
 Sacred Fire must be important but usable (not hoarded forever, not spent mindlessly).
+
+### Kaveh's Forge (meta progression)
+
+- Defeating enemies in campaign battles drops **Star Iron** tied to a specific tower material (banked on **victory** only).
+- **Main menu → Kaveh's Forge:** spend a tower's own material to raise its permanent forge level (1–30).
+- Every **10 levels** the tower's battlefield design tier advances (placeholder: color/size until art M4).
+- After level 30, a **5-step Elite path** marks the tower **Elite** (+large combat bonuses).
+- **Damavand Binding** requires at least one Elite tower before launch (logic wired; finale level deferred).
+- Distinct from **Ancestral Forge** (in-battle adjacent-tower hybrids — still deferred).
 
 ---
 

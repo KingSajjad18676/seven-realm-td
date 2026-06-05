@@ -43,6 +43,7 @@ For **what exists in the repo today**, read **[engineering/project-status.md](en
 |-----|---------|
 | [product/prd.md](product/prd.md) | Product requirements summary |
 | [product/roadmap.md](product/roadmap.md) | Milestone backlog and release bundles |
+| [spec/entities-and-gameplay.md](spec/entities-and-gameplay.md) | All towers & maps (every phase) + built entities + assets needed |
 | [spec/gameplay.md](spec/gameplay.md) | Full mechanics spec (incl. post-launch) |
 
 ---
@@ -51,6 +52,8 @@ For **what exists in the repo today**, read **[engineering/project-status.md](en
 
 | Doc | Purpose |
 |-----|---------|
+| [spec/entities-and-gameplay.md](spec/entities-and-gameplay.md) | **All towers & maps (every phase)** + built entities + assets needed |
+| [prompts/README.md](../prompts/README.md) | **AI sprite prompts** — phase 0–7, chroma green review |
 | [art/pipeline.md](art/pipeline.md) | Import rules and AI sprite workflow |
 | [art/visual-vfx.md](art/visual-vfx.md) | Readability checklist for signature systems |
 | [art/content-checklist.md](art/content-checklist.md) | Player-facing flow + asset gaps |
@@ -63,9 +66,9 @@ For **what exists in the repo today**, read **[engineering/project-status.md](en
 | Role | Path |
 |------|------|
 | Anyone new | `design/00` → `engineering/project-status` → `engineering/handoff` |
-| Gameplay / design | `design/02` → `spec/gameplay` |
+| Gameplay / design | `design/02` → `spec/entities-and-gameplay` → `spec/gameplay` |
 | Programmer | `engineering/architecture` → `engineering/game-logic` → `design/04` |
-| Artist | `design/01` → `art/pipeline` → `art/visual-vfx` |
+| Artist | `design/01` → `prompts/README` → `spec/entities-and-gameplay` → `art/pipeline` → `art/visual-vfx` |
 | Monetization / ops | `design/03` → `design/05` → `liveops/retention` |
 
 ---

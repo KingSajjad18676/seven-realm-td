@@ -11,8 +11,41 @@ config_version=5
 [application]
 
 config/name="Shahnameh TD"
+run/main_scene="res://scenes/boot/boot.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+SaveSystem="*res://scripts/meta/save_system.gd"
+ForgeService="*res://scripts/meta/forge_service.gd"
+SceneFlowController="*res://scripts/meta/scene_flow_controller.gd"
+ContentRegistry="*res://scripts/meta/content_registry.gd"
+SettingsService="*res://scripts/meta/settings_service.gd"
+AudioManager="*res://scripts/utilities/audio_manager.gd"
+CombatEvents="*res://scripts/core/combat_events.gd"
+AnalyticsService="*res://scripts/meta/analytics_service.gd"
+LocalizationService="*res://scripts/meta/localization_service.gd"
+DailyTaleService="*res://scripts/meta/daily_tale_service.gd"
+StoreService="*res://scripts/meta/store_service.gd"
+CrashReporter="*res://scripts/meta/crash_reporter.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/mode=3
+window/size/resizable=false
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation=1
+
+[input]
+
+touch={
+"deadzone": 0.5,
+"events": []
+}
 
 [physics]
 

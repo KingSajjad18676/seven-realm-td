@@ -1,0 +1,39 @@
+# READY-TO-PASTE IMAGE PROMPT — vfx_serpent_hud_fill
+
+Generate exactly **ONE** game asset for **Shahnameh TD**.
+
+## Asset identity
+- Stable asset ID: `vfx_serpent_hud_fill`
+- Project phase: Phase 5 — Damavand, Zahhak Hunt, Live-Ops
+- Deliverable mode: **GREEN-BACKGROUND GODOT SPRITE GRID**
+- Asset class: `vfx_animation`
+
+## Background policy — highest priority
+This is an isolated gameplay sprite or sprite-sheet asset. Use a **solid opaque chroma-green background exactly `#00FF00`** in every unused pixel region. Do **not** use transparency or alpha background. Preserve the exact sprite-sheet canvas and conceptual cell grid. Keep the subject fully visible with safe padding inside each cell. Do not crop any body part, tower part, effect edge, or prop edge. Do not draw visible guide lines into the final exported image; the cells must be aligned mathematically, not separated by printed lines. Keep clean edges with no green spill, green fringe, green outline, or green cast shadow.
+
+## Global Shahnameh TD visual system
+Hand-painted 2D game art for **Shahnameh TD**, a landscape-mobile active tower-defense roguelite inspired by Ferdowsi's Shahnameh, Persian miniature painting, and Zoroastrian Sacred Fire versus corruption.
+
+Use the approved `hero_rostam` design as the style-system anchor for line weight, palette, painterly cel-shading, and gameplay readability. Do not copy Rostam's costume onto unrelated characters.
+
+Art direction: strong dark-brown or near-black contours, controlled internal lines, readable silhouettes, painterly cel-shading, Iranian-epic materials: bronze, gold, copper, leather, timber, stone, textile, parchment. Palette: deep teal, lapis blue, crimson, rust red, ivory, charcoal. Sacred Fire uses warm orange, gold, copper, and ivory highlights. Corruption uses restrained cold blue, muted shadow-violet, and charcoal; never neon sci-fi purple. Use an elevated three-quarter gameplay perspective unless the asset is explicitly UI, portrait, icon, tile, or illustration. Keep silhouettes readable at landscape-mobile zoom.
+
+## Asset-specific direction
+Tribute meter particles: twin-serpent fill motes.
+
+## Asset-type contract
+Create a horizontal animation strip with exactly 8 equal cells and 1 row. Every cell is exactly 128×128px. Animate left-to-right. Do not merge poses. Do not overlap cells. Preserve identical scale, costume, materials, perspective, and lighting in every cell.
+
+## Exact technical export contract
+- Exact canvas: 1024×128px.
+- Grid: 8 columns × 1 rows. Cell size: 128×128px.
+- Pivot intent for Godot: center.
+- Frame order: left-to-right. Use 8 distinct sequential frames unless the asset specification explicitly requests fewer. Place the subject consistently inside every cell; no cell overflow or overlap.
+- GREEN SPRITE EXPORT: use solid opaque chroma green exactly `#00FF00` in background
+- Godot target folder: `art/vfx/`. Use stable asset ID `vfx_serpent_hud_fill` as the export basename.
+
+## Required result
+Return only the final image asset. Do not include explanation, labels, filenames, watermarks, or a contact-sheet title inside the image.
+
+## Negative prompt
+Avoid: photorealistic render, 3D CGI, Unreal or Unity screenshot look, generic Western high fantasy, European plate armor, Viking armor, Roman armor, samurai armor, cyberpunk, neon, flat corporate vector, chibi anime, manga speed lines, stock-photo look, watermark, signature, logo unless requested, readable text, fake Persian or Arabic calligraphy, fake runes, excessive spikes, excessive bloom, lens flare, heavy motion-blur smear, cropped head, cropped hands, cropped feet, broken anatomy, inconsistent lighting, muddy gray corruption, green-screen spill, green fringe, green outline, green cast shadow, cluttered scenery behind isolated sprites, duplicate limbs, merged frames, frame overlap, unequal sprite cells, inconsistent character scale, inconsistent costume between animation frames.

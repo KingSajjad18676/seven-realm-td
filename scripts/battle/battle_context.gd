@@ -1,0 +1,26 @@
+class_name BattleContext
+extends RefCounted
+
+var level_data: LevelData = null
+var launch_data: BattleLaunchData = null
+var state_controller: BattleStateController = null
+var wave_manager: WaveManager = null
+var enemy_spawner: EnemySpawner = null
+var economy: BattleEconomy = null
+var lives: LivesController = null
+var tower_manager: TowerManager = null
+var hero_manager: HeroManager = null
+var map_light: MapLightManager = null
+var objectives: ObjectiveController = null
+var morale: MoraleController = null
+var run_modifiers: RunModifierService = null
+var ancestral_forge: AncestralForgeController = null
+var hunt: HuntController = null
+var bridge: BattleContextBridge = null
+var run_summary: Dictionary = {}
+var runtime_modifiers: Dictionary = {}
+var selected_fate_card: FateCardData = null
+
+var active_enemies: Array = []
+var path_points: PackedVector2Array = PackedVector2Array()
+var tutorial_hold_waves: bool = false

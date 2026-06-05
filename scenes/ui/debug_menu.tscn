@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=3 uid="uid://debug_menu"]
+
+[ext_resource type="Script" path="res://scripts/ui/debug_menu_controller.gd" id="1"]
+
+[node name="DebugMenu" type="CanvasLayer"]
+layer = 90
+script = ExtResource("1")
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 280.0
+offset_bottom = 200.0
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SkipWave" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "Skip wave"
+
+[node name="ForceWin" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "Force victory"
+
+[node name="AddGold" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "+100 gold"
+
+[node name="CollapseRegion" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "Collapse north region"

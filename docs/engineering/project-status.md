@@ -1,6 +1,6 @@
 # Project Status (Godot)
 
-**Last updated:** 2026-06-04  
+**Last updated:** 2026-06-04 (campaign roadmap implementation)  
 **Milestones:** [design/04-production-roadmap.md](../design/04-production-roadmap.md) · **Identity:** [design/00-project-index.md](../design/00-project-index.md)
 
 ---
@@ -9,64 +9,47 @@
 
 | Item | Status |
 |------|--------|
-| Godot project | ✅ `project.godot` at repo root (Godot 4.6, Mobile renderer) |
-| `scripts/`, `scenes/`, `resources/` | ❌ **Not present** — scaffold only |
-| Main scene / boot flow | ❌ Not configured (`config/name` still default) |
-| Design data (`.tres`) | ❌ None committed |
-| Playable TD battle | ❌ Not yet — start at **M0** |
-
-**Implication:** Docs that describe waves, autoloads, 115+ resources, or Boot → World Map describe the **target architecture**, not this checkout. Use [implementation-tracker.md](implementation-tracker.md) for planned features; use this file for **what is on disk**.
+| Godot project | ✅ `project.godot` — landscape mobile, main scene boot |
+| `scripts/`, `scenes/`, `resources/` | ✅ M0–M8 engineering scaffold |
+| Campaign levels | ✅ Tutorial + Khans 1–7 + Damavand (`ContentCatalog`) |
+| Roguelite map | ✅ 3-node run + relic picks |
+| Endless / Hunt | ✅ Launch flags + endless wave generator |
+| M4 art hooks | ✅ `VisualAssetLoader` + `art/_placeholders/khan1/` |
+| Meta services | ✅ Daily Tale, Store stub, Localization, CrashReporter stubs |
+| Accessibility | ✅ Settings panel (UI scale, contrast, particles, shake) |
 
 ---
 
 ## Milestone alignment
 
-| Milestone | Status | Next step |
-|-----------|--------|-----------|
-| **M0** Technical proof | ❌ Not started | Landscape viewport, touch, one path, one tower, one enemy, gate leak |
-| **M1** Khan 1 graybox | ❌ | Rostam, 4 tower behaviors, 5 waves, replay button |
-| **M2** Signature systems | ❌ | Regional light, corruption, Sacred Fire, hijack |
-| **M3** Lion boss | ❌ | Arena + telegraphs |
-| **M4** Visual slice | ❌ | [design/01-art-phases.md](../design/01-art-phases.md) Phase 0/1 assets |
-| **M5–M8** | ❌ | Per [design/04-production-roadmap.md](../design/04-production-roadmap.md) |
+| Milestone | Status | Notes |
+|-----------|--------|-------|
+| **M0–M3** | ✅ | Khan 1 slice, corruption, Lion boss |
+| **M4** | 🟡 | Art import path wired; drop PNGs in placeholders |
+| **M5** | ✅ | Full Pardeh flow, 8 Fate cards, objectives, relics, roguelite map, Morale, Sacred Tether, Ancestral Forge prototype |
+| **M6** | ✅ | `ContentCatalog`, `resources/data/` merge, validators, debug menu, save v3 |
+| **M7** | ✅ | Levels 02–08 data, Zal hero, large-map camera, world map, Khan seals |
+| **M8** | ✅ | Accessibility settings, i18n stub, Daily Tale, store restore stub, crash reporter stub |
 
-**Product gate (unchanged):** voluntary **Khan 1 replay** before campaign expansion ([design/00-project-index.md](../design/00-project-index.md)).
+**Product gate:** still validate voluntary **Khan 1 replay** on device before marketing scale.
 
 ---
 
-## Target layout (when M0+ lands)
+## How to run
 
-```text
-project.godot
-scenes/boot/boot.tscn          # main scene (F5)
-scripts/                       # GDScript systems
-resources/                     # .tres design data
-art/_placeholders/
-tools/                         # validators, smoke tests
+1. Open repo root in **Godot 4.6** → **F5**.
+2. Main menu → Campaign / Forge / Settings / Daily Tale.
+3. World map → all Khans (unlock on clear) + Roguelite / Endless / Hunt (after 7 seals).
+
+```powershell
+powershell -File tools/validate_resources.ps1
+godot --headless --path . --script res://tools/smoke_test.gd
 ```
 
-See [architecture.md](architecture.md) and [handoff.md](handoff.md).
-
 ---
 
-## How to run (today)
+## Immediate follow-up
 
-1. Open the repository root in **Godot 4.6**.
-2. Press **F5** — empty project until scenes exist.
-3. Set **Project → Project Settings → Application → Run → Main Scene** to `res://scenes/boot/boot.tscn` once boot exists.
-
----
-
-## Immediate engineering backlog
-
-1. Rename project in `project.godot` → `Shahnameh TD`.
-2. Create folder skeleton per [architecture.md](architecture.md).
-3. Implement **M0**: graybox battle scene with one enemy path, one tower, lives/gate.
-4. Add `tools/validate_resources.ps1` when first `.tres` files exist.
-5. Update [implementation-tracker.md](implementation-tracker.md) as features land.
-
----
-
-## Maintenance
-
-When you ship a milestone, update **this file first**, then adjust tables in `implementation-tracker.md`. Do not mark features ✅ here without matching files under `scripts/`, `scenes/`, or `resources/`.
+1. Device playtest Khan 1 gate (replay analytics in save).
+2. Import Phase 0–7 art into `art/_placeholders/` (run `tools/generate_map_placeholders.gd` in Godot for map PNGs).
+3. Tune per-boss phases on device after playtest.
