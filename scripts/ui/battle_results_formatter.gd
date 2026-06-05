@@ -53,4 +53,8 @@ static func format_summary(summary: Dictionary, ctx: BattleContext) -> String:
 		lines.append("Objective: Complete")
 	elif bool(summary.get("objective_failed", false)):
 		lines.append("Objective: Failed")
+	var vows_honored := int(summary.get("vows_honored", 0))
+	var vows_total := int(summary.get("vows_total", 0))
+	if vows_total > 0:
+		lines.append("Vows honored: %d/%d" % [vows_honored, vows_total])
 	return "\n".join(lines)

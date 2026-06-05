@@ -130,8 +130,13 @@ func _setup_battle() -> void:
 	add_child(fate_draft)
 	fate_draft.initialize(_context, _pardeh_panel)
 
+	var vow_offer := VowOfferController.new()
+	vow_offer.name = "VowOfferController"
+	add_child(vow_offer)
+	vow_offer.initialize(_context, _pardeh_panel)
+
 	if _hud:
-		_hud.initialize(_context, fate_draft)
+		_hud.initialize(_context, fate_draft, vow_offer)
 		if _hud.has_method("setup_camera_ui"):
 			_hud.setup_camera_ui(_camera)
 	if level.is_tutorial:

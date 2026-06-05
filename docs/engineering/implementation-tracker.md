@@ -1,6 +1,6 @@
 # Implementation Tracker
 
-**Last updated:** 2026-06-06 (Horde mode, Forge Tokens, Spells, paid power)  
+**Last updated:** 2026-06-06 (Hero's Vow + scaled campaign waves)  
 **Repo truth:** [project-status.md](project-status.md)
 
 ---
@@ -14,8 +14,10 @@
 | Khan 1 onboarding (tutorial + hints) | ✅ | `tutorial_controller.gd`, `contextual_hint_controller.gd`, `seen_hints` in save |
 | Tower place / upgrade / sell | ✅ | Build radial on empty pad (unaffordable towers disabled); manage radial on occupied pad (level, upgrade, sell, purify) |
 | Waves + spawner + win/loss | ✅ | [spec/gameplay.md](../spec/gameplay.md) |
+| **Scaled campaign waves** | ✅ | Khan 1 = 30 waves, +10 per mission to Damavand 100; mini-boss every 10th; final boss wave |
+| **Hero's Vow (10-wave blocks)** | ✅ | `VowOfferController`, `ObjectiveController` vow types, HUD chip, results tally |
 | Hero move + skill | ✅ | Rostam + Zal (Khans 2–3) |
-| 5 waves + Lion boss | ✅ | Khan 1 |
+| Lion boss (Khan 1 finale) | ✅ | Wave 30 of Khan 1 |
 | Voluntary replay + analytics | ✅ | Mode-aware `BattleLaunchData.duplicate_launch()` |
 
 ---
@@ -39,7 +41,7 @@
 
 | Feature | Built |
 |---------|-------|
-| Khans 1–7 + Damavand data | ✅ Per-Khan enemy IDs + wave tables |
+| Khans 1–7 + Damavand data | ✅ Procedural waves + per-Khan rosters / mini-bosses |
 | World map unlock chain | ✅ Tutorial → Khan 1 → … → Damavand |
 | Khan seals (7) | ✅ Campaign clears only |
 | Roguelite 5-node run | ✅ `save_system.gd` + `SceneFlowController`; resume from world map |

@@ -1,6 +1,6 @@
 # Project Status (Godot)
 
-**Last updated:** 2026-06-06 (Khan difficulty scaling, Horde mode, Forge Tokens, Spells, paid power store)  
+**Last updated:** 2026-06-06 (Hero's Vow + scaled campaign waves)  
 **Milestones:** [design/04-production-roadmap.md](../design/04-production-roadmap.md) · **Identity:** [design/00-project-index.md](../design/00-project-index.md)
 
 ---
@@ -13,7 +13,8 @@
 | Main menu → world map → battle | ✅ Campaign, roguelite, endless, **horde**, hunt, daily tale                                                                                                                 |
 | Tutorial gate                  | ✅ Khan 1 locked until tutorial cleared                                                                                                                           |
 | Khan 1 onboarding              | ✅ Tutorial teaches objective/morale/boss; one-time contextual hints in battle (tower panel, forge, early call, tether)                                           |
-| Campaign levels                | ✅ Tutorial + Khans 1–7 + Damavand with per-Khan enemy rosters                                                                                                    |
+| Campaign levels                | ✅ Tutorial + Khans 1–7 + Damavand; **30–100 procedural waves** (+10 per Khan), mini-boss every 10th wave |
+| Hero's Vow (wave challenges)   | ✅ Optional Accept/Decline vow every 10 waves; honor = SF + morale; break = morale penalty (never fails battle) |
 | Signature systems              | ✅ Corruption, hijack (SF purify), Pardeh/Fate (skip or pick), Morale at start, Sacred Tether via tower panel, Ancestral Forge nearest-pad fusion                 |
 | Roguelite 5-node run           | ✅ Persisted to save v4; resume from world map; defeat clears run                                                                                                 |
 | Hunt for Zahhak                | ✅ 7 seals + Elite forge enforced in scene flow; binding shards weaken Zahhak                                                                                     |
@@ -21,7 +22,7 @@
 | Kaveh's Forge                  | ✅ World map link; Elite notification unlocks Hunt                                                                                                                |
 | Save v4                        | ✅ Hunt best, forge notification, roguelite run state, mode-aware battle saves                                                                                    |
 | Save v5                        | ✅ Forge Tokens, spells owned, horde progress, unlocked towers, paid entitlements                                                                                 |
-| Khan difficulty scaling        | ✅ Per-Khan HP/speed/count mults; larger campaign waves                                                                                                           |
+| Khan difficulty scaling        | ✅ Per-Khan HP/speed/count mults; procedural wave generator (`ContentCatalog._generate_campaign_waves`) |
 | Horde mode                     | ✅ 15 waves per Khan; clear all 8 unlocks Serpent Spire tower                                                                                                     |
 | Forge Tokens + Spells          | ✅ Earn on victory; buy in Kaveh's Forge; cast in battle HUD                                                                                                      |
 | Paid power store (stub IAP)    | ✅ Tower, spells, token packs via StoreService                                                                                                                      |
@@ -77,7 +78,7 @@ In the editor: **Project → Tools → GUT** (bottom panel) → Run All.
 - Per-spawn `EnemyData`/`HeroData` duplicate — no shared catalog mutation
 - Boss debuffs cleared on death; pool reuse resets boss controller
 - Tutorial Continue requires victory; world map shows hunt/forge alerts
-- Objectives evaluated at victory (no_leaks / no_hijack / cleanse_twice)
+- Objectives evaluated at victory (no_leaks / no_hijack / cleanse_twice); **Hero's Vow** offered every 10 waves (Accept/Decline) with HUD chip + results tally
 - Tutorial adds objective, morale, and boss-warning steps; `ContextualHintController` teaches tower panel, forge, early wave call, and Sacred Tether once per save
 
 ## Known deferrals

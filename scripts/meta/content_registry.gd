@@ -107,6 +107,10 @@ func _index_content() -> void:
 	if _objectives.is_empty():
 		for o in _build_default_objectives():
 			_objectives[o.objective_id] = o
+	else:
+		for o in _build_default_objectives():
+			if not _objectives.has(o.objective_id):
+				_objectives[o.objective_id] = o
 
 
 func get_tower(tower_id: String) -> TowerData:
@@ -167,11 +171,34 @@ func get_objective(objective_id: String) -> ObjectiveData:
 
 
 func get_random_objective() -> ObjectiveData:
-	var keys := _objectives.keys()
+	var keys: Array = []
+	for key in _objectives.keys():
+		var obj := _objectives[key] as ObjectiveData
+		if obj and not obj.is_vow:
+			keys.append(key)
 	if keys.is_empty():
 		return null
 	var pick: String = keys[randi() % keys.size()]
 	return _objectives[pick] as ObjectiveData
+
+
+func get_all_vows() -> Array[ObjectiveData]:
+	var out: Array[ObjectiveData] = []
+	for o in _objectives.values():
+		var obj := o as ObjectiveData
+		if obj and obj.is_vow:
+			out.append(obj)
+	out.sort_custom(func(a: ObjectiveData, b: ObjectiveData) -> bool:
+		return a.objective_id < b.objective_id
+	)
+	return out
+
+
+func get_vow(vow_id: String) -> ObjectiveData:
+	var obj := get_objective(vow_id)
+	if obj and obj.is_vow:
+		return obj
+	return null
 
 
 func _build_default_relics() -> Array[RelicData]:
@@ -269,4 +296,64 @@ func _build_default_objectives() -> Array[ObjectiveData]:
 	o3.title = "Sacred Vigil"
 	o3.description = "Never lose a tower to hijack."
 	o3.goal_type = "no_hijack"
-	return [o1, o2, o3]
+	var vows := _build_default_vows()
+	vows.append_array([o1, o2, o3])
+	return vows
+
+
+func _build_default_vows() -> Array[ObjectiveData]:
+	var vows: Array[ObjectiveData] = []
+	vows.append(_make_vow(
+		"vow_stillness", "Rostam's Stillness", "Do not move the hero this block.",
+		"vow_no_hero_move", 1, 8, 5
+	))
+	vows.append(_make_vow(
+		"vow_hold_upgrades", "Patience of the Smith", "Do not upgrade any tower this block.",
+		"vow_no_upgrade", 1, 8, 5
+	))
+	vows.append(_make_vow(
+		"vow_no_new_towers", "Make Do", "Do not build new towers this block.",
+		"vow_no_build", 1, 10, 6
+	))
+	vows.append(_make_vow(
+		"vow_no_sell", "Waste Nothing", "Do not sell any tower this block.",
+		"vow_no_sell", 1, 8, 4
+	))
+	vows.append(_make_vow(
+		"vow_mortal_resolve", "Mortal Resolve", "Do not use hero skills this block.",
+		"vow_no_hero_skill", 1, 10, 6
+	))
+	vows.append(_make_vow(
+		"vow_endure", "Endure the Dark", "Do not cleanse any region this block.",
+		"vow_no_cleanse", 1, 10, 7
+	))
+	vows.append(_make_vow(
+		"vow_unbroken_gate", "Unbroken Gate", "Let no enemy reach the gate this block.",
+		"vow_no_leak_window", 1, 12, 8
+	))
+	vows.append(_make_vow(
+		"vow_sacred_vigil", "Sacred Vigil", "Prevent all tower hijacks this block.",
+		"vow_no_hijack_window", 2, 15, 10
+	))
+	return vows
+
+
+func _make_vow(
+	id: String,
+	title: String,
+	description: String,
+	goal_type: String,
+	sf_reward: int,
+	morale_reward: int,
+	penalty: int
+) -> ObjectiveData:
+	var v := ObjectiveData.new()
+	v.objective_id = id
+	v.title = title
+	v.description = description
+	v.goal_type = goal_type
+	v.is_vow = true
+	v.sacred_fire_reward = sf_reward
+	v.morale_reward = morale_reward
+	v.penalty_morale = penalty
+	return v

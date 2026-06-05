@@ -67,6 +67,7 @@ func _spawn_next_wave() -> void:
 		if context.state_controller:
 			context.state_controller.notify_all_waves_spawned()
 		return
+	await _maybe_offer_vow()
 	var wave: WaveData = context.level_data.waves[current_wave_index]
 	if context.bridge:
 		context.bridge.wave_changed.emit(current_wave_index + 1, total_waves)
@@ -113,6 +114,7 @@ func continue_after_tutorial_hold() -> void:
 func _spawn_endless_wave() -> void:
 	_endless_wave += 1
 	current_wave_index = _endless_wave - 1
+	await _maybe_offer_vow()
 	if context.bridge:
 		context.bridge.wave_changed.emit(_endless_wave, 999)
 	var wave := _build_endless_wave_data(_endless_wave)
@@ -267,3 +269,33 @@ func _time_scale() -> float:
 	if context and context.state_controller:
 		return maxf(context.state_controller.speed_multiplier, 0.01)
 	return 1.0
+
+
+func _block_size() -> int:
+	if context == null or context.level_data == null:
+		return 10
+	var size := context.level_data.block_size
+	return size if size > 0 else 10
+
+
+func _maybe_offer_vow() -> void:
+	if context == null or context.level_data == null:
+		return
+	if context.level_data.is_tutorial:
+		return
+	if context.objectives == null or context.bridge == null:
+		return
+	var block_size := _block_size()
+	if current_wave_index % block_size != 0:
+		return
+	var block_index := current_wave_index / block_size
+	var block_start := block_index * block_size + 1
+	var block_end := block_index * block_size + block_size
+	if not _endless_mode and not _horde_mode:
+		block_end = mini(block_end, total_waves)
+	var vow := context.objectives.pick_next_vow(block_index)
+	if vow == null:
+		return
+	context.bridge.vow_offer_requested.emit(vow, block_start, block_end)
+	while context.state_controller and context.state_controller.current_state == GameEnums.BattleState.PAUSED:
+		await get_tree().process_frame

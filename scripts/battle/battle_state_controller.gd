@@ -125,6 +125,8 @@ func _emit_run_summary(victory: bool, reason: String) -> void:
 		"morale": context.morale.current if context.morale else 0,
 		"objective_done": context.objectives.completed if context.objectives else false,
 		"objective_failed": context.objectives.failed if context.objectives else false,
+		"vows_honored": context.objectives.vows_honored if context.objectives else 0,
+		"vows_total": context.objectives.vows_offered if context.objectives else 0,
 	}
 	context.run_summary = summary
 	context.bridge.run_summary_ready.emit(summary)

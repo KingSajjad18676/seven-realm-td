@@ -628,7 +628,8 @@ static func build_khan_level(
 		level.camera_anchors = [Vector2(640, 360), Vector2(900, 400), Vector2(400, 320)]
 	var pad_count := 4 if not large_cam else 6
 	level.build_spot_positions = _pads_along_path(path, pad_count)
-	level.waves = _scale_waves_for_khan(_campaign_waves_for_khan(id, boss_id), id)
+	level.waves = _generate_campaign_waves(id, boss_id)
+	level.block_size = 10
 	level.default_objective_id = _default_objective_for(id)
 	level.minimap_bounds = MapCameraUtils.compute_world_bounds(level)
 	return level
@@ -684,6 +685,73 @@ static func _default_objective_for(level_id: String) -> String:
 			return "obj_cleanse_twice"
 		_:
 			return ""
+
+
+static func wave_count_for(level_id: String) -> int:
+	var idx := khan_index(level_id)
+	if idx <= 0:
+		return 5
+	return 20 + idx * 10
+
+
+static func mini_boss_for(level_id: String) -> String:
+	match level_id:
+		"level_01":
+			return "enemy_boar"
+		"level_02":
+			return "enemy_salt_crust_brute"
+		"level_03":
+			return "enemy_canyon_serpent"
+		"level_04":
+			return "enemy_feast_shade"
+		"level_05":
+			return "enemy_mountain_raider"
+		"level_06":
+			return "enemy_div_brute"
+		"level_07":
+			return "enemy_cavern_boulder_brute"
+		"level_08_damavand":
+			return "enemy_chainbreaker_div"
+		_:
+			return "enemy_boar"
+
+
+static func _generate_campaign_waves(level_id: String, boss_id: String) -> Array[WaveData]:
+	var count := wave_count_for(level_id)
+	var roster := get_horde_roster(level_id)
+	var mini_boss := mini_boss_for(level_id)
+	var diff := khan_difficulty(level_id)
+	var mult := float(diff.count_mult)
+	var waves: Array[WaveData] = []
+	for i in range(1, count + 1):
+		var wave_id := "%s_wave_%d" % [level_id, i]
+		var delay := 1.5 if i % 10 != 0 else 2.0
+		if i > 20:
+			delay = 1.2
+		if i == count:
+			waves.append(_make_wave(wave_id, [{"enemy_id": boss_id, "count": 1}], 2.5, true))
+		elif i % 10 == 0:
+			var escort_count := maxi(2, int((3 + i / 10) * mult))
+			var groups: Array = [
+				{"enemy_id": mini_boss, "count": 1},
+				{"enemy_id": roster[0], "count": escort_count},
+			]
+			var w := _make_wave(wave_id, groups, delay, false)
+			w.display_name = "Mini-boss"
+			waves.append(w)
+		else:
+			var primary: String = roster[(i - 1) % roster.size()]
+			var base_count := maxi(3, int((4.0 + float(i) * 0.35) * mult))
+			var groups: Array = [{"enemy_id": primary, "count": base_count}]
+			if roster.size() > 1 and i % 3 == 0:
+				var secondary: String = roster[i % roster.size()]
+				if secondary != primary:
+					groups.append({"enemy_id": secondary, "count": maxi(1, int(float(base_count) * 0.4))})
+			var interval := 0.0
+			if primary in ["enemy_mirage_shade", "enemy_illusion_attendant", "enemy_white_div_thrall"]:
+				interval = maxf(0.08, 0.2 - float(i) * 0.001)
+			waves.append(_make_wave(wave_id, groups, delay, false, interval))
+	return waves
 
 
 static func _scale_waves_for_khan(waves: Array[WaveData], level_id: String) -> Array[WaveData]:

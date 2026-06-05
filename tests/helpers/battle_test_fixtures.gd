@@ -71,6 +71,19 @@ static func make_objective(goal_type: String, goal_count: int = 1) -> ObjectiveD
 	return obj
 
 
+static func make_vow(goal_type: String, penalty: int = 5) -> ObjectiveData:
+	var obj := ObjectiveData.new()
+	obj.objective_id = "test_vow_%s" % goal_type
+	obj.title = "Test Vow"
+	obj.description = "Test vow description"
+	obj.goal_type = goal_type
+	obj.is_vow = true
+	obj.sacred_fire_reward = 2
+	obj.morale_reward = 8
+	obj.penalty_morale = penalty
+	return obj
+
+
 static func make_enemy(
 	enemy_id: String,
 	tags: Array[String] = [],

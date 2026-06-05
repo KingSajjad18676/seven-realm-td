@@ -55,3 +55,25 @@ func test_cleanse_twice_evaluates_at_victory() -> void:
 	_objectives.on_cleanse()
 	_objectives.evaluate_at_victory()
 	assert_true(_objectives.completed)
+
+
+func test_vow_breaks_on_forbidden_action() -> void:
+	BattleTestFixtures.attach_morale(self, _ctx)
+	var vow := BattleTestFixtures.make_vow("vow_no_hero_move", 6)
+	_objectives.activate_vow(vow, 1, 10)
+	var morale_before := _ctx.morale.current
+	CombatEvents.hero_moved.emit()
+	assert_false(_objectives.is_vow_active())
+	assert_eq(_ctx.morale.current, morale_before - 6)
+
+
+func test_vow_honored_when_block_cleared() -> void:
+	BattleTestFixtures.attach_economy(self, _ctx)
+	BattleTestFixtures.attach_morale(self, _ctx)
+	var vow := BattleTestFixtures.make_vow("vow_no_upgrade", 5)
+	_objectives.activate_vow(vow, 1, 3)
+	_objectives._current_wave = 3
+	_objectives.on_wave_cleared()
+	assert_eq(_objectives.vows_honored, 1)
+	assert_false(_objectives.is_vow_active())
+	assert_eq(_ctx.economy.sacred_fire, 2)

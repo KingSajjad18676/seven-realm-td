@@ -28,6 +28,7 @@ const PRIMARY_SPAWN_ID := "spawn_main"
 @export var minimap_bounds: Rect2 = Rect2(0, 0, 1280, 720)
 @export var boss_enemy_id: String = ""
 @export var default_objective_id: String = ""
+@export var block_size: int = 10
 
 
 func ensure_routes_migrated() -> void:

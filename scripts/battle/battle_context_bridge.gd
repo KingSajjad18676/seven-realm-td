@@ -17,5 +17,7 @@ signal run_summary_ready(summary: Dictionary)
 signal enemy_died(enemy_id: String)
 signal intermission_started(preview_text: String, max_bonus_gold: int)
 signal intermission_ended
+signal vow_offer_requested(vow_data: ObjectiveData, block_start: int, block_end: int)
+signal vow_status(text: String, state: int)
 
 var context: BattleContext = null

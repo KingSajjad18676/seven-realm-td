@@ -2,6 +2,8 @@
 extends CanvasLayer
 var context: BattleContext = null
 var _fate_draft: FateDraftController = null
+var _vow_offer: VowOfferController = null
+var _vow_label: Label = null
 var _tower_spot_panel: TowerSpotPanelController = null
 var _tower_radial: TowerRadialBuildController = null
 var _last_victory: bool = false
@@ -39,9 +41,10 @@ var _pending_summary: Dictionary = {}
 var _forge_wired: bool = false
 var _spell_row: HBoxContainer = null
 var _spell_buttons: Array[Button] = []
-func initialize(ctx: BattleContext, fate_draft: FateDraftController) -> void:
+func initialize(ctx: BattleContext, fate_draft: FateDraftController, vow_offer: VowOfferController = null) -> void:
 	context = ctx
 	_fate_draft = fate_draft
+	_vow_offer = vow_offer
 	_tower_spot_panel = get_node_or_null("%TowerSpotPanel") as TowerSpotPanelController
 	if _tower_spot_panel:
 		_tower_spot_panel.initialize(ctx)
@@ -56,6 +59,8 @@ func initialize(ctx: BattleContext, fate_draft: FateDraftController) -> void:
 		ctx.bridge.alert_message.connect(_on_alert)
 		ctx.bridge.battle_state_changed.connect(_on_state)
 		ctx.bridge.pardeh_break_requested.connect(_on_pardeh)
+		ctx.bridge.vow_offer_requested.connect(_on_vow_offer)
+		ctx.bridge.vow_status.connect(_on_vow_status)
 		ctx.bridge.results_requested.connect(_on_results)
 		ctx.bridge.morale_changed.connect(_on_morale)
 		ctx.bridge.run_summary_ready.connect(_on_run_summary)
@@ -75,6 +80,7 @@ func initialize(ctx: BattleContext, fate_draft: FateDraftController) -> void:
 		_results_panel.visible = false
 	if _pardeh_panel:
 		_pardeh_panel.visible = false
+	_setup_vow_label()
 	if _replay_btn:
 		_replay_btn.visible = false
 	if _map_btn:
@@ -482,6 +488,47 @@ func _on_pardeh() -> void:
 		_tower_spot_panel.hide_panel()
 	if _tower_radial:
 		_tower_radial.hide_menu()
+
+
+func _on_vow_offer(vow_data: ObjectiveData, block_start: int, block_end: int) -> void:
+	if _vow_offer:
+		_vow_offer.show_offer(vow_data, block_start, block_end)
+	if _pardeh_panel:
+		_pardeh_panel.visible = true
+	if _tower_spot_panel:
+		_tower_spot_panel.hide_panel()
+	if _tower_radial:
+		_tower_radial.hide_menu()
+
+
+func _setup_vow_label() -> void:
+	if _vow_label != null:
+		return
+	var top_bar := get_node_or_null("TopBarPanel/TopBar") as HBoxContainer
+	if top_bar == null:
+		return
+	_vow_label = Label.new()
+	_vow_label.name = "VowLabel"
+	_vow_label.text = ""
+	_vow_label.add_theme_font_size_override("font_size", 14)
+	_vow_label.modulate = Color(0.85, 0.75, 0.45)
+	top_bar.add_child(_vow_label)
+
+
+func _on_vow_status(text: String, state: int) -> void:
+	if _vow_label == null:
+		return
+	if text.is_empty():
+		_vow_label.text = ""
+		return
+	_vow_label.text = text
+	match state:
+		ObjectiveController.VOW_STATE_BROKEN:
+			_vow_label.modulate = Color(0.9, 0.35, 0.35)
+		ObjectiveController.VOW_STATE_HONORED:
+			_vow_label.modulate = Color(0.45, 0.85, 0.55)
+		_:
+			_vow_label.modulate = Color(0.85, 0.75, 0.45)
 func _on_results(victory: bool, reason: String) -> void:
 	_last_victory = victory
 	_pending_victory = victory
