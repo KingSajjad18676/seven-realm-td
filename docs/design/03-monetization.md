@@ -88,7 +88,9 @@ Start **without ads** in internal testing.
 
 Loot boxes, randomized paid rewards, confusing multi-currency packs, fear-based limited offers, paid accessibility, power hidden in cosmetics.
 
-**In scope (owner decision):** direct-purchase combat Spells, the Serpent Spire unique tower, and Forge Token packs — each with a clear earn-by-play alternative (Horde mode full clear for tower; battle victories for tokens).
+**In scope (owner decision):** direct-purchase combat Spells, the Serpent Spire unique tower, the **Rostam Tahmtan Barracks** tower, and Forge Token packs — each with a clear earn-by-play alternative (Horde all-clear for Serpent; **7 Labour seals** for Barracks; battle victories for tokens).
+
+**Product tension (flagged):** selling full unique towers for real money is powerful combat content. This matches shipped stub SKUs (`StoreService`: `tower_zahhak_serpent`, `tower_rostam_barracks` ~$4.99) and owner override above — revisit before global launch if “no paid combat power” marketing is required.
 
 ---
 

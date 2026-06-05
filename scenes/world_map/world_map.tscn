@@ -31,7 +31,7 @@ offset_right = 200.0
 offset_bottom = 56.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 28
-text = "Seven Khans"
+text = "Seven Labours of Rostam"
 horizontal_alignment = 1
 
 [node name="SealsLabel" type="Label" parent="."]
@@ -45,7 +45,7 @@ offset_top = 56.0
 offset_right = 120.0
 offset_bottom = 80.0
 grow_horizontal = 2
-text = "Khan seals: 0/7"
+text = "Labour seals: 0/7"
 horizontal_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]

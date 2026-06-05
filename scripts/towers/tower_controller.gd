@@ -15,6 +15,12 @@ var _efficiency: float = 1.0
 var _forge_damage_mult: float = 1.0
 var _forge_range_mult: float = 1.0
 var _tether_mult: float = 1.0
+var _hunger_stacks: int = 0
+var _hunger_decay_timer: float = 0.0
+var _allies: Array[AllyUnitController] = []
+var _ally_respawn_timers: Array[float] = []
+const HUNGER_MAX_STACKS := 10
+const HUNGER_DECAY_SEC := 4.0
 
 @onready var _sprite: ColorRect = $Sprite
 @onready var _range_area: Area2D = $RangeArea
@@ -30,6 +36,8 @@ func initialize(ctx: BattleContext, tower_data: TowerData, spot: BuildSpot) -> v
 	_cooldown = 0.0
 	_apply_forge_visuals()
 	_update_efficiency()
+	if data and data.attack_behavior == GameEnums.AttackBehavior.BARRACKS:
+		_spawn_barracks_units()
 	CombatEvents.tower_built.emit(tower_data.tower_id)
 
 
@@ -46,19 +54,28 @@ func _process(delta: float) -> void:
 		if _hijack_timer <= 0.0:
 			_enter_hijacked()
 		return
+	if data and data.attack_behavior == GameEnums.AttackBehavior.BARRACKS:
+		_process_barracks(delta)
+		_tick_hunger_decay(delta)
+		return
+	_tick_hunger_decay(delta)
 	_cooldown -= delta
 	if _cooldown > 0.0:
 		return
 	var target := _pick_target()
 	if target == null:
 		return
-	_fire_at(target)
+	if data.attack_behavior == GameEnums.AttackBehavior.TWIN:
+		_fire_twin_at(target)
+	else:
+		_fire_at(target)
 	var rate := data.attack_rate * _efficiency
 	if context.runtime_modifiers.has("attack_mult"):
 		rate *= float(context.runtime_modifiers["attack_mult"])
 	if context.runtime_modifiers.has("tower_attack_rate_mult"):
 		rate *= float(context.runtime_modifiers["tower_attack_rate_mult"])
 	rate *= MoraleController.get_rate_mult(context)
+	rate *= _hunger_rate_mult()
 	_cooldown = 1.0 / maxf(0.1, rate)
 
 
@@ -109,6 +126,8 @@ func try_upgrade() -> bool:
 	gold_invested += cost
 	level += 1
 	_apply_forge_visuals()
+	if data and data.attack_behavior == GameEnums.AttackBehavior.BARRACKS:
+		_spawn_barracks_units()
 	CombatEvents.tower_upgraded.emit(data.tower_id, level)
 	AnalyticsService.tower_upgraded(data.tower_id, level)
 	return true
@@ -135,7 +154,9 @@ func _pick_target() -> EnemyController:
 	var in_range: Array[EnemyController] = []
 	for e in enemies:
 		if e is EnemyController and global_position.distance_to(e.global_position) <= _effective_range():
-			in_range.append(e)
+			var enemy: EnemyController = e
+			if enemy.is_targetable_by_tower():
+				in_range.append(enemy)
 	if in_range.is_empty():
 		return null
 	match data.target_mode:
@@ -160,22 +181,125 @@ func _fire_at(target: EnemyController) -> void:
 		dmg *= float(context.runtime_modifiers["tower_damage_mult"])
 	if context.runtime_modifiers.has("attack_mult"):
 		dmg *= float(context.runtime_modifiers["attack_mult"])
-	var info := DamageInfo.create(dmg)
-	info.applies_burn = data.applies_burn
-	info.applies_slow = data.applies_slow
-	if data.applies_slow and context.runtime_modifiers.has("control_slow_mult"):
-		info.applies_slow = true
-	info.armor_break = data.armor_break
-	target.take_damage(info.amount)
-	if info.applies_burn:
+	target.take_damage(dmg)
+	if data.attack_behavior == GameEnums.AttackBehavior.TWIN:
+		target.apply_venom(1, 5.0, 3.0, self)
+	elif data.applies_burn:
 		target.apply_burn(2.5)
-	if info.applies_slow:
+	if data.applies_slow:
 		var slow_mult := 0.55
 		if context.runtime_modifiers.has("control_slow_mult"):
 			slow_mult = float(context.runtime_modifiers["control_slow_mult"])
 		target.apply_slow(slow_mult, 1.5)
-	if info.armor_break:
+	if data.armor_break:
 		target.apply_armor_break()
+
+
+func _fire_twin_at(primary: EnemyController) -> void:
+	_fire_at(primary)
+	var secondary := _pick_second_target(primary)
+	if secondary:
+		if context and context.tower_manager:
+			context.tower_manager.spawn_projectile(self, secondary)
+		var dmg := data.damage * _efficiency * _forge_damage_mult * _level_damage_mult() * _tether_mult
+		dmg *= MoraleController.get_damage_mult(context)
+		if context.runtime_modifiers.has("tower_damage_mult"):
+			dmg *= float(context.runtime_modifiers["tower_damage_mult"])
+		secondary.take_damage(dmg)
+		secondary.apply_venom(1, 5.0, 3.0, self)
+
+
+func _pick_second_target(exclude: EnemyController) -> EnemyController:
+	var enemies: Array = context.active_enemies if context else []
+	var in_range: Array[EnemyController] = []
+	for e in enemies:
+		if e is EnemyController and e != exclude and global_position.distance_to(e.global_position) <= _effective_range():
+			var enemy: EnemyController = e
+			if enemy.is_targetable_by_tower():
+				in_range.append(enemy)
+	if in_range.is_empty():
+		return null
+	return in_range[0]
+
+
+func on_venom_kill() -> void:
+	_hunger_stacks = mini(_hunger_stacks + 1, HUNGER_MAX_STACKS)
+	_hunger_decay_timer = HUNGER_DECAY_SEC
+
+
+func _hunger_rate_mult() -> float:
+	return 1.0 + float(_hunger_stacks) * 0.08
+
+
+func _tick_hunger_decay(delta: float) -> void:
+	if _hunger_stacks <= 0:
+		return
+	_hunger_decay_timer -= delta
+	if _hunger_decay_timer <= 0.0:
+		_hunger_stacks = maxi(0, _hunger_stacks - 1)
+		_hunger_decay_timer = HUNGER_DECAY_SEC
+
+
+func _spawn_barracks_units() -> void:
+	_clear_allies()
+	var count := data.max_units if data else 2
+	for i in count:
+		_spawn_single_ally(i)
+		_ally_respawn_timers.append(0.0)
+
+
+func _spawn_single_ally(index: int) -> void:
+	if context == null or context.tower_manager == null or data == null:
+		return
+	var unit_id := data.upgraded_unit_id if level >= data.max_level else data.spawn_unit_id
+	var unit_data := ContentCatalog.get_ally_unit(unit_id)
+	if unit_data == null:
+		return
+	var ally := AllyUnitController.new()
+	context.tower_manager.units_root.add_child(ally)
+	var offset := data.rally_offset + Vector2(index * 24 - 12, 0)
+	ally.initialize(context, unit_data, global_position + offset, self)
+	ally.rally_position = global_position + offset
+	while _allies.size() <= index:
+		_allies.append(null)
+	if _allies[index] and is_instance_valid(_allies[index]):
+		context.active_allies.erase(_allies[index])
+		_allies[index].queue_free()
+	_allies[index] = ally
+	if context:
+		context.active_allies.append(ally)
+
+
+func _process_barracks(delta: float) -> void:
+	for i in _ally_respawn_timers.size():
+		if i >= _allies.size():
+			continue
+		var ally: AllyUnitController = _allies[i]
+		if ally and ally.is_alive():
+			ally.rally_position = global_position + data.rally_offset + Vector2(i * 24 - 12, 0)
+			continue
+		_ally_respawn_timers[i] -= delta
+		if _ally_respawn_timers[i] <= 0.0:
+			_spawn_single_ally(i)
+			_ally_respawn_timers[i] = data.unit_respawn_cooldown
+
+
+func notify_ally_died(ally: AllyUnitController) -> void:
+	var idx := _allies.find(ally)
+	if idx >= 0:
+		_allies[idx] = null
+		if idx < _ally_respawn_timers.size():
+			_ally_respawn_timers[idx] = data.unit_respawn_cooldown
+
+
+func _clear_allies() -> void:
+	for ally in _allies:
+		if ally and is_instance_valid(ally):
+			if context:
+				context.active_allies.erase(ally)
+			ally.queue_free()
+	_allies.clear()
+	_ally_respawn_timers.clear()
 
 
 func _level_damage_mult() -> float:
@@ -186,8 +310,45 @@ func _level_range_mult() -> float:
 	return 1.0 + float(level - 1) * LEVEL_RANGE_BONUS
 
 
+func get_effective_range() -> float:
+	if data == null:
+		return 0.0
+	return _effective_range()
+
+
+static func compute_preview_range(
+	ctx: BattleContext,
+	tower_data: TowerData,
+	region_id: String,
+	preview_level: int = 1
+) -> float:
+	if tower_data == null:
+		return 0.0
+	var efficiency := 1.0
+	if ctx and ctx.map_light:
+		var light := ctx.map_light.get_light(region_id)
+		efficiency = 1.0 if light >= 30 else float(light) / 30.0
+	var forge_mult := 1.0
+	if ForgeService:
+		forge_mult = ForgeService.get_range_mult(tower_data.tower_id)
+	var level_mult := 1.0 + float(preview_level - 1) * LEVEL_RANGE_BONUS
+	var debuff_mult := 1.0
+	if ctx and ctx.runtime_modifiers.has("vision_radius_mult"):
+		debuff_mult = float(ctx.runtime_modifiers["vision_radius_mult"])
+	return tower_data.range * efficiency * forge_mult * level_mult * debuff_mult
+
+
+func set_selected_visual(selected: bool) -> void:
+	if _sprite == null:
+		return
+	_sprite.modulate = Color(1.25, 1.2, 1.05, 1.0) if selected else Color(1, 1, 1, 1)
+
+
 func _effective_range() -> float:
-	return data.range * _efficiency * _forge_range_mult * _level_range_mult()
+	var mult := 1.0
+	if context and context.runtime_modifiers.has("vision_radius_mult"):
+		mult = float(context.runtime_modifiers["vision_radius_mult"])
+	return data.range * _efficiency * _forge_range_mult * _level_range_mult() * mult
 
 
 func _apply_forge_visuals() -> void:

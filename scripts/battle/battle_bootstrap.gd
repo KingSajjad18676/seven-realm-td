@@ -123,7 +123,7 @@ func _setup_battle() -> void:
 	_build_map_visuals(level)
 	_assign_level_objective(level)
 	var spots := _create_build_spots(level)
-	_context.tower_manager.initialize(_context, spots, _towers_root, _projectiles_root)
+	_context.tower_manager.initialize(_context, spots, _towers_root, _projectiles_root, _units_root)
 
 	var fate_draft := FateDraftController.new()
 	fate_draft.name = "FateDraftController"
@@ -137,6 +137,12 @@ func _setup_battle() -> void:
 
 	if _hud:
 		_hud.initialize(_context, fate_draft, vow_offer)
+		var range_ring := TowerRangeRing.new()
+		range_ring.name = "TowerRangeRing"
+		range_ring.z_index = 2
+		_map_root.add_child(range_ring)
+		if _hud.has_method("setup_tower_range_ring"):
+			_hud.setup_tower_range_ring(range_ring)
 		if _hud.has_method("setup_camera_ui"):
 			_hud.setup_camera_ui(_camera)
 	if level.is_tutorial:
@@ -159,6 +165,7 @@ func _setup_battle() -> void:
 	_connect_region_updates(spots)
 	_apply_difficulty_and_unlocks(launch, level)
 	_apply_endless_or_hunt(launch, level)
+	_attach_labour_mode(launch, level)
 	if _hud and _hud.has_method("setup_ancestral_forge"):
 		_hud.setup_ancestral_forge(_context)
 	if _hud and _hud.has_method("refresh_skill_label"):
@@ -386,6 +393,9 @@ func _apply_difficulty_and_unlocks(launch: BattleLaunchData, level: LevelData) -
 	if SaveSystem and SaveSystem.is_tower_unlocked("tower_zahhak_serpent"):
 		if "tower_zahhak_serpent" not in level.available_tower_ids:
 			level.available_tower_ids.append("tower_zahhak_serpent")
+	if SaveSystem and SaveSystem.is_tower_unlocked("tower_rostam_barracks"):
+		if "tower_rostam_barracks" not in level.available_tower_ids:
+			level.available_tower_ids.append("tower_rostam_barracks")
 
 
 func _apply_endless_or_hunt(launch: BattleLaunchData, level: LevelData) -> void:
@@ -412,6 +422,43 @@ func _apply_endless_or_hunt(launch: BattleLaunchData, level: LevelData) -> void:
 		_context.runtime_modifiers["damavand_binding_progress"] = 0.0
 		if _context.bridge:
 			_context.bridge.enemy_died.connect(_on_damavand_enemy_died)
+
+
+func _attach_labour_mode(launch: BattleLaunchData, level: LevelData) -> void:
+	if launch == null or _context == null or level == null:
+		return
+	if not launch.is_campaign_mode():
+		return
+	if level.labour_mode_id == "":
+		level.labour_mode_id = LabourModeFactory.labour_mode_id_for_level(level.level_id)
+	var mode := LabourModeFactory.create(level)
+	if mode == null:
+		return
+	mode.name = "LabourMode_%s" % level.labour_mode_id
+	add_child(mode)
+	mode.initialize(_context)
+	_context.labour_mode = mode
+	if not CombatEvents.wave_started.is_connected(_on_labour_wave_started):
+		CombatEvents.wave_started.connect(_on_labour_wave_started)
+	if not CombatEvents.wave_completed.is_connected(_on_labour_wave_completed):
+		CombatEvents.wave_completed.connect(_on_labour_wave_completed)
+	if not CombatEvents.cleanse_used.is_connected(_on_labour_cleanse):
+		CombatEvents.cleanse_used.connect(_on_labour_cleanse)
+
+
+func _on_labour_wave_started(wave_index: int) -> void:
+	if _context and _context.labour_mode:
+		_context.labour_mode.on_wave_started(wave_index)
+
+
+func _on_labour_wave_completed(wave_index: int) -> void:
+	if _context and _context.labour_mode:
+		_context.labour_mode.on_wave_completed(wave_index)
+
+
+func _on_labour_cleanse(region_id: String) -> void:
+	if _context and _context.labour_mode:
+		_context.labour_mode.on_cleanse(region_id)
 
 
 func _screen_to_world(screen_pos: Vector2) -> Vector2:

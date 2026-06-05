@@ -1,6 +1,6 @@
 # Project Status (Godot)
 
-**Last updated:** 2026-06-06 (Hero's Vow + scaled campaign waves)  
+**Last updated:** 2026-06-06 (Rostam 7 Labours rebrand + Labour Modes + reward towers)  
 **Milestones:** [design/04-production-roadmap.md](../design/04-production-roadmap.md) · **Identity:** [design/00-project-index.md](../design/00-project-index.md)
 
 ---
@@ -9,11 +9,14 @@
 
 | Item                           | Status                                                                                                                                                            |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Godot project                  | ✅ `project.godot` — landscape mobile, main scene boot                                                                                                            |
+| Godot project                  | ✅ `project.godot` — **Rostam 7 Labours: Shahname TD**, landscape mobile                                                                                          |
 | Main menu → world map → battle | ✅ Campaign, roguelite, endless, **horde**, hunt, daily tale                                                                                                                 |
 | Tutorial gate                  | ✅ Khan 1 locked until tutorial cleared                                                                                                                           |
 | Khan 1 onboarding              | ✅ Tutorial teaches objective/morale/boss; one-time contextual hints in battle (tower panel, forge, early call, tether)                                           |
-| Campaign levels                | ✅ Tutorial + Khans 1–7 + Damavand; **30–100 procedural waves** (+10 per Khan), mini-boss every 10th wave |
+| Campaign levels                | ✅ Tutorial + **Labours 1–7** + Damavand; **30–100 procedural waves** (+10 per Labour), mini-boss every 10th wave |
+| **Labour Modes (campaign)**    | ✅ Additive per-map story overlays (`scripts/battle/labours/`) — Lion, Thirst, Dragon, Temptress, Demons, Rescue, Blindness, Zahhak |
+| **Rostam Tahmtan Barracks**    | ✅ Unlock at 7 Labour seals or store IAP; summons Zabul Vanguard / Bull-Mace Bearer allies (in-battle upgrade) |
+| **Serpent Spire behavior**     | ✅ Twin-target venom + Hunger attack-speed (horde-clear or store unlock; no Star Iron forge) |
 | Hero's Vow (wave challenges)   | ✅ Optional Accept/Decline vow every 10 waves; honor = SF + morale; break = morale penalty (never fails battle) |
 | Signature systems              | ✅ Corruption, hijack (SF purify), Pardeh/Fate (skip or pick), Morale at start, Sacred Tether via tower panel, Ancestral Forge nearest-pad fusion                 |
 | Roguelite 5-node run           | ✅ Persisted to save v4; resume from world map; defeat clears run                                                                                                 |
@@ -28,7 +31,7 @@
 | Paid power store (stub IAP)    | ✅ Tower, spells, token packs via StoreService                                                                                                                      |
 | Automated tests                | ✅ GUT v9.6.0 (`tests/`), ContentValidator, SaveMigration, GitHub Actions CI                                                                                      |
 | Khan 1 map art                 | ✅ `art/maps/level_01.jpg` + geometry override in `resources/data/levels/level_01.tres`; battle hides green Terrain fallback when map sprite loads                |
-| Battle camera / HUD (Khan 1)   | ✅ Full-map fit-locked view; compact HUD; build radial (afford-gated) + manage radial on pad tap; bottom tower bar removed |
+| Battle camera / HUD (Khan 1)   | ✅ Full-map fit-locked view; compact HUD; build radial (afford-gated) + manage radial on pad tap; **range ring** on pad select (build preview + manage, resizes on upgrade); bottom tower bar removed |
 | Map editor (dev)               | ✅ Multi-route + multi-spawn editor; `PathRouteData` / `SpawnPointData` in level `.tres`; battle resolves `route_id` / `spawn_id` per wave group |
 
 ---
@@ -51,8 +54,8 @@
 ## How to run
 
 1. Open repo root in **Godot 4.6** → **F5**.
-2. **Play** → tutorial (first time) → world map → campaign Khans 1–7 → Damavand.
-3. Forge Elite at **Kaveh's Forge** (world map button) to unlock **Hunt Zahhak** after 7 seals.
+2. **Play** → tutorial (first time) → world map → campaign **Labours 1–7** → Damavand.
+3. Forge Elite at **Kaveh's Forge** (world map button) to unlock **Hunt Zahhak** after **7 Labour seals**.
 4. **Roguelite Path** — 5-node run with relic picks.
 5. **Map editor (debug)** — F6 on `scenes/tools/map_editor.tscn`, or main menu **[DEV] Map Editor** → multiple routes/spawns, pads, gate → **Save .tres** → `resources/data/levels/{level_id}.tres`.
 
@@ -71,7 +74,7 @@ In the editor: **Project → Tools → GUT** (bottom panel) → Run All.
 
 - Battle map art: opaque `Terrain` ColorRect no longer covers `MapBackground` when `map_sprite_path` resolves
 - Battle camera: medium maps fit-lock to full 1280×720 canvas; pan/zoom disabled until `uses_large_map_camera`
-- Battle HUD: compact top/bottom bars; minimap/threat hidden when map fully visible; build radial disables unaffordable towers; occupied pad opens manage radial (level, upgrade, sell, purify)
+- Battle HUD: compact top/bottom bars; minimap/threat hidden when map fully visible; build radial disables unaffordable towers; occupied pad opens manage radial (level, upgrade, sell, purify); **attack-range ring** on pad select (preview on build, live on manage, grows on upgrade)
 - Build pads: circular hammer-style markers; path/gate dev overlays hidden when map art loads
 - Map editor: multi-route polylines + multi-spawn markers; optional wave `route_id` / `spawn_id`; legacy `path_points` synced on save
 - Wave manager waits for enemy clear before Pardeh / next wave
@@ -79,7 +82,9 @@ In the editor: **Project → Tools → GUT** (bottom panel) → Run All.
 - Boss debuffs cleared on death; pool reuse resets boss controller
 - Tutorial Continue requires victory; world map shows hunt/forge alerts
 - Objectives evaluated at victory (no_leaks / no_hijack / cleanse_twice); **Hero's Vow** offered every 10 waves (Accept/Decline) with HUD chip + results tally
-- Tutorial adds objective, morale, and boss-warning steps; `ContextualHintController` teaches tower panel, forge, early wave call, and Sacred Tether once per save
+- **Rostam 7 Labours rebrand:** player-facing "Khan" → "Labour"; project title `Rostam 7 Labours: Shahname TD`
+- **LabourMode framework:** campaign-only additive hazards wired in `battle_bootstrap._attach_labour_mode`
+- **Reward towers:** Barracks (7 seals / IAP); Serpent Spire twin venom + Hunger (8 horde clears / IAP); neither uses Star Iron forge materials
 
 ## Known deferrals
 

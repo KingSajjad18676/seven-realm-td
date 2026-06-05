@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://map_editor_scene"]
+[gd_scene format=3 uid="uid://3j6wbwerv75m"]
 
-[ext_resource type="Script" path="res://scripts/tools/map_editor.gd" id="1_editor"]
-[ext_resource type="Script" path="res://scripts/tools/map_editor_canvas.gd" id="2_canvas"]
-[ext_resource type="Script" path="res://scripts/tools/map_editor_camera.gd" id="3_camera"]
+[ext_resource type="Script" uid="uid://5i1j8kl58jci" path="res://scripts/tools/map_editor.gd" id="1_editor"]
+[ext_resource type="Script" uid="uid://dk42cruxl5bxj" path="res://scripts/tools/map_editor_canvas.gd" id="2_canvas"]
+[ext_resource type="Script" uid="uid://desyk2by5ersi" path="res://scripts/tools/map_editor_camera.gd" id="3_camera"]
 
-[node name="MapEditor" type="Control"]
+[node name="MapEditor" type="Control" unique_id=1394023390]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_editor")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=1265411585]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,7 +22,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.08, 0.1, 0.12, 1)
 
-[node name="RootVBox" type="VBoxContainer" parent="."]
+[node name="RootVBox" type="VBoxContainer" parent="." unique_id=255631281]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,174 +35,199 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 8
 
-[node name="Toolbar" type="HBoxContainer" parent="RootVBox"]
+[node name="Toolbar" type="VBoxContainer" parent="RootVBox" unique_id=182326983]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ToolbarRowPrimary" type="HBoxContainer" parent="RootVBox/Toolbar" unique_id=182326984]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="LevelLabel" type="Label" parent="RootVBox/Toolbar"]
+[node name="LevelLabel" type="Label" parent="RootVBox/Toolbar/ToolbarRowPrimary" unique_id=1761811309]
 layout_mode = 2
 text = "Level:"
 
-[node name="LevelSelect" type="OptionButton" parent="RootVBox/Toolbar"]
+[node name="LevelSelect" type="OptionButton" parent="RootVBox/Toolbar/ToolbarRowPrimary" unique_id=2003053744]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(320, 0)
+custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="ToolRoad" type="Button" parent="RootVBox/Toolbar"]
+[node name="ToolRoad" type="Button" parent="RootVBox/Toolbar/ToolbarRowPrimary" unique_id=565578094]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Road (1)"
 
-[node name="ToolPads" type="Button" parent="RootVBox/Toolbar"]
+[node name="ToolPads" type="Button" parent="RootVBox/Toolbar/ToolbarRowPrimary" unique_id=690653650]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Pads (2)"
 
-[node name="ToolSpawn" type="Button" parent="RootVBox/Toolbar"]
+[node name="ToolSpawn" type="Button" parent="RootVBox/Toolbar/ToolbarRowPrimary" unique_id=367796943]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Spawn (3)"
 
-[node name="ToolGate" type="Button" parent="RootVBox/Toolbar"]
+[node name="ToolGate" type="Button" parent="RootVBox/Toolbar/ToolbarRowPrimary" unique_id=183791782]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Gate (4)"
 
-[node name="ToolSelect" type="Button" parent="RootVBox/Toolbar"]
+[node name="ToolSelect" type="Button" parent="RootVBox/Toolbar/ToolbarRowPrimary" unique_id=1673579142]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Select (5)"
 
-[node name="RouteLabel" type="Label" parent="RootVBox/Toolbar"]
+[node name="ToolbarRowSecondary" type="HBoxContainer" parent="RootVBox/Toolbar" unique_id=182326985]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="RouteLabel" type="Label" parent="RootVBox/Toolbar/ToolbarRowSecondary" unique_id=2041633095]
 layout_mode = 2
 text = "Route:"
 
-[node name="RouteSelect" type="OptionButton" parent="RootVBox/Toolbar"]
+[node name="RouteSelect" type="OptionButton" parent="RootVBox/Toolbar/ToolbarRowSecondary" unique_id=1388642978]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 
-[node name="AddRouteButton" type="Button" parent="RootVBox/Toolbar"]
+[node name="AddRouteButton" type="Button" parent="RootVBox/Toolbar/ToolbarRowSecondary" unique_id=957811406]
 unique_name_in_owner = true
 layout_mode = 2
 text = "+ Route"
 
-[node name="DeleteRouteButton" type="Button" parent="RootVBox/Toolbar"]
+[node name="DeleteRouteButton" type="Button" parent="RootVBox/Toolbar/ToolbarRowSecondary" unique_id=1689595686]
 unique_name_in_owner = true
 layout_mode = 2
 text = "- Route"
 
-[node name="SpawnRouteLabel" type="Label" parent="RootVBox/Toolbar"]
+[node name="SpawnRouteLabel" type="Label" parent="RootVBox/Toolbar/ToolbarRowSecondary" unique_id=775619386]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Spawn→"
 
-[node name="SpawnRouteSelect" type="OptionButton" parent="RootVBox/Toolbar"]
+[node name="SpawnRouteSelect" type="OptionButton" parent="RootVBox/Toolbar/ToolbarRowSecondary" unique_id=1977979919]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 
-[node name="SnapToggle" type="CheckBox" parent="RootVBox/Toolbar"]
+[node name="SnapToggle" type="CheckBox" parent="RootVBox/Toolbar/ToolbarRowSecondary" unique_id=599500718]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Snap 10px"
 button_pressed = true
+text = "Snap 10px"
 
-[node name="SaveButton" type="Button" parent="RootVBox/Toolbar"]
+[node name="ToolbarSpacer" type="Control" parent="RootVBox/Toolbar/ToolbarRowSecondary" unique_id=182326986]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SaveButton" type="Button" parent="RootVBox/Toolbar/ToolbarRowSecondary" unique_id=667526983]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Save .tres"
 
-[node name="ReloadButton" type="Button" parent="RootVBox/Toolbar"]
+[node name="ReloadButton" type="Button" parent="RootVBox/Toolbar/ToolbarRowSecondary" unique_id=1748839277]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Reload"
 
-[node name="FitMapButton" type="Button" parent="RootVBox/Toolbar"]
+[node name="FitMapButton" type="Button" parent="RootVBox/Toolbar/ToolbarRowSecondary" unique_id=1383796168]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Fit (0)"
 
-[node name="BackButton" type="Button" parent="RootVBox/Toolbar"]
+[node name="BackButton" type="Button" parent="RootVBox/Toolbar/ToolbarRowSecondary" unique_id=2101268729]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Back"
 
-[node name="BodyHBox" type="HBoxContainer" parent="RootVBox"]
+[node name="BodyHBox" type="HBoxContainer" parent="RootVBox" unique_id=824092563]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 8
 
-[node name="ViewportContainer" type="SubViewportContainer" parent="RootVBox/BodyHBox"]
+[node name="ViewportContainer" type="SubViewportContainer" parent="RootVBox/BodyHBox" unique_id=514730824]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="RootVBox/BodyHBox/ViewportContainer"]
-handle_input_locally = true
-size = Vector2i(1280, 720)
+[node name="SubViewport" type="SubViewport" parent="RootVBox/BodyHBox/ViewportContainer" unique_id=617553812]
+handle_input_locally = false
+size = Vector2i(1405, 634)
 render_target_update_mode = 4
 
-[node name="EditorCamera" type="Camera2D" parent="RootVBox/BodyHBox/ViewportContainer/SubViewport"]
+[node name="EditorCamera" type="Camera2D" parent="RootVBox/BodyHBox/ViewportContainer/SubViewport" unique_id=1506633956]
 unique_name_in_owner = true
 script = ExtResource("3_camera")
 
-[node name="MapCanvas" type="Node2D" parent="RootVBox/BodyHBox/ViewportContainer/SubViewport"]
+[node name="MapCanvas" type="Node2D" parent="RootVBox/BodyHBox/ViewportContainer/SubViewport" unique_id=1867433465]
 unique_name_in_owner = true
 script = ExtResource("2_canvas")
 
-[node name="SidePanel" type="VBoxContainer" parent="RootVBox/BodyHBox"]
-custom_minimum_size = Vector2(260, 0)
+[node name="SidePanelScroll" type="ScrollContainer" parent="RootVBox/BodyHBox" unique_id=129395509]
+custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="SidePanel" type="VBoxContainer" parent="RootVBox/BodyHBox/SidePanelScroll" unique_id=129395510]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="CoordLabel" type="Label" parent="RootVBox/BodyHBox/SidePanel"]
+[node name="CoordLabel" type="Label" parent="RootVBox/BodyHBox/SidePanelScroll/SidePanel" unique_id=762755838]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Cursor: (0, 0)"
+autowrap_mode = 3
 
-[node name="ZoomLabel" type="Label" parent="RootVBox/BodyHBox/SidePanel"]
+[node name="ZoomLabel" type="Label" parent="RootVBox/BodyHBox/SidePanelScroll/SidePanel" unique_id=529120091]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Zoom: 100%"
+autowrap_mode = 3
 
-[node name="RegionLabel" type="Label" parent="RootVBox/BodyHBox/SidePanel"]
+[node name="RegionLabel" type="Label" parent="RootVBox/BodyHBox/SidePanelScroll/SidePanel" unique_id=565305421]
 layout_mode = 2
 text = "Region IDs (comma-separated):"
+autowrap_mode = 3
 
-[node name="RegionInput" type="LineEdit" parent="RootVBox/BodyHBox/SidePanel"]
+[node name="RegionInput" type="LineEdit" parent="RootVBox/BodyHBox/SidePanelScroll/SidePanel" unique_id=168727053]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "region_north, region_south"
 
-[node name="AutoPadsHBox" type="HBoxContainer" parent="RootVBox/BodyHBox/SidePanel"]
+[node name="AutoPadsHBox" type="HBoxContainer" parent="RootVBox/BodyHBox/SidePanelScroll/SidePanel" unique_id=1087412563]
 layout_mode = 2
 
-[node name="PadCountSpin" type="SpinBox" parent="RootVBox/BodyHBox/SidePanel/AutoPadsHBox"]
+[node name="PadCountSpin" type="SpinBox" parent="RootVBox/BodyHBox/SidePanelScroll/SidePanel/AutoPadsHBox" unique_id=1368847251]
 unique_name_in_owner = true
 layout_mode = 2
 min_value = 1.0
 max_value = 30.0
 value = 15.0
 
-[node name="AutoPadsButton" type="Button" parent="RootVBox/BodyHBox/SidePanel/AutoPadsHBox"]
+[node name="AutoPadsButton" type="Button" parent="RootVBox/BodyHBox/SidePanelScroll/SidePanel/AutoPadsHBox" unique_id=249393481]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Auto pads"
 
-[node name="ClearToolButton" type="Button" parent="RootVBox/BodyHBox/SidePanel"]
+[node name="ClearToolButton" type="Button" parent="RootVBox/BodyHBox/SidePanelScroll/SidePanel" unique_id=1192088033]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Clear active tool"
 
-[node name="HelpLabel" type="Label" parent="RootVBox/BodyHBox/SidePanel"]
+[node name="HelpLabel" type="Label" parent="RootVBox/BodyHBox/SidePanelScroll/SidePanel" unique_id=1080416105]
 layout_mode = 2
-autowrap_mode = 3
 text = "Road: edit active route (select route in toolbar). Spawn: LMB add marker, RMB delete; pick route link in Spawn→. Multiple routes share fork/merge coords. Wheel: zoom. Middle-drag / Space+LMB: pan. 0: fit."
+autowrap_mode = 3
 
-[node name="StatusLabel" type="Label" parent="RootVBox"]
+[node name="StatusLabel" type="Label" parent="RootVBox" unique_id=1206045980]
 unique_name_in_owner = true
 layout_mode = 2
-autowrap_mode = 3
 text = "Ready."
+autowrap_mode = 3

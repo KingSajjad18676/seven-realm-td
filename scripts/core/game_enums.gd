@@ -22,6 +22,13 @@ enum TowerFamily {
 	HEAVY,
 	CONTROL,
 	FORGE,
+	BARRACKS,
+}
+
+enum AttackBehavior {
+	SINGLE,
+	TWIN,
+	BARRACKS,
 }
 
 enum DamageType {

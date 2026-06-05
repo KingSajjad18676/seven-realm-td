@@ -6,7 +6,7 @@ extends Node
 func _ready() -> void:
 	AnalyticsService.session_start()
 	if _status:
-		_status.text = "Loading Shahnameh TD..."
+		_status.text = "Loading Rostam 7 Labours..."
 	await get_tree().create_timer(0.6).timeout
 	SaveSystem.load_save()
 	SettingsService.load_from_save()

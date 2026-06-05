@@ -11,15 +11,17 @@ var tower_scene: PackedScene = preload("res://scenes/prefabs/tower.tscn")
 var projectile_scene: PackedScene = preload("res://scenes/prefabs/projectile.tscn")
 var towers_root: Node2D = null
 var projectiles_root: Node2D = null
+var units_root: Node2D = null
 var _projectile_pool: ObjectPool = null
 var selected_tower_id: String = "tower_archer"
 
 
-func initialize(ctx: BattleContext, spots: Array[BuildSpot], t_root: Node2D, p_root: Node2D) -> void:
+func initialize(ctx: BattleContext, spots: Array[BuildSpot], t_root: Node2D, p_root: Node2D, u_root: Node2D = null) -> void:
 	context = ctx
 	build_spots = spots
 	towers_root = t_root
 	projectiles_root = p_root
+	units_root = u_root if u_root else t_root
 	_projectile_pool = ObjectPool.new(projectile_scene, p_root, 12)
 	for spot in build_spots:
 		spot.battle_context = ctx

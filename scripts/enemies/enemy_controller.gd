@@ -17,6 +17,13 @@ var _armor_delta: float = 0.0
 var _move_speed_bonus: float = 0.0
 var _max_hp_override: float = -1.0
 var _revealed_form: bool = false
+var _burrowed: bool = false
+var _decoy: bool = false
+var _venom_stacks: int = 0
+var _venom_timer: float = 0.0
+var _venom_dps: float = 0.0
+var _damage_taken_mult: float = 1.0
+var _venom_source: TowerController = null
 
 @onready var _sprite: ColorRect = $Sprite
 @onready var _hp_bar: ProgressBar = $HPBar
@@ -30,6 +37,13 @@ func initialize(ctx: BattleContext, enemy_data: EnemyData, path: PackedVector2Ar
 	_move_speed_bonus = 0.0
 	_max_hp_override = -1.0
 	_revealed_form = false
+	_burrowed = false
+	_decoy = false
+	_venom_stacks = 0
+	_venom_timer = 0.0
+	_venom_dps = 0.0
+	_damage_taken_mult = 1.0
+	_venom_source = null
 	current_hp = _effective_max_hp()
 	_follower.setup(path)
 	_burn_timer = 0.0
@@ -78,6 +92,12 @@ func _process(delta: float) -> void:
 	if _burn_timer > 0.0:
 		_burn_timer -= delta
 		take_damage(4.0 * delta, false)
+	if _venom_timer > 0.0:
+		_venom_timer -= delta
+		take_damage(_venom_dps * delta, false)
+		if _venom_timer <= 0.0:
+			_venom_stacks = 0
+			_damage_taken_mult = 1.0
 	if _slow_timer > 0.0:
 		_slow_timer -= delta
 		if _slow_timer <= 0.0:
@@ -91,7 +111,10 @@ func _process(delta: float) -> void:
 
 
 func take_damage(amount: float, from_tower: bool = true) -> void:
+	if from_tower and _burrowed:
+		return
 	var dmg := maxf(1.0, amount - _effective_armor() * 0.5)
+	dmg *= _damage_taken_mult
 	if _is_boss and from_tower and _boss_controller and _boss_controller.has_method("blocks_tower_damage") and _boss_controller.blocks_tower_damage():
 		dmg *= 0.5
 	current_hp -= dmg
@@ -116,6 +139,49 @@ func apply_armor_break() -> void:
 
 func add_armor_delta(delta: float) -> void:
 	_armor_delta += delta
+
+
+func apply_venom(stacks: int, dps: float, duration: float, source: TowerController = null) -> void:
+	_venom_stacks = mini(_venom_stacks + stacks, 8)
+	_venom_dps = dps * float(_venom_stacks)
+	_venom_timer = maxf(_venom_timer, duration)
+	_damage_taken_mult = 1.0 + float(_venom_stacks) * 0.06
+	if source:
+		_venom_source = source
+
+
+func has_venom() -> bool:
+	return _venom_timer > 0.0
+
+
+func get_venom_source() -> TowerController:
+	return _venom_source
+
+
+func set_burrowed(burrowed: bool) -> void:
+	_burrowed = burrowed
+	if _sprite:
+		_sprite.modulate.a = 0.35 if _burrowed else 1.0
+
+
+func is_burrowed() -> bool:
+	return _burrowed
+
+
+func is_targetable_by_tower() -> bool:
+	return not _burrowed
+
+
+func set_decoy(value: bool) -> void:
+	_decoy = value
+	if value and data:
+		data.gold_reward = 1
+		if _sprite:
+			_sprite.modulate = Color(0.85, 0.75, 0.95, 0.75)
+
+
+func is_decoy() -> bool:
+	return _decoy
 
 
 func apply_boss_reveal() -> void:
@@ -145,19 +211,25 @@ func _effective_max_hp() -> float:
 
 
 func _die() -> void:
+	if has_venom() and _venom_source and is_instance_valid(_venom_source):
+		_venom_source.on_venom_kill()
 	if _is_boss and _boss_controller and _boss_controller.has_method("cleanup"):
 		_boss_controller.cleanup()
 	if _is_boss and context and context.morale:
 		context.morale.on_boss_defeated()
+		if context.labour_mode:
+			context.labour_mode.on_boss_defeated()
 	if context and context.hunt and data:
 		context.hunt.on_enemy_slain(data)
-	if context and context.economy:
+	if context and context.economy and not _decoy:
 		context.economy.apply_kill_rewards(data)
 	if data.corruption_pressure > 0.0 and context and context.map_light:
 		var region := context.map_light.get_region_for_position(global_position)
 		context.map_light.apply_corruption_pressure(region, data.corruption_pressure)
 	if context and context.bridge and data:
 		context.bridge.enemy_died.emit(data.enemy_id)
+	if context and context.labour_mode:
+		context.labour_mode.on_enemy_died(data.enemy_id, self)
 	died.emit(self)
 	if context and context.enemy_spawner:
 		context.enemy_spawner.release_enemy(self)

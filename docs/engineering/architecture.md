@@ -1,6 +1,6 @@
 # Godot Architecture
 
-**Last updated:** 2026-06-04  
+**Last updated:** 2026-06-06  
 **Design canon:** [design/04-production-roadmap.md](../design/04-production-roadmap.md)  
 **Engine:** Godot 4.6 Mobile  
 **Project root:** repository folder containing `project.godot`  
@@ -15,10 +15,11 @@ repo root/
   scripts/
     core/           enums, DamageInfo, status instances
     data/           Resource class definitions (.gd)
-    battle/         WaveManager, BattleBootstrap, MapLightManager, deep systems
+    battle/         WaveManager, BattleBootstrap, MapLightManager, labours/, deep systems
     enemies/        EnemyController, PathFollower
     towers/         TowerController, TowerManager, build spots
     heroes/         HeroController, Sacred Tether
+    units/          AllyUnitController (barracks summons)
     projectiles/
     status_effects/
     ui/             Battle HUD + meta panels
@@ -46,8 +47,10 @@ repo root/
 
 ## Battle wiring
 
-- **`BattleBootstrap`** — scene root; builds `BattleContext`, map, managers
-- **`BattleContext`** — RefCounted service locator (managers only)
+- **`BattleBootstrap`** — scene root; builds `BattleContext`, map, managers; attaches **`LabourMode`** on campaign launches only
+- **`BattleContext`** — RefCounted service locator (managers only); holds `labour_mode` and `active_allies`
+- **`LabourMode` + `LabourModeFactory`** — `scripts/battle/labours/`; per-map additive hazards via wave/cleanse/boss hooks
+- **`AllyUnitController`** — barracks melee blockers tracked on `BattleContext.active_allies`
 - **`BattleContextBridge`** — Node wrapper exposing signals for UI
 - **Ownership rules** — see `.cursor/rules/code-battle.mdc`
 

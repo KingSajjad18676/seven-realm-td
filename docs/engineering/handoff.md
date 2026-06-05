@@ -9,7 +9,7 @@
 
 **Engine:** Godot 4.6 — repository root (`project.godot`)
 
-**First production target:** Khan 1 vertical slice only until testers **voluntarily replay** ([design/00](../design/00-project-index.md)).
+**First production target:** Khan 1 vertical slice only until testers **voluntarily replay** ([design/00](../design/00-project-index.md)). Player-facing campaign label: **Seven Labours of Rostam**.
 
 ---
 
@@ -49,7 +49,7 @@ flowchart LR
 | 1 | **Boot** | Loads save, audio, scene flow (fade overlay) |
 | 2 | **CompanySplash** | Studio title ~2.5s; tap or skip |
 | 3 | **MainMenu** | Play Campaign → World Map; toolbar opens meta panels (Hero, Towers, Relics, Daily, Bazaar, Quests, Forge, etc.). Premium/Battle Pass UI may exist as **stubs** — not launch monetization ([design/03](../design/03-monetization.md)). |
-| 4 | **WorldMap** | Seven **Khan** campaign nodes; **Endless** and **Hunt Zahhak** unlock after all Khans cleared |
+| 4 | **WorldMap** | Seven **Labour** campaign nodes; **Endless** and **Hunt Zahhak** unlock after all Labours cleared |
 | 5 | **Battle** | Tower defense loop; victory/defeat → rewards → return to map |
 
 ### Campaign — Seven Khans + Damavand Binding (8 battlefields)
@@ -67,7 +67,7 @@ Rostam’s seven labors plus a finale binding map ([design/02](../design/02-game
 | 7 | `level_07` | Khan 7 — White Div Cavern | 56×32 | Div-e Sepid |
 | 8 | (finale) | Damavand Binding | 64×36 | Zahhak binding sequence |
 
-**Progression:** Only `level_01` unlocked at start. Win → soft currency + unlock next level. Each Khan first-clear grants one **Khan seal** (7-piece mosaic). All 7 seals unlock **Hunt for Zahhak**. **Damavand Binding** is the authored campaign finale (separate from repeatable Hunt mode in code today).
+**Progression:** Only `level_01` unlocked at start. Win → soft currency + unlock next level. Each Labour first-clear grants one **Labour seal** (7-piece mosaic). All 7 seals unlock **Hunt for Zahhak** and **`tower_rostam_barracks`**. **Damavand Binding** is the authored campaign finale (separate from repeatable Hunt mode in code today).
 
 **Starter towers (design):** Archer, Sacred Fire, Heavy, Control. **Starter hero:** Rostam.
 
@@ -248,6 +248,8 @@ All battle systems receive the same `BattleContext` reference:
 | `director` / `ahriman_director` | Counter-pick boss modifiers |
 | `tribute` | Zahhak serpent sacrifice timer |
 | `hunt_director` | Hunt finale / shard pacing |
+| `labour_mode` | Campaign-only story overlay (`LabourMode` node) |
+| `active_allies` | Barracks-summoned melee units |
 
 UI listens via `BattleContextBridge` (Node wrapper with signals).
 
@@ -323,6 +325,7 @@ repo root/
 | Area | Path |
 |------|------|
 | Battle entry | `scripts/battle/battle_bootstrap.gd` |
+| Labour modes | `scripts/battle/labours/labour_mode.gd`, `labour_mode_factory.gd`, `mode_*.gd` |
 | Service hub | `scripts/battle/battle_context.gd` |
 | UI bridge | `scripts/battle/battle_context_bridge.gd` |
 | State machine | `scripts/battle/battle_state_controller.gd` |
@@ -330,11 +333,13 @@ repo root/
 | Launch payload | `scripts/battle/battle_launch_data.gd` |
 | Enemies | `scripts/enemies/enemy_controller.gd` |
 | Towers | `scripts/towers/tower_controller.gd` |
+| Ally units | `scripts/units/ally_unit_controller.gd`, `scripts/data/ally_unit_data.gd` |
 | Hero | `scripts/heroes/hero_controller.gd` |
 | Light/corruption | `scripts/battle/map_light_manager.gd` |
 | Design data types | `scripts/data/*.gd` |
 | World map | `scripts/meta/world_map_controller.gd` |
 | Save | `scripts/meta/save_system.gd` |
+| Store (IAP stub) | `scripts/meta/store_service.gd` — Serpent + Barracks SKUs |
 | Battle HUD | `scripts/ui/battle_hud_controller.gd` |
 
 ### Data pipeline

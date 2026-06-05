@@ -1,7 +1,9 @@
-# Shahnameh TD — Documentation
+# Rostam 7 Labours: Shahname TD — Documentation
 
-**Last updated:** 2026-06-04  
+**Last updated:** 2026-06-06  
 **Repo:** Godot 4.6 at repository root (`project.godot`)
+
+**One-line pitch:** Active 2D tower-defense roguelite — build towers, move Rostam, cleanse corruption, survive procedural campaign **Labours**, unlock reward towers (Serpent Spire, Rostam Barracks).
 
 Start with **[design/00-project-index.md](design/00-project-index.md)** for product identity and locked decisions.  
 For **what exists in the repo today**, read **[engineering/project-status.md](engineering/project-status.md)** first.
@@ -41,6 +43,7 @@ For **what exists in the repo today**, read **[engineering/project-status.md](en
 
 | Doc | Purpose |
 |-----|---------|
+| [product/main-gameplay.md](product/main-gameplay.md) | **Main gameplay** — maps, modes, Labour hazards, unlocks |
 | [product/prd.md](product/prd.md) | Product requirements summary |
 | [product/roadmap.md](product/roadmap.md) | Milestone backlog and release bundles |
 | [spec/entities-and-gameplay.md](spec/entities-and-gameplay.md) | All towers & maps (every phase) + built entities + assets needed |
@@ -66,7 +69,7 @@ For **what exists in the repo today**, read **[engineering/project-status.md](en
 | Role | Path |
 |------|------|
 | Anyone new | `design/00` → `engineering/project-status` → `engineering/handoff` |
-| Gameplay / design | `design/02` → `spec/entities-and-gameplay` → `spec/gameplay` |
+| Gameplay / design | `product/main-gameplay` → `design/02` → `spec/entities-and-gameplay` → `spec/gameplay` |
 | Programmer | `engineering/architecture` → `engineering/game-logic` → `design/04` |
 | Artist | `design/01` → `prompts/README` → `spec/entities-and-gameplay` → `art/pipeline` → `art/visual-vfx` |
 | Monetization / ops | `design/03` → `design/05` → `liveops/retention` |

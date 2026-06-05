@@ -73,13 +73,21 @@ static func spawns_to_state(spawns: Array[SpawnPointData]) -> Array[Dictionary]:
 	return out
 
 
+static func typed_vector2_array(raw: Array) -> Array[Vector2]:
+	var out: Array[Vector2] = []
+	for point in raw:
+		if point is Vector2:
+			out.append(point)
+	return out
+
+
 static func state_to_routes(state: Array) -> Array[PathRouteData]:
 	var out: Array[PathRouteData] = []
 	for entry in state:
 		if entry is Dictionary:
 			var route := PathRouteData.new()
 			route.route_id = str(entry.get("route_id", ""))
-			route.points = entry.get("points", [])
+			route.points = typed_vector2_array(entry.get("points", []))
 			out.append(route)
 	return out
 
@@ -150,7 +158,7 @@ static func merge_save_payload(
 	out.map_sprite_path = geometry.get("map_sprite_path", "")
 	out.path_routes = state_to_routes(geometry.get("path_routes", []))
 	out.spawn_points = state_to_spawns(geometry.get("spawn_points", []))
-	out.build_spot_positions = geometry.get("build_spot_positions", [])
+	out.build_spot_positions = typed_vector2_array(geometry.get("build_spot_positions", []))
 	out.gate_position = geometry.get("gate_position", Vector2.ZERO)
 	out.region_ids = geometry.get("region_ids", [])
 	out.uses_large_map_camera = geometry.get("uses_large_map_camera", false)
@@ -161,29 +169,33 @@ static func merge_save_payload(
 	return out
 
 
-static func next_route_id(routes: Array[Dictionary]) -> String:
-	var index := routes.size() + 1
+static func next_route_id(routes: Array) -> String:
+	var index := maxi(routes.size() + 1, 1)
+	var candidate := "route_%d" % index
 	while true:
-		var candidate := "route_%d" % index
 		var taken := false
 		for route in routes:
 			if route.get("route_id", "") == candidate:
 				taken = true
 				break
 		if not taken:
-			return candidate
+			break
 		index += 1
+		candidate = "route_%d" % index
+	return candidate
 
 
-static func next_spawn_id(spawns: Array[Dictionary]) -> String:
-	var index := spawns.size() + 1
+static func next_spawn_id(spawns: Array) -> String:
+	var index := maxi(spawns.size() + 1, 1)
+	var candidate := "spawn_%d" % index
 	while true:
-		var candidate := "spawn_%d" % index
 		var taken := false
 		for spawn in spawns:
 			if spawn.get("spawn_id", "") == candidate:
 				taken = true
 				break
 		if not taken:
-			return candidate
+			break
 		index += 1
+		candidate = "spawn_%d" % index
+	return candidate

@@ -272,7 +272,24 @@ Meta currencies (honor, diamonds, shards) are handled in `Meta/*` services and `
 - `ZahhakBossController`: immune to tower damage; hero damage only.
 - `ZahhakTributeManager`: periodic max-level tower sacrifice or HP/regional penalty.
 - Win: Zahhak in `DamavandMountainArea` + ≥2 adjacent **Forge** family towers → `TriggerVictory()`.
-- Hunt: **100 Star Iron → 1 anchor** (3 per bind); **7 Khan seals + anchors + wave 50** for finale; repeatable with **Zahhak Fury** after each bind.
+- Hunt: **100 Star Iron → 1 anchor** (3 per bind); **7 Labour seals + anchors + wave 50** for finale; repeatable with **Zahhak Fury** after each bind.
+
+### Labour Modes (campaign overlays)
+
+- **`LabourMode`** (`scripts/battle/labours/labour_mode.gd`): Node with `initialize(ctx)`, `_process`, wave/cleanse/boss hooks.
+- **`LabourModeFactory`**: maps `level_id` → `labour_mode_id`; returns `null` for tutorial and non-campaign IDs.
+- **`BattleBootstrap._attach_labour_mode`**: runs only when `BattleLaunchData.is_campaign_mode()`; wires `CombatEvents.wave_started/completed/cleanse_used` and `bridge.enemy_died`.
+- Modes act through **existing systems**: extra spawns (`EnemySpawner`), hero HP, `MapLightManager` / cleanse, `runtime_modifiers` (`tower_damage_mult`, `vision_radius_mult`), `ObjectiveController` (Rescue).
+- **`EnemyController`**: `is_targetable_by_tower()`, `is_decoy()`, `apply_venom()`, burrow flags for Dragon mode.
+
+### Reward tower behaviors
+
+| Tower | `AttackBehavior` | Notes |
+|-------|------------------|-------|
+| `tower_zahhak_serpent` | `TWIN` | Two targets; venom DoT + `_damage_taken_mult`; **Hunger** AS buff on venom kills (decays, capped, battle-reset) |
+| `tower_rostam_barracks` | `BARRACKS` | No projectiles; spawns/resummons allies from `AllyUnitData`; level drives Vanguard → Bull-Mace Bearer |
+
+Unlock: Serpent via `SaveSystem.record_horde_victory()` (all 8 hordes) or `StoreService`; Barracks via 7th Labour seal in `mark_level_cleared` or store. Both injected in `battle_bootstrap._apply_difficulty_and_unlocks` and gated in `tower_radial_build_controller`.
 
 ---
 
@@ -284,6 +301,8 @@ Meta currencies (honor, diamonds, shards) are handled in `Meta/*` services and `
 | `useDynamicPathfinding` | A* paths weighted by regional light |
 | `enableZahhakTribute` | Serpent tribute timer |
 | `enableDamavandBoss` | Zahhak + mountain finale setup |
+| `labour_mode_id` | Campaign overlay id (`mode_lion` … `mode_zahhak`); empty for tutorial |
+| `labour_params` | Optional per-mode tuning dictionary |
 
 Roguelite launches often force tribute via bootstrap even if level asset omits the flag.
 

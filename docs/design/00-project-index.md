@@ -1,18 +1,19 @@
 ﻿# Design 00 — Project Index
 
-**Last updated:** 2026-06-04  
+**Last updated:** 2026-06-06  
 **Design canon** for project identity, reading order, and locked decisions.  
 **Implementation truth:** [engineering/project-status.md](../engineering/project-status.md) · [engineering/implementation-tracker.md](../engineering/implementation-tracker.md)
 
+**Product title:** Rostam 7 Labours: Shahname TD  
 **Engine:** Godot 4.6 · **Platform:** landscape mobile · **Genre:** active 2D tower-defense roguelite  
-**Campaign:** Seven Khans + Damavand Binding finale · **Main battlefields:** 8  
+**Campaign:** Seven Labours of Rostam + Damavand Binding finale · **Main battlefields:** 8  
 **Visual identity:** hand-painted Shahnameh-inspired Iranian epic art with strong mobile readability
 
 ---
 
 ## 1. Project promise
 
-Shahnameh TD is a heroic illustrated tower-defense roguelite inspired by Ferdowsi’s Shahnameh. The player builds a defense, moves a legendary champion, protects regions of sacred light, purifies corruption, rescues hijacked towers, drafts Fate cards, and confronts mythic bosses.
+Shahnameh TD (market title: **Rostam 7 Labours: Shahname TD**) is a heroic illustrated tower-defense roguelite inspired by Ferdowsi’s Shahnameh and Rostam’s seven labours toward Mazanderan.
 
 Identity must appear in story structure, characters and mythic ordeals, tower shape language, Sacred Fire vs corruption, regional map design, ornamental UI rhythm, soundtrack and SFX, narrator presentation, and replayable roguelite choices — not as generic TD with Persian decorations.
 
@@ -81,7 +82,10 @@ Do not mass-produce the full campaign until real testers **voluntarily replay** 
 | Core battle resource | Gold |
 | Signature resource | Sacred Fire |
 | Signature threat | Regional corruption and tower hijacking |
-| Main campaign | Seven Khans + Damavand Binding |
+| Main campaign | Seven Labours of Rostam + Damavand Binding (internal IDs: `level_01`…`level_08_damavand`) |
+| **Player-facing title** | **Rostam 7 Labours: Shahname TD** |
+| **Labour Modes** | Additive per-map story overlays on campaign only (`scripts/battle/labours/`) |
+| **Reward towers** | `tower_zahhak_serpent` (8 horde clears or IAP); `tower_rostam_barracks` (7 Labour seals or IAP); no Star Iron forge |
 | Map count | 8 |
 | Map progression | Medium → very large |
 | Large maps | Layered TileMaps, active sectors, camera anchors, minimap, threat-jump navigation |

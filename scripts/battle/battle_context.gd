@@ -17,12 +17,14 @@ var run_modifiers: RunModifierService = null
 var ancestral_forge: AncestralForgeController = null
 var hunt: HuntController = null
 var spell_controller: SpellController = null
+var labour_mode: LabourMode = null
 var bridge: BattleContextBridge = null
 var run_summary: Dictionary = {}
 var runtime_modifiers: Dictionary = {}
 var selected_fate_card: FateCardData = null
 
 var active_enemies: Array = []
+var active_allies: Array = []
 var path_points: PackedVector2Array = PackedVector2Array()
 var tutorial_hold_waves: bool = false
 var tutorial_active: bool = false

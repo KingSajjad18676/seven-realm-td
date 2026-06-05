@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Shahnameh TD"
+config/name="Rostam 7 Labours: Shahname TD"
 run/main_scene="res://scenes/boot/boot.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
@@ -59,3 +59,4 @@ touch={
 
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true

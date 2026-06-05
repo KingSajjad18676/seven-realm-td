@@ -6,7 +6,7 @@ const STRINGS: Dictionary = {
 	"menu_settings": "Settings",
 	"battle_gold": "Gold",
 	"battle_sacred_fire": "Sacred Fire",
-	"world_map_title": "Seven Khans",
+	"world_map_title": "Seven Labours of Rostam",
 }
 
 

@@ -1,9 +1,11 @@
 # Gameplay Specification
 
-**Last updated:** 2026-06-04  
+**Last updated:** 2026-06-06  
 **Design canon:** [design/02-gameplay-ux.md](../design/02-gameplay-ux.md) · [design/00-project-index.md](../design/00-project-index.md)  
 **Developer quick start:** [engineering/game-logic.md](../engineering/game-logic.md)  
 **What works today:** [engineering/implementation-tracker.md](../engineering/implementation-tracker.md)
+
+**Shipped (2026-06-06):** Campaign **Labour Modes** (`mode_lion` … `mode_zahhak`) layer story hazards on the core loop; **Serpent Spire** (twin venom + Hunger) and **Rostam Tahmtan Barracks** (ally blockers) unlock by mission or store IAP — see [game-logic.md](../engineering/game-logic.md) §9 and [entities-and-gameplay.md](entities-and-gameplay.md) §5–7.
 
 This document includes **advanced and post-launch** systems (rewind, tribute, premium stubs). **Khan 1 launch scope** is defined in design/02 §20 and [PRD.md](../product/prd.md) §5 — do not treat every section here as required for the first vertical slice.
 

@@ -461,6 +461,10 @@ func mark_level_cleared(level_id: String) -> void:
 			progress[level_id] = entry
 			_data["campaign_progress"] = progress
 			add_khan_seal()
+			if get_khan_seals() >= 7 and not is_tower_unlocked("tower_rostam_barracks"):
+				unlock_tower("tower_rostam_barracks")
+				if SceneFlowController:
+					SceneFlowController.pending_alert = "Rostam's Barracks unlocked!"
 	save_game()
 
 

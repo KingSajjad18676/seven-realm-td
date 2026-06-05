@@ -246,6 +246,12 @@ func _setup_tower_radial() -> void:
 		_tower_radial.initialize(context, cam)
 
 
+func setup_tower_range_ring(ring: TowerRangeRing) -> void:
+	_setup_tower_radial()
+	if _tower_radial:
+		_tower_radial.set_range_ring(ring)
+
+
 func _on_build_radial_requested(spot: BuildSpot) -> void:
 	if _tower_radial:
 		if _tower_spot_panel:

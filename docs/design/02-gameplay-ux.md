@@ -164,6 +164,13 @@ Hero solves problems towers cannot alone: hold breach, intercept runner, interru
 
 Each tower must communicate its job before reading stats.
 
+**Reward towers (unlock-by-mission or store; no Kaveh's Forge Star Iron):**
+
+| Tower | Role | Unlock | Behavior |
+|-------|------|--------|----------|
+| Serpent Spire (`tower_zahhak_serpent`) | Twin-target venom DPS | Clear all 8 Horde missions **or** store purchase | Twin vipers, stacking dark-venom DoT + vulnerability, **Hunger** attack-speed on poisoned kills |
+| Rostam Tahmtan Barracks (`tower_rostam_barracks`) | Melee ally blockers | **7 Labour seals** **or** store purchase | Summons Zabul Vanguard; at max in-battle level → Bull-Mace Bearer (armor shatter + brief stun) |
+
 ---
 
 ## 11. Advanced towers and Forge hybrids
@@ -198,16 +205,18 @@ Add heroes only after each tactical identity is clear.
 
 ## 13. Eight maps
 
-| Map | Scale | Grid | Tactical lesson |
-|-----|-------|------|-----------------|
-| Khan 1 — Lion and Rakhsh | Medium | 32×18 | Basics, corruption warning, hero movement |
-| Khan 2 — Desert of Thirst | Medium | 36×20 | Resource pressure, exposed lanes |
-| Khan 3 — Azhdaha Canyon | Medium-large | 40×22 | Split routes, boss arena |
-| Khan 4 — Sorceress Feast | Medium-large | 42×24 | Illusion routes, information clarity |
-| Khan 5 — Olad Camp | Large | 48×27 | Branching priorities, staged fronts |
-| Khan 6 — Arzhang Fortress | Large | 52×30 | Siege sectors, breach defense |
-| Khan 7 — White Div Cavern | Very large | 56×32 | Visibility, chamber activation |
-| Damavand Binding | Very large | 64×36 | Multi-objective finale, anchor control |
+Each campaign map layers an additive **Labour Mode** (story hazard) on the unchanged core TD loop. Modes apply **campaign launches only** — Endless, Hunt, Horde, Daily Tale, and Tutorial carry no mode.
+
+| Map | Labour Mode | Scale | Grid | Tactical lesson |
+|-----|-------------|-------|------|-----------------|
+| Labour 1 — Lion and Rakhsh | Rakhsh ambush (`mode_lion`) | Medium | 32×18 | Basics, corruption warning, hero + towers together |
+| Labour 2 — Desert of Thirst | Thirst drain (`mode_thirst`) | Medium | 36×20 | Resource pressure, cleanse/oasis relief |
+| Labour 3 — Azhdaha Canyon | Dragon burrow (`mode_dragon`) | Medium-large | 40×22 | Split routes, timed emergence pressure |
+| Labour 4 — Sorceress Feast | Illusion decoys (`mode_temptress`) | Medium-large | 42×24 | Information clarity, Sacred Fire reveal |
+| Labour 5 — Olad Camp | Second cave front (`mode_demons`) | Large | 48×27 | Branching priorities, staged fronts |
+| Labour 6 — Arzhang Fortress | Rescue captive (`mode_rescue`) | Large | 52×30 | Reach Kay Kavus node under summons |
+| Labour 7 — White Div Cavern | Darkness aura (`mode_blindness`) | Very large | 56×32 | Temporary vision/range debuff, boss clears |
+| Damavand Binding | Zahhak binding (`mode_zahhak`) | Very large | 64×36 | Multi-objective finale, anchor control |
 
 **Large-map rule:** staged sectors, minimap, camera anchors, threat-jump, off-screen warnings, short transitions, clear primary/secondary fronts — scale without fighting the camera.
 
@@ -240,7 +249,8 @@ Every boss needs: readable entrance, recognizable silhouette, new battlefield qu
 - **Memory Div:** Rival that remembers prior success patterns; encourages adaptation  
 - **Daily Tale:** Validated seed — fair modifiers, fixed pool, score/mastery; no forced daily grind  
 - **Endless:** Post-campaign mastery; scale combinations and pressure, not HP only  
-- **Horde:** Per-Khan 15-wave survival; clear all 8 Khans to earn Serpent Spire tower (or buy)  
+- **Horde:** Per-Labour 15-wave survival; clear all 8 to earn Serpent Spire tower (or buy)  
+- **Barracks unlock:** 7 Labour seals (campaign clears) or store purchase — same dual path as Serpent  
 - **Forge Tokens + Spells:** Meta collectibles earned from victories; buy with tokens or real money; cast in battle  
 
 ---

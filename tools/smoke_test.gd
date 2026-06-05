@@ -12,6 +12,8 @@ func _init() -> void:
 		push_error("smoke_test: %s" % err)
 	ok = ok and validation_errors.is_empty()
 	ok = ok and _catalog_has_tower(catalog, "tower_flame_archer")
+	ok = ok and _catalog_has_tower(catalog, "tower_rostam_barracks")
+	ok = ok and _campaign_levels_have_labour_modes(catalog)
 	var launch := BattleLaunchData.new()
 	launch.is_roguelite_run = true
 	ok = ok and not launch.is_campaign_mode()
@@ -36,3 +38,13 @@ func _catalog_has_tower(catalog: BootstrapContent, tower_id: String) -> bool:
 		if t is TowerData and t.tower_id == tower_id:
 			return true
 	return false
+
+
+func _campaign_levels_have_labour_modes(catalog: BootstrapContent) -> bool:
+	for level in catalog.levels:
+		if level is LevelData and level.level_id.begins_with("level_0") and level.level_id != "level_00_tutorial":
+			if level.labour_mode_id == "":
+				return false
+			if LabourModeFactory.create(level) == null:
+				return false
+	return true

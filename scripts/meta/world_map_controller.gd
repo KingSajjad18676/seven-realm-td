@@ -2,13 +2,13 @@ extends Control
 
 const KHAN_LEVELS: Array[Dictionary] = [
 	{"id": "level_00_tutorial", "label": "Tutorial", "short": "T", "tutorial": true},
-	{"id": "level_01", "label": "Khan 1", "short": "1"},
-	{"id": "level_02", "label": "Khan 2", "short": "2"},
-	{"id": "level_03", "label": "Khan 3", "short": "3"},
-	{"id": "level_04", "label": "Khan 4", "short": "4"},
-	{"id": "level_05", "label": "Khan 5", "short": "5"},
-	{"id": "level_06", "label": "Khan 6", "short": "6"},
-	{"id": "level_07", "label": "Khan 7", "short": "7"},
+	{"id": "level_01", "label": "Labour 1", "short": "1"},
+	{"id": "level_02", "label": "Labour 2", "short": "2"},
+	{"id": "level_03", "label": "Labour 3", "short": "3"},
+	{"id": "level_04", "label": "Labour 4", "short": "4"},
+	{"id": "level_05", "label": "Labour 5", "short": "5"},
+	{"id": "level_06", "label": "Labour 6", "short": "6"},
+	{"id": "level_07", "label": "Labour 7", "short": "7"},
 	{"id": "level_08_damavand", "label": "Damavand", "short": "D"},
 ]
 
@@ -53,9 +53,9 @@ func _show_pending_alert() -> void:
 	var seals := SaveSystem.get_khan_seals() if SaveSystem else 0
 	var horde_clears := SaveSystem.get_horde_clears_count() if SaveSystem else 0
 	if msg != "":
-		_seals_label.text = "%s\nKhan seals: %d/7 | Horde: %d/8" % [msg, seals, horde_clears]
+		_seals_label.text = "%s\nLabour seals: %d/7 | Horde: %d/8" % [msg, seals, horde_clears]
 	else:
-		_seals_label.text = "Khan seals: %d/7 | Horde cleared: %d/8" % [seals, horde_clears]
+		_seals_label.text = "Labour seals: %d/7 | Horde cleared: %d/8" % [seals, horde_clears]
 
 
 func _build_campaign_nodes() -> void:
@@ -106,7 +106,7 @@ func _level_tooltip(entry: Dictionary, unlocked: bool) -> String:
 	if level_id == "level_01" and SaveSystem and not SaveSystem.is_tutorial_completed():
 		return "%s — Complete tutorial first" % text
 	if level_id == "level_08_damavand" and SaveSystem and not SaveSystem.is_level_unlocked(level_id):
-		return "%s — Clear Khan 7 first" % text
+		return "%s — Clear Labour 7 first" % text
 	if not unlocked:
 		return "%s — Locked" % text
 	return text
@@ -130,12 +130,12 @@ func _refresh_mode_buttons() -> void:
 	var seals := SaveSystem.get_khan_seals() if SaveSystem else 0
 	var horde_clears := SaveSystem.get_horde_clears_count() if SaveSystem else 0
 	if _seals_label:
-		_seals_label.text = "Khan seals: %d/7 | Horde cleared: %d/8" % [seals, horde_clears]
+		_seals_label.text = "Labour seals: %d/7 | Horde cleared: %d/8" % [seals, horde_clears]
 	if _endless_btn:
 		_endless_btn.disabled = seals < 7
 	if _horde_btn:
 		_horde_btn.disabled = not SaveSystem.is_tutorial_completed() if SaveSystem else true
-		_horde_btn.tooltip_text = "Survive 15 waves per Khan — clear all 8 to unlock Serpent Spire"
+		_horde_btn.tooltip_text = "Survive 15 waves per Labour — clear all 8 to unlock Serpent Spire"
 	if _hunt_btn:
 		var hunt_ready := seals >= 7 and ForgeService and ForgeService.can_enter_damavand()
 		_hunt_btn.disabled = not hunt_ready

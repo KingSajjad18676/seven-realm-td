@@ -109,15 +109,33 @@ static func build_towers() -> Array[TowerData]:
 	zahhak_serpent.tower_id = "tower_zahhak_serpent"
 	zahhak_serpent.display_name = "Serpent Spire"
 	zahhak_serpent.family = GameEnums.TowerFamily.SACRED_FIRE
+	zahhak_serpent.attack_behavior = GameEnums.AttackBehavior.TWIN
 	zahhak_serpent.build_cost = 150
-	zahhak_serpent.damage = 24.0
+	zahhak_serpent.damage = 18.0
 	zahhak_serpent.attack_rate = 1.15
 	zahhak_serpent.range = 165.0
-	zahhak_serpent.applies_burn = true
+	zahhak_serpent.applies_burn = false
 	zahhak_serpent.color = Color(0.55, 0.12, 0.28)
 	zahhak_serpent.max_level = 3
 
-	return [archer, sacred, heavy, control, flame_archer, volcano_ram, zahhak_serpent]
+	var barracks := TowerData.new()
+	barracks.tower_id = "tower_rostam_barracks"
+	barracks.display_name = "Rostam Tahmtan Barracks"
+	barracks.family = GameEnums.TowerFamily.BARRACKS
+	barracks.attack_behavior = GameEnums.AttackBehavior.BARRACKS
+	barracks.build_cost = 140
+	barracks.damage = 0.0
+	barracks.attack_rate = 0.0
+	barracks.range = 0.0
+	barracks.spawn_unit_id = "unit_zabul_vanguard"
+	barracks.upgraded_unit_id = "unit_bull_mace_bearer"
+	barracks.max_units = 2
+	barracks.unit_respawn_cooldown = 6.0
+	barracks.rally_offset = Vector2(0, -45)
+	barracks.color = Color(0.45, 0.35, 0.25)
+	barracks.max_level = 3
+
+	return [archer, sacred, heavy, control, flame_archer, volcano_ram, zahhak_serpent, barracks]
 
 
 static func build_enemies() -> Array[EnemyData]:
@@ -562,13 +580,13 @@ static func available_towers_for_level(level_id: String, include_zahhak: bool) -
 static func build_levels() -> Array[LevelData]:
 	return [
 		build_tutorial(),
-		build_khan_level("level_01", "Khan 1 — Lion and Rakhsh", 32, 18, 150, 4, "enemy_lion_boss", _khan1_path(), false),
-		build_khan_level("level_02", "Khan 2 — Desert of Thirst", 36, 20, 160, 5, "enemy_thirst_manifest", _khan2_path(), false),
-		build_khan_level("level_03", "Khan 3 — Azhdaha Canyon", 40, 22, 170, 5, "enemy_azhdaha", _khan3_path(), true),
-		build_khan_level("level_04", "Khan 4 — Sorceress Feast", 42, 24, 175, 5, "enemy_sorceress", _khan4_path(), true),
-		build_khan_level("level_05", "Khan 5 — Olad Camp", 48, 27, 180, 6, "enemy_olad_champion", _khan5_path(), true),
-		build_khan_level("level_06", "Khan 6 — Arzhang Fortress", 52, 30, 185, 6, "enemy_arzhang_div", _khan6_path(), true),
-		build_khan_level("level_07", "Khan 7 — White Div Cavern", 56, 32, 190, 6, "enemy_white_div", _khan7_path(), true),
+		build_khan_level("level_01", "Labour 1 — Lion and Rakhsh", 32, 18, 150, 4, "enemy_lion_boss", _khan1_path(), false),
+		build_khan_level("level_02", "Labour 2 — Desert of Thirst", 36, 20, 160, 5, "enemy_thirst_manifest", _khan2_path(), false),
+		build_khan_level("level_03", "Labour 3 — Azhdaha Canyon", 40, 22, 170, 5, "enemy_azhdaha", _khan3_path(), true),
+		build_khan_level("level_04", "Labour 4 — Sorceress Feast", 42, 24, 175, 5, "enemy_sorceress", _khan4_path(), true),
+		build_khan_level("level_05", "Labour 5 — Olad Camp", 48, 27, 180, 6, "enemy_olad_champion", _khan5_path(), true),
+		build_khan_level("level_06", "Labour 6 — Arzhang Fortress", 52, 30, 185, 6, "enemy_arzhang_div", _khan6_path(), true),
+		build_khan_level("level_07", "Labour 7 — White Div Cavern", 56, 32, 190, 6, "enemy_white_div", _khan7_path(), true),
 		build_khan_level("level_08_damavand", "Damavand Binding", 64, 36, 200, 8, "enemy_zahhak", _damavand_path(), true),
 	]
 
@@ -631,6 +649,7 @@ static func build_khan_level(
 	level.waves = _generate_campaign_waves(id, boss_id)
 	level.block_size = 10
 	level.default_objective_id = _default_objective_for(id)
+	level.labour_mode_id = LabourModeFactory.labour_mode_id_for_level(id)
 	level.minimap_bounds = MapCameraUtils.compute_world_bounds(level)
 	return level
 
@@ -968,3 +987,35 @@ static func _damavand_path() -> Array[Vector2]:
 		Vector2(100, 360), Vector2(400, 360), Vector2(600, 200),
 		Vector2(800, 200), Vector2(1000, 360), Vector2(1200, 360), Vector2(1400, 280),
 	]
+
+
+static func build_ally_units() -> Array[AllyUnitData]:
+	var vanguard := AllyUnitData.new()
+	vanguard.unit_id = "unit_zabul_vanguard"
+	vanguard.display_name = "Zabul Vanguard"
+	vanguard.max_hp = 180.0
+	vanguard.damage = 20.0
+	vanguard.attack_rate = 0.9
+	vanguard.move_speed = 110.0
+	vanguard.cleave_radius = 48.0
+	vanguard.magic_fire_resist = 0.35
+	vanguard.color = Color(0.35, 0.45, 0.55)
+
+	var mace := AllyUnitData.new()
+	mace.unit_id = "unit_bull_mace_bearer"
+	mace.display_name = "Bull-Mace Bearer"
+	mace.max_hp = 220.0
+	mace.damage = 32.0
+	mace.attack_rate = 0.65
+	mace.move_speed = 95.0
+	mace.armor_shatter = 3.0
+	mace.stun_seconds = 0.8
+	mace.color = Color(0.5, 0.38, 0.28)
+	return [vanguard, mace]
+
+
+static func get_ally_unit(unit_id: String) -> AllyUnitData:
+	for unit in build_ally_units():
+		if unit.unit_id == unit_id:
+			return unit
+	return null

@@ -58,3 +58,20 @@ func release_enemy(node: EnemyController) -> void:
 	if context.state_controller:
 		context.state_controller.register_enemy_removed()
 	_pool.release(node)
+
+
+func spawn_enemy_at(enemy_id: String, position: Vector2, spawn_group: Dictionary = {}) -> EnemyController:
+	if context == null:
+		return null
+	var catalog_data := ContentRegistry.get_enemy(enemy_id)
+	if catalog_data == null:
+		return null
+	var data := catalog_data.duplicate(true) as EnemyData
+	var group := spawn_group.duplicate()
+	if group.is_empty():
+		group = {"enemy_id": enemy_id, "count": 1}
+	_spawn_enemy(data, group)
+	var node := context.active_enemies[context.active_enemies.size() - 1] as EnemyController
+	if node:
+		node.global_position = position
+	return node

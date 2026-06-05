@@ -22,6 +22,14 @@ extends Resource
 @export var applies_slow: bool = false
 @export var armor_break: bool = false
 @export var color: Color = Color.WHITE
+@export var attack_behavior: GameEnums.AttackBehavior = GameEnums.AttackBehavior.SINGLE
+
+@export_group("Barracks")
+@export var spawn_unit_id: String = ""
+@export var upgraded_unit_id: String = ""
+@export var max_units: int = 2
+@export var unit_respawn_cooldown: float = 5.0
+@export var rally_offset: Vector2 = Vector2(0, -40)
 
 @export_group("Forge")
 ## Unique Star Iron ID; non-empty registers tower in Kaveh's Forge (see prompts/10-add-new-content.prompt.md).

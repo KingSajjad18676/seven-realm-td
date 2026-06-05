@@ -1,6 +1,6 @@
-﻿# Shahnameh Mobile Landscape TD
+﻿# Rostam 7 Labours: Shahname TD
 
-Mobile landscape 2D **active tower-defense roguelite** inspired by the Shahnameh — Persian mythology, Zoroastrian fire symbolism, and classical Persian miniature painting.
+Mobile landscape 2D **active tower-defense roguelite** inspired by the Shahnameh — Rostam's seven labours, Persian mythology, Zoroastrian fire symbolism, and classical Persian miniature painting.
 
 ## Godot 4.6
 

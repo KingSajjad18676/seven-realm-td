@@ -85,7 +85,7 @@ func consume_pending_alert() -> String:
 func go_to_battle(launch: BattleLaunchData) -> void:
 	if launch and launch.is_hunt_mode and ForgeService and ForgeService.is_damavand_level(launch.level_id):
 		if SaveSystem and not SaveSystem.has_all_khan_seals():
-			pending_alert = "Collect all 7 Khan seals before Hunt for Zahhak."
+			pending_alert = "Complete all seven Labours (7 seals) before Hunt for Zahhak."
 			go_to_world_map()
 			return
 		if not ForgeService.can_enter_damavand():

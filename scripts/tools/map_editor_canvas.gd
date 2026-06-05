@@ -41,8 +41,14 @@ func _ready() -> void:
 
 
 func load_geometry(state: Dictionary) -> void:
-	path_routes = state.get("path_routes", [])
-	spawn_points = state.get("spawn_points", [])
+	path_routes.clear()
+	for entry in state.get("path_routes", []):
+		if entry is Dictionary:
+			path_routes.append(entry)
+	spawn_points.clear()
+	for entry in state.get("spawn_points", []):
+		if entry is Dictionary:
+			spawn_points.append(entry)
 	if path_routes.is_empty() and state.has("path_points"):
 		var legacy_points: Array = state.get("path_points", [])
 		if not legacy_points.is_empty():
@@ -455,8 +461,8 @@ func _route_id_at(index: int) -> String:
 
 func _active_route_points() -> Array[Vector2]:
 	if active_route_index < 0 or active_route_index >= path_routes.size():
-		return []
-	return path_routes[active_route_index].get("points", [])
+		return MapEditorUtils.typed_vector2_array([])
+	return MapEditorUtils.typed_vector2_array(path_routes[active_route_index].get("points", []))
 
 
 func _primary_spawn_position() -> Vector2:
@@ -470,7 +476,7 @@ func _duplicate_routes() -> Array[Dictionary]:
 	for route in path_routes:
 		out.append({
 			"route_id": route.get("route_id", ""),
-			"points": (route.get("points", []) as Array).duplicate(),
+			"points": MapEditorUtils.typed_vector2_array(route.get("points", [])).duplicate(),
 		})
 	return out
 

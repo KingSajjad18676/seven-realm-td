@@ -13,6 +13,12 @@ const PRODUCTS: Dictionary = {
 		"type": "tower",
 		"grant_id": "tower_zahhak_serpent",
 	},
+	"tower_rostam_barracks": {
+		"display_name": "Rostam Tahmtan Barracks",
+		"price_label": "$4.99",
+		"type": "tower",
+		"grant_id": "tower_rostam_barracks",
+	},
 	"spell_gold_rush": {"display_name": "Gold Rush Spell", "price_label": "$1.99", "type": "spell", "grant_id": "spell_gold_rush"},
 	"spell_purify_blast": {"display_name": "Purify Blast Spell", "price_label": "$2.99", "type": "spell", "grant_id": "spell_purify_blast"},
 	"spell_morale_surge": {"display_name": "Morale Surge Spell", "price_label": "$2.99", "type": "spell", "grant_id": "spell_morale_surge"},
