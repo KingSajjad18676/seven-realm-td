@@ -108,7 +108,7 @@ func show_for_spot(spot: BuildSpot) -> void:
 func show_for_occupied_spot(spot: BuildSpot) -> void:
 	if context == null or spot == null or not spot.occupied or spot.tower == null:
 		return
-	if context.tutorial_active:
+	if context.tutorial_active and not context.tutorial_allows("build_pads"):
 		return
 	_mode = Mode.MANAGE
 	_spot = spot

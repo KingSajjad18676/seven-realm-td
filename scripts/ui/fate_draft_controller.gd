@@ -45,7 +45,8 @@ func _clear_content_root() -> void:
 	if _content_root == null:
 		return
 	for child in _content_root.get_children():
-		child.free()
+		_content_root.remove_child(child)
+		child.queue_free()
 	_content_root.add_theme_constant_override("separation", 10)
 
 
@@ -125,7 +126,8 @@ func _build_phase_two(container: VBoxContainer) -> void:
 
 func _populate_cards(container: HBoxContainer) -> void:
 	for child in container.get_children():
-		child.free()
+		container.remove_child(child)
+		child.queue_free()
 	var pool: Array[FateCardData] = ContentRegistry.get_all_fate_cards()
 	var shuffled := pool.duplicate()
 	shuffled.shuffle()

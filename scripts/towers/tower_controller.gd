@@ -21,9 +21,18 @@ var _allies: Array[AllyUnitController] = []
 var _ally_respawn_timers: Array[float] = []
 const HUNGER_MAX_STACKS := 10
 const HUNGER_DECAY_SEC := 4.0
+const PICK_PADDING := 8.0
 
 @onready var _sprite: ColorRect = $Sprite
 @onready var _range_area: Area2D = $RangeArea
+@onready var _pick_area: Area2D = $PickArea
+
+
+func _ready() -> void:
+	if _pick_area:
+		_pick_area.input_pickable = true
+		_pick_area.input_event.connect(_on_pick_input)
+	refresh_pick_area()
 
 
 func initialize(ctx: BattleContext, tower_data: TowerData, spot: BuildSpot) -> void:
@@ -378,6 +387,46 @@ func _apply_forge_visuals() -> void:
 	if sp == "":
 		sp = VisualAssetLoader.khan1_sprite(data.tower_id)
 	VisualAssetLoader.apply_sprite(self, sp, color, Vector2(size, size))
+	refresh_pick_area()
+
+
+func get_pick_radius() -> float:
+	return get_visual_half_extent() + PICK_PADDING
+
+
+func get_visual_half_extent() -> float:
+	if _sprite != null:
+		return _sprite.size.x * 0.5
+	return 18.0
+
+
+func refresh_pick_area() -> void:
+	if _pick_area == null:
+		_pick_area = get_node_or_null("PickArea") as Area2D
+	if _pick_area == null:
+		return
+	var shape_node := _pick_area.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if shape_node == null or not shape_node.shape is CircleShape2D:
+		return
+	(shape_node.shape as CircleShape2D).radius = get_pick_radius()
+	if build_spot != null:
+		build_spot.refresh_pick_collision()
+
+
+func _on_pick_input(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+	if build_spot == null:
+		return
+	var pressed := false
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		pressed = true
+	elif event is InputEventScreenTouch and event.pressed:
+		pressed = true
+	if not pressed:
+		return
+	if context and context.tutorial_active and not context.tutorial_allows("build_pads"):
+		return
+	get_viewport().set_input_as_handled()
+	build_spot.spot_selected.emit(build_spot)
 
 
 func trigger_hijack_warning() -> void:

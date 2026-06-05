@@ -45,12 +45,12 @@ func find_spot_at(world_pos: Vector2, radius: float = 36.0) -> BuildSpot:
 
 
 func find_spot_at_any(world_pos: Vector2, radius: float = -1.0) -> BuildSpot:
-	var pick_radius := radius if radius > 0.0 else BuildPadVisuals.PAD_RADIUS + 8.0
 	var best: BuildSpot = null
-	var best_dist := pick_radius
+	var best_dist := -1.0
 	for spot in build_spots:
+		var pick_radius := radius if radius > 0.0 else spot.get_pick_radius()
 		var dist := world_pos.distance_to(spot.global_position)
-		if dist <= best_dist:
+		if dist <= pick_radius and (best == null or dist < best_dist):
 			best_dist = dist
 			best = spot
 	return best
@@ -60,8 +60,7 @@ func try_select_spot_at_world(world_pos: Vector2) -> bool:
 	var spot := find_spot_at_any(world_pos)
 	if spot == null:
 		return false
-	_on_spot_selected(spot)
-	return true
+	return _on_spot_selected(spot)
 
 
 func try_build_on_spot(spot: BuildSpot, tower_id: String = "") -> bool:
@@ -145,14 +144,19 @@ func spawn_projectile(tower: TowerController, target: EnemyController) -> void:
 	, CONNECT_ONE_SHOT)
 
 
-func _on_spot_selected(spot: BuildSpot) -> void:
+func _on_spot_selected(spot: BuildSpot) -> bool:
 	if context == null:
-		return
+		return false
 	if context.map_light:
 		context.map_light.select_region(spot.region_id)
-	if spot.occupied and spot.tower:
-		if context.tutorial_active:
-			return
+	if spot.occupied:
+		if spot.tower == null:
+			return false
+		if context.tutorial_active and not context.tutorial_allows("build_pads"):
+			return false
 		tower_spot_opened.emit(spot)
-		return
+		return true
+	if context.tutorial_active and not context.tutorial_allows("build_pads"):
+		return false
 	build_radial_requested.emit(spot)
+	return true

@@ -63,6 +63,14 @@ func test_show_for_spot_skips_occupied_pad() -> void:
 	assert_false(_radial.visible)
 
 
+func test_show_for_occupied_spot_allowed_during_tutorial_with_build_pads() -> void:
+	_setup_tower_on_spot(1)
+	_ctx.tutorial_active = true
+	_ctx.set_tutorial_allowed(["build_pads"])
+	_radial.show_for_occupied_spot(_spot)
+	assert_true(_radial.visible)
+
+
 func test_build_radial_disables_unaffordable_towers() -> void:
 	_ctx.economy.gold = 55
 	_radial.show_for_spot(_spot)
