@@ -388,6 +388,39 @@ func _hide_pause_modal() -> void:
 		_pause_panel.visible = false
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		_handle_back_pressed()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		_handle_back_pressed()
+		get_viewport().set_input_as_handled()
+
+
+func _handle_back_pressed() -> void:
+	if _tower_radial and _tower_radial.visible:
+		_tower_radial.hide_menu()
+		return
+	if _tower_spot_panel and _tower_spot_panel.visible:
+		_tower_spot_panel.hide_panel()
+		return
+	if _user_pause_modal_visible:
+		_on_pause_resume()
+		return
+	if _can_user_pause():
+		_on_pause()
+
+
+func _can_user_pause() -> bool:
+	if context == null or context.state_controller == null:
+		return false
+	var state := context.state_controller.current_state
+	return state == GameEnums.BattleState.WAVE_ACTIVE \
+		or state == GameEnums.BattleState.PRE_BATTLE
+
+
 func _on_speed() -> void:
 	if context == null or context.state_controller == null:
 		return
