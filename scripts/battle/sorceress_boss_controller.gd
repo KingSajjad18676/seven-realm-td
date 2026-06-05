@@ -1,11 +1,12 @@
 class_name SorceressBossController
 extends RefCounted
 
-enum Phase { PATROL, HEX, FEAST }
+enum Phase { PATROL, HEX, FEAST, REVEALED }
 
 var _enemy: EnemyController = null
 var _phase: Phase = Phase.PATROL
 var _phase_timer: float = 0.0
+var _revealed: bool = false
 
 
 func attach(enemy: EnemyController) -> void:
@@ -14,6 +15,10 @@ func attach(enemy: EnemyController) -> void:
 
 
 func tick(delta: float) -> void:
+	if not _revealed and _enemy and _enemy.data:
+		var ratio := _enemy.current_hp / maxf(1.0, _enemy.data.max_hp)
+		if ratio <= 0.5:
+			_transform_revealed()
 	_phase_timer -= delta
 	if _phase_timer > 0.0:
 		return
@@ -35,15 +40,37 @@ func tick(delta: float) -> void:
 				for region_id in _enemy.context.level_data.region_ids:
 					_enemy.context.map_light.apply_corruption_pressure(region_id, 6.0)
 			_phase = Phase.PATROL
-			_phase_timer = 4.2
+			_phase_timer = 4.2 if not _revealed else 3.0
+		Phase.REVEALED:
+			if _enemy and _enemy.context and _enemy.context.map_light:
+				var region := _enemy.context.map_light.get_region_for_position(_enemy.global_position)
+				_enemy.context.map_light.apply_corruption_pressure(region, 14.0)
+			_phase = Phase.PATROL
+			_phase_timer = 3.5
 
 
 func get_speed_mult() -> float:
+	if _phase == Phase.REVEALED:
+		return 1.15
 	return 0.4 if _phase == Phase.HEX else 0.9
 
 
 func blocks_tower_damage() -> bool:
-	return false
+	return _phase == Phase.REVEALED and _enemy and _enemy.current_hp > _enemy.data.max_hp * 0.25
+
+
+func _transform_revealed() -> void:
+	_revealed = true
+	_phase = Phase.REVEALED
+	_phase_timer = 1.0
+	if _enemy == null or _enemy.data == null:
+		return
+	_enemy.data.display_name = "Sorceress (Revealed Fiend)"
+	_enemy.data.max_hp = maxf(_enemy.current_hp, _enemy.data.max_hp * 0.6)
+	_enemy.data.move_speed += 15.0
+	if _enemy._sprite:
+		_enemy._sprite.color = Color(0.85, 0.15, 0.35)
+	_alert("Illusion shattered — the fiend is revealed!", 92)
 
 
 func _alert(msg: String, prio: int) -> void:

@@ -53,9 +53,13 @@ func _process(delta: float) -> void:
 	if context.state_controller.current_state != GameEnums.BattleState.WAVE_ACTIVE:
 		return
 	var speed := data.move_speed * _slow_mult
+	if context and context.runtime_modifiers.has("enemy_speed_mult"):
+		speed *= float(context.runtime_modifiers["enemy_speed_mult"])
 	if _is_boss and _boss_controller and _boss_controller.has_method("get_speed_mult"):
 		speed *= _boss_controller.get_speed_mult()
 	global_position = _follower.advance(speed * delta)
+	if data.tags.has("regen") and current_hp < data.max_hp * _hp_multiplier():
+		current_hp = minf(current_hp + 3.0 * delta, data.max_hp * _hp_multiplier())
 	if _burn_timer > 0.0:
 		_burn_timer -= delta
 		take_damage(4.0 * delta, false)
@@ -96,6 +100,8 @@ func apply_armor_break() -> void:
 
 
 func _die() -> void:
+	if _is_boss and context and context.morale:
+		context.morale.on_boss_defeated()
 	if context and context.hunt and data:
 		context.hunt.on_enemy_slain(data)
 	if context and context.economy:
@@ -103,6 +109,8 @@ func _die() -> void:
 	if data.corruption_pressure > 0.0 and context and context.map_light:
 		var region := context.map_light.get_region_for_position(global_position)
 		context.map_light.apply_corruption_pressure(region, data.corruption_pressure)
+	if context and context.bridge and data:
+		context.bridge.enemy_died.emit(data.enemy_id)
 	died.emit(self)
 	if context and context.enemy_spawner:
 		context.enemy_spawner.release_enemy(self)

@@ -74,5 +74,11 @@ func _execute_roar() -> void:
 	_roar_cooldown = 10.0
 	if _enemy and _enemy.context and _enemy.context.bridge:
 		_enemy.context.bridge.alert_message.emit("Lion roar — towers weakened briefly!", 85)
+	if _enemy and _enemy.context:
+		_enemy.context.runtime_modifiers["tower_damage_mult"] = 0.75
+		_enemy.get_tree().create_timer(4.0).timeout.connect(func() -> void:
+			if _enemy and _enemy.context:
+				_enemy.context.runtime_modifiers.erase("tower_damage_mult")
+		, CONNECT_ONE_SHOT)
 	_phase = Phase.PATROL
 	_phase_timer = 5.0

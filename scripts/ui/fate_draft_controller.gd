@@ -8,6 +8,8 @@ var _panel: Control = null
 var _reroll_used: bool = false
 var _objective_accepted: bool = false
 var _strategic_used: bool = false
+var _card_picked: bool = false
+var _continue_btn: Button = null
 
 
 func initialize(ctx: BattleContext, panel: Control) -> void:
@@ -23,6 +25,8 @@ func show_draft() -> void:
 	_reroll_used = false
 	_objective_accepted = false
 	_strategic_used = false
+	_card_picked = false
+	_continue_btn = null
 	_panel.visible = true
 	if context.state_controller:
 		context.state_controller.pause_battle()
@@ -39,9 +43,13 @@ func _build_pardeh_ui() -> void:
 	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_panel.add_child(vbox)
 	var title := Label.new()
-	title.text = "Pardeh Break — Weave your Fate"
+	title.text = "Pardeh Break - Weave your Fate"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(title)
+	var hint := Label.new()
+	hint.text = "Choose a Fate card to continue"
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(hint)
 	var card_row := HBoxContainer.new()
 	card_row.name = "CardRow"
 	card_row.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -72,10 +80,11 @@ func _build_pardeh_ui() -> void:
 	reroll_btn.text = "Reroll cards (%d SF)" % REROLL_SF_COST
 	reroll_btn.pressed.connect(_on_reroll.bind(card_row))
 	vbox.add_child(reroll_btn)
-	var continue_btn := Button.new()
-	continue_btn.text = "Continue"
-	continue_btn.pressed.connect(_close)
-	vbox.add_child(continue_btn)
+	_continue_btn = Button.new()
+	_continue_btn.text = "Continue"
+	_continue_btn.disabled = true
+	_continue_btn.pressed.connect(_on_continue_pressed)
+	vbox.add_child(_continue_btn)
 	var skip := _panel.get_node_or_null("SkipButton") as Button
 	if skip:
 		skip.visible = false
@@ -84,11 +93,12 @@ func _build_pardeh_ui() -> void:
 func _populate_cards(container: HBoxContainer) -> void:
 	for child in container.get_children():
 		child.queue_free()
-	var pool := ContentRegistry.get_all_fate_cards()
-	pool.shuffle()
+	var pool: Array[FateCardData] = ContentRegistry.get_all_fate_cards()
+	var shuffled := pool.duplicate()
+	shuffled.shuffle()
 	var picks: Array[FateCardData] = []
-	for i in mini(3, pool.size()):
-		picks.append(pool[i])
+	for i in range(mini(3, shuffled.size())):
+		picks.append(shuffled[i])
 	for card in picks:
 		var btn := Button.new()
 		btn.text = "%s\n%s" % [card.title, card.description]
@@ -105,6 +115,9 @@ func _on_reroll(card_row: HBoxContainer) -> void:
 			context.bridge.alert_message.emit("Need Sacred Fire to reroll", 40)
 		return
 	_reroll_used = true
+	_card_picked = false
+	if _continue_btn:
+		_continue_btn.disabled = true
 	_populate_cards(card_row)
 
 
@@ -122,7 +135,7 @@ func _on_strategic(action: String) -> void:
 		"Repair +15 region light":
 			if context.map_light:
 				for rid in context.map_light.region_light.keys():
-					context.map_light.repair_region_light(rid, 15)
+					context.map_light.repair_region_light(str(rid), 15)
 		"Gold surge +20":
 			if context.economy:
 				context.economy.add_gold(20)
@@ -137,23 +150,58 @@ func _on_card_picked(card: FateCardData) -> void:
 	if context == null:
 		return
 	context.selected_fate_card = card
-	if card.boon_gold_bonus > 0 and context.economy:
-		context.economy.add_gold(card.boon_gold_bonus)
-	if card.boon_sacred_fire_bonus > 0 and context.economy:
-		context.economy.add_sacred_fire(card.boon_sacred_fire_bonus)
-	if card.boon_attack_mult != 1.0:
-		context.runtime_modifiers["attack_mult"] = card.boon_attack_mult
-	if card.curse_enemy_hp_mult != 1.0:
-		context.runtime_modifiers["enemy_hp_mult"] = card.curse_enemy_hp_mult
-	if card.curse_corruption_rate > 0.0:
-		context.runtime_modifiers["corruption_rate_bonus"] = card.curse_corruption_rate
+	_apply_fate_effects(card)
+	_card_picked = true
+	if _continue_btn:
+		_continue_btn.disabled = false
 	AnalyticsService.fate_card_selected(card.card_id)
 	CombatEvents.fate_card_selected.emit(card.card_id)
 	if context.bridge:
 		context.bridge.alert_message.emit("Fate chosen: %s" % card.title, 20)
 
 
-func _close() -> void:
+func _apply_fate_effects(card: FateCardData) -> void:
+	match card.card_id:
+		"card_derafsh_oath":
+			if context.morale:
+				context.morale.add(15)
+			if card.curse_corruption_rate > 0.0:
+				context.runtime_modifiers["corruption_rate_bonus"] = card.curse_corruption_rate
+		"card_qanat_blessing":
+			context.runtime_modifiers["control_slow_mult"] = 0.4
+			if card.boon_gold_bonus != 0:
+				context.runtime_modifiers["wave_gold_penalty"] = card.boon_gold_bonus
+		"card_lion_s_legacy":
+			var grant_gold := false
+			if context.wave_manager and context.level_data:
+				var next_idx := context.wave_manager.current_wave_index + 1
+				if next_idx < context.level_data.waves.size():
+					grant_gold = context.level_data.waves[next_idx].is_boss_wave
+			if grant_gold and context.economy:
+				context.economy.add_gold(card.boon_gold_bonus)
+		"card_iron_rain":
+			context.runtime_modifiers["tower_attack_rate_mult"] = 1.2
+			context.runtime_modifiers["enemy_speed_mult"] = 1.05
+			if card.curse_enemy_hp_mult != 1.0:
+				context.runtime_modifiers["enemy_hp_mult"] = card.curse_enemy_hp_mult
+		_:
+			if card.boon_gold_bonus > 0 and context.economy:
+				context.economy.add_gold(card.boon_gold_bonus)
+			if card.boon_sacred_fire_bonus > 0 and context.economy:
+				context.economy.add_sacred_fire(card.boon_sacred_fire_bonus)
+			if card.boon_attack_mult != 1.0:
+				context.runtime_modifiers["attack_mult"] = card.boon_attack_mult
+			if card.curse_enemy_hp_mult != 1.0:
+				context.runtime_modifiers["enemy_hp_mult"] = card.curse_enemy_hp_mult
+			if card.curse_corruption_rate > 0.0:
+				context.runtime_modifiers["corruption_rate_bonus"] = card.curse_corruption_rate
+
+
+func _on_continue_pressed() -> void:
+	if not _card_picked:
+		if context and context.bridge:
+			context.bridge.alert_message.emit("Choose a Fate card first", 50)
+		return
 	if _panel:
 		_panel.visible = false
 		for child in _panel.get_children():

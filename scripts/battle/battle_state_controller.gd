@@ -110,6 +110,7 @@ func _emit_run_summary(victory: bool, reason: String) -> void:
 		"fate_card": context.selected_fate_card.card_id if context.selected_fate_card else "",
 		"morale": context.morale.current if context.morale else 0,
 		"objective_done": context.objectives.completed if context.objectives else false,
+		"objective_failed": context.objectives.failed if context.objectives else false,
 	}
 	context.run_summary = summary
 	context.bridge.run_summary_ready.emit(summary)

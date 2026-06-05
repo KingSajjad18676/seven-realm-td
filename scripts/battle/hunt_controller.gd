@@ -24,6 +24,8 @@ func on_enemy_slain(data: EnemyData) -> void:
 		gained = 1
 	elif data.is_boss:
 		gained = 2
+	elif data.enemy_id == "enemy_zahhak_serpent_guard":
+		gained = 1
 	elif randf() < 0.15:
 		gained = 1
 	if gained <= 0:

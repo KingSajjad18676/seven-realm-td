@@ -54,6 +54,28 @@ func try_upgrade_tower(tower: TowerController) -> bool:
 	return tower.try_upgrade()
 
 
+func replace_with_hybrid(keep_spot: BuildSpot, remove_spot: BuildSpot, hybrid_id: String) -> bool:
+	if context == null or keep_spot == null or remove_spot == null:
+		return false
+	if keep_spot.tower == null or remove_spot.tower == null:
+		return false
+	var hybrid_data := ContentRegistry.get_tower(hybrid_id)
+	if hybrid_data == null:
+		return false
+	var keep_tower := keep_spot.tower
+	var invested := keep_tower.gold_invested + remove_spot.tower.gold_invested
+	var keep_level := maxi(keep_tower.level, remove_spot.tower.level)
+	towers.erase(remove_spot.tower)
+	remove_spot.tower.queue_free()
+	remove_spot.set_occupied(null)
+	keep_tower.data = hybrid_data
+	keep_tower.gold_invested = invested
+	keep_tower.level = keep_level
+	if keep_tower.has_method("_apply_forge_visuals"):
+		keep_tower._apply_forge_visuals()
+	return true
+
+
 func try_sell_tower(tower: TowerController) -> bool:
 	if tower == null or context == null or context.economy == null:
 		return false

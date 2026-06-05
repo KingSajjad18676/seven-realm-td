@@ -39,3 +39,5 @@ func on_wave_started() -> void:
 	for relic in active_relics:
 		if relic.gold_bonus_per_wave > 0:
 			context.economy.add_gold(relic.gold_bonus_per_wave)
+	if context.runtime_modifiers.has("wave_gold_penalty"):
+		context.economy.add_gold(int(context.runtime_modifiers["wave_gold_penalty"]))

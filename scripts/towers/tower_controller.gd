@@ -58,6 +58,7 @@ func _process(delta: float) -> void:
 		rate *= float(context.runtime_modifiers["attack_mult"])
 	if context.runtime_modifiers.has("tower_attack_rate_mult"):
 		rate *= float(context.runtime_modifiers["tower_attack_rate_mult"])
+	rate *= MoraleController.get_rate_mult(context)
 	_cooldown = 1.0 / maxf(0.1, rate)
 
 
@@ -154,6 +155,7 @@ func _fire_at(target: EnemyController) -> void:
 	if context and context.tower_manager:
 		context.tower_manager.spawn_projectile(self, target)
 	var dmg := data.damage * _efficiency * _forge_damage_mult * _level_damage_mult() * _tether_mult
+	dmg *= MoraleController.get_damage_mult(context)
 	if context.runtime_modifiers.has("tower_damage_mult"):
 		dmg *= float(context.runtime_modifiers["tower_damage_mult"])
 	if context.runtime_modifiers.has("attack_mult"):
@@ -161,12 +163,17 @@ func _fire_at(target: EnemyController) -> void:
 	var info := DamageInfo.create(dmg)
 	info.applies_burn = data.applies_burn
 	info.applies_slow = data.applies_slow
+	if data.applies_slow and context.runtime_modifiers.has("control_slow_mult"):
+		info.applies_slow = true
 	info.armor_break = data.armor_break
 	target.take_damage(info.amount)
 	if info.applies_burn:
 		target.apply_burn(2.5)
 	if info.applies_slow:
-		target.apply_slow(0.55, 1.5)
+		var slow_mult := 0.55
+		if context.runtime_modifiers.has("control_slow_mult"):
+			slow_mult = float(context.runtime_modifiers["control_slow_mult"])
+		target.apply_slow(slow_mult, 1.5)
 	if info.armor_break:
 		target.apply_armor_break()
 

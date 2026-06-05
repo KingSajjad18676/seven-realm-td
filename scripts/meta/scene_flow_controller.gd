@@ -21,6 +21,8 @@ func _ready() -> void:
 
 func _ensure_fade_overlay() -> void:
 	if _fade_layer != null:
+		if _fade_rect:
+			_fade_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		return
 	_fade_layer = CanvasLayer.new()
 	_fade_layer.layer = 100
@@ -29,6 +31,7 @@ func _ensure_fade_overlay() -> void:
 	_fade_rect = ColorRect.new()
 	_fade_rect.color = Color(0, 0, 0, 0)
 	_fade_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_fade_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_fade_layer.add_child(_fade_rect)
 
 
@@ -80,6 +83,7 @@ func _change_scene(path: String) -> void:
 		return
 	_is_transitioning = true
 	_ensure_fade_overlay()
+	_fade_rect.mouse_filter = Control.MOUSE_FILTER_STOP
 	var tween := create_tween()
 	tween.tween_property(_fade_rect, "color:a", 1.0, 0.25)
 	tween.tween_callback(func() -> void:
@@ -88,4 +92,5 @@ func _change_scene(path: String) -> void:
 	tween.tween_property(_fade_rect, "color:a", 0.0, 0.35)
 	tween.tween_callback(func() -> void:
 		_is_transitioning = false
+		_fade_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	)

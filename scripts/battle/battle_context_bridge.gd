@@ -14,5 +14,6 @@ signal pardeh_break_requested
 signal results_requested(victory: bool, reason: String)
 signal morale_changed(current: int, max_morale: int)
 signal run_summary_ready(summary: Dictionary)
+signal enemy_died(enemy_id: String)
 
 var context: BattleContext = null

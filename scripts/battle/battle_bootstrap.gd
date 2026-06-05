@@ -242,11 +242,28 @@ func _apply_endless_or_hunt(launch: BattleLaunchData, level: LevelData) -> void:
 		_context.hunt.initialize(_context)
 		if _context.bridge:
 			_context.bridge.alert_message.emit("Hunt for Zahhak — bind the darkness!", 80)
+	elif level.level_id == "level_08_damavand" and not launch.is_hunt_mode:
+		_context.runtime_modifiers["damavand_binding_progress"] = 0.0
+		if _context.bridge:
+			_context.bridge.enemy_died.connect(_on_damavand_enemy_died)
 
 
 func _screen_to_world(screen_pos: Vector2) -> Vector2:
 	var canvas := get_viewport().get_canvas_transform()
 	return canvas.affine_inverse() * screen_pos
+
+
+func _on_damavand_enemy_died(enemy_id: String) -> void:
+	if _context == null:
+		return
+	var progress := float(_context.runtime_modifiers.get("damavand_binding_progress", 0.0))
+	if enemy_id == "enemy_zahhak_serpent_guard":
+		progress += 0.25
+	elif enemy_id == "enemy_chainbreaker_div":
+		progress += 0.35
+	if progress >= 1.0 and _context.bridge:
+		_context.bridge.alert_message.emit("Binding anchors shattered — Zahhak is vulnerable!", 90)
+	_context.runtime_modifiers["damavand_binding_progress"] = progress
 
 
 func _process(delta: float) -> void:

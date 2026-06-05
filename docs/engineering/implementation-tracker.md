@@ -1,6 +1,6 @@
 # Implementation Tracker
 
-**Last updated:** 2026-06-04 (full campaign roadmap)  
+**Last updated:** 2026-06-05 (complete game logic roadmap)  
 **Repo truth:** [project-status.md](project-status.md)
 
 ---
@@ -10,12 +10,12 @@
 | Feature | Built | Target reference |
 |---------|-------|------------------|
 | Boot → menu → world map → battle | ✅ | [handoff.md](handoff.md) §2 |
-| Tutorial mission | ✅ | `level_00_tutorial` |
+| Tutorial gates Khan 1 | ✅ | `save_system.gd`, `world_map_controller.gd` |
 | Tower place / upgrade / sell | ✅ | [design/02-gameplay-ux.md](../design/02-gameplay-ux.md) |
 | Waves + spawner + win/loss | ✅ | [spec/gameplay.md](../spec/gameplay.md) |
 | Hero move + skill | ✅ | Rostam + Zal (Khans 2–3) |
 | 5 waves + Lion boss | ✅ | Khan 1 |
-| Voluntary replay + analytics | ✅ | `replay_stats`, AnalyticsService |
+| Voluntary replay + analytics | ✅ | Mode-aware `BattleLaunchData.duplicate_launch()` |
 
 ---
 
@@ -25,12 +25,12 @@
 |--------|-------|-------|
 | Regional light + corruption | ✅ | `MapLightManager` |
 | Sacred Fire + cleanse | ✅ | |
-| Tower hijack | ✅ | Analytics wired |
-| Sacred Tether | ✅ | Tap near tower to tether |
-| Morale meter | ✅ | `MoraleController` + HUD |
-| Pardeh Break / Fate | ✅ | Reroll, objectives, strategic actions, 8 cards |
-| Ancestral Forge | ✅ | Adjacent-pair fuse via battle HUD button |
-| Kaveh's Forge (meta) | ✅ | |
+| Tower hijack | ✅ | |
+| Sacred Tether | ✅ | |
+| Morale meter | ✅ | Affects tower/hero damage and attack rate |
+| Pardeh Break / Fate | ✅ | Pick required; 8 cards with aligned effects |
+| Ancestral Forge | ✅ | `tower_flame_archer`, `tower_volcano_ram` replace pads |
+| Kaveh's Forge (meta) | ✅ | Elite gate for Hunt only |
 
 ---
 
@@ -38,12 +38,12 @@
 
 | Feature | Built |
 |---------|-------|
-| Khans 1–7 + Damavand data | ✅ `ContentCatalog` |
-| World map unlock chain | ✅ `SaveSystem.unlock_levels_after_clear` |
-| Khan seals (7) | ✅ |
-| Roguelite 3-node map | ✅ |
-| Endless mode | ✅ |
-| Hunt Zahhak launch | ✅ (Damavand + elite gate) |
+| Khans 1–7 + Damavand data | ✅ Per-Khan enemy IDs + wave tables |
+| World map unlock chain | ✅ Tutorial → Khan 1 → … → Damavand |
+| Khan seals (7) | ✅ Campaign clears only |
+| Roguelite 5-node run | ✅ Persisted via `SceneFlowController.pending_roguelite_run` |
+| Endless mode | ✅ No campaign progress on victory |
+| Hunt Zahhak | ✅ Elite forge + 7 seals; binding shards |
 
 ---
 
@@ -51,8 +51,8 @@
 
 | Feature | Built |
 |---------|-------|
-| Save v3 + accessibility | ✅ |
-| Daily Tale stub | ✅ |
+| Save v4 + accessibility | ✅ |
+| Daily Tale | ✅ `is_daily_tale` launch flag |
 | Store restore stub | ✅ |
 | Localization stub | ✅ |
 | Crash reporter stub | ✅ |
@@ -60,26 +60,24 @@
 
 ---
 
-## Campaign depth (roadmap batch)
+## Boss logic
 
-| Feature | Built | Notes |
-|---------|-------|-------|
-| Per-Khan wave tables | ✅ | `ContentCatalog` waves 01–08 |
-| Per-level default objectives | ✅ | `LevelData.default_objective_id` |
-| Boss controllers 2–8 | ✅ | `BossControllerFactory` + per-boss scripts |
-| Map terrain tint + sprite path | ✅ | `VisualAssetLoader`, `battle_bootstrap` |
-| Path-based region assignment | ✅ | `MapRegionUtils` |
-| `.tres` level override | ✅ | `resources/data/levels/level_02.tres` |
-| Zal foresight skill | ✅ | `hero_controller.gd` |
-| Hunt binding shards | ✅ | `HuntController` |
-| Roguelite 5-node run | ✅ | Levels 01–04 variety |
-| World map node strip | ✅ | Locked / cleared / seal states |
+| Boss | Built | Notes |
+|------|-------|-------|
+| Lion | ✅ | Roar tower damage debuff |
+| Thirst | ✅ | Drought drains SF in weak regions |
+| Sorceress | ✅ | HP threshold dual-form reveal |
+| Olad / Arzhang / White Div | ✅ | Phase controllers |
+| Zahhak | ✅ | Hunt binding + campaign guard progress gates damage |
+
+---
 
 ## Deferred / polish
 
 | Item | Notes |
 |------|-------|
-| Full 43 Fate card art | Subset in data; expand per playtest |
-| Production map/unit art | Placeholders + `generate_map_placeholders.gd` |
+| Full 43 Fate card art | 8 wired with logic |
+| Production map/unit art | Placeholders |
 | Platform IAP / crash SDK | Wire at soft launch |
-| Real device Khan 1 gate proof | QA |
+| Extra hero roster | Rostam + Zal only |
+| Company splash | Optional stub scene |

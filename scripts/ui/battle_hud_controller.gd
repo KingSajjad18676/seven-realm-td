@@ -306,6 +306,8 @@ func _on_run_summary(summary: Dictionary) -> void:
 		]
 		if bool(summary.get("objective_done", false)):
 			extra += " | Objective complete"
+		elif context and context.objectives and context.objectives.failed:
+			extra += " | Objective failed"
 		_results_label.text += extra
 
 

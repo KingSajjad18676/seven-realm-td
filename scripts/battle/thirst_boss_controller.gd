@@ -58,8 +58,13 @@ func _do_mirage() -> void:
 
 
 func _do_drought() -> void:
-	if _enemy and _enemy.context and _enemy.context.economy:
-		_enemy.context.economy.spend_sacred_fire(1)
+	if _enemy and _enemy.context and _enemy.context.map_light and _enemy.context.tower_manager:
+		for spot in _enemy.context.tower_manager.build_spots:
+			if spot.tower == null:
+				continue
+			var light := _enemy.context.map_light.get_light(spot.region_id)
+			if light < 50 and _enemy.context.economy:
+				_enemy.context.economy.spend_sacred_fire(1)
 	_phase = Phase.SURGE
 	_phase_timer = 0.8
 	_alert("Thirst surge — hero must intercept!", 90)

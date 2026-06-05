@@ -19,7 +19,7 @@ func try_fuse_any_adjacent_pair() -> bool:
 	if context == null or context.tower_manager == null:
 		return false
 	var spots := context.tower_manager.build_spots
-	for i in spots.size():
+	for i in range(spots.size()):
 		for j in range(i + 1, spots.size()):
 			var a: BuildSpot = spots[i]
 			var b: BuildSpot = spots[j]
@@ -39,10 +39,11 @@ func try_fuse_adjacent(spot_a: BuildSpot, spot_b: BuildSpot) -> bool:
 		return false
 	var key := "%s+%s" % [spot_a.tower.data.tower_id, spot_b.tower.data.tower_id]
 	var alt := "%s+%s" % [spot_b.tower.data.tower_id, spot_a.tower.data.tower_id]
-	var hybrid_id: String = RECIPES.get(key, RECIPES.get(alt, ""))
+	var hybrid_id := str(RECIPES.get(key, RECIPES.get(alt, "")))
 	if hybrid_id == "":
 		return false
-	if context.bridge:
-		context.bridge.alert_message.emit("Ancestral Forge: %s forged!" % hybrid_id, 65)
-	context.runtime_modifiers["hybrid_%s" % hybrid_id] = 1.15
-	return true
+	if context.tower_manager.replace_with_hybrid(spot_a, spot_b, hybrid_id):
+		if context.bridge:
+			context.bridge.alert_message.emit("Ancestral Forge: %s forged!" % hybrid_id, 65)
+		return true
+	return false

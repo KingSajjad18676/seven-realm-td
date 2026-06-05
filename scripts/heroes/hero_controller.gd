@@ -147,8 +147,10 @@ func _attack_nearby(delta: float) -> void:
 	_attack_cooldown -= delta
 	if _attack_cooldown > 0.0:
 		return
+	var dmg := data.attack_damage * MoraleController.get_damage_mult(context)
 	for e in context.active_enemies:
 		if e is EnemyController and global_position.distance_to(e.global_position) < 55.0:
-			e.take_damage(data.attack_damage, false)
-			_attack_cooldown = 1.0 / data.attack_rate
+			e.take_damage(dmg, false)
+			var rate := data.attack_rate * MoraleController.get_rate_mult(context)
+			_attack_cooldown = 1.0 / maxf(0.1, rate)
 			break

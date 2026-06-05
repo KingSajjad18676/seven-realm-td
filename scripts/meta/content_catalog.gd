@@ -72,7 +72,33 @@ static func build_towers() -> Array[TowerData]:
 
 	for t in [archer, sacred, heavy, control]:
 		t.max_level = 3
-	return [archer, sacred, heavy, control]
+
+	var flame_archer := TowerData.new()
+	flame_archer.tower_id = "tower_flame_archer"
+	flame_archer.display_name = "Flame Archer"
+	flame_archer.family = GameEnums.TowerFamily.ARCHER
+	flame_archer.build_cost = 100
+	flame_archer.damage = 18.0
+	flame_archer.attack_rate = 1.6
+	flame_archer.range = 155.0
+	flame_archer.applies_burn = true
+	flame_archer.color = Color(1.0, 0.45, 0.15)
+	flame_archer.max_level = 3
+
+	var volcano_ram := TowerData.new()
+	volcano_ram.tower_id = "tower_volcano_ram"
+	volcano_ram.display_name = "Volcano Ram"
+	volcano_ram.family = GameEnums.TowerFamily.HEAVY
+	volcano_ram.build_cost = 120
+	volcano_ram.damage = 34.0
+	volcano_ram.attack_rate = 0.65
+	volcano_ram.range = 125.0
+	volcano_ram.applies_burn = true
+	volcano_ram.armor_break = true
+	volcano_ram.color = Color(0.85, 0.35, 0.2)
+	volcano_ram.max_level = 3
+
+	return [archer, sacred, heavy, control, flame_archer, volcano_ram]
 
 
 static func build_enemies() -> Array[EnemyData]:
@@ -125,7 +151,7 @@ static func build_enemies() -> Array[EnemyData]:
 	lion.armor = 6.0
 	lion.gold_reward = 80
 	lion.forge_material_id = "iron_frost"
-	lion.forge_material_drop = 25
+	lion.forge_material_drop = 30
 	lion.is_boss = true
 	lion.color = Color(0.85, 0.7, 0.25)
 	lion.scale = 2.0
@@ -212,7 +238,161 @@ static func build_enemies() -> Array[EnemyData]:
 	zahhak.color = Color(0.5, 0.1, 0.15)
 	zahhak.scale = 3.0
 
-	return [jackal, boar, corruptor, lion, thirst, azhdaha, sorceress, olad, arzhang, white_div, zahhak]
+	var mirage := EnemyData.new()
+	mirage.enemy_id = "enemy_mirage_shade"
+	mirage.display_name = "Mirage Shade"
+	mirage.tags = ["runner"]
+	mirage.max_hp = 18.0
+	mirage.move_speed = 130.0
+	mirage.gold_reward = 5
+	mirage.color = Color(0.7, 0.75, 0.9)
+
+	var salt_brute := EnemyData.new()
+	salt_brute.enemy_id = "enemy_salt_crust_brute"
+	salt_brute.display_name = "Salt-Crust Brute"
+	salt_brute.tags = ["brute"]
+	salt_brute.max_hp = 110.0
+	salt_brute.move_speed = 48.0
+	salt_brute.armor = 7.0
+	salt_brute.gold_reward = 16
+	salt_brute.scale = 1.25
+	salt_brute.color = Color(0.75, 0.7, 0.55)
+
+	var serpent := EnemyData.new()
+	serpent.enemy_id = "enemy_canyon_serpent"
+	serpent.display_name = "Canyon Serpent"
+	serpent.tags = ["regen"]
+	serpent.max_hp = 55.0
+	serpent.move_speed = 75.0
+	serpent.gold_reward = 9
+	serpent.color = Color(0.35, 0.6, 0.35)
+
+	var hound := EnemyData.new()
+	hound.enemy_id = "enemy_scorched_hound"
+	hound.display_name = "Scorched Hound"
+	hound.tags = ["runner"]
+	hound.max_hp = 32.0
+	hound.move_speed = 115.0
+	hound.gold_reward = 7
+	hound.color = Color(0.6, 0.35, 0.2)
+
+	var illusion := EnemyData.new()
+	illusion.enemy_id = "enemy_illusion_attendant"
+	illusion.display_name = "Illusion Attendant"
+	illusion.tags = ["decoy"]
+	illusion.max_hp = 15.0
+	illusion.move_speed = 100.0
+	illusion.gold_reward = 4
+	illusion.color = Color(0.8, 0.6, 0.95)
+
+	var feast_shade := EnemyData.new()
+	feast_shade.enemy_id = "enemy_feast_shade"
+	feast_shade.display_name = "Feast Shade"
+	feast_shade.tags = ["corruptor"]
+	feast_shade.max_hp = 38.0
+	feast_shade.move_speed = 68.0
+	feast_shade.gold_reward = 9
+	feast_shade.sacred_fire_reward = 1
+	feast_shade.corruption_pressure = 14.0
+	feast_shade.color = Color(0.55, 0.25, 0.65)
+
+	var raider := EnemyData.new()
+	raider.enemy_id = "enemy_mountain_raider"
+	raider.display_name = "Mountain Raider"
+	raider.tags = ["runner"]
+	raider.max_hp = 24.0
+	raider.move_speed = 125.0
+	raider.gold_reward = 6
+	raider.color = Color(0.5, 0.4, 0.35)
+
+	var m_archer := EnemyData.new()
+	m_archer.enemy_id = "enemy_mountain_archer"
+	m_archer.display_name = "Mountain Archer"
+	m_archer.tags = ["ranged"]
+	m_archer.max_hp = 30.0
+	m_archer.move_speed = 85.0
+	m_archer.armor = 1.0
+	m_archer.gold_reward = 8
+	m_archer.color = Color(0.45, 0.5, 0.4)
+
+	var div_inf := EnemyData.new()
+	div_inf.enemy_id = "enemy_div_infantry"
+	div_inf.display_name = "Div Infantry"
+	div_inf.tags = ["div", "grunt"]
+	div_inf.max_hp = 45.0
+	div_inf.move_speed = 80.0
+	div_inf.armor = 2.0
+	div_inf.gold_reward = 8
+	div_inf.color = Color(0.3, 0.25, 0.4)
+
+	var div_brute := EnemyData.new()
+	div_brute.enemy_id = "enemy_div_brute"
+	div_brute.display_name = "Div Brute"
+	div_brute.tags = ["div", "brute"]
+	div_brute.max_hp = 130.0
+	div_brute.move_speed = 50.0
+	div_brute.armor = 8.0
+	div_brute.gold_reward = 18
+	div_brute.scale = 1.35
+	div_brute.color = Color(0.25, 0.2, 0.35)
+
+	var div_corruptor := EnemyData.new()
+	div_corruptor.enemy_id = "enemy_div_corruptor"
+	div_corruptor.display_name = "Div Corruptor"
+	div_corruptor.tags = ["div", "corruptor"]
+	div_corruptor.max_hp = 48.0
+	div_corruptor.move_speed = 65.0
+	div_corruptor.gold_reward = 11
+	div_corruptor.sacred_fire_reward = 2
+	div_corruptor.corruption_pressure = 22.0
+	div_corruptor.color = Color(0.35, 0.15, 0.45)
+
+	var thrall := EnemyData.new()
+	thrall.enemy_id = "enemy_white_div_thrall"
+	thrall.display_name = "White Div Thrall"
+	thrall.tags = ["grunt"]
+	thrall.max_hp = 22.0
+	thrall.move_speed = 105.0
+	thrall.gold_reward = 5
+	thrall.color = Color(0.85, 0.85, 0.9)
+
+	var boulder := EnemyData.new()
+	boulder.enemy_id = "enemy_cavern_boulder_brute"
+	boulder.display_name = "Cavern Boulder Brute"
+	boulder.tags = ["brute"]
+	boulder.max_hp = 160.0
+	boulder.move_speed = 38.0
+	boulder.armor = 10.0
+	boulder.gold_reward = 20
+	boulder.scale = 1.5
+	boulder.color = Color(0.55, 0.5, 0.52)
+
+	var serpent_guard := EnemyData.new()
+	serpent_guard.enemy_id = "enemy_zahhak_serpent_guard"
+	serpent_guard.display_name = "Serpent Guard"
+	serpent_guard.tags = ["corruptor", "guard"]
+	serpent_guard.max_hp = 70.0
+	serpent_guard.move_speed = 60.0
+	serpent_guard.armor = 3.0
+	serpent_guard.gold_reward = 12
+	serpent_guard.corruption_pressure = 16.0
+	serpent_guard.color = Color(0.4, 0.15, 0.2)
+
+	var chainbreaker := EnemyData.new()
+	chainbreaker.enemy_id = "enemy_chainbreaker_div"
+	chainbreaker.display_name = "Chainbreaker Div"
+	chainbreaker.tags = ["div", "brute", "guard"]
+	chainbreaker.max_hp = 140.0
+	chainbreaker.move_speed = 52.0
+	chainbreaker.armor = 7.0
+	chainbreaker.gold_reward = 16
+	chainbreaker.color = Color(0.45, 0.1, 0.15)
+
+	return [
+		jackal, boar, corruptor, lion, thirst, azhdaha, sorceress, olad, arzhang, white_div, zahhak,
+		mirage, salt_brute, serpent, hound, illusion, feast_shade, raider, m_archer,
+		div_inf, div_brute, div_corruptor, thrall, boulder, serpent_guard, chainbreaker,
+	]
 
 
 static func build_heroes() -> Array[HeroData]:
@@ -443,70 +623,70 @@ static func _waves_khan_01(boss_id: String) -> Array[WaveData]:
 
 static func _waves_khan_02(boss_id: String) -> Array[WaveData]:
 	return [
-		_make_wave("level_02_wave_1", [{"enemy_id": "enemy_jackal", "count": 8}], 2.5),
-		_make_wave("level_02_wave_2", [{"enemy_id": "enemy_corruptor", "count": 2}, {"enemy_id": "enemy_jackal", "count": 4}], 2.0, false, 0.35),
-		_make_wave("level_02_wave_3", [{"enemy_id": "enemy_corruptor", "count": 3}, {"enemy_id": "enemy_jackal", "count": 6}], 2.0),
-		_make_wave("level_02_wave_4", [{"enemy_id": "enemy_boar", "count": 2}, {"enemy_id": "enemy_corruptor", "count": 2}], 2.0),
+		_make_wave("level_02_wave_1", [{"enemy_id": "enemy_mirage_shade", "count": 10}], 2.5, false, 0.2),
+		_make_wave("level_02_wave_2", [{"enemy_id": "enemy_mirage_shade", "count": 6}, {"enemy_id": "enemy_salt_crust_brute", "count": 2}], 2.0),
+		_make_wave("level_02_wave_3", [{"enemy_id": "enemy_corruptor", "count": 2}, {"enemy_id": "enemy_mirage_shade", "count": 8}], 2.0),
+		_make_wave("level_02_wave_4", [{"enemy_id": "enemy_salt_crust_brute", "count": 3}, {"enemy_id": "enemy_corruptor", "count": 2}], 2.0),
 		_make_wave("level_02_wave_5", [{"enemy_id": boss_id, "count": 1}], 2.0, true),
 	]
 
 
 static func _waves_khan_03(boss_id: String) -> Array[WaveData]:
 	return [
-		_make_wave("level_03_wave_1", [{"enemy_id": "enemy_boar", "count": 2}, {"enemy_id": "enemy_jackal", "count": 4}], 2.5),
-		_make_wave("level_03_wave_2", [{"enemy_id": "enemy_boar", "count": 3}], 2.0),
-		_make_wave("level_03_wave_3", [{"enemy_id": "enemy_corruptor", "count": 2}, {"enemy_id": "enemy_jackal", "count": 8}], 2.0, false, 0.25),
-		_make_wave("level_03_wave_4", [{"enemy_id": "enemy_boar", "count": 3}, {"enemy_id": "enemy_corruptor", "count": 2}], 2.0),
+		_make_wave("level_03_wave_1", [{"enemy_id": "enemy_canyon_serpent", "count": 4}, {"enemy_id": "enemy_scorched_hound", "count": 4}], 2.5),
+		_make_wave("level_03_wave_2", [{"enemy_id": "enemy_scorched_hound", "count": 8}], 2.0, false, 0.2),
+		_make_wave("level_03_wave_3", [{"enemy_id": "enemy_canyon_serpent", "count": 5}, {"enemy_id": "enemy_corruptor", "count": 2}], 2.0),
+		_make_wave("level_03_wave_4", [{"enemy_id": "enemy_salt_crust_brute", "count": 2}, {"enemy_id": "enemy_canyon_serpent", "count": 4}], 2.0),
 		_make_wave("level_03_wave_5", [{"enemy_id": boss_id, "count": 1}], 2.0, true),
 	]
 
 
 static func _waves_khan_04(boss_id: String) -> Array[WaveData]:
 	return [
-		_make_wave("level_04_wave_1", [{"enemy_id": "enemy_jackal", "count": 10}], 2.5),
-		_make_wave("level_04_wave_2", [{"enemy_id": "enemy_corruptor", "count": 3}, {"enemy_id": "enemy_jackal", "count": 5}], 2.0),
-		_make_wave("level_04_wave_3", [{"enemy_id": "enemy_boar", "count": 2}, {"enemy_id": "enemy_corruptor", "count": 2}], 2.0),
-		_make_wave("level_04_wave_4", [{"enemy_id": "enemy_jackal", "count": 12}, {"enemy_id": "enemy_corruptor", "count": 1}], 2.0, false, 0.2),
+		_make_wave("level_04_wave_1", [{"enemy_id": "enemy_illusion_attendant", "count": 12}], 2.5, false, 0.15),
+		_make_wave("level_04_wave_2", [{"enemy_id": "enemy_feast_shade", "count": 3}, {"enemy_id": "enemy_illusion_attendant", "count": 6}], 2.0),
+		_make_wave("level_04_wave_3", [{"enemy_id": "enemy_jackal", "count": 6}, {"enemy_id": "enemy_feast_shade", "count": 2}], 2.0),
+		_make_wave("level_04_wave_4", [{"enemy_id": "enemy_illusion_attendant", "count": 10}, {"enemy_id": "enemy_feast_shade", "count": 3}], 2.0),
 		_make_wave("level_04_wave_5", [{"enemy_id": boss_id, "count": 1}], 2.0, true),
 	]
 
 
 static func _waves_khan_05(boss_id: String) -> Array[WaveData]:
 	return [
-		_make_wave("level_05_wave_1", [{"enemy_id": "enemy_jackal", "count": 8}, {"enemy_id": "enemy_boar", "count": 2}], 2.5),
-		_make_wave("level_05_wave_2", [{"enemy_id": "enemy_boar", "count": 4}], 2.0),
-		_make_wave("level_05_wave_3", [{"enemy_id": "enemy_jackal", "count": 14}], 2.0, false, 0.15),
-		_make_wave("level_05_wave_4", [{"enemy_id": "enemy_boar", "count": 3}, {"enemy_id": "enemy_corruptor", "count": 3}], 2.0),
+		_make_wave("level_05_wave_1", [{"enemy_id": "enemy_mountain_raider", "count": 10}, {"enemy_id": "enemy_mountain_archer", "count": 4}], 2.5, false, 0.18),
+		_make_wave("level_05_wave_2", [{"enemy_id": "enemy_mountain_archer", "count": 6}, {"enemy_id": "enemy_boar", "count": 2}], 2.0),
+		_make_wave("level_05_wave_3", [{"enemy_id": "enemy_mountain_raider", "count": 14}], 2.0, false, 0.12),
+		_make_wave("level_05_wave_4", [{"enemy_id": "enemy_mountain_raider", "count": 8}, {"enemy_id": "enemy_corruptor", "count": 3}], 2.0),
 		_make_wave("level_05_wave_5", [{"enemy_id": boss_id, "count": 1}], 2.0, true),
 	]
 
 
 static func _waves_khan_06(boss_id: String) -> Array[WaveData]:
 	return [
-		_make_wave("level_06_wave_1", [{"enemy_id": "enemy_boar", "count": 3}, {"enemy_id": "enemy_corruptor", "count": 1}], 2.5),
-		_make_wave("level_06_wave_2", [{"enemy_id": "enemy_corruptor", "count": 4}], 2.0),
-		_make_wave("level_06_wave_3", [{"enemy_id": "enemy_boar", "count": 4}, {"enemy_id": "enemy_jackal", "count": 6}], 2.0),
-		_make_wave("level_06_wave_4", [{"enemy_id": "enemy_boar", "count": 2}, {"enemy_id": "enemy_corruptor", "count": 3}, {"enemy_id": "enemy_jackal", "count": 8}], 2.0),
+		_make_wave("level_06_wave_1", [{"enemy_id": "enemy_div_infantry", "count": 8}, {"enemy_id": "enemy_div_corruptor", "count": 1}], 2.5),
+		_make_wave("level_06_wave_2", [{"enemy_id": "enemy_div_corruptor", "count": 3}], 2.0),
+		_make_wave("level_06_wave_3", [{"enemy_id": "enemy_div_brute", "count": 3}, {"enemy_id": "enemy_div_infantry", "count": 6}], 2.0),
+		_make_wave("level_06_wave_4", [{"enemy_id": "enemy_div_brute", "count": 2}, {"enemy_id": "enemy_div_corruptor", "count": 3}, {"enemy_id": "enemy_div_infantry", "count": 8}], 2.0),
 		_make_wave("level_06_wave_5", [{"enemy_id": boss_id, "count": 1}], 2.0, true),
 	]
 
 
 static func _waves_khan_07(boss_id: String) -> Array[WaveData]:
 	return [
-		_make_wave("level_07_wave_1", [{"enemy_id": "enemy_corruptor", "count": 2}, {"enemy_id": "enemy_jackal", "count": 8}], 2.5),
-		_make_wave("level_07_wave_2", [{"enemy_id": "enemy_boar", "count": 4}, {"enemy_id": "enemy_corruptor", "count": 2}], 2.0),
-		_make_wave("level_07_wave_3", [{"enemy_id": "enemy_jackal", "count": 16}], 2.0, false, 0.12),
-		_make_wave("level_07_wave_4", [{"enemy_id": "enemy_boar", "count": 3}, {"enemy_id": "enemy_corruptor", "count": 4}], 2.0),
+		_make_wave("level_07_wave_1", [{"enemy_id": "enemy_white_div_thrall", "count": 14}], 2.5, false, 0.1),
+		_make_wave("level_07_wave_2", [{"enemy_id": "enemy_cavern_boulder_brute", "count": 3}, {"enemy_id": "enemy_corruptor", "count": 2}], 2.0),
+		_make_wave("level_07_wave_3", [{"enemy_id": "enemy_white_div_thrall", "count": 12}, {"enemy_id": "enemy_cavern_boulder_brute", "count": 2}], 2.0),
+		_make_wave("level_07_wave_4", [{"enemy_id": "enemy_cavern_boulder_brute", "count": 3}, {"enemy_id": "enemy_div_corruptor", "count": 3}], 2.0),
 		_make_wave("level_07_wave_5", [{"enemy_id": boss_id, "count": 1}], 2.0, true),
 	]
 
 
 static func _waves_damavand(boss_id: String) -> Array[WaveData]:
 	return [
-		_make_wave("level_08_wave_1", [{"enemy_id": "enemy_corruptor", "count": 4}, {"enemy_id": "enemy_jackal", "count": 6}], 2.5),
-		_make_wave("level_08_wave_2", [{"enemy_id": "enemy_boar", "count": 4}, {"enemy_id": "enemy_corruptor", "count": 2}], 2.0),
-		_make_wave("level_08_wave_3", [{"enemy_id": "enemy_corruptor", "count": 5}], 2.0, false, 0.3),
-		_make_wave("level_08_wave_4", [{"enemy_id": "enemy_boar", "count": 3}, {"enemy_id": "enemy_jackal", "count": 12}, {"enemy_id": "enemy_corruptor", "count": 2}], 2.0),
+		_make_wave("level_08_wave_1", [{"enemy_id": "enemy_zahhak_serpent_guard", "count": 4}, {"enemy_id": "enemy_corruptor", "count": 2}], 2.5),
+		_make_wave("level_08_wave_2", [{"enemy_id": "enemy_zahhak_serpent_guard", "count": 5}, {"enemy_id": "enemy_div_infantry", "count": 6}], 2.0),
+		_make_wave("level_08_wave_3", [{"enemy_id": "enemy_zahhak_serpent_guard", "count": 6}], 2.0, false, 0.25),
+		_make_wave("level_08_wave_4", [{"enemy_id": "enemy_chainbreaker_div", "count": 3}, {"enemy_id": "enemy_div_brute", "count": 2}], 2.0),
 		_make_wave("level_08_wave_5", [{"enemy_id": boss_id, "count": 1}], 2.5, true),
 	]
 

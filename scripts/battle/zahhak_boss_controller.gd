@@ -29,13 +29,15 @@ func tick(delta: float) -> void:
 					_enemy.context.map_light.apply_corruption_pressure(region_id, 10.0)
 			_phase = Phase.BINDING
 			_phase_timer = 1.2
-			_alert("Binding ritual — collect Hunt shards to weaken!", 88)
+			_alert("Binding ritual — weaken Zahhak before the final strike!", 88)
 		Phase.BINDING:
 			_binding_stacks += 1
 			if _enemy and _enemy.context:
 				var hunt_bonus: float = float(_enemy.context.runtime_modifiers.get("hunt_binding_bonus", 0.0))
-				if hunt_bonus > 0.0:
-					_enemy.take_damage(40.0 * hunt_bonus, false)
+				var campaign_bonus := float(_enemy.context.runtime_modifiers.get("damavand_binding_progress", 0.0))
+				var bonus := maxf(hunt_bonus, campaign_bonus)
+				if bonus > 0.0:
+					_enemy.take_damage(40.0 * bonus, false)
 			_phase = Phase.FURY if _binding_stacks >= 2 else Phase.PATROL
 			_phase_timer = 3.0 if _phase == Phase.PATROL else 1.0
 		Phase.FURY:
@@ -56,7 +58,15 @@ func get_speed_mult() -> float:
 
 
 func blocks_tower_damage() -> bool:
-	return _phase == Phase.BINDING and _binding_stacks < 2
+	if _phase != Phase.BINDING:
+		return false
+	if _enemy == null or _enemy.context == null:
+		return true
+	if bool(_enemy.context.runtime_modifiers.get("hunt_mode", false)):
+		var hunt_bonus: float = float(_enemy.context.runtime_modifiers.get("hunt_binding_bonus", 0.0))
+		return hunt_bonus < 1.05
+	var progress: float = float(_enemy.context.runtime_modifiers.get("damavand_binding_progress", 0.0))
+	return progress < 1.0
 
 
 func _alert(msg: String, prio: int) -> void:
