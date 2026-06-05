@@ -6,6 +6,7 @@ const FOUNTAIN_INTERVAL := 18.0
 
 var _fountain_timer := 0.0
 var _fountain_pos := Vector2.ZERO
+var _drought_active := false
 
 
 func initialize(ctx: BattleContext) -> void:
@@ -23,6 +24,8 @@ func _process(delta: float) -> void:
 	if context.state_controller.current_state != GameEnums.BattleState.WAVE_ACTIVE:
 		return
 	_drain_strength(delta)
+	if _drought_active:
+		return
 	_fountain_timer += delta
 	if _fountain_timer >= FOUNTAIN_INTERVAL:
 		_fountain_timer = 0.0
@@ -53,7 +56,8 @@ func _pulse_fountain() -> void:
 			hero.current_hp = minf(hero.current_hp + 40.0, hero.data.max_hp if hero.data else 220.0)
 			if context.bridge:
 				context.bridge.alert_message.emit("Oasis found — strength restored!", 45)
-	_spawn_mirage_at_fountain()
+	if act_index_for(context.wave_manager.current_wave_index if context.wave_manager else 0) >= 1:
+		_spawn_mirage_at_fountain()
 
 
 func _spawn_mirage_at_fountain() -> void:
@@ -74,3 +78,9 @@ func on_cleanse(_region_id: String) -> void:
 		var hero := context.hero_manager.hero
 		if not hero.is_dead():
 			hero.current_hp = minf(hero.current_hp + 15.0, hero.data.max_hp if hero.data else 220.0)
+
+
+func set_drought(active: bool) -> void:
+	_drought_active = active
+	if active and context and context.bridge:
+		context.bridge.alert_message.emit("The oasis dries up — Sacred Fire must sustain you!", 65)

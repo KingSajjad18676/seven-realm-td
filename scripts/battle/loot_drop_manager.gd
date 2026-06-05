@@ -32,7 +32,13 @@ func try_spawn_drop(world_pos: Vector2, enemy_data: EnemyData) -> void:
 		return
 	if enemy_data.forge_material_id == "" or enemy_data.forge_material_drop <= 0:
 		return
-	if randf() > enemy_data.forge_material_drop_chance:
+	var wave := _current_wave()
+	if wave != null and wave.suppress_material_drops:
+		return
+	var drop_chance := enemy_data.forge_material_drop_chance
+	if wave != null:
+		drop_chance *= wave.material_drop_mult
+	if randf() > drop_chance:
 		return
 	if _root == null or _drop_scene == null:
 		return
@@ -60,3 +66,12 @@ func clear_all_drops() -> void:
 		if is_instance_valid(drop):
 			drop.queue_free()
 	_active_drops.clear()
+
+
+func _current_wave() -> WaveData:
+	if context == null or context.wave_manager == null or context.level_data == null:
+		return null
+	var idx := context.wave_manager.current_wave_index
+	if idx < 0 or idx >= context.level_data.waves.size():
+		return null
+	return context.level_data.waves[idx]

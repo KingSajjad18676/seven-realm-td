@@ -85,5 +85,9 @@ func _execute_roar() -> void:
 			if _enemy and _enemy.context:
 				_enemy.context.runtime_modifiers.erase("tower_damage_mult")
 		, CONNECT_ONE_SHOT)
+		if _enemy.context.labour_mode and _enemy.context.labour_mode.has_method("spawn_roar_ambush_at"):
+			var hero := _enemy.context.hero_manager.hero if _enemy.context.hero_manager else null
+			var pos := hero.global_position if hero else _enemy.global_position
+			_enemy.context.labour_mode.spawn_roar_ambush_at(pos, 8)
 	_phase = Phase.PATROL
 	_phase_timer = 5.0

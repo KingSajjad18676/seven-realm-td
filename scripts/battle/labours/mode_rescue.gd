@@ -27,7 +27,10 @@ func _process(_delta: float) -> void:
 
 
 func on_wave_started(wave_index: int) -> void:
-	if wave_index != 2 or context == null or context.map_light == null:
+	if context == null or context.map_light == null:
 		return
-	for region_id in context.level_data.region_ids:
-		context.map_light.apply_corruption_pressure(region_id, 25.0)
+	if wave_index == 2 or (wave_index > 2 and wave_index % 10 == 2):
+		for region_id in context.level_data.region_ids:
+			context.map_light.apply_corruption_pressure(region_id, 25.0)
+		if context.bridge:
+			context.bridge.alert_message.emit("Sudden corruption spike — cleanse or lose towers!", 55)

@@ -14,6 +14,21 @@ var _horde_mode: bool = false
 var _horde_wave: int = 0
 var _skirmish_max_waves: int = 0
 var _early_call_requested: bool = false
+var _aborted: bool = false
+
+
+func _exit_tree() -> void:
+	_aborted = true
+
+
+func _tree_available() -> bool:
+	return not _aborted and is_inside_tree()
+
+
+func _await_process_frame() -> void:
+	if not _tree_available():
+		return
+	await get_tree().process_frame
 
 
 func initialize(ctx: BattleContext) -> void:
@@ -76,30 +91,52 @@ func _spawn_next_wave() -> void:
 		if context.state_controller:
 			context.state_controller.notify_all_waves_spawned()
 		return
-	await _maybe_offer_vow()
 	var wave: WaveData = context.level_data.waves[current_wave_index]
 	if context.bridge:
 		context.bridge.wave_changed.emit(current_wave_index + 1, total_waves)
 	CombatEvents.wave_started.emit(current_wave_index)
+	if wave.wave_phase != "":
+		CombatEvents.wave_phase_started.emit(current_wave_index, wave.wave_phase)
 	if context and context.run_modifiers:
 		context.run_modifiers.on_wave_started()
 	is_spawning = true
+	if not _tree_available():
+		return
 	await get_tree().create_timer(wave.pre_wave_delay / _time_scale()).timeout
+	if not _tree_available():
+		is_spawning = false
+		return
 	if context.enemy_spawner:
 		await context.enemy_spawner.spawn_wave(wave)
+	if not _tree_available():
+		is_spawning = false
+		return
 	is_spawning = false
 	await _wait_for_wave_clear()
+	if not _tree_available():
+		return
 	CombatEvents.wave_completed.emit(current_wave_index)
 	if context:
 		if context.morale:
 			context.morale.on_wave_cleared()
 		if context.objectives:
 			context.objectives.on_wave_cleared()
+	await _maybe_offer_vow()
+	if not _tree_available():
+		return
 	if _should_offer_pardeh() and context.bridge:
 		context.bridge.pardeh_break_requested.emit()
-		while context.state_controller and context.state_controller.current_state == GameEnums.BattleState.PAUSED:
-			await get_tree().process_frame
+		while (
+			_tree_available()
+			and context.state_controller
+			and context.state_controller.current_state == GameEnums.BattleState.PAUSED
+		):
+			await _await_process_frame()
+	if not _tree_available():
+		return
 	await _wait_intermission(_build_wave_preview_text(current_wave_index + 1))
+	if not _tree_available():
+		return
 	if context.tutorial_hold_waves:
 		return
 	if context.state_controller and context.state_controller.current_state == GameEnums.BattleState.WAVE_ACTIVE:
@@ -123,22 +160,36 @@ func continue_after_tutorial_hold() -> void:
 func _spawn_endless_wave() -> void:
 	_endless_wave += 1
 	current_wave_index = _endless_wave - 1
-	await _maybe_offer_vow()
 	if context.bridge:
 		context.bridge.wave_changed.emit(_endless_wave, 999)
 	var wave := _build_endless_wave_data(_endless_wave)
 	if context and context.run_modifiers:
 		context.run_modifiers.on_wave_started()
 	is_spawning = true
+	if not _tree_available():
+		return
 	await get_tree().create_timer(wave.pre_wave_delay / _time_scale()).timeout
+	if not _tree_available():
+		is_spawning = false
+		return
 	if context.enemy_spawner:
 		await context.enemy_spawner.spawn_wave(wave)
+	if not _tree_available():
+		is_spawning = false
+		return
 	is_spawning = false
 	await _wait_for_wave_clear()
+	if not _tree_available():
+		return
 	if context and context.morale:
 		context.morale.on_wave_cleared()
+	await _maybe_offer_vow()
+	if not _tree_available():
+		return
 	var next_preview := _format_wave_preview(_build_endless_wave_data(_endless_wave + 1), _endless_wave + 1)
 	await _wait_intermission(next_preview)
+	if not _tree_available():
+		return
 	if context.state_controller and context.state_controller.current_state == GameEnums.BattleState.WAVE_ACTIVE:
 		_spawn_endless_wave()
 
@@ -153,11 +204,21 @@ func _spawn_horde_wave() -> void:
 	if context and context.run_modifiers:
 		context.run_modifiers.on_wave_started()
 	is_spawning = true
+	if not _tree_available():
+		return
 	await get_tree().create_timer(wave.pre_wave_delay / _time_scale()).timeout
+	if not _tree_available():
+		is_spawning = false
+		return
 	if context.enemy_spawner:
 		await context.enemy_spawner.spawn_wave(wave)
+	if not _tree_available():
+		is_spawning = false
+		return
 	is_spawning = false
 	await _wait_for_wave_clear()
+	if not _tree_available():
+		return
 	if context and context.morale:
 		context.morale.on_wave_cleared()
 	var horde_target := _skirmish_max_waves if _skirmish_max_waves > 0 else ContentCatalog.HORDE_WAVES_TO_CLEAR
@@ -170,6 +231,8 @@ func _spawn_horde_wave() -> void:
 		_horde_wave + 1
 	)
 	await _wait_intermission(next_preview)
+	if not _tree_available():
+		return
 	if context.state_controller and context.state_controller.current_state == GameEnums.BattleState.WAVE_ACTIVE:
 		_spawn_horde_wave()
 
@@ -206,16 +269,18 @@ func _wait_for_wave_clear() -> void:
 	if context == null or context.state_controller == null:
 		return
 	while context.state_controller.get_active_enemy_count() > 0:
+		if not _tree_available():
+			return
 		if context.state_controller.current_state in [
 			GameEnums.BattleState.DEFEAT,
 			GameEnums.BattleState.VICTORY,
 		]:
 			return
-		await get_tree().process_frame
+		await _await_process_frame()
 
 
 func _wait_intermission(preview_text: String) -> void:
-	if context == null:
+	if context == null or not _tree_available():
 		return
 	if context.tutorial_hold_waves:
 		return
@@ -227,6 +292,8 @@ func _wait_intermission(preview_text: String) -> void:
 		context.bridge.intermission_started.emit(preview_text, max_bonus)
 	var timer := get_tree().create_timer(INTERMISSION_DURATION / _time_scale())
 	while timer.time_left > 0.0:
+		if not _tree_available():
+			return
 		if _early_call_requested:
 			var bonus := int(round(timer.time_left * EARLY_CALL_GOLD_PER_SECOND))
 			bonus = maxi(0, bonus)
@@ -235,8 +302,8 @@ func _wait_intermission(preview_text: String) -> void:
 			if context.bridge:
 				context.bridge.alert_message.emit("Early call! +%d gold" % bonus, 60)
 			break
-		await get_tree().process_frame
-	if context.bridge:
+		await _await_process_frame()
+	if _tree_available() and context.bridge:
 		context.bridge.intermission_ended.emit()
 
 
@@ -286,9 +353,12 @@ func _maybe_offer_vow() -> void:
 	if context.objectives == null or context.bridge == null:
 		return
 	var block_size := _block_size()
-	if current_wave_index % block_size != 0:
+	var cleared := current_wave_index + 1
+	if cleared % block_size != 0:
 		return
-	var block_index := current_wave_index / block_size
+	if cleared >= total_waves:
+		return
+	var block_index := (cleared / block_size) - 1
 	var block_start := block_index * block_size + 1
 	var block_end := block_index * block_size + block_size
 	if not _endless_mode and not _horde_mode:
@@ -297,5 +367,9 @@ func _maybe_offer_vow() -> void:
 	if vow == null:
 		return
 	context.bridge.vow_offer_requested.emit(vow, block_start, block_end)
-	while context.state_controller and context.state_controller.current_state == GameEnums.BattleState.PAUSED:
-		await get_tree().process_frame
+	while (
+		_tree_available()
+		and context.state_controller
+		and context.state_controller.current_state == GameEnums.BattleState.PAUSED
+	):
+		await _await_process_frame()

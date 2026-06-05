@@ -38,23 +38,16 @@ func test_hijack_maps_include_corruptors_in_templates() -> void:
 func test_block_two_scales_above_block_one() -> void:
 	var waves := CampaignWaveTemplates.generate("level_01", "enemy_lion_boss")
 	var wave1_count := _total_enemies(waves[0])
-	var wave6_count := _total_enemies(waves[5])
-	assert_gt(wave6_count, wave1_count, "Block 2 wave 1 should scale above block 1 wave 1")
+	var wave11_count := _total_enemies(waves[10])
+	assert_gt(wave11_count, wave1_count, "Act 2 bait should scale above act 1 bait")
 
 
-func test_level_one_wave_one_favors_boars() -> void:
+func test_level_one_wave_one_is_jackal_scavenge_bait() -> void:
 	var waves := CampaignWaveTemplates.generate("level_01", "enemy_lion_boss")
 	var wave1: WaveData = waves[0]
-	var boar_count := 0
-	var jackal_count := 0
+	assert_eq(wave1.wave_phase, "bait")
 	for group in wave1.spawn_groups:
-		match str(group.get("enemy_id", "")):
-			"enemy_boar":
-				boar_count = int(group.get("count", 0))
-			"enemy_jackal":
-				jackal_count = int(group.get("count", 0))
-	assert_gt(boar_count, 0, "Wave 1 should include armored boars")
-	assert_gte(boar_count, jackal_count / 2, "Boars should be a meaningful intro threat")
+		assert_eq(str(group.get("enemy_id", "")), "enemy_jackal")
 
 
 func test_horde_slice_matches_campaign_roles() -> void:

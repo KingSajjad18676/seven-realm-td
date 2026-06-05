@@ -72,9 +72,11 @@ Meaningful decision every **15–30 seconds** without overwhelm.
 
 ---
 
-## 5. Five-wave structure (Pardeh Break)
+## 5. Wave structure (Pardeh Break + 10-wave blocks)
 
-Every five waves, open a **Pardeh Break** (20–40 seconds):
+Campaign maps use **10-wave master blocks**: Bait (1–3) → Trap (4–5) → Hijack (6–8) → Push/Mini-boss (9–10). **Hero's Vow** is offered after clearing wave 10, 20, 30, etc.
+
+Every five cleared waves, open a **Pardeh Break** (20–40 seconds):
 
 ```
 review the run

@@ -26,13 +26,12 @@ func test_generated_waves_have_mini_boss_every_tenth() -> void:
 			assert_true(has_mini, "Wave %d should include mini-boss" % wave_num)
 
 
-func test_level_one_first_wave_uses_boar_intro() -> void:
+func test_level_one_first_wave_is_jackal_bait() -> void:
 	var waves := CampaignWaveTemplates.generate("level_01", "enemy_lion_boss")
-	var has_boar := false
+	assert_eq(waves[0].wave_phase, "bait")
 	for group in waves[0].spawn_groups:
-		if str(group.get("enemy_id", "")) == "enemy_boar":
-			has_boar = true
-	assert_true(has_boar)
+		assert_eq(str(group.get("enemy_id", "")), "enemy_jackal")
+	assert_gt(waves[0].material_drop_mult, 1.0)
 
 
 func test_final_wave_uses_campaign_boss() -> void:

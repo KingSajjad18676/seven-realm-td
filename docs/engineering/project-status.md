@@ -31,7 +31,7 @@
 | Save v4                        | ✅ Hunt best, forge notification, roguelite run state, mode-aware battle saves                                                                                    |
 | Save v5                        | ✅ Forge Tokens, spells owned, horde progress, unlocked towers, paid entitlements                                                                                 |
 | Save v6                        | ✅ `campaign_run`, starter towers seeded in `unlocked_towers` pool                                                                                                |
-| Khan difficulty scaling        | ✅ Per-Khan HP/speed/count mults; **5-wave block wave generator** (`CampaignWaveTemplates`) |
+| Khan difficulty scaling        | ✅ Per-Khan HP/speed/count mults; **10-wave master block generator** (`CampaignWaveTemplates`) |
 | Horde mode                     | ✅ 15 waves per Khan; clear all 8 unlocks Serpent Spire tower                                                                                                     |
 | Forge Tokens + Spells          | ✅ Earn on victory; buy in Kaveh's Forge; cast in battle HUD                                                                                                      |
 | Paid power store (stub IAP)    | ✅ Tower, spells, token packs via StoreService                                                                                                                      |
@@ -39,6 +39,7 @@
 | Khan 1 map art                 | ✅ `art/maps/level_01.jpg` + geometry override in `resources/data/levels/level_01.tres`; battle hides green Terrain fallback when map sprite loads                |
 | Battle camera / HUD (Khan 1)   | ✅ Full-map fit-locked view; compact HUD; build radial (afford-gated) + manage radial on pad tap; **range ring** on pad select (build preview + manage, resizes on upgrade); bottom tower bar removed |
 | Map editor (dev)               | ✅ Multi-route + multi-spawn editor; `PathRouteData` / `SpawnPointData` in level `.tres`; battle resolves `route_id` / `spawn_id` per wave group |
+| Per-map battle preload         | ✅ `LevelAssetCollector` + threaded preload overlay before battle; map/enemy/hero/tower sprites + `battle.tscn` warmed per `level_id` |
 
 ---
 
@@ -91,7 +92,7 @@ In the editor: **Project → Tools → GUT** (bottom panel) → Run All.
 - **Rostam 7 Labours rebrand:** player-facing "Khan" → "Labour"; project title `Rostam 7 Labours: Shahname TD`
 - **LabourMode framework:** campaign-only additive hazards wired in `battle_bootstrap._attach_labour_mode`
 - **Reward towers:** Barracks (7 seals / IAP); Serpent Spire twin venom + Hunger (8 horde clears / IAP); neither uses Star Iron forge materials
-- **5-wave block campaign waves:** `CampaignWaveTemplates` replaces flat procedural generator; Pardeh every 5 cleared waves (not wave 4 only)
+- **10-wave master block campaign waves:** `CampaignWaveTemplates` — Bait/Trap/Hijack/Push roles per 10-wave block; act progression per Labour; Pardeh every 5 cleared waves; Hero's Vow every 10 cleared waves
 - **Forge progression gate:** `ForgeService.expected_forge_level_for()` drives Labour 3+ / Damavand / Horde HP+count scaling; replay earlier Labours for Star Iron; no hard map locks
 
 ## Known deferrals

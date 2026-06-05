@@ -7,3 +7,6 @@ extends Resource
 @export var spawn_interval: float = 0.8
 @export var pre_wave_delay: float = 2.0
 @export var is_boss_wave: bool = false
+@export var wave_phase: String = ""
+@export var material_drop_mult: float = 1.0
+@export var suppress_material_drops: bool = false

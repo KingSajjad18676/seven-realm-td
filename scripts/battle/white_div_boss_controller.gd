@@ -21,7 +21,11 @@ func tick(delta: float) -> void:
 		Phase.PATROL:
 			_phase = Phase.BLIZZARD
 			_phase_timer = 1.2
-			_alert("Div-e Sepid blizzard — slows all towers!", 86)
+			_alert("Div-e Sepid blizzard — plunges the cavern into darkness!", 86)
+			if _enemy and _enemy.context and _enemy.context.labour_mode:
+				var labour: LabourMode = _enemy.context.labour_mode
+				if labour.has_method("set_boss_permanent_darkness"):
+					labour.set_boss_permanent_darkness(true)
 		Phase.BLIZZARD:
 			if _enemy and _enemy.context:
 				_enemy.context.runtime_modifiers["tower_attack_rate_mult"] = 0.65

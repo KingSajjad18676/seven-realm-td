@@ -58,6 +58,14 @@ func _do_mirage() -> void:
 
 
 func _do_drought() -> void:
+	if _enemy and _enemy.context:
+		var labour: LabourMode = _enemy.context.labour_mode
+		if labour and labour.has_method("set_drought"):
+			labour.set_drought(true)
+		_enemy.get_tree().create_timer(8.0).timeout.connect(func() -> void:
+			if labour and labour.has_method("set_drought"):
+				labour.set_drought(false)
+		, CONNECT_ONE_SHOT)
 	if _enemy and _enemy.context and _enemy.context.map_light and _enemy.context.tower_manager:
 		for spot in _enemy.context.tower_manager.build_spots:
 			if spot.tower == null:

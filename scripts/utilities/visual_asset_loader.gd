@@ -43,6 +43,19 @@ static func map_sprite(level_id: String) -> String:
 	return ""
 
 
+static func loading_sprite(level_id: String) -> String:
+	var placeholder := "res://art/_placeholders/loading/%s.png" % level_id
+	if ResourceLoader.exists(placeholder):
+		return placeholder
+	var production_jpg := "res://art/loading/%s.jpg" % level_id
+	if ResourceLoader.exists(production_jpg):
+		return production_jpg
+	var production_png := "res://art/loading/%s.png" % level_id
+	if ResourceLoader.exists(production_png):
+		return production_png
+	return map_sprite(level_id)
+
+
 static func map_terrain_color(level_id: String) -> Color:
 	match level_id:
 		"level_00_tutorial":

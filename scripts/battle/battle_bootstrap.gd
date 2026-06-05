@@ -301,7 +301,7 @@ func _apply_map_background(level: LevelData) -> void:
 		if terrain:
 			terrain.visible = true
 		return
-	var tex := load(level.map_sprite_path) as Texture2D
+	var tex := ResourceLoader.load(level.map_sprite_path) as Texture2D
 	if tex == null:
 		if terrain:
 			terrain.visible = true

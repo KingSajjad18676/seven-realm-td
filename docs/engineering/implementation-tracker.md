@@ -14,7 +14,7 @@
 | Khan 1 onboarding (tutorial + hints) | ✅ | `tutorial_controller.gd`, `contextual_hint_controller.gd`, `seen_hints` in save |
 | Tower place / upgrade / sell | ✅ | Build radial on empty pad (unaffordable towers disabled); manage radial on occupied pad (level, upgrade, sell, purify); **range ring** on select (`tower_range_ring.gd`) |
 | Waves + spawner + win/loss | ✅ | [spec/gameplay.md](../spec/gameplay.md) |
-| **Scaled campaign waves** | ✅ | 5-wave block templates per map; Pardeh every 5 cleared waves; mini-boss every 10th; final boss wave |
+| **Scaled campaign waves** | ✅ | 10-wave master block templates per map; Pardeh every 5 cleared waves; mini-boss every 10th; Hero's Vow after block end; final boss wave |
 | **Hero's Vow (10-wave blocks)** | ✅ | `VowOfferController`, `ObjectiveController` vow types, HUD chip, results tally |
 | Hero move + skill | ✅ | Rostam + Zal (Khans 2–3) |
 | Lion boss (Khan 1 finale) | ✅ | Wave 30 of Khan 1 |
@@ -118,3 +118,4 @@
 | Platform IAP / crash SDK | Wire at soft launch |
 | Extra hero roster | Rostam + Zal only |
 | Company splash | Optional stub scene |
+| Per-map loading screens | 🟡 Functional preload overlay + progress (`battle_loading_overlay`); illustrated splash art still placeholder via `VisualAssetLoader.loading_sprite()` |

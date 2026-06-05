@@ -28,7 +28,7 @@ func test_no_pardeh_after_final_boss_wave() -> void:
 
 func test_no_pardeh_on_non_fifth_waves() -> void:
 	var wm := _wave_manager_with_waves(30)
-	for idx in [0, 1, 2, 5, 11]:
+	for idx in [0, 1, 2, 5, 9, 11]:
 		wm.current_wave_index = idx
 		assert_false(wm._should_offer_pardeh(), "No Pardeh after wave %d" % (idx + 1))
 

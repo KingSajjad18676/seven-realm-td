@@ -136,23 +136,25 @@ A **map** is a battlefield (`level_id`). A **mode** is how you launch that map (
 **Wave formula (campaign):** `20 + (Labour index × 10)` — e.g. Labour 1 = 30 waves, Labour 7 = 90, Damavand = 100.  
 **Difficulty scaling:** Each Labour raises enemy HP, speed, and spawn count (~12% / 4% / 15% per step).
 
-**5-wave micro-loop (campaign):** Every map repeats escalating **5-wave blocks** — intro (waves 1–2), escalation (3–4), climax (5) — then **Pardeh Break** (Fate card pick). Mini-boss on every 10th wave; Hero's Vow every 10-wave block. Templates live in `scripts/meta/campaign_wave_templates.gd`.
+**10-wave master block (campaign):** Every map repeats **10-wave macro blocks** with act-specific enemy progression. Within each block: **Bait** (1–3, scavenging focus), **Trap** (4–5, heavy push + Labour hazard intensity), **Hijack** (6–8, corruptor floods), **Push + Mini-boss** (9–10). **Pardeh Break** after every 5 cleared waves (end of Trap); **Hero's Vow** after every 10 cleared waves (end of block). Templates in `scripts/meta/campaign_wave_templates.gd`.
 
 | Block role | Waves in block | Purpose |
 |------------|----------------|---------|
-| Intro | 1–2 | New enemy type or lighter Labour hazard |
-| Escalation | 3–4 | Swarms + pairings; corruptors tax Sacred Fire on hijack maps |
-| Climax | 5 | Push Labour hazard before Pardeh; wave 10/20 = mini-boss climax |
+| Bait | 1–3 | Low-tier enemies; material drops boosted; no corruptors |
+| Trap | 4–5 | Heavy push; Labour hazard peaks; Pardeh at wave 5 |
+| Hijack | 6–8 | Corruptor floods; Sacred Fire tax |
+| Push | 9 | Brute/elite escorts before mini-boss |
+| Mini-boss | 10 | Map mini-boss + escorts; Hero's Vow after clear |
 
 **Labour + wave synergy (block 1 teaching beats):**
 
 | Map | Wave design hook | Labour hazard sync |
 |-----|------------------|-------------------|
-| L1 Lion | Boars distract path; jackals swarm | Rakhsh ambush wave 1 |
+| L1 Lion | Jackal bait scavenging; boars act 2+ | Rakhsh ambush wave 1; roar ambushes act 3 |
 | L2 Thirst | Mirage shades | Oasis pulse spawns mirages — heal or defend |
 | L3 Dragon | Hounds rush while serpents burrow | 12s burrow cycle |
 | L4 Temptress | Feast shades after decoys | Cleanse dispels illusions |
-| L5 Olad | Raider funnel then boar flood | Second cave opens after wave 3 |
+| L5 Olad | Raider funnel then dual-lane attrition | Second cave opens after wave 3 |
 | L6 Rescue | Div corruptor floods | Wave 3 corruption spike + captive objective |
 | L7 Blindness | Boulder brutes in darkness | 6s blind every 14s; cleanse shortens |
 | Damavand | Serpent guards → chainbreakers | Binding progress (campaign) |
@@ -330,7 +332,7 @@ This is intentional **replay-to-grow** (roguelite TD standard), not a paywall: S
 | Safe retreat | `fate_draft_controller.gd` → `battle_state_controller.trigger_safe_retreat()` |
 | Per-tower forge unlock | `forge_service.gd`, `kaveh_forge_controller.gd` |
 | Campaign-only Labour attach | `scripts/battle/battle_bootstrap.gd` → `_attach_labour_mode()` |
-| Wave count + 5-wave block templates | `scripts/meta/campaign_wave_templates.gd` + `content_catalog.gd` → `wave_count_for()` |
+| Wave count + 10-wave master block templates | `scripts/meta/campaign_wave_templates.gd` + `content_catalog.gd` → `wave_count_for()` |
 | Pardeh cadence (every 5 waves) | `scripts/battle/wave_manager.gd` → `_should_offer_pardeh()` |
 | Expected forge curve + gate | `scripts/meta/forge_service.gd` → `expected_forge_level_for()`, `is_under_forge_recommendation()` |
 | Forge-scaled difficulty (L3+) | `scripts/meta/content_catalog.gd` → `khan_difficulty()` |

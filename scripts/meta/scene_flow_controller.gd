@@ -6,6 +6,7 @@ const FORGE := "res://scenes/main_menu/kaveh_forge.tscn"
 const WORLD_MAP := "res://scenes/world_map/world_map.tscn"
 const BATTLE := "res://scenes/battle/battle.tscn"
 const ROGUELITE_MAP := "res://scenes/roguelite_map/roguelite_map.tscn"
+const LOADING_OVERLAY := preload("res://scenes/ui/battle_loading_overlay.tscn")
 
 var pending_launch: BattleLaunchData = null
 var pending_roguelite_run: RogueliteRunState = null
@@ -15,6 +16,7 @@ var pending_alert: String = ""
 var forge_return_path: String = MAIN_MENU
 var _fade_layer: CanvasLayer = null
 var _fade_rect: ColorRect = null
+var _loading_overlay: BattleLoadingOverlay = null
 var _is_transitioning: bool = false
 
 
@@ -106,6 +108,8 @@ func consume_pending_alert() -> String:
 
 
 func go_to_battle(launch: BattleLaunchData) -> void:
+	if _is_transitioning:
+		return
 	if launch and launch.is_hunt_mode and ForgeService and ForgeService.is_damavand_level(launch.level_id):
 		if SaveSystem and not SaveSystem.has_all_khan_seals():
 			pending_alert = "Complete all seven Labours (7 seals) before Hunt for Zahhak."
@@ -116,7 +120,54 @@ func go_to_battle(launch: BattleLaunchData) -> void:
 			go_to_world_map()
 			return
 	pending_launch = launch
-	_change_scene(BATTLE)
+	_go_to_battle_with_preload(launch)
+
+
+func _ensure_loading_overlay() -> void:
+	_ensure_fade_overlay()
+	if _loading_overlay != null:
+		return
+	_loading_overlay = LOADING_OVERLAY.instantiate() as BattleLoadingOverlay
+	_fade_layer.add_child(_loading_overlay)
+
+
+func _go_to_battle_with_preload(launch: BattleLaunchData) -> void:
+	if _is_transitioning:
+		return
+	var level := ContentRegistry.get_level(launch.level_id) if ContentRegistry else null
+	if level == null:
+		pending_alert = "Missing level data: %s" % launch.level_id
+		go_to_world_map()
+		return
+
+	_is_transitioning = true
+	Engine.time_scale = 1.0
+	_ensure_fade_overlay()
+	_fade_rect.mouse_filter = Control.MOUSE_FILTER_STOP
+
+	var fade_out := create_tween()
+	fade_out.set_ignore_time_scale(true)
+	fade_out.tween_property(_fade_rect, "color:a", 1.0, 0.25)
+	await fade_out.finished
+
+	_ensure_loading_overlay()
+	_loading_overlay.show_loading(level)
+
+	var paths := LevelAssetCollector.collect(level, launch)
+	var progress_cb := func(ratio: float) -> void:
+		if _loading_overlay:
+			_loading_overlay.set_progress(ratio)
+	await LevelAssetPreloader.preload_paths(paths, progress_cb)
+
+	get_tree().change_scene_to_file(BATTLE)
+	_loading_overlay.hide_loading()
+
+	var fade_in := create_tween()
+	fade_in.set_ignore_time_scale(true)
+	fade_in.tween_property(_fade_rect, "color:a", 0.0, 0.35)
+	await fade_in.finished
+	_is_transitioning = false
+	_fade_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func _change_scene(path: String) -> void:

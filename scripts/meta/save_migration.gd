@@ -77,7 +77,7 @@ static func _migrate_legacy_roguelite_run(legacy: Dictionary) -> Dictionary:
 		for i in saved_nodes.size():
 			var n: Variant = saved_nodes[i]
 			if n is Dictionary:
-				var node := n.duplicate(true)
+				var node: Dictionary = (n as Dictionary).duplicate(true)
 				node["id"] = "legacy_%d" % i
 				node["cleared"] = i < int(legacy.get("current_index", 0))
 				if not node.has("edges"):
