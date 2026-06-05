@@ -28,6 +28,8 @@ repo root/
   art/_placeholders/
   addons/           editor plugins (e.g. level map editor)
   tools/            validate_resources, smoke_test.gd
+  tests/            GUT unit, integration, validation tests
+  addons/gut/       GUT v9.6.0 test framework
   docs/
 ```
 

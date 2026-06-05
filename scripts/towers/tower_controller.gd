@@ -66,6 +66,8 @@ func on_region_light_changed(light: int) -> void:
 	if light <= 0:
 		_start_hijack_warning()
 	else:
+		if hijack_phase != GameEnums.HijackPhase.NONE:
+			_recover_from_hijack()
 		_efficiency = 1.0 if light >= 30 else float(light) / 30.0
 
 
@@ -245,6 +247,8 @@ func _enter_hijacked() -> void:
 
 
 func _recover_from_hijack() -> void:
+	if hijack_phase == GameEnums.HijackPhase.NONE:
+		return
 	hijack_phase = GameEnums.HijackPhase.RECOVERING
 	if _sprite and data:
 		_apply_forge_visuals()

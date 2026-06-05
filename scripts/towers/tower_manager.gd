@@ -21,16 +21,33 @@ func initialize(ctx: BattleContext, spots: Array[BuildSpot], t_root: Node2D, p_r
 	projectiles_root = p_root
 	_projectile_pool = ObjectPool.new(projectile_scene, p_root, 12)
 	for spot in build_spots:
+		spot.battle_context = ctx
 		spot.spot_selected.connect(_on_spot_selected)
 		if ctx.map_light:
 			var light := ctx.map_light.get_light(spot.region_id)
 			# Connect region updates via bootstrap
 
 
-func try_build_on_spot(spot: BuildSpot) -> bool:
+func find_spot_at(world_pos: Vector2, radius: float = 36.0) -> BuildSpot:
+	var best: BuildSpot = null
+	var best_dist := radius
+	for spot in build_spots:
+		if spot.occupied:
+			continue
+		var dist := world_pos.distance_to(spot.global_position)
+		if dist <= best_dist:
+			best_dist = dist
+			best = spot
+	return best
+
+
+func try_build_on_spot(spot: BuildSpot, tower_id: String = "") -> bool:
+	if context and context.tutorial_active and not context.tutorial_allows("build_pads"):
+		return false
 	if spot.occupied or context == null or context.economy == null:
 		return false
-	var tower_data := ContentRegistry.get_tower(selected_tower_id)
+	var tid := tower_id if tower_id != "" else selected_tower_id
+	var tower_data := ContentRegistry.get_tower(tid)
 	if tower_data == null:
 		return false
 	if not context.economy.spend_gold(tower_data.build_cost):
@@ -111,6 +128,8 @@ func _on_spot_selected(spot: BuildSpot) -> void:
 	if context.map_light:
 		context.map_light.select_region(spot.region_id)
 	if spot.occupied and spot.tower:
+		if context.tutorial_active:
+			return
 		tower_spot_opened.emit(spot)
 		return
 	try_build_on_spot(spot)

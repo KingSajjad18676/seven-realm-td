@@ -12,6 +12,20 @@ When implementing gameplay:
 - Simple test `.tres` + small scenes under `scenes/` for isolated systems.
 - Fix root cause, not symptoms.
 
+**Automated tests (GUT):**
+
+1. Open repo root in Godot 4.6 (GUT plugin enabled)
+2. **Project → Tools → GUT** → confirm **Test Directories** includes `res://tests` (enabled). If empty, restart Godot or **Load** → `.gut_editor_config.json`
+3. **Run All**
+
+```powershell
+godot --headless --path . --import --quit
+godot --headless --path . -s res://addons/gut/gut_cmdln.gd -gconfig=res://.gutconfig.json
+godot --headless --path . --script res://tools/smoke_test.gd
+```
+
+Add tests under `tests/unit/`, `tests/integration/`, or `tests/validation/` with prefix `test_`. Use `tests/helpers/battle_test_fixtures.gd` for battle controller setup. Full playbook: `.cursor/skills/gut-testing/SKILL.md`.
+
 **Manual test template:**
 
 1. Open repo root (`project.godot`) in Godot 4.6

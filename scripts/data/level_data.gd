@@ -20,5 +20,6 @@ extends Resource
 @export var map_sprite_path: String = ""
 @export var camera_anchors: Array[Vector2] = []
 @export var uses_large_map_camera: bool = false
+@export var minimap_bounds: Rect2 = Rect2(0, 0, 1280, 720)
 @export var boss_enemy_id: String = ""
 @export var default_objective_id: String = ""

@@ -1,0 +1,28 @@
+name: Godot tests
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.6.0
+          use-dotnet: false
+
+      - name: Import project
+        run: godot --headless --path . --import --quit
+
+      - name: Run GUT
+        env:
+          GODOT_DISABLE_LEAK_CHECKS: "1"
+        run: godot --headless --path . -s res://addons/gut/gut_cmdln.gd -gconfig=res://.gutconfig.json
+
+      - name: Run smoke_test
+        run: godot --headless --path . --script res://tools/smoke_test.gd

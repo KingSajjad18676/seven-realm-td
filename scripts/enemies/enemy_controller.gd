@@ -43,7 +43,7 @@ func initialize(ctx: BattleContext, enemy_data: EnemyData, path: PackedVector2Ar
 	if _hp_bar:
 		_hp_bar.max_value = current_hp
 		_hp_bar.value = current_hp
-		_hp_bar.visible = _is_boss or enemy_data.max_hp > 50.0
+		_hp_bar.visible = true
 	monitoring = true
 	monitorable = true
 
@@ -60,6 +60,12 @@ func _process(delta: float) -> void:
 	if context == null or data == null:
 		return
 	if context.state_controller.current_state != GameEnums.BattleState.WAVE_ACTIVE:
+		return
+	var hero := context.hero_manager.hero if context.hero_manager else null
+	if hero and hero.should_block_enemy(self):
+		if _is_boss and _boss_controller and _boss_controller.has_method("tick"):
+			_boss_controller.tick(delta)
+		_apply_corruption_trail()
 		return
 	var speed := (data.move_speed + _move_speed_bonus) * _slow_mult
 	if context and context.runtime_modifiers.has("enemy_speed_mult"):
@@ -176,6 +182,10 @@ func _apply_corruption_trail() -> void:
 
 func is_near_gate(threshold: float = 0.75) -> bool:
 	return _follower.total_length > 0.0 and _follower.progress_distance >= _follower.total_length * threshold
+
+
+func get_path_progress() -> float:
+	return _follower.get_progress_distance()
 
 
 func _hp_multiplier() -> float:

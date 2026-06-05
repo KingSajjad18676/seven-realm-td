@@ -8,8 +8,10 @@ signal spot_selected(spot: BuildSpot)
 
 var occupied: bool = false
 var tower: TowerController = null
+var battle_context: BattleContext = null
 
 @onready var _pad: ColorRect = $Pad
+@onready var _pad_border: ColorRect = $PadBorder
 @onready var _label: Label = $Label
 
 
@@ -36,8 +38,15 @@ func _input_event(
 	elif event is InputEventScreenTouch and event.pressed:
 		pressed = true
 	if pressed:
+		if battle_context and battle_context.tutorial_active and not battle_context.tutorial_allows("build_pads"):
+			return
 		get_viewport().set_input_as_handled()
 		spot_selected.emit(self)
+
+
+func set_drag_highlight(active: bool) -> void:
+	if _pad_border:
+		_pad_border.color = Color(0.85, 1.0, 0.9, 1.0) if active else Color(0.55, 0.95, 0.75, 0.9)
 
 
 func set_occupied(t: TowerController) -> void:

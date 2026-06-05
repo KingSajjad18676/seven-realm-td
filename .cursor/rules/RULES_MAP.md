@@ -33,3 +33,14 @@
 | `17-godot-liveops-economy.mdc` | `17-liveops.mdc` | `liveops-economy.mdc` |
 | `18-godot-testing-debugging.mdc` | `18-testing.mdc` | `code-testing.mdc` |
 | `20-docs-and-design-canon.mdc` | `20-docs.mdc` | `docs-editing.mdc` |
+
+## Agent skills (`.cursor/skills/`)
+
+Task playbooks for Cursor agents — see [`.cursor/skills/README.md`](../skills/README.md).
+
+| Skill | When to use |
+|-------|-------------|
+| `gut-testing` | GUT tests, smoke_test, CI, ContentValidator |
+| `godot-battle-feature` | Battle controllers, corruption, hijack, bosses |
+| `shahnameh-content` | ContentCatalog, enemies, levels, stable IDs |
+| `shahnameh-milestone` | M0–M8 delivery, project-status, Khan 1 gate |

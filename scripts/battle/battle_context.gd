@@ -24,3 +24,17 @@ var selected_fate_card: FateCardData = null
 var active_enemies: Array = []
 var path_points: PackedVector2Array = PackedVector2Array()
 var tutorial_hold_waves: bool = false
+var tutorial_active: bool = false
+var tutorial_allowed: Dictionary = {}
+
+
+func set_tutorial_allowed(keys: Array) -> void:
+	tutorial_allowed.clear()
+	for key in keys:
+		tutorial_allowed[str(key)] = true
+
+
+func tutorial_allows(key: String) -> bool:
+	if not tutorial_active:
+		return true
+	return bool(tutorial_allowed.get(key, false))

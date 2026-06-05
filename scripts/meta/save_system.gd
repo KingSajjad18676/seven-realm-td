@@ -28,32 +28,18 @@ func load_save() -> void:
 
 
 func _migrate_save() -> void:
-	var version := int(_data.get("save_version", 1))
-	if version < 2:
-		if not _data.has("star_iron"):
-			_data["star_iron"] = {}
-		if not _data.has("tower_forge"):
-			_data["tower_forge"] = {}
-	if version < 3:
-		if not _data.has("replay_stats"):
-			_data["replay_stats"] = {}
-		if not _data.has("accessibility"):
-			_data["accessibility"] = _default_accessibility()
-		if not _data.has("daily_tale"):
-			_data["daily_tale"] = {}
-		if not _data.has("endless_best"):
-			_data["endless_best"] = 0
-		_data["save_version"] = SAVE_VERSION
+	var version_before := int(_data.get("save_version", 1))
+	_data = SaveMigration.migrate(_data, SAVE_VERSION)
+	if int(_data.get("save_version", 1)) != version_before:
 		save_game()
-	if version < 4:
-		if not _data.has("hunt_best_binding"):
-			_data["hunt_best_binding"] = 0
-		if not _data.has("damavand_forge_notified"):
-			_data["damavand_forge_notified"] = false
-		if not _data.has("roguelite_run"):
-			_data["roguelite_run"] = {}
-		_data["save_version"] = 4
-		save_game()
+
+
+func test_replace_data(data: Dictionary) -> void:
+	_data = data.duplicate(true)
+
+
+func test_reset_to_defaults() -> void:
+	test_replace_data(_default_data())
 
 
 func save_game() -> void:
@@ -94,12 +80,7 @@ func _default_data() -> Dictionary:
 
 
 func _default_accessibility() -> Dictionary:
-	return {
-		"ui_scale": 1.0,
-		"high_contrast": false,
-		"reduced_shake": false,
-		"subtitles": true,
-	}
+	return SaveMigration.default_accessibility()
 
 
 func record_replay(level_id: String) -> void:

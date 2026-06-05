@@ -478,8 +478,10 @@ static func build_tutorial() -> LevelData:
 	level.spawn_position = Vector2(80, 360)
 	level.gate_position = Vector2(1180, 360)
 	level.path_points = _khan1_path()
+	level.map_sprite_path = VisualAssetLoader.map_sprite("level_00_tutorial")
 	level.build_spot_positions = [Vector2(320, 300), Vector2(520, 220), Vector2(700, 300)]
 	level.waves = _tutorial_waves()
+	level.minimap_bounds = MapCameraUtils.compute_world_bounds(level)
 	return level
 
 
@@ -517,6 +519,7 @@ static func build_khan_level(
 	level.build_spot_positions = _pads_along_path(path, pad_count)
 	level.waves = _campaign_waves_for_khan(id, boss_id)
 	level.default_objective_id = _default_objective_for(id)
+	level.minimap_bounds = MapCameraUtils.compute_world_bounds(level)
 	return level
 
 

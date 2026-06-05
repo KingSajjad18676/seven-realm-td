@@ -124,14 +124,17 @@ func _setup_battle() -> void:
 
 	if _hud:
 		_hud.initialize(_context, fate_draft)
+		if _hud.has_method("setup_camera_ui"):
+			_hud.setup_camera_ui(_camera)
 	if level.is_tutorial:
 		var tutorial := _tutorial_overlay_scene.instantiate() as TutorialController
-		add_child(tutorial)
-		tutorial.initialize(_context, _hud, self, fate_draft)
+		if tutorial == null:
+			push_error("BattleBootstrap: failed to instantiate TutorialController")
+		else:
+			add_child(tutorial)
+			tutorial.call_deferred("initialize", _context, _hud, self, fate_draft)
 	if _camera:
-		_camera.global_position = Vector2(640, 360)
-		if level.uses_large_map_camera:
-			_camera.configure_large_map(level.camera_anchors, level.gate_position)
+		_camera.configure_from_level(level)
 
 	_connect_region_updates(spots)
 	_apply_endless_or_hunt(launch, level)
@@ -150,16 +153,30 @@ func _build_map_visuals(level: LevelData) -> void:
 		for p in level.path_points:
 			curve.add_point(p)
 		_path.curve = curve
+		_apply_path_line(level.path_points)
 	if _gate:
 		_gate.global_position = level.gate_position
 	if _spawn_marker:
 		_spawn_marker.global_position = level.spawn_position
-	if _camera:
-		_camera.global_position = Vector2(640, 360)
 	var terrain := _map_root.get_node_or_null("Terrain") as ColorRect
 	if terrain:
 		terrain.color = VisualAssetLoader.map_terrain_color(level.level_id)
+		terrain.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_apply_map_background(level)
+
+
+func _apply_path_line(points: Array[Vector2]) -> void:
+	if _path == null or points.is_empty():
+		return
+	var line := _path.get_node_or_null("PathLine") as Line2D
+	if line == null:
+		line = Line2D.new()
+		line.name = "PathLine"
+		_path.add_child(line)
+	line.z_index = -1
+	line.width = 12.0
+	line.default_color = Color(0.72, 0.58, 0.38, 0.85)
+	line.points = PackedVector2Array(points)
 
 
 func _apply_map_background(level: LevelData) -> void:
@@ -219,14 +236,28 @@ func _connect_region_updates(spots: Array[BuildSpot]) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	_handle_battlefield_tap(event)
+
+
+func _handle_battlefield_tap(event: InputEvent) -> void:
 	if _context == null or _context.hero_manager == null:
 		return
+	if _camera and _camera.should_block_battlefield_tap():
+		return
+	if _context.tutorial_active and not _context.tutorial_allows("battlefield"):
+		return
+	var world: Vector2 = Vector2.ZERO
+	var pressed := false
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		var world := get_global_mouse_position()
-		_context.hero_manager.handle_ground_tap(world)
+		world = _screen_to_world(event.position)
+		pressed = true
 	elif event is InputEventScreenTouch and event.pressed:
-		var world := _screen_to_world(event.position)
-		_context.hero_manager.handle_ground_tap(world)
+		world = _screen_to_world(event.position)
+		pressed = true
+	if not pressed:
+		return
+	_context.hero_manager.handle_ground_tap(world)
+	get_viewport().set_input_as_handled()
 
 
 func _apply_endless_or_hunt(launch: BattleLaunchData, level: LevelData) -> void:

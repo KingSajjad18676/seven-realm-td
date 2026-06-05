@@ -1,11 +1,12 @@
-class_name BattleHudController
+﻿class_name BattleHudController
 extends CanvasLayer
-
 var context: BattleContext = null
 var _fate_draft: FateDraftController = null
 var _tower_spot_panel: TowerSpotPanelController = null
+var _tower_drag: TowerBuildDragController = null
 var _last_victory: bool = false
-
+var _tutorial_gating: bool = false
+var _last_tutorial_allowed: PackedStringArray = PackedStringArray()
 @onready var _gold_label: Label = %GoldLabel
 @onready var _sf_label: Label = %SacredFireLabel
 @onready var _lives_label: Label = %LivesLabel
@@ -18,16 +19,17 @@ var _last_victory: bool = false
 @onready var _speed_btn: Button = %SpeedButton
 @onready var _cleanse_btn: Button = %CleanseButton
 @onready var _skill_btn: Button = %SkillButton
+@onready var _forge_btn: Button = %ForgeButton
 @onready var _replay_btn: Button = %ReplayButton
 @onready var _map_btn: Button = %MapButton
 @onready var _results_panel: Panel = %ResultsPanel
 @onready var _results_label: Label = %ResultsLabel
 @onready var _pardeh_panel: Panel = %PardehPanel
 @onready var _tower_buttons: HBoxContainer = %TowerButtons
-var _forge_btn: Button = null
+@onready var _minimap: MinimapController = %MinimapPanel
+@onready var _threat_indicator: ThreatIndicatorController = %ThreatIndicators
 var _tower_button_group: ButtonGroup = null
-
-
+var _forge_wired: bool = false
 func initialize(ctx: BattleContext, fate_draft: FateDraftController) -> void:
 	context = ctx
 	_fate_draft = fate_draft
@@ -53,7 +55,9 @@ func initialize(ctx: BattleContext, fate_draft: FateDraftController) -> void:
 	_on_sf(ctx.economy.sacred_fire if ctx.economy else 0)
 	_on_lives(ctx.lives.current_lives if ctx.lives else 0, ctx.lives.max_lives if ctx.lives else 0)
 	_refresh_cleanse_hint()
+	_setup_tower_drag()
 	_setup_tower_buttons()
+	setup_ancestral_forge(ctx)
 	if _results_panel:
 		_results_panel.visible = false
 	if _pardeh_panel:
@@ -62,8 +66,6 @@ func initialize(ctx: BattleContext, fate_draft: FateDraftController) -> void:
 		_replay_btn.visible = false
 	if _map_btn:
 		_map_btn.visible = false
-
-
 func _ready() -> void:
 	if _start_btn:
 		_start_btn.pressed.connect(_on_start)
@@ -79,8 +81,6 @@ func _ready() -> void:
 		_replay_btn.pressed.connect(_on_replay)
 	if _map_btn:
 		_map_btn.pressed.connect(_on_map)
-
-
 func get_highlight_target(key: String) -> Control:
 	match key:
 		"tower_buttons":
@@ -103,25 +103,73 @@ func get_highlight_target(key: String) -> Control:
 			return _speed_btn
 		"pause_speed":
 			return _pause_btn
+		"forge":
+			return _forge_btn
+		"fate_draft":
+			return _pardeh_panel
 	return null
-
-
 func setup_ancestral_forge(ctx: BattleContext) -> void:
-	if _forge_btn != null:
+	if _forge_btn == null or _forge_wired:
 		return
-	_forge_btn = Button.new()
-	_forge_btn.text = "Ancestral Forge"
-	_forge_btn.position = Vector2(200, 620)
-	_forge_btn.size = Vector2(140, 40)
-	_forge_btn.pressed.connect(func() -> void:
-		if ctx and ctx.ancestral_forge and ctx.ancestral_forge.try_fuse_any_adjacent_pair():
-			_on_alert("Adjacent towers fused!", 50)
-		elif ctx and ctx.bridge:
-			ctx.bridge.alert_message.emit("Place two adjacent towers to fuse", 45)
-	)
-	add_child(_forge_btn)
+	_forge_wired = true
+	_forge_btn.pressed.connect(_on_forge_pressed.bind(ctx))
 
 
+func setup_camera_ui(camera: TouchCamera) -> void:
+	if _minimap and camera:
+		_minimap.initialize(context, camera)
+	if _threat_indicator and camera:
+		_threat_indicator.initialize(context, camera)
+func _on_forge_pressed(ctx: BattleContext) -> void:
+	if ctx and ctx.ancestral_forge and ctx.ancestral_forge.try_fuse_any_adjacent_pair():
+		_on_alert("Adjacent towers fused!", 50)
+	elif ctx and ctx.bridge:
+		ctx.bridge.alert_message.emit("Place two adjacent towers to fuse", 45)
+func apply_tutorial_gating(allowed: PackedStringArray) -> void:
+	_tutorial_gating = true
+	_last_tutorial_allowed = allowed
+	var allow: Dictionary = {}
+	for key in allowed:
+		allow[key] = true
+	_set_control_enabled(_start_btn, allow.get("start_wave", false))
+	_set_control_enabled(_pause_btn, allow.get("pause", false) or allow.get("pause_speed", false))
+	_set_control_enabled(_speed_btn, allow.get("speed", false) or allow.get("pause_speed", false))
+	_set_control_enabled(_cleanse_btn, allow.get("cleanse", false))
+	_set_control_enabled(_skill_btn, allow.get("skill", false))
+	_set_control_enabled(_forge_btn, false)
+	_set_tower_buttons_enabled(allow.get("tower_buttons", false))
+func clear_tutorial_gating() -> void:
+	_tutorial_gating = false
+	_last_tutorial_allowed = PackedStringArray()
+	_set_control_enabled(_start_btn, true)
+	_set_control_enabled(_pause_btn, true)
+	_set_control_enabled(_speed_btn, true)
+	_set_control_enabled(_cleanse_btn, true)
+	_set_control_enabled(_skill_btn, true)
+	if _forge_btn:
+		_set_control_enabled(_forge_btn, true)
+	_set_tower_buttons_enabled(true)
+func _set_control_enabled(control: Control, enabled: bool) -> void:
+	if control == null:
+		return
+	if control is BaseButton:
+		(control as BaseButton).disabled = not enabled
+	control.mouse_filter = Control.MOUSE_FILTER_STOP if enabled else Control.MOUSE_FILTER_IGNORE
+func _set_tower_buttons_enabled(enabled: bool) -> void:
+	if _tower_buttons == null:
+		return
+	_tower_buttons.mouse_filter = Control.MOUSE_FILTER_STOP if enabled else Control.MOUSE_FILTER_IGNORE
+	for child in _tower_buttons.get_children():
+		if child is BaseButton:
+			(child as BaseButton).disabled = not enabled
+func _setup_tower_drag() -> void:
+	if _tower_drag != null:
+		return
+	_tower_drag = TowerBuildDragController.new()
+	_tower_drag.name = "TowerBuildDragController"
+	add_child(_tower_drag)
+	if context:
+		_tower_drag.initialize(context)
 func refresh_skill_label() -> void:
 	if _skill_btn == null or context == null or context.hero_manager == null:
 		return
@@ -132,8 +180,6 @@ func refresh_skill_label() -> void:
 				_skill_btn.text = "Zal Foresight"
 			_:
 				_skill_btn.text = "Rostam Skill"
-
-
 func _setup_tower_buttons() -> void:
 	if _tower_buttons == null or context == null or context.level_data == null:
 		return
@@ -154,24 +200,20 @@ func _setup_tower_buttons() -> void:
 				context.tower_manager.selected_tower_id = tid
 		)
 		_tower_buttons.add_child(btn)
+		if _tower_drag:
+			_tower_drag.register_tower_button(btn, tid)
 		if tid == "tower_archer":
 			btn.button_pressed = true
-
-
+	if _tutorial_gating:
+		apply_tutorial_gating(_last_tutorial_allowed)
 func _on_tower_spot_opened(spot: BuildSpot) -> void:
 	if _tower_spot_panel:
 		_tower_spot_panel.show_for_spot(spot)
-
-
 func _on_region_selected(region_id: String, _light: int) -> void:
 	_refresh_cleanse_hint()
-
-
 func _on_region_light_changed(region_id: String, _light: int, _state: GameEnums.RegionLightState) -> void:
 	if context and context.map_light and context.map_light.selected_region_id == region_id:
 		_refresh_cleanse_hint()
-
-
 func _refresh_cleanse_hint() -> void:
 	if _cleanse_hint == null or context == null or context.map_light == null:
 		return
@@ -182,18 +224,14 @@ func _refresh_cleanse_hint() -> void:
 	else:
 		var auto := ml.get_best_cleanse_target()
 		if auto != "":
-			_cleanse_hint.text = "Cleanse: auto → %s (%d)" % [auto, ml.get_light(auto)]
+			_cleanse_hint.text = "Cleanse: auto â†’ %s (%d)" % [auto, ml.get_light(auto)]
 		else:
 			_cleanse_hint.text = "Cleanse: auto"
-
-
 func _on_start() -> void:
 	if context and context.state_controller:
 		context.state_controller.start_battle()
 		if _start_btn:
 			_start_btn.disabled = true
-
-
 func _on_pause() -> void:
 	if context == null or context.state_controller == null:
 		return
@@ -201,8 +239,6 @@ func _on_pause() -> void:
 		context.state_controller.resume_battle()
 	else:
 		context.state_controller.pause_battle()
-
-
 func _on_speed() -> void:
 	if context == null or context.state_controller == null:
 		return
@@ -210,20 +246,14 @@ func _on_speed() -> void:
 	context.state_controller.set_speed_multiplier(mult)
 	if _speed_btn:
 		_speed_btn.text = "%dx" % int(mult)
-
-
 func _on_cleanse() -> void:
 	if context and context.map_light:
 		context.map_light.try_cleanse_selected()
-
-
 func _on_skill() -> void:
 	if context and context.hero_manager and context.hero_manager.hero:
 		context.hero_manager.hero.use_skill()
-
-
 func _on_replay() -> void:
-	var launch = _get_current_launch()
+	var launch := _get_current_launch()
 	var level_id: String = "level_01"
 	if launch:
 		level_id = launch.level_id
@@ -234,7 +264,6 @@ func _on_replay() -> void:
 			SaveSystem.mark_tutorial_completed()
 			SceneFlowController.go_to_world_map()
 		elif not _last_victory:
-			var launch := _get_current_launch()
 			if launch:
 				SceneFlowController.go_to_battle(launch.duplicate_launch())
 			else:
@@ -253,16 +282,12 @@ func _on_replay() -> void:
 		var fresh := BattleLaunchData.new()
 		fresh.level_id = level_id
 		SceneFlowController.go_to_battle(fresh)
-
-
-func _get_current_launch():
+func _get_current_launch() -> BattleLaunchData:
 	if context and context.launch_data:
 		return context.launch_data
 	if SceneFlowController:
 		return SceneFlowController.pending_launch
 	return null
-
-
 func _on_map() -> void:
 	var level_id := context.level_data.level_id if context and context.level_data else "level_01"
 	AnalyticsService.battle_exit_to_map(level_id, _last_victory)
@@ -284,33 +309,21 @@ func _on_map() -> void:
 	if launch and launch.is_endless_mode and not _last_victory and context and context.wave_manager:
 		SaveSystem.set_endless_best(context.wave_manager.get_endless_wave_count())
 	SceneFlowController.go_to_world_map()
-
-
 func _on_gold(v: int) -> void:
 	if _gold_label:
 		_gold_label.text = "Gold: %d" % v
-
-
 func _on_sf(v: int) -> void:
 	if _sf_label:
 		_sf_label.text = "Sacred Fire: %d" % v
-
-
 func _on_lives(c: int, m: int) -> void:
 	if _lives_label:
 		_lives_label.text = "Lives: %d/%d" % [c, m]
-
-
 func _on_wave(c: int, t: int) -> void:
 	if _wave_label:
 		_wave_label.text = "Wave: %d/%d" % [c, t]
-
-
 func _on_morale(current: int, max_m: int) -> void:
 	if _morale_label:
 		_morale_label.text = "Morale: %d/%d" % [current, max_m]
-
-
 func _on_run_summary(summary: Dictionary) -> void:
 	if _results_label and summary:
 		var extra := "\nFate: %s | Morale: %s" % [
@@ -322,20 +335,16 @@ func _on_run_summary(summary: Dictionary) -> void:
 		elif context and context.objectives and context.objectives.failed:
 			extra += " | Objective failed"
 		_results_label.text += extra
-
-
 func _on_alert(msg: String, _prio: int) -> void:
 	if _alert_label:
 		_alert_label.text = msg
-
-
 func _on_state(state: GameEnums.BattleState) -> void:
-	if state == GameEnums.BattleState.PRE_BATTLE and _start_btn:
+	if state == GameEnums.BattleState.PRE_BATTLE and _start_btn and not _tutorial_gating:
 		_start_btn.disabled = false
+	elif state == GameEnums.BattleState.PRE_BATTLE and _tutorial_gating:
+		apply_tutorial_gating(_last_tutorial_allowed)
 	if _tower_spot_panel and _tower_spot_panel.visible:
 		_tower_spot_panel.refresh_panel()
-
-
 func _on_pardeh() -> void:
 	if _fate_draft:
 		_fate_draft.show_draft()
@@ -343,8 +352,6 @@ func _on_pardeh() -> void:
 		_pardeh_panel.visible = true
 	if _tower_spot_panel:
 		_tower_spot_panel.hide_panel()
-
-
 func _on_results(victory: bool, reason: String) -> void:
 	_last_victory = victory
 	if _tower_spot_panel:
@@ -361,8 +368,8 @@ func _on_results(victory: bool, reason: String) -> void:
 				var lines: PackedStringArray = PackedStringArray()
 				lines.append("Star Iron earned:")
 				for mat_id in earned.keys():
-					var name := ForgeService.get_material_name(str(mat_id)) if ForgeService else str(mat_id)
-					lines.append("  %s +%d" % [name, int(earned[mat_id])])
+					var mat_name := ForgeService.get_material_name(str(mat_id)) if ForgeService else str(mat_id)
+					lines.append("  %s +%d" % [mat_name, int(earned[mat_id])])
 				_results_label.text += "\n\n" + "\n".join(lines)
 	if _replay_btn:
 		_replay_btn.visible = true

@@ -3,38 +3,70 @@
 [ext_resource type="Script" path="res://scripts/ui/tutorial_controller.gd" id="1_tutorial"]
 
 [node name="TutorialOverlay" type="CanvasLayer"]
-layer = 50
+layer = 70
 script = ExtResource("1_tutorial")
 
-[node name="Dim" type="ColorRect" parent="."]
+[node name="Root" type="Control" parent="."]
 unique_name_in_owner = true
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
-color = Color(0, 0, 0, 0.55)
+mouse_filter = 2
 
-[node name="HighlightBorder" type="ColorRect" parent="."]
+[node name="Dim" type="ColorRect" parent="Root"]
+unique_name_in_owner = true
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.3)
+
+[node name="MapInputBlocker" type="ColorRect" parent="Root"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 148.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="HighlightBorder" type="ColorRect" parent="Root"]
 unique_name_in_owner = true
 visible = false
+z_index = 1
+layout_mode = 0
 mouse_filter = 2
 color = Color(1, 0.85, 0.35, 0.25)
 
-[node name="CoachPanel" type="Panel" parent="."]
+[node name="CoachPanel" type="Panel" parent="Root"]
 unique_name_in_owner = true
-anchors_preset = 5
+z_index = 2
+layout_mode = 1
+anchors_preset = 8
 anchor_left = 0.5
+anchor_top = 0.5
 anchor_right = 0.5
+anchor_bottom = 0.5
 offset_left = -360.0
-offset_top = 72.0
+offset_top = -110.0
 offset_right = 360.0
-offset_bottom = 200.0
+offset_bottom = 110.0
 grow_horizontal = 2
-mouse_filter = 1
+grow_vertical = 2
+mouse_filter = 0
 
-[node name="CoachLabel" type="Label" parent="CoachPanel"]
+[node name="CoachLabel" type="Label" parent="Root/CoachPanel"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -46,13 +78,15 @@ offset_right = -16.0
 offset_bottom = -52.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_font_sizes/font_size = 18
 text = "Tutorial"
 autowrap_mode = 3
 horizontal_alignment = 1
 
-[node name="GotItButton" type="Button" parent="CoachPanel"]
+[node name="GotItButton" type="Button" parent="Root/CoachPanel"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 40)
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -60,9 +94,13 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -70.0
-offset_top = -44.0
+offset_top = -48.0
 offset_right = 70.0
 offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
+focus_mode = 0
+mouse_filter = 0
+theme_override_colors/font_color = Color(1, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 16
 text = "Got it"

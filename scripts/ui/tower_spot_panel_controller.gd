@@ -27,6 +27,8 @@ func initialize(ctx: BattleContext) -> void:
 
 
 func show_for_spot(spot: BuildSpot) -> void:
+	if context and context.tutorial_active:
+		return
 	_spot = spot
 	if spot == null or spot.tower == null:
 		hide_panel()

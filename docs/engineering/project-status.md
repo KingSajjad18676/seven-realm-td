@@ -1,6 +1,6 @@
 # Project Status (Godot)
 
-**Last updated:** 2026-06-05 (game logic audit fixes)  
+**Last updated:** 2026-06-05 (GUT test suite)  
 **Milestones:** [design/04-production-roadmap.md](../design/04-production-roadmap.md) · **Identity:** [design/00-project-index.md](../design/00-project-index.md)
 
 ---
@@ -19,6 +19,7 @@
 | Campaign Damavand | ✅ After Khan 7 clear; binding guards + chainbreakers before boss |
 | Kaveh's Forge | ✅ World map link; Elite notification unlocks Hunt |
 | Save v4 | ✅ Hunt best, forge notification, roguelite run state, mode-aware battle saves |
+| Automated tests | ✅ GUT v9.6.0 (`tests/`), ContentValidator, SaveMigration, GitHub Actions CI |
 
 ---
 
@@ -46,8 +47,12 @@
 
 ```powershell
 powershell -File tools/validate_resources.ps1
+godot --headless --path . --import --quit
+godot --headless --path . -s res://addons/gut/gut_cmdln.gd -gconfig=res://.gutconfig.json
 godot --headless --path . --script res://tools/smoke_test.gd
 ```
+
+In the editor: **Project → Tools → GUT** (bottom panel) → Run All.
 
 ---
 

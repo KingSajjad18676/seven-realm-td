@@ -5,11 +5,14 @@ const REROLL_SF_COST := 1
 
 var context: BattleContext = null
 var _panel: Control = null
+var _content_root: VBoxContainer = null
 var _reroll_used: bool = false
 var _objective_accepted: bool = false
 var _strategic_used: bool = false
 var _card_picked: bool = false
 var _continue_btn: Button = null
+var _card_row: HBoxContainer = null
+var _phase_two_root: VBoxContainer = null
 
 
 func initialize(ctx: BattleContext, panel: Control) -> void:
@@ -17,9 +20,7 @@ func initialize(ctx: BattleContext, panel: Control) -> void:
 	_panel = panel
 	if _panel:
 		_panel.visible = false
-		var skip := _panel.get_node_or_null("SkipButton") as Button
-		if skip and not skip.pressed.is_connected(_on_skip_pressed):
-			skip.pressed.connect(_on_skip_pressed)
+		_content_root = _panel.get_node_or_null("ContentRoot") as VBoxContainer
 
 
 func show_draft() -> void:
@@ -30,6 +31,8 @@ func show_draft() -> void:
 	_strategic_used = false
 	_card_picked = false
 	_continue_btn = null
+	_card_row = null
+	_phase_two_root = null
 	_panel.visible = true
 	if context.state_controller:
 		context.state_controller.pause_battle()
@@ -38,28 +41,50 @@ func show_draft() -> void:
 	_build_pardeh_ui()
 
 
+func _clear_content_root() -> void:
+	if _content_root == null:
+		return
+	for child in _content_root.get_children():
+		child.free()
+	_content_root.add_theme_constant_override("separation", 10)
+
+
 func _build_pardeh_ui() -> void:
-	for child in _panel.get_children():
-		if child.name != "SkipButton":
-			child.queue_free()
-	var vbox := VBoxContainer.new()
-	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_panel.add_child(vbox)
+	if _content_root == null:
+		return
+	_clear_content_root()
 	var title := Label.new()
 	title.text = "Pardeh Break - Weave your Fate"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(title)
+	title.add_theme_font_size_override("font_size", 22)
+	_content_root.add_child(title)
 	var hint := Label.new()
 	hint.text = "Choose a Fate card to continue"
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(hint)
-	var card_row := HBoxContainer.new()
-	card_row.name = "CardRow"
-	card_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	vbox.add_child(card_row)
-	_populate_cards(card_row)
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_content_root.add_child(hint)
+	_card_row = HBoxContainer.new()
+	_card_row.name = "CardRow"
+	_card_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	_card_row.add_theme_constant_override("separation", 12)
+	_content_root.add_child(_card_row)
+	_populate_cards(_card_row)
+	var reroll_btn := Button.new()
+	reroll_btn.text = "Reroll cards (%d SF)" % REROLL_SF_COST
+	reroll_btn.pressed.connect(_on_reroll)
+	_content_root.add_child(reroll_btn)
+	_phase_two_root = VBoxContainer.new()
+	_phase_two_root.name = "PhaseTwo"
+	_phase_two_root.visible = false
+	_phase_two_root.add_theme_constant_override("separation", 8)
+	_content_root.add_child(_phase_two_root)
+	_build_phase_two(_phase_two_root)
+
+
+func _build_phase_two(container: VBoxContainer) -> void:
 	var obj_row := HBoxContainer.new()
 	obj_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	obj_row.add_theme_constant_override("separation", 8)
 	if ContentRegistry:
 		var obj: ObjectiveData = ContentRegistry.get_random_objective()
 		if obj:
@@ -71,32 +96,26 @@ func _build_pardeh_ui() -> void:
 			decline_obj.text = "Decline objective"
 			decline_obj.pressed.connect(func() -> void: _objective_accepted = true)
 			obj_row.add_child(decline_obj)
-	vbox.add_child(obj_row)
+	container.add_child(obj_row)
 	var strat_row := HBoxContainer.new()
 	strat_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	strat_row.add_theme_constant_override("separation", 8)
 	for action in ["Repair +15 region light", "Gold surge +20", "Morale +10"]:
 		var btn := Button.new()
 		btn.text = action
 		btn.pressed.connect(_on_strategic.bind(action))
 		strat_row.add_child(btn)
-	vbox.add_child(strat_row)
-	var reroll_btn := Button.new()
-	reroll_btn.text = "Reroll cards (%d SF)" % REROLL_SF_COST
-	reroll_btn.pressed.connect(_on_reroll.bind(card_row))
-	vbox.add_child(reroll_btn)
+	container.add_child(strat_row)
 	_continue_btn = Button.new()
 	_continue_btn.text = "Continue"
 	_continue_btn.disabled = true
 	_continue_btn.pressed.connect(_on_continue_pressed)
-	vbox.add_child(_continue_btn)
-	var skip := _panel.get_node_or_null("SkipButton") as Button
-	if skip:
-		skip.visible = false
+	container.add_child(_continue_btn)
 
 
 func _populate_cards(container: HBoxContainer) -> void:
 	for child in container.get_children():
-		child.queue_free()
+		child.free()
 	var pool: Array[FateCardData] = ContentRegistry.get_all_fate_cards()
 	var shuffled := pool.duplicate()
 	shuffled.shuffle()
@@ -106,13 +125,20 @@ func _populate_cards(container: HBoxContainer) -> void:
 	for card in picks:
 		var btn := Button.new()
 		btn.text = "%s\n%s" % [card.title, card.description]
-		btn.custom_minimum_size = Vector2(200, 100)
+		btn.custom_minimum_size = Vector2(220, 120)
 		btn.pressed.connect(_on_card_picked.bind(card))
 		container.add_child(btn)
 
 
-func _on_reroll(card_row: HBoxContainer) -> void:
-	if _reroll_used or context == null or context.economy == null:
+func _show_phase_two() -> void:
+	if _phase_two_root:
+		_phase_two_root.visible = true
+	if _continue_btn:
+		_continue_btn.disabled = false
+
+
+func _on_reroll() -> void:
+	if _card_row == null or _reroll_used or context == null or context.economy == null:
 		return
 	if not context.economy.spend_sacred_fire(REROLL_SF_COST):
 		if context.bridge:
@@ -120,9 +146,11 @@ func _on_reroll(card_row: HBoxContainer) -> void:
 		return
 	_reroll_used = true
 	_card_picked = false
+	if _phase_two_root:
+		_phase_two_root.visible = false
 	if _continue_btn:
 		_continue_btn.disabled = true
-	_populate_cards(card_row)
+	_populate_cards(_card_row)
 
 
 func _on_accept_objective(obj: ObjectiveData) -> void:
@@ -156,12 +184,14 @@ func _on_card_picked(card: FateCardData) -> void:
 	context.selected_fate_card = card
 	_apply_fate_effects(card)
 	_card_picked = true
-	if _continue_btn:
-		_continue_btn.disabled = false
 	AnalyticsService.fate_card_selected(card.card_id)
 	CombatEvents.fate_card_selected.emit(card.card_id)
 	if context.bridge:
 		context.bridge.alert_message.emit("Fate chosen: %s" % card.title, 20)
+	if context.tutorial_active:
+		_finish_draft()
+		return
+	_show_phase_two()
 
 
 func _apply_fate_effects(card: FateCardData) -> void:
@@ -212,13 +242,6 @@ func _apply_default_fate_effects(card: FateCardData) -> void:
 		context.runtime_modifiers["corruption_rate_bonus"] = card.curse_corruption_rate
 
 
-func _on_skip_pressed() -> void:
-	_card_picked = true
-	if context and context.bridge:
-		context.bridge.alert_message.emit("Fate declined — no boon or curse", 30)
-	_finish_draft()
-
-
 func _on_continue_pressed() -> void:
 	if not _card_picked:
 		if context and context.bridge:
@@ -230,11 +253,6 @@ func _on_continue_pressed() -> void:
 func _finish_draft() -> void:
 	if _panel:
 		_panel.visible = false
-		for child in _panel.get_children():
-			if child.name != "SkipButton":
-				child.queue_free()
-		var skip := _panel.get_node_or_null("SkipButton") as Button
-		if skip:
-			skip.visible = true
+		_clear_content_root()
 	if context and context.state_controller:
 		context.state_controller.resume_battle()

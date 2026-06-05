@@ -7,6 +7,7 @@ extends CanvasLayer
 
 
 func _ready() -> void:
+	add_to_group("debug_menu")
 	visible = OS.is_debug_build()
 	if _skip:
 		_skip.pressed.connect(_on_skip)

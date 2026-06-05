@@ -40,6 +40,10 @@ window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation=1
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/shahnameh_gut_setup/plugin.cfg", "res://addons/gut/plugin.cfg")
+
 [input]
 
 touch={

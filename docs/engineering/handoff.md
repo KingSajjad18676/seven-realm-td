@@ -382,9 +382,14 @@ Headless checks:
 
 ```powershell
 powershell -File tools/validate_resources.ps1
-godot --headless --path . --check-only
+godot --headless --path . --import --quit
+godot --headless --path . -s res://addons/gut/gut_cmdln.gd -gconfig=res://.gutconfig.json
 godot --headless --path . --script res://tools/smoke_test.gd
 ```
+
+**Test layout:** `tests/unit/` (pure logic), `tests/integration/` (battle controllers), `tests/validation/` (catalog, save migration, unlock chain). Helpers in `tests/helpers/`. CI: `.github/workflows/godot-tests.yml`.
+
+**Cursor agent skills:** `.cursor/skills/` — `gut-testing`, `godot-battle-feature`, `shahnameh-content`, `shahnameh-milestone` (see `.cursor/skills/README.md`).
 
 ---
 

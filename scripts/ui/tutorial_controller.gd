@@ -1,6 +1,13 @@
 class_name TutorialController
 extends CanvasLayer
 
+const DIM_ALPHA_COACH := 0.30
+const DIM_ALPHA_MAP := 0.20
+const COACH_CENTER := {"left": -360.0, "top": -110.0, "right": 360.0, "bottom": 110.0}
+const COACH_BOTTOM := {"left": -360.0, "top": -200.0, "right": 360.0, "bottom": -20.0}
+const PLAYFIELD_TOP := 48.0
+const PLAYFIELD_BOTTOM := 652.0
+
 enum StepAdvance {
 	GOT_IT,
 	TOWER_BUILT,
@@ -13,7 +20,9 @@ enum StepAdvance {
 	VICTORY,
 }
 
+@onready var _root: Control = %Root
 @onready var _dim: ColorRect = %Dim
+@onready var _map_blocker: ColorRect = %MapInputBlocker
 @onready var _highlight: ColorRect = %HighlightBorder
 @onready var _coach_panel: Panel = %CoachPanel
 @onready var _coach_label: Label = %CoachLabel
@@ -26,6 +35,64 @@ var _fate_draft: FateDraftController = null
 var _step_index: int = 0
 var _steps: Array[Dictionary] = []
 var _waiting_for_action: bool = false
+var _pending_init: Dictionary = {}
+
+
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	if _got_it_btn:
+		_got_it_btn.pressed.connect(_on_got_it)
+	if _coach_panel:
+		_coach_panel.gui_input.connect(_on_coach_panel_gui_input)
+	if _root:
+		_root.gui_input.connect(_on_root_gui_input)
+	if not _pending_init.is_empty():
+		_begin_tutorial()
+
+
+func _input(event: InputEvent) -> void:
+	if context == null or not context.tutorial_active:
+		return
+	if _step_index >= _steps.size():
+		return
+	if not _is_got_it_press(event):
+		return
+	var step: Dictionary = _steps[_step_index]
+	var screen_pos := _event_screen_pos(event)
+	if not should_swallow_playfield_press(step, screen_pos):
+		return
+	get_viewport().set_input_as_handled()
+
+
+func should_swallow_playfield_press(step: Dictionary, screen_pos: Vector2) -> bool:
+	var allowed: Array = step.get("allowed", [])
+	if allowed.has("battlefield"):
+		return false
+	var allows_map_interaction: bool = allowed.has("battlefield") or allowed.has("build_pads")
+	if allows_map_interaction:
+		return false
+	var active_gated: bool = not bool(step.get("pause", true)) and not allows_map_interaction
+	if not active_gated:
+		return false
+	if not _is_in_playfield(screen_pos):
+		return false
+	if _is_in_allowed_hud_rect(screen_pos, allowed):
+		return false
+	return true
+
+
+func _is_in_playfield(screen_pos: Vector2) -> bool:
+	return screen_pos.y >= PLAYFIELD_TOP and screen_pos.y <= PLAYFIELD_BOTTOM
+
+
+func _is_in_allowed_hud_rect(screen_pos: Vector2, allowed: Array) -> bool:
+	if _hud == null:
+		return false
+	for key in allowed:
+		var target := _hud.get_highlight_target(str(key))
+		if target and target.get_global_rect().has_point(screen_pos):
+			return true
+	return false
 
 
 func initialize(
@@ -34,17 +101,33 @@ func initialize(
 	battle_root: Node2D,
 	fate_draft: FateDraftController
 ) -> void:
-	context = ctx
-	_hud = hud
-	_battle_root = battle_root
-	_fate_draft = fate_draft
-	if ctx:
-		ctx.tutorial_hold_waves = true
-		ctx.runtime_modifiers["tutorial_block_victory"] = true
+	_pending_init = {
+		"context": ctx,
+		"hud": hud,
+		"battle_root": battle_root,
+		"fate_draft": fate_draft,
+	}
+	if is_node_ready():
+		_begin_tutorial()
+	else:
+		call_deferred("_begin_tutorial")
+
+
+func _begin_tutorial() -> void:
+	if _pending_init.is_empty():
+		return
+	context = _pending_init.get("context") as BattleContext
+	_hud = _pending_init.get("hud") as BattleHudController
+	_battle_root = _pending_init.get("battle_root") as Node2D
+	_fate_draft = _pending_init.get("fate_draft") as FateDraftController
+	_pending_init.clear()
+	if context:
+		context.tutorial_hold_waves = true
+		context.tutorial_active = true
+		context.runtime_modifiers["tutorial_block_victory"] = true
+	_set_debug_menu_visible(false)
 	_steps = _build_steps()
 	_connect_events()
-	if _got_it_btn:
-		_got_it_btn.pressed.connect(_on_got_it)
 	_show_step(0)
 
 
@@ -52,10 +135,11 @@ func _build_steps() -> Array[Dictionary]:
 	return [
 		{
 			"id": "welcome",
-			"text": "Welcome, champion. Defend the Sacred Fire and push back corruption before it claims your towers.",
+			"text": "Welcome, champion. Defend the Sacred Fire and push back corruption before it claims your towers.\n\nTap Got it to begin.",
 			"highlight": "",
 			"advance": StepAdvance.GOT_IT,
 			"pause": true,
+			"allowed": [],
 		},
 		{
 			"id": "read_battlefield",
@@ -63,6 +147,7 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "battlefield",
 			"advance": StepAdvance.GOT_IT,
 			"pause": true,
+			"allowed": [],
 		},
 		{
 			"id": "tower_families",
@@ -70,13 +155,15 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "tower_buttons",
 			"advance": StepAdvance.GOT_IT,
 			"pause": true,
+			"allowed": [],
 		},
 		{
 			"id": "place_tower",
-			"text": "Select a tower, then tap a green build pad to place it.",
+			"text": "Drag a tower onto a green build pad — or select one, then tap a pad.",
 			"highlight": "tower_buttons",
 			"advance": StepAdvance.TOWER_BUILT,
 			"pause": false,
+			"allowed": ["tower_buttons", "build_pads"],
 		},
 		{
 			"id": "gold_economy",
@@ -84,6 +171,7 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "gold",
 			"advance": StepAdvance.GOT_IT,
 			"pause": true,
+			"allowed": [],
 		},
 		{
 			"id": "start_wave",
@@ -91,6 +179,7 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "start_wave",
 			"advance": StepAdvance.WAVE_STARTED,
 			"pause": false,
+			"allowed": ["start_wave"],
 		},
 		{
 			"id": "lives_gate",
@@ -98,6 +187,7 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "lives",
 			"advance": StepAdvance.GOT_IT,
 			"pause": true,
+			"allowed": [],
 		},
 		{
 			"id": "pause_speed",
@@ -105,6 +195,7 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "pause_speed",
 			"advance": StepAdvance.GOT_IT,
 			"pause": true,
+			"allowed": [],
 		},
 		{
 			"id": "move_hero",
@@ -112,6 +203,7 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "",
 			"advance": StepAdvance.HERO_MOVED,
 			"pause": false,
+			"allowed": ["battlefield"],
 		},
 		{
 			"id": "hero_skill",
@@ -119,6 +211,7 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "skill",
 			"advance": StepAdvance.HERO_SKILL,
 			"pause": false,
+			"allowed": ["skill"],
 		},
 		{
 			"id": "corruption",
@@ -126,6 +219,7 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "sacred_fire",
 			"advance": StepAdvance.GOT_IT,
 			"pause": true,
+			"allowed": [],
 			"on_enter": "_lesson_corruption_pressure",
 		},
 		{
@@ -134,6 +228,7 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "cleanse",
 			"advance": StepAdvance.CLEANSE,
 			"pause": false,
+			"allowed": ["cleanse"],
 		},
 		{
 			"id": "hijack",
@@ -141,6 +236,7 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "cleanse",
 			"advance": StepAdvance.HIJACK_RECOVERED,
 			"pause": false,
+			"allowed": ["cleanse"],
 			"on_enter": "_lesson_hijack_collapse",
 		},
 		{
@@ -149,6 +245,7 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "",
 			"advance": StepAdvance.FATE_SELECTED,
 			"pause": true,
+			"allowed": ["fate_draft"],
 			"on_enter": "_lesson_pardeh_break",
 		},
 		{
@@ -157,6 +254,7 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "",
 			"advance": StepAdvance.VICTORY,
 			"pause": false,
+			"allowed": ["battlefield"],
 			"on_enter": "_lesson_release_victory",
 		},
 		{
@@ -165,6 +263,7 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "",
 			"advance": StepAdvance.GOT_IT,
 			"pause": true,
+			"allowed": [],
 			"on_enter": "_lesson_mark_complete",
 		},
 	]
@@ -201,13 +300,64 @@ func _show_step(index: int) -> void:
 		_got_it_btn.visible = true
 	elif _got_it_btn:
 		_got_it_btn.visible = false
-	if _dim:
-		var needs_map: bool = step.advance in [
-			StepAdvance.TOWER_BUILT,
-			StepAdvance.HERO_MOVED,
-		]
-		_dim.visible = not needs_map
-		_dim.color.a = 0.35 if needs_map else 0.55
+	_update_dim_for_step(step)
+	_apply_gating(step.get("allowed", []))
+	if context and context.hero_manager and not step.get("allowed", []).has("battlefield"):
+		context.hero_manager.cancel_hero_move()
+
+
+func _update_dim_for_step(step: Dictionary) -> void:
+	if _dim == null:
+		return
+	var allowed: Array = step.get("allowed", [])
+	var allows_fate_draft: bool = allowed.has("fate_draft")
+	if allows_fate_draft:
+		if _dim:
+			_dim.visible = false
+		if _root:
+			_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		if _coach_panel:
+			_coach_panel.visible = false
+			_coach_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		if _map_blocker:
+			_map_blocker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		return
+	var needs_map: bool = step.advance in [
+		StepAdvance.TOWER_BUILT,
+		StepAdvance.HERO_MOVED,
+	]
+	_dim.visible = not needs_map
+	_dim.color.a = DIM_ALPHA_MAP if needs_map else DIM_ALPHA_COACH
+	var block_hud: bool = _dim.visible and step.get("pause", true)
+	var allows_battlefield: bool = allowed.has("battlefield")
+	var allows_map_interaction: bool = allows_battlefield or allowed.has("build_pads")
+	if _root:
+		if allows_battlefield:
+			_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		else:
+			_root.mouse_filter = Control.MOUSE_FILTER_STOP if block_hud else Control.MOUSE_FILTER_IGNORE
+	if _coach_panel:
+		_coach_panel.visible = true
+		_coach_panel.mouse_filter = (
+			Control.MOUSE_FILTER_IGNORE if allows_map_interaction else Control.MOUSE_FILTER_STOP
+		)
+		_apply_coach_layout(allows_map_interaction)
+	var active_gated: bool = not bool(step.get("pause", true)) and not allows_map_interaction
+	if _map_blocker:
+		_map_blocker.mouse_filter = (
+			Control.MOUSE_FILTER_STOP if active_gated and not block_hud else Control.MOUSE_FILTER_IGNORE
+		)
+
+
+func _apply_coach_layout(bottom: bool) -> void:
+	if _coach_panel == null:
+		return
+	var layout: Dictionary = COACH_BOTTOM if bottom else COACH_CENTER
+	_coach_panel.set_anchors_preset(Control.PRESET_CENTER)
+	_coach_panel.offset_left = layout.left
+	_coach_panel.offset_top = layout.top
+	_coach_panel.offset_right = layout.right
+	_coach_panel.offset_bottom = layout.bottom
 
 
 func _advance_step() -> void:
@@ -219,10 +369,51 @@ func _advance_step() -> void:
 
 
 func _on_got_it() -> void:
+	_advance_got_it_step()
+
+
+func _advance_got_it_step() -> void:
+	if _step_index >= _steps.size():
+		return
 	var step: Dictionary = _steps[_step_index]
 	if step.advance != StepAdvance.GOT_IT:
 		return
 	_advance_step()
+
+
+func _on_coach_panel_gui_input(event: InputEvent) -> void:
+	if not _is_got_it_press(event):
+		return
+	_advance_got_it_step()
+
+
+func _on_root_gui_input(event: InputEvent) -> void:
+	if _step_index >= _steps.size():
+		return
+	var step: Dictionary = _steps[_step_index]
+	if step.advance != StepAdvance.GOT_IT:
+		return
+	if not _is_got_it_press(event):
+		return
+	if _coach_panel and _coach_panel.get_global_rect().has_point(_event_screen_pos(event)):
+		return
+	_advance_got_it_step()
+
+
+func _is_got_it_press(event: InputEvent) -> bool:
+	if event is InputEventScreenTouch:
+		return event.pressed
+	if event is InputEventMouseButton:
+		return event.pressed and event.button_index == MOUSE_BUTTON_LEFT
+	return false
+
+
+func _event_screen_pos(event: InputEvent) -> Vector2:
+	if event is InputEventScreenTouch:
+		return event.position
+	if event is InputEventMouseButton:
+		return event.position
+	return Vector2.ZERO
 
 
 func _on_tower_built(_tower_id: String) -> void:
@@ -272,7 +463,7 @@ func _update_coach(text: String) -> void:
 		_coach_label.text = text
 	if _coach_panel:
 		_coach_panel.visible = true
-	visible = true
+	_set_overlay_visible(true)
 
 
 func _update_highlight(key: String) -> void:
@@ -311,27 +502,50 @@ func _pause_battle() -> void:
 	if context and context.state_controller:
 		if context.state_controller.current_state == GameEnums.BattleState.WAVE_ACTIVE:
 			context.state_controller.pause_battle()
-		elif context.state_controller.current_state == GameEnums.BattleState.PRE_BATTLE:
-			Engine.time_scale = 0.0
 
 
 func _resume_battle() -> void:
 	if context and context.state_controller:
 		if context.state_controller.current_state == GameEnums.BattleState.PAUSED:
 			context.state_controller.resume_battle()
-		elif context.state_controller.current_state == GameEnums.BattleState.PRE_BATTLE:
-			Engine.time_scale = 1.0
 		elif context.state_controller.current_state == GameEnums.BattleState.WAVE_ACTIVE:
 			Engine.time_scale = context.state_controller.speed_multiplier
 
 
+func _apply_gating(allowed: Array) -> void:
+	if context:
+		context.set_tutorial_allowed(allowed)
+	if _hud:
+		_hud.apply_tutorial_gating(PackedStringArray(allowed))
+
+
+func _set_debug_menu_visible(show_menu: bool) -> void:
+	for node in get_tree().get_nodes_in_group("debug_menu"):
+		if node is CanvasLayer:
+			node.visible = show_menu and OS.is_debug_build()
+
+
 func _hide_overlay() -> void:
-	visible = false
+	_set_overlay_visible(false)
+	if context:
+		context.tutorial_active = false
+		context.set_tutorial_allowed([])
+	if _hud:
+		_hud.clear_tutorial_gating()
+	_set_debug_menu_visible(true)
 	if _coach_panel:
 		_coach_panel.visible = false
 	if _highlight:
 		_highlight.visible = false
+	if _dim:
+		_dim.visible = false
+	if _root:
+		_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_resume_battle()
+
+
+func _set_overlay_visible(show_overlay: bool) -> void:
+	visible = show_overlay
 
 
 func _get_tower_region_id() -> String:
