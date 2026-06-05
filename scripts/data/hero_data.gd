@@ -11,6 +11,7 @@ extends Resource
 @export var skill_cooldown: float = 8.0
 @export var skill_damage: float = 60.0
 @export var tether_radius: float = 120.0
+@export var respawn_cooldown: float = 8.0
 @export var color: Color = Color.DODGER_BLUE
 @export var scene_path: String = "res://scenes/prefabs/hero.tscn"
 @export var sprite_path: String = ""

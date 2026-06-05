@@ -17,6 +17,7 @@ var _context: BattleContext = null
 var _bridge: BattleContextBridge = null
 var _build_spot_scene: PackedScene = preload("res://scenes/prefabs/build_spot.tscn")
 var _tutorial_overlay_scene: PackedScene = preload("res://scenes/ui/tutorial_overlay.tscn")
+var _contextual_hint_scene: PackedScene = preload("res://scenes/ui/contextual_hint_overlay.tscn")
 
 
 func _ready() -> void:
@@ -39,7 +40,9 @@ func _setup_battle() -> void:
 	_context = BattleContext.new()
 	_context.level_data = level
 	_context.launch_data = launch
-	_context.path_points = PackedVector2Array(level.path_points)
+	level.ensure_routes_migrated()
+	level.ensure_spawns_migrated()
+	_context.path_points = level.get_route()
 
 	_bridge = BattleContextBridge.new()
 	_bridge.name = "BattleContextBridge"
@@ -103,6 +106,11 @@ func _setup_battle() -> void:
 	add_child(_context.wave_manager)
 	_context.wave_manager.initialize(_context)
 
+	_context.spell_controller = SpellController.new()
+	_context.spell_controller.name = "SpellController"
+	add_child(_context.spell_controller)
+	_context.spell_controller.initialize(_context)
+
 	_context.tower_manager = TowerManager.new()
 	_context.tower_manager.name = "TowerManager"
 	add_child(_context.tower_manager)
@@ -133,10 +141,18 @@ func _setup_battle() -> void:
 		else:
 			add_child(tutorial)
 			tutorial.call_deferred("initialize", _context, _hud, self, fate_draft)
+	else:
+		var hints := _contextual_hint_scene.instantiate() as ContextualHintController
+		if hints == null:
+			push_error("BattleBootstrap: failed to instantiate ContextualHintController")
+		else:
+			add_child(hints)
+			hints.call_deferred("initialize", _context, _hud)
 	if _camera:
 		_camera.configure_from_level(level)
 
 	_connect_region_updates(spots)
+	_apply_difficulty_and_unlocks(launch, level)
 	_apply_endless_or_hunt(launch, level)
 	if _hud and _hud.has_method("setup_ancestral_forge"):
 		_hud.setup_ancestral_forge(_context)
@@ -148,16 +164,24 @@ func _setup_battle() -> void:
 
 
 func _build_map_visuals(level: LevelData) -> void:
+	level.ensure_routes_migrated()
+	level.ensure_spawns_migrated()
+	var has_map_art := _level_has_map_art(level)
+	_clear_dev_map_overlays()
 	if _path:
+		var primary := level.get_route()
 		var curve := Curve2D.new()
-		for p in level.path_points:
+		for p in primary:
 			curve.add_point(p)
 		_path.curve = curve
-		_apply_path_line(level.path_points)
+		_apply_path_line(primary, has_map_art)
+		_apply_extra_route_lines(level, has_map_art)
 	if _gate:
 		_gate.global_position = level.gate_position
 	if _spawn_marker:
-		_spawn_marker.global_position = level.spawn_position
+		_spawn_marker.global_position = level.get_spawn().get("position", level.spawn_position)
+	_apply_spawn_markers(level, has_map_art)
+	_set_dev_map_markers_visible(not has_map_art)
 	var terrain := _map_root.get_node_or_null("Terrain") as ColorRect
 	if terrain:
 		terrain.color = VisualAssetLoader.map_terrain_color(level.level_id)
@@ -165,7 +189,71 @@ func _build_map_visuals(level: LevelData) -> void:
 	_apply_map_background(level)
 
 
-func _apply_path_line(points: Array[Vector2]) -> void:
+func _clear_dev_map_overlays() -> void:
+	for node_name in ["DevRoutes", "DevSpawns"]:
+		var existing := _map_root.get_node_or_null(node_name)
+		if existing:
+			existing.queue_free()
+
+
+func _apply_extra_route_lines(level: LevelData, has_map_art: bool) -> void:
+	if level.path_routes.size() <= 1:
+		return
+	var container := Node2D.new()
+	container.name = "DevRoutes"
+	_map_root.add_child(container)
+	for i in level.path_routes.size():
+		var route := level.path_routes[i]
+		var line := Line2D.new()
+		line.points = PackedVector2Array(route.points)
+		line.width = 6.0
+		line.default_color = MapEditorUtils.route_color(i)
+		line.z_index = -1
+		line.visible = not has_map_art
+		container.add_child(line)
+
+
+func _apply_spawn_markers(level: LevelData, has_map_art: bool) -> void:
+	if level.spawn_points.is_empty():
+		return
+	var container := Node2D.new()
+	container.name = "DevSpawns"
+	_map_root.add_child(container)
+	for spawn in level.spawn_points:
+		var marker := Node2D.new()
+		marker.global_position = spawn.position
+		var visual := ColorRect.new()
+		visual.offset_left = -20.0
+		visual.offset_top = -40.0
+		visual.offset_right = 20.0
+		visual.offset_bottom = 40.0
+		visual.color = Color(0.9, 0.25, 0.2, 0.95)
+		visual.visible = not has_map_art
+		marker.add_child(visual)
+		container.add_child(marker)
+
+
+func _level_has_map_art(level: LevelData) -> bool:
+	return level.map_sprite_path != "" and ResourceLoader.exists(level.map_sprite_path)
+
+
+func _set_dev_map_markers_visible(visible: bool) -> void:
+	var gate_visual := _gate.get_node_or_null("GateVisual") if _gate else null
+	if gate_visual:
+		gate_visual.visible = visible
+	for child in _spawn_marker.get_children() if _spawn_marker else []:
+		child.visible = visible
+	var dev_routes := _map_root.get_node_or_null("DevRoutes")
+	if dev_routes:
+		dev_routes.visible = visible
+	var dev_spawns := _map_root.get_node_or_null("DevSpawns")
+	if dev_spawns:
+		for child in dev_spawns.get_children():
+			for visual in child.get_children():
+				visual.visible = visible
+
+
+func _apply_path_line(points: Array[Vector2], has_map_art: bool = false) -> void:
 	if _path == null or points.is_empty():
 		return
 	var line := _path.get_node_or_null("PathLine") as Line2D
@@ -174,19 +262,28 @@ func _apply_path_line(points: Array[Vector2]) -> void:
 		line.name = "PathLine"
 		_path.add_child(line)
 	line.z_index = -1
-	line.width = 12.0
-	line.default_color = Color(0.72, 0.58, 0.38, 0.85)
-	line.points = PackedVector2Array(points)
+	if has_map_art:
+		line.visible = false
+	else:
+		line.visible = true
+		line.width = 6.0
+		line.default_color = Color(0.72, 0.58, 0.38, 0.35)
+		line.points = PackedVector2Array(points)
 
 
 func _apply_map_background(level: LevelData) -> void:
+	var terrain := _map_root.get_node_or_null("Terrain") as ColorRect
 	var existing := _map_root.get_node_or_null("MapBackground") as Sprite2D
 	if existing:
 		existing.queue_free()
 	if level.map_sprite_path == "" or not ResourceLoader.exists(level.map_sprite_path):
+		if terrain:
+			terrain.visible = true
 		return
 	var tex := load(level.map_sprite_path) as Texture2D
 	if tex == null:
+		if terrain:
+			terrain.visible = true
 		return
 	var spr := Sprite2D.new()
 	spr.name = "MapBackground"
@@ -199,6 +296,8 @@ func _apply_map_background(level: LevelData) -> void:
 	spr.scale = Vector2(scale_factor.x, scale_factor.y)
 	_map_root.add_child(spr)
 	_map_root.move_child(spr, 0)
+	if terrain:
+		terrain.visible = false
 
 
 func _assign_level_objective(level: LevelData) -> void:
@@ -244,7 +343,10 @@ func _handle_battlefield_tap(event: InputEvent) -> void:
 		return
 	if _camera and _camera.should_block_battlefield_tap():
 		return
-	if _context.tutorial_active and not _context.tutorial_allows("battlefield"):
+	if _hud and _hud.has_method("is_tower_radial_open") and _hud.is_tower_radial_open():
+		return
+	if _context.tutorial_active and not _context.tutorial_allows("battlefield") \
+			and not _context.tutorial_allows("build_pads"):
 		return
 	var world: Vector2 = Vector2.ZERO
 	var pressed := false
@@ -256,8 +358,29 @@ func _handle_battlefield_tap(event: InputEvent) -> void:
 		pressed = true
 	if not pressed:
 		return
+	if _context.tower_manager and _context.tower_manager.try_select_spot_at_world(world):
+		get_viewport().set_input_as_handled()
+		return
+	if _context.tutorial_active and not _context.tutorial_allows("battlefield"):
+		return
 	_context.hero_manager.handle_ground_tap(world)
 	get_viewport().set_input_as_handled()
+
+
+func _apply_difficulty_and_unlocks(launch: BattleLaunchData, level: LevelData) -> void:
+	if _context == null or level == null:
+		return
+	var diff := ContentCatalog.khan_difficulty(level.level_id)
+	var hp_mult := float(diff.hp_mult)
+	var speed_mult := float(diff.speed_mult)
+	if launch and launch.is_horde_mode:
+		hp_mult *= 1.15
+		speed_mult *= 1.08
+	_context.runtime_modifiers["enemy_hp_mult"] = hp_mult
+	_context.runtime_modifiers["enemy_speed_mult"] = speed_mult
+	if SaveSystem and SaveSystem.is_tower_unlocked("tower_zahhak_serpent"):
+		if "tower_zahhak_serpent" not in level.available_tower_ids:
+			level.available_tower_ids.append("tower_zahhak_serpent")
 
 
 func _apply_endless_or_hunt(launch: BattleLaunchData, level: LevelData) -> void:
@@ -265,6 +388,13 @@ func _apply_endless_or_hunt(launch: BattleLaunchData, level: LevelData) -> void:
 		return
 	if launch.is_endless_mode and _context.wave_manager:
 		_context.wave_manager.enable_endless_mode()
+	if launch.is_horde_mode and _context.wave_manager:
+		_context.wave_manager.enable_horde_mode()
+		if _context.bridge:
+			_context.bridge.alert_message.emit(
+				"Horde Mode — survive %d waves!" % ContentCatalog.HORDE_WAVES_TO_CLEAR,
+				90
+			)
 	if launch.is_hunt_mode:
 		_context.runtime_modifiers["hunt_mode"] = true
 		_context.hunt = HuntController.new()
@@ -301,3 +431,5 @@ func _process(delta: float) -> void:
 	if _context and _context.map_light:
 		_context.map_light.tick_decay(delta)
 		_context.map_light.process_hijack_timers(delta)
+	if _context and _context.spell_controller:
+		_context.spell_controller.tick(delta)

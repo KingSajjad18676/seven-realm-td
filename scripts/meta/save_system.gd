@@ -1,7 +1,7 @@
 extends Node
 
 const SAVE_PATH := "user://shahnamehtd_save.json"
-const SAVE_VERSION := 4
+const SAVE_VERSION := 5
 
 var _data: Dictionary = {}
 
@@ -76,6 +76,12 @@ func _default_data() -> Dictionary:
 		"roguelite_run": {},
 		"relics_owned": [],
 		"cosmetic_entitlements": [],
+		"paid_entitlements": [],
+		"seen_hints": {},
+		"forge_tokens": 0,
+		"spells_owned": [],
+		"horde_progress": {},
+		"unlocked_towers": [],
 	}
 
 
@@ -165,6 +171,118 @@ func get_cosmetic_entitlements() -> Array[String]:
 func set_cosmetic_entitlements(ids: Array[String]) -> void:
 	_data["cosmetic_entitlements"] = ids.duplicate()
 	save_game()
+
+
+func get_paid_entitlements() -> Array[String]:
+	var raw: Variant = _data.get("paid_entitlements", [])
+	var ids: Array[String] = []
+	if raw is Array:
+		for entry in raw:
+			if entry is String:
+				ids.append(entry)
+	return ids
+
+
+func set_paid_entitlements(ids: Array[String]) -> void:
+	_data["paid_entitlements"] = ids.duplicate()
+	save_game()
+
+
+func get_forge_tokens() -> int:
+	return int(_data.get("forge_tokens", 0))
+
+
+func add_forge_tokens(amount: int) -> void:
+	if amount <= 0:
+		return
+	_data["forge_tokens"] = get_forge_tokens() + amount
+	save_game()
+
+
+func spend_forge_tokens(amount: int) -> bool:
+	if amount <= 0:
+		return false
+	if get_forge_tokens() < amount:
+		return false
+	_data["forge_tokens"] = get_forge_tokens() - amount
+	save_game()
+	return true
+
+
+func get_spells_owned() -> Array[String]:
+	var raw: Variant = _data.get("spells_owned", [])
+	var ids: Array[String] = []
+	if raw is Array:
+		for entry in raw:
+			if entry is String:
+				ids.append(entry)
+	return ids
+
+
+func owns_spell(spell_id: String) -> bool:
+	return spell_id in get_spells_owned()
+
+
+func add_spell(spell_id: String) -> void:
+	if spell_id == "" or owns_spell(spell_id):
+		return
+	var owned := get_spells_owned()
+	owned.append(spell_id)
+	_data["spells_owned"] = owned
+	save_game()
+
+
+func is_tower_unlocked(tower_id: String) -> bool:
+	var raw: Variant = _data.get("unlocked_towers", [])
+	if raw is Array:
+		return tower_id in raw
+	return false
+
+
+func unlock_tower(tower_id: String) -> void:
+	if tower_id == "" or is_tower_unlocked(tower_id):
+		return
+	var unlocked: Array = _data.get("unlocked_towers", [])
+	unlocked.append(tower_id)
+	_data["unlocked_towers"] = unlocked
+	save_game()
+
+
+func get_horde_progress(level_id: String) -> Dictionary:
+	var progress: Dictionary = _data.get("horde_progress", {})
+	var entry: Variant = progress.get(level_id, null)
+	return entry if entry is Dictionary else {"cleared": false, "best_wave": 0}
+
+
+func is_horde_cleared(level_id: String) -> bool:
+	return bool(get_horde_progress(level_id).get("cleared", false))
+
+
+func record_horde_victory(level_id: String, waves_cleared: int) -> void:
+	var progress: Dictionary = _data.get("horde_progress", {})
+	var entry: Dictionary = get_horde_progress(level_id)
+	entry["cleared"] = true
+	entry["best_wave"] = maxi(int(entry.get("best_wave", 0)), waves_cleared)
+	progress[level_id] = entry
+	_data["horde_progress"] = progress
+	if has_all_khan_horde_clears() and not is_tower_unlocked("tower_zahhak_serpent"):
+		unlock_tower("tower_zahhak_serpent")
+	save_game()
+
+
+func has_all_khan_horde_clears() -> bool:
+	for level_id in ContentCatalog.KHAN_HORDE_LEVELS:
+		if not is_horde_cleared(level_id):
+			return false
+	return true
+
+
+func get_horde_clears_count() -> int:
+	var count := 0
+	for level_id in ContentCatalog.KHAN_HORDE_LEVELS:
+		if is_horde_cleared(level_id):
+			count += 1
+	return count
 
 
 func get_endless_best() -> int:
@@ -307,6 +425,22 @@ func is_tutorial_completed() -> bool:
 func mark_tutorial_completed() -> void:
 	_data["tutorial_completed"] = true
 	unlock_level("level_01")
+	save_game()
+
+
+func has_seen_hint(hint_id: String) -> bool:
+	if hint_id == "":
+		return false
+	var hints: Dictionary = _data.get("seen_hints", {})
+	return bool(hints.get(hint_id, false))
+
+
+func mark_hint_seen(hint_id: String) -> void:
+	if hint_id == "":
+		return
+	var hints: Dictionary = _data.get("seen_hints", {})
+	hints[hint_id] = true
+	_data["seen_hints"] = hints
 	save_game()
 
 

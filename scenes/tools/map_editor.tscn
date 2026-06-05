@@ -1,0 +1,208 @@
+[gd_scene load_steps=4 format=3 uid="uid://map_editor_scene"]
+
+[ext_resource type="Script" path="res://scripts/tools/map_editor.gd" id="1_editor"]
+[ext_resource type="Script" path="res://scripts/tools/map_editor_canvas.gd" id="2_canvas"]
+[ext_resource type="Script" path="res://scripts/tools/map_editor_camera.gd" id="3_camera"]
+
+[node name="MapEditor" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_editor")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.1, 0.12, 1)
+
+[node name="RootVBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="Toolbar" type="HBoxContainer" parent="RootVBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LevelLabel" type="Label" parent="RootVBox/Toolbar"]
+layout_mode = 2
+text = "Level:"
+
+[node name="LevelSelect" type="OptionButton" parent="RootVBox/Toolbar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+
+[node name="ToolRoad" type="Button" parent="RootVBox/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Road (1)"
+
+[node name="ToolPads" type="Button" parent="RootVBox/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Pads (2)"
+
+[node name="ToolSpawn" type="Button" parent="RootVBox/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Spawn (3)"
+
+[node name="ToolGate" type="Button" parent="RootVBox/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Gate (4)"
+
+[node name="ToolSelect" type="Button" parent="RootVBox/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Select (5)"
+
+[node name="RouteLabel" type="Label" parent="RootVBox/Toolbar"]
+layout_mode = 2
+text = "Route:"
+
+[node name="RouteSelect" type="OptionButton" parent="RootVBox/Toolbar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+
+[node name="AddRouteButton" type="Button" parent="RootVBox/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "+ Route"
+
+[node name="DeleteRouteButton" type="Button" parent="RootVBox/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "- Route"
+
+[node name="SpawnRouteLabel" type="Label" parent="RootVBox/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Spawn→"
+
+[node name="SpawnRouteSelect" type="OptionButton" parent="RootVBox/Toolbar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+
+[node name="SnapToggle" type="CheckBox" parent="RootVBox/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Snap 10px"
+button_pressed = true
+
+[node name="SaveButton" type="Button" parent="RootVBox/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save .tres"
+
+[node name="ReloadButton" type="Button" parent="RootVBox/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Reload"
+
+[node name="FitMapButton" type="Button" parent="RootVBox/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Fit (0)"
+
+[node name="BackButton" type="Button" parent="RootVBox/Toolbar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Back"
+
+[node name="BodyHBox" type="HBoxContainer" parent="RootVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="ViewportContainer" type="SubViewportContainer" parent="RootVBox/BodyHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="RootVBox/BodyHBox/ViewportContainer"]
+handle_input_locally = true
+size = Vector2i(1280, 720)
+render_target_update_mode = 4
+
+[node name="EditorCamera" type="Camera2D" parent="RootVBox/BodyHBox/ViewportContainer/SubViewport"]
+unique_name_in_owner = true
+script = ExtResource("3_camera")
+
+[node name="MapCanvas" type="Node2D" parent="RootVBox/BodyHBox/ViewportContainer/SubViewport"]
+unique_name_in_owner = true
+script = ExtResource("2_canvas")
+
+[node name="SidePanel" type="VBoxContainer" parent="RootVBox/BodyHBox"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CoordLabel" type="Label" parent="RootVBox/BodyHBox/SidePanel"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Cursor: (0, 0)"
+
+[node name="ZoomLabel" type="Label" parent="RootVBox/BodyHBox/SidePanel"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Zoom: 100%"
+
+[node name="RegionLabel" type="Label" parent="RootVBox/BodyHBox/SidePanel"]
+layout_mode = 2
+text = "Region IDs (comma-separated):"
+
+[node name="RegionInput" type="LineEdit" parent="RootVBox/BodyHBox/SidePanel"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "region_north, region_south"
+
+[node name="AutoPadsHBox" type="HBoxContainer" parent="RootVBox/BodyHBox/SidePanel"]
+layout_mode = 2
+
+[node name="PadCountSpin" type="SpinBox" parent="RootVBox/BodyHBox/SidePanel/AutoPadsHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 30.0
+value = 15.0
+
+[node name="AutoPadsButton" type="Button" parent="RootVBox/BodyHBox/SidePanel/AutoPadsHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Auto pads"
+
+[node name="ClearToolButton" type="Button" parent="RootVBox/BodyHBox/SidePanel"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Clear active tool"
+
+[node name="HelpLabel" type="Label" parent="RootVBox/BodyHBox/SidePanel"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Road: edit active route (select route in toolbar). Spawn: LMB add marker, RMB delete; pick route link in Spawn→. Multiple routes share fork/merge coords. Wheel: zoom. Middle-drag / Space+LMB: pan. 0: fit."
+
+[node name="StatusLabel" type="Label" parent="RootVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+text = "Ready."

@@ -7,8 +7,8 @@ func test_v1_migrates_to_v4() -> void:
 		"tutorial_completed": false,
 		"unlocked_levels": ["level_00_tutorial"],
 	}
-	var migrated := SaveMigration.migrate(v1, 4)
-	assert_eq(int(migrated.get("save_version", 0)), 4)
+	var migrated := SaveMigration.migrate(v1, 5)
+	assert_eq(int(migrated.get("save_version", 0)), 5)
 	assert_true(migrated.has("star_iron"))
 	assert_true(migrated.has("tower_forge"))
 	assert_true(migrated.has("replay_stats"))
@@ -42,13 +42,13 @@ func test_cosmetic_entitlements_preserved() -> void:
 	assert_has(migrated.get("cosmetic_entitlements", []), "skin_rostam_gold")
 
 
-func test_already_v4_unchanged_version() -> void:
-	var v4 := {
-		"save_version": 4,
-		"hunt_best_binding": 2,
-		"roguelite_run": {"seed": 42},
+func test_already_v5_unchanged_version() -> void:
+	var v5 := {
+		"save_version": 5,
+		"forge_tokens": 42,
+		"spells_owned": ["spell_gold_rush"],
 	}
-	var migrated := SaveMigration.migrate(v4, 4)
-	assert_eq(int(migrated.get("save_version", 0)), 4)
-	assert_eq(int(migrated.get("hunt_best_binding", 0)), 2)
-	assert_eq(int(migrated.get("roguelite_run", {}).get("seed", 0)), 42)
+	var migrated := SaveMigration.migrate(v5, 5)
+	assert_eq(int(migrated.get("save_version", 0)), 5)
+	assert_eq(int(migrated.get("forge_tokens", 0)), 42)
+	assert_has(migrated.get("spells_owned", []), "spell_gold_rush")

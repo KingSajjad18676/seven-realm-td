@@ -4,6 +4,7 @@ extends Control
 @onready var _forge_btn: Button = %ForgeButton
 @onready var _settings_btn: Button = %SettingsButton
 @onready var _daily_btn: Button = %DailyButton
+@onready var _map_editor_btn: Button = %MapEditorButton
 @onready var _alert_label: Label = %AlertLabel
 @onready var _settings_panel: Panel = %SettingsPanel
 
@@ -17,6 +18,10 @@ func _ready() -> void:
 		_settings_btn.pressed.connect(_on_settings)
 	if _daily_btn:
 		_daily_btn.pressed.connect(_on_daily)
+	if _map_editor_btn:
+		_map_editor_btn.visible = OS.is_debug_build()
+		if OS.is_debug_build():
+			_map_editor_btn.pressed.connect(_on_map_editor)
 	_show_pending_alert()
 
 
@@ -52,3 +57,7 @@ func _on_settings() -> void:
 func _on_daily() -> void:
 	if DailyTaleService:
 		DailyTaleService.launch_daily_battle()
+
+
+func _on_map_editor() -> void:
+	get_tree().change_scene_to_file("res://scenes/tools/map_editor.tscn")

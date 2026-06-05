@@ -151,19 +151,19 @@ func _build_steps() -> Array[Dictionary]:
 		},
 		{
 			"id": "tower_families",
-			"text": "Four tower families: Archer (steady DPS), Sacred Fire (burn), Heavy (armor break), Control (slow). Each costs Gold.",
-			"highlight": "tower_buttons",
+			"text": "Four tower families: Archer (steady DPS), Sacred Fire (burn), Heavy (armor break), Control (slow). Tap a build pad to choose one.",
+			"highlight": "build_pads",
 			"advance": StepAdvance.GOT_IT,
 			"pause": true,
 			"allowed": [],
 		},
 		{
 			"id": "place_tower",
-			"text": "Drag a tower onto a green build pad — or select one, then tap a pad.",
-			"highlight": "tower_buttons",
+			"text": "Tap a build pad and pick a tower from the radial menu.",
+			"highlight": "build_pads",
 			"advance": StepAdvance.TOWER_BUILT,
 			"pause": false,
-			"allowed": ["tower_buttons", "build_pads"],
+			"allowed": ["build_pads", "battlefield"],
 		},
 		{
 			"id": "gold_economy",
@@ -179,12 +179,28 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "start_wave",
 			"advance": StepAdvance.WAVE_STARTED,
 			"pause": false,
-			"allowed": ["start_wave"],
+			"allowed": ["start_wave", "battlefield"],
 		},
 		{
 			"id": "lives_gate",
 			"text": "Each enemy that reaches the Gate costs a Life. At zero Lives, the battle is lost.",
 			"highlight": "lives",
+			"advance": StepAdvance.GOT_IT,
+			"pause": true,
+			"allowed": [],
+		},
+		{
+			"id": "objective",
+			"text": "Each Khan has a bonus objective. Khan 1: let no enemy reach the Gate.",
+			"highlight": "lives",
+			"advance": StepAdvance.GOT_IT,
+			"pause": true,
+			"allowed": [],
+		},
+		{
+			"id": "morale",
+			"text": "Morale rises as you fight well and boosts your towers; it falls when enemies leak.",
+			"highlight": "morale",
 			"advance": StepAdvance.GOT_IT,
 			"pause": true,
 			"allowed": [],
@@ -211,7 +227,7 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "skill",
 			"advance": StepAdvance.HERO_SKILL,
 			"pause": false,
-			"allowed": ["skill"],
+			"allowed": ["skill", "battlefield"],
 		},
 		{
 			"id": "corruption",
@@ -228,7 +244,7 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "cleanse",
 			"advance": StepAdvance.CLEANSE,
 			"pause": false,
-			"allowed": ["cleanse"],
+			"allowed": ["cleanse", "battlefield"],
 		},
 		{
 			"id": "hijack",
@@ -236,7 +252,7 @@ func _build_steps() -> Array[Dictionary]:
 			"highlight": "cleanse",
 			"advance": StepAdvance.HIJACK_RECOVERED,
 			"pause": false,
-			"allowed": ["cleanse"],
+			"allowed": ["cleanse", "battlefield"],
 			"on_enter": "_lesson_hijack_collapse",
 		},
 		{
@@ -247,6 +263,14 @@ func _build_steps() -> Array[Dictionary]:
 			"pause": true,
 			"allowed": ["fate_draft"],
 			"on_enter": "_lesson_pardeh_break",
+		},
+		{
+			"id": "boss_warning",
+			"text": "The final wave brings a boss with telegraphed attacks. Pause, focus fire, and use Rostam.",
+			"highlight": "",
+			"advance": StepAdvance.GOT_IT,
+			"pause": true,
+			"allowed": [],
 		},
 		{
 			"id": "survive",
@@ -480,6 +504,16 @@ func _update_highlight(key: String) -> void:
 			_highlight.size = Vector2(400, 160)
 			_highlight.visible = true
 			return
+	if key == "build_pads" and _battle_root and context and context.tower_manager:
+		for spot in context.tower_manager.build_spots:
+			if not spot.occupied:
+				var screen_pos := BattleUiCoords.world_to_screen(
+					_battle_root.get_viewport(), spot.global_position
+				)
+				_highlight.global_position = screen_pos - Vector2(36, 36)
+				_highlight.size = Vector2(72, 72)
+				_highlight.visible = true
+				return
 	var target := _resolve_highlight_target(key)
 	if target == null:
 		_highlight.visible = false

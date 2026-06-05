@@ -74,14 +74,22 @@ func trigger_victory(reason: String = "waves_cleared") -> void:
 		SaveSystem.mark_level_cleared(lid)
 	if launch and launch.is_endless_mode and context and context.wave_manager and SaveSystem:
 		SaveSystem.set_endless_best(context.wave_manager.get_endless_wave_count())
+	if launch and launch.is_horde_mode and SaveSystem and context and context.level_data:
+		var lid := context.level_data.level_id
+		SaveSystem.record_horde_victory(lid, context.wave_manager.get_horde_wave_count() if context.wave_manager else 0)
+		SaveSystem.add_forge_tokens(ContentCatalog.forge_tokens_for_victory(lid, true))
 	if launch and launch.is_hunt_mode and SaveSystem and context and context.hunt:
 		SaveSystem.record_hunt_binding(context.hunt.binding_shards)
 	if launch and launch.is_daily_tale and DailyTaleService:
 		DailyTaleService.mark_daily_completed()
 	if SaveSystem and context.economy and launch and (
-		launch.is_campaign_mode() or launch.is_hunt_mode or launch.is_daily_tale
+		launch.is_campaign_mode() or launch.is_hunt_mode or launch.is_daily_tale or launch.is_horde_mode
 	):
 		SaveSystem.commit_battle_materials(context.economy.forge_materials_earned)
+	if SaveSystem and context.level_data and launch and launch.is_campaign_mode():
+		SaveSystem.add_forge_tokens(
+			ContentCatalog.forge_tokens_for_victory(context.level_data.level_id, false)
+		)
 	_emit_run_summary(true, reason)
 
 

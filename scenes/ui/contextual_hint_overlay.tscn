@@ -1,0 +1,71 @@
+[gd_scene load_steps=2 format=3 uid="uid://contextual_hint_overlay"]
+
+[ext_resource type="Script" path="res://scripts/ui/contextual_hint_controller.gd" id="1_hint"]
+
+[node name="ContextualHintOverlay" type="CanvasLayer"]
+layer = 65
+script = ExtResource("1_hint")
+
+[node name="Root" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HintPanel" type="Panel" parent="Root"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = -180.0
+offset_right = 320.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 0
+
+[node name="HintLabel" type="Label" parent="Root/HintPanel"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 12.0
+offset_right = -16.0
+offset_bottom = -52.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 17
+text = "Hint"
+autowrap_mode = 3
+horizontal_alignment = 1
+
+[node name="GotItButton" type="Button" parent="Root/HintPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 36)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -44.0
+offset_right = 60.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+focus_mode = 0
+mouse_filter = 0
+theme_override_font_sizes/font_size = 15
+text = "Got it"

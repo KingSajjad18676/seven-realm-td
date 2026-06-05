@@ -16,6 +16,7 @@ var morale: MoraleController = null
 var run_modifiers: RunModifierService = null
 var ancestral_forge: AncestralForgeController = null
 var hunt: HuntController = null
+var spell_controller: SpellController = null
 var bridge: BattleContextBridge = null
 var run_summary: Dictionary = {}
 var runtime_modifiers: Dictionary = {}
@@ -26,6 +27,17 @@ var path_points: PackedVector2Array = PackedVector2Array()
 var tutorial_hold_waves: bool = false
 var tutorial_active: bool = false
 var tutorial_allowed: Dictionary = {}
+
+
+func resolve_enemy_route(spawn_group: Dictionary) -> Dictionary:
+	if level_data:
+		return level_data.resolve_enemy_route(spawn_group)
+	return {
+		"spawn_id": "",
+		"position": Vector2.ZERO,
+		"route_id": "",
+		"path": path_points,
+	}
 
 
 func set_tutorial_allowed(keys: Array) -> void:

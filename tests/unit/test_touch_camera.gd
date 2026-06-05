@@ -9,7 +9,7 @@ func before_each() -> void:
 	await get_tree().process_frame
 
 
-func test_configure_from_level_sets_bounds_and_anchor() -> void:
+func test_configure_from_level_uses_fit_center_for_medium_maps() -> void:
 	var level := LevelData.new()
 	level.grid_width = 32
 	level.grid_height = 18
@@ -20,7 +20,9 @@ func test_configure_from_level_sets_bounds_and_anchor() -> void:
 	level.camera_anchors = [Vector2(500, 320), Vector2(900, 360)]
 	level.minimap_bounds = MapCameraUtils.compute_world_bounds(level)
 	_camera.configure_from_level(level)
-	assert_eq(_camera.global_position, Vector2(500, 320))
+	var fit := MapCameraUtils.compute_fit_to_view(MapCameraUtils.compute_battle_view_bounds(level))
+	assert_eq(_camera.global_position, fit.center)
+	assert_true(_camera.is_camera_locked())
 	assert_gt(_camera.get_world_bounds().size.x, 0.0)
 
 
@@ -33,22 +35,50 @@ func test_zoom_clamps_between_min_and_max() -> void:
 	assert_gte(_camera.zoom.x, _camera.min_zoom)
 
 
-func test_should_block_battlefield_tap_when_multi_touch() -> void:
+func test_should_block_battlefield_tap_when_multi_touch_on_large_map() -> void:
+	var level := _sample_level()
+	_camera.configure_from_level(level)
 	assert_false(_camera.should_block_battlefield_tap())
 	_camera._touch_count = 2
 	assert_true(_camera.should_block_battlefield_tap())
 
 
-func test_should_block_battlefield_tap_after_pan() -> void:
+func test_should_not_block_battlefield_tap_when_camera_locked() -> void:
+	var level := LevelData.new()
+	level.path_points = [Vector2(80, 360), Vector2(1180, 360)]
+	level.minimap_bounds = MapCameraUtils.compute_world_bounds(level)
+	_camera.configure_from_level(level)
 	_camera._pan_moved = true
-	assert_true(_camera.should_block_battlefield_tap())
+	assert_false(_camera.should_block_battlefield_tap())
 
 
-func test_jump_to_anchor_moves_camera() -> void:
+func test_locked_camera_can_zoom_in_when_apply_zoom() -> void:
+	var level := LevelData.new()
+	level.path_points = [Vector2(80, 360), Vector2(1180, 360)]
+	_camera.configure_from_level(level)
+	assert_true(_camera.is_camera_locked())
+	var start_z := _camera.zoom.x
+	_camera._apply_zoom_at(Vector2(640, 360), 1.1)
+	assert_gt(_camera.zoom.x, start_z)
+	assert_lte(_camera.zoom.x, _camera.max_zoom)
+
+
+func test_jump_to_anchor_moves_camera_on_large_map() -> void:
 	var level := _sample_level()
 	_camera.configure_from_level(level)
 	_camera.jump_to_anchor(1, true)
 	assert_eq(_camera.global_position, level.camera_anchors[1])
+
+
+func test_jump_to_anchor_ignored_when_camera_locked() -> void:
+	var level := LevelData.new()
+	level.path_points = [Vector2(80, 360), Vector2(1180, 360)]
+	level.camera_anchors = [Vector2(500, 320), Vector2(900, 360)]
+	level.minimap_bounds = MapCameraUtils.compute_world_bounds(level)
+	_camera.configure_from_level(level)
+	var start := _camera.global_position
+	_camera.jump_to_anchor(1, true)
+	assert_eq(_camera.global_position, start)
 
 
 func test_is_world_visible_for_center_position() -> void:

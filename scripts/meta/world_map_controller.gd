@@ -18,9 +18,12 @@ const KHAN_LEVELS: Array[Dictionary] = [
 @onready var _back_btn: Button = $BackButton
 @onready var _roguelite_btn: Button = %RogueliteButton
 @onready var _endless_btn: Button = %EndlessButton
+@onready var _horde_btn: Button = %HordeButton
 @onready var _hunt_btn: Button = %HuntButton
 @onready var _seals_label: Label = %SealsLabel
 @onready var _forge_btn: Button = %ForgeLinkButton
+@onready var _horde_picker: Panel = %HordePickerPanel
+@onready var _horde_list: VBoxContainer = %HordeLevelList
 
 
 func _ready() -> void:
@@ -33,6 +36,8 @@ func _ready() -> void:
 		_roguelite_btn.pressed.connect(_on_roguelite)
 	if _endless_btn:
 		_endless_btn.pressed.connect(_on_endless)
+	if _horde_btn:
+		_horde_btn.pressed.connect(_on_horde_menu)
 	if _hunt_btn:
 		_hunt_btn.pressed.connect(_on_hunt)
 	if _forge_btn:
@@ -46,10 +51,11 @@ func _show_pending_alert() -> void:
 		return
 	var msg := SceneFlowController.consume_pending_alert()
 	var seals := SaveSystem.get_khan_seals() if SaveSystem else 0
+	var horde_clears := SaveSystem.get_horde_clears_count() if SaveSystem else 0
 	if msg != "":
-		_seals_label.text = "%s\nKhan seals: %d/7" % [msg, seals]
+		_seals_label.text = "%s\nKhan seals: %d/7 | Horde: %d/8" % [msg, seals, horde_clears]
 	else:
-		_seals_label.text = "Khan seals: %d/7" % seals
+		_seals_label.text = "Khan seals: %d/7 | Horde cleared: %d/8" % [seals, horde_clears]
 
 
 func _build_campaign_nodes() -> void:
@@ -96,7 +102,7 @@ func _is_level_playable(entry: Dictionary) -> bool:
 
 func _level_tooltip(entry: Dictionary, unlocked: bool) -> String:
 	var level_id: String = entry["id"]
-	var text := entry["label"]
+	var text: String = entry["label"]
 	if level_id == "level_01" and SaveSystem and not SaveSystem.is_tutorial_completed():
 		return "%s — Complete tutorial first" % text
 	if level_id == "level_08_damavand" and SaveSystem and not SaveSystem.is_level_unlocked(level_id):
@@ -122,10 +128,14 @@ func _build_level_buttons_fallback() -> void:
 
 func _refresh_mode_buttons() -> void:
 	var seals := SaveSystem.get_khan_seals() if SaveSystem else 0
+	var horde_clears := SaveSystem.get_horde_clears_count() if SaveSystem else 0
 	if _seals_label:
-		_seals_label.text = "Khan seals: %d/7" % seals
+		_seals_label.text = "Khan seals: %d/7 | Horde cleared: %d/8" % [seals, horde_clears]
 	if _endless_btn:
 		_endless_btn.disabled = seals < 7
+	if _horde_btn:
+		_horde_btn.disabled = not SaveSystem.is_tutorial_completed() if SaveSystem else true
+		_horde_btn.tooltip_text = "Survive 15 waves per Khan — clear all 8 to unlock Serpent Spire"
 	if _hunt_btn:
 		var hunt_ready := seals >= 7 and ForgeService and ForgeService.can_enter_damavand()
 		_hunt_btn.disabled = not hunt_ready
@@ -158,6 +168,41 @@ func _on_endless() -> void:
 	var launch := BattleLaunchData.new()
 	launch.level_id = "level_01"
 	launch.is_endless_mode = true
+	SceneFlowController.go_to_battle(launch)
+
+
+func _on_horde_menu() -> void:
+	if _horde_picker == null:
+		return
+	_horde_picker.visible = not _horde_picker.visible
+	if _horde_picker.visible:
+		_build_horde_picker()
+
+
+func _build_horde_picker() -> void:
+	if _horde_list == null:
+		return
+	for child in _horde_list.get_children():
+		child.queue_free()
+	for entry in KHAN_LEVELS:
+		if entry.get("tutorial", false):
+			continue
+		var level_id: String = entry["id"]
+		if not _is_level_playable(entry):
+			continue
+		var btn := Button.new()
+		var cleared := SaveSystem.is_horde_cleared(level_id) if SaveSystem else false
+		btn.text = "%s — Horde%s" % [entry["label"], " ✓" if cleared else ""]
+		btn.pressed.connect(_on_horde_level.bind(level_id))
+		_horde_list.add_child(btn)
+
+
+func _on_horde_level(level_id: String) -> void:
+	if _horde_picker:
+		_horde_picker.visible = false
+	var launch := BattleLaunchData.new()
+	launch.level_id = level_id
+	launch.is_horde_mode = true
 	SceneFlowController.go_to_battle(launch)
 
 

@@ -88,8 +88,8 @@ Do not mass-produce the full campaign until real testers **voluntarily replay** 
 | Starting towers | Archer, Sacred Fire, Heavy, Control |
 | Starting hero | Rostam |
 | Replayability | Cards, relics, routes, Forge hybrids, objectives, heroes, Pacts, Hunt, Endless, Daily Tale |
-| Monetization | Cosmetics-first, supporter pack, ad removal, limited optional rewarded ads |
-| **Forbidden monetization** | Paid combat power, paid loot boxes, forced ads during battle, manipulative defeat-screen offers |
+| Monetization | Cosmetics-first, supporter pack, ad removal; **optional paid Spells/tower/token packs** (earn-by-play alternatives) |
+| **Forbidden monetization** | Loot boxes, randomized paid rewards, forced ads during battle, manipulative defeat-screen offers |
 | Production rule | Prove Khan 1 gameplay before full asset catalog |
 
 ---

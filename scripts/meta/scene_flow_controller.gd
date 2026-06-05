@@ -100,9 +100,11 @@ func _change_scene(path: String) -> void:
 	if _is_transitioning:
 		return
 	_is_transitioning = true
+	Engine.time_scale = 1.0
 	_ensure_fade_overlay()
 	_fade_rect.mouse_filter = Control.MOUSE_FILTER_STOP
 	var tween := create_tween()
+	tween.set_ignore_time_scale(true)
 	tween.tween_property(_fade_rect, "color:a", 1.0, 0.25)
 	tween.tween_callback(func() -> void:
 		get_tree().change_scene_to_file(path)

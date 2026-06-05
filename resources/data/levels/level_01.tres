@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="LevelData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/level_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/wave_data.gd" id="2_8ff0n"]
+
+[resource]
+script = ExtResource("1")
+level_id = "level_01"
+build_spot_positions = Array[Vector2]([Vector2(1150, 580), Vector2(290, 410), Vector2(430, 250), Vector2(640, 200), Vector2(640, 560), Vector2(880, 510), Vector2(990, 360)])
+path_points = Array[Vector2]([Vector2(140, 630), Vector2(420, 510), Vector2(480, 460), Vector2(460, 410), Vector2(450, 390), Vector2(480, 360), Vector2(490, 340), Vector2(520, 310), Vector2(620, 310), Vector2(650, 300), Vector2(720, 300), Vector2(820, 300), Vector2(880, 220), Vector2(1040, 150), Vector2(1120, 100), Vector2(1220, 40), Vector2(1260, 20)])
+gate_position = Vector2(1250, 20)
+spawn_position = Vector2(-10, 720)
+region_ids = Array[String](["region_north", "region_south"])
+map_sprite_path = "res://art/maps/level_01.jpg"

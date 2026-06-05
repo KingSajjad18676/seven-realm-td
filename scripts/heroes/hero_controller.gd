@@ -18,6 +18,9 @@ var _has_target: bool = false
 var tethered_tower: TowerController = null
 var tether_energy: float = 100.0
 var _last_real_usec: int = 0
+var _spawn_position: Vector2 = Vector2.ZERO
+var _dead: bool = false
+var _respawn_remaining: float = 0.0
 
 @onready var _sprite: ColorRect = $Sprite
 @onready var _hp_bar: ProgressBar = $HPBar
@@ -28,7 +31,10 @@ func initialize(ctx: BattleContext, hero_data: HeroData, start_pos: Vector2) -> 
 	data = hero_data
 	current_hp = hero_data.max_hp
 	global_position = start_pos
+	_spawn_position = start_pos
 	_move_target = start_pos
+	_dead = false
+	_respawn_remaining = 0.0
 	z_index = 10
 	_last_real_usec = Time.get_ticks_usec()
 	var sprite_path := hero_data.sprite_path
@@ -39,6 +45,8 @@ func initialize(ctx: BattleContext, hero_data: HeroData, start_pos: Vector2) -> 
 
 
 func move_to(pos: Vector2) -> void:
+	if _dead:
+		return
 	tethered_tower = null
 	_move_target = pos
 	_has_target = true
@@ -48,6 +56,14 @@ func move_to(pos: Vector2) -> void:
 func cancel_move() -> void:
 	_has_target = false
 	velocity = Vector2.ZERO
+
+
+func is_dead() -> bool:
+	return _dead
+
+
+func get_respawn_remaining() -> float:
+	return _respawn_remaining if _dead else 0.0
 
 
 func get_lane_block_path_distance() -> float:
@@ -106,7 +122,7 @@ func tether_to_tower(tower: TowerController) -> void:
 
 
 func use_skill() -> void:
-	if _skill_cooldown > 0.0 or context == null or data == null:
+	if _dead or _skill_cooldown > 0.0 or context == null or data == null:
 		return
 	_skill_cooldown = data.skill_cooldown
 	CombatEvents.hero_skill_used.emit(data.skill_id)
@@ -145,13 +161,45 @@ func _use_zal_foresight() -> void:
 
 
 func take_damage(amount: float) -> void:
+	if _dead:
+		return
 	current_hp -= amount
 	_refresh_hp_bar()
-	if current_hp <= 0.0 and context and context.state_controller:
-		context.state_controller.trigger_defeat("hero_fallen")
+	if current_hp <= 0.0:
+		_die()
+
+
+func _die() -> void:
+	_dead = true
+	current_hp = 0.0
+	_has_target = false
+	velocity = Vector2.ZERO
+	_clear_tether()
+	_respawn_remaining = data.respawn_cooldown if data else 8.0
+	visible = false
+	if context and context.bridge:
+		context.bridge.alert_message.emit(
+			"Hero fallen — respawning in %ds" % int(ceilf(_respawn_remaining)), 50
+		)
+
+
+func _respawn() -> void:
+	_dead = false
+	current_hp = data.max_hp if data else 200.0
+	global_position = _spawn_position
+	_move_target = _spawn_position
+	visible = true
+	_refresh_hp_bar()
+	if context and context.bridge and data:
+		context.bridge.alert_message.emit("%s has returned!" % data.display_name, 45)
 
 
 func _physics_process(delta: float) -> void:
+	if _dead:
+		_respawn_remaining = maxf(0.0, _respawn_remaining - delta)
+		if _respawn_remaining <= 0.0:
+			_respawn()
+		return
 	if context == null or data == null:
 		return
 	if not _can_act_in_battle():

@@ -15,5 +15,7 @@ signal results_requested(victory: bool, reason: String)
 signal morale_changed(current: int, max_morale: int)
 signal run_summary_ready(summary: Dictionary)
 signal enemy_died(enemy_id: String)
+signal intermission_started(preview_text: String, max_bonus_gold: int)
+signal intermission_ended
 
 var context: BattleContext = null

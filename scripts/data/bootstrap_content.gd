@@ -7,3 +7,4 @@ extends Resource
 @export var waves: Array[WaveData] = []
 @export var levels: Array[LevelData] = []
 @export var fate_cards: Array[FateCardData] = []
+@export var spells: Array[SpellData] = []

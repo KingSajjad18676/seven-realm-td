@@ -21,8 +21,9 @@ func _init() -> void:
 	run.advance()
 	ok = ok and run.current_index == 1
 	if ok:
-		print("smoke_test: PASS levels=%d enemies=%d fates=%d towers=%d" % [
-			catalog.levels.size(), catalog.enemies.size(), catalog.fate_cards.size(), catalog.towers.size()
+		print("smoke_test: PASS levels=%d enemies=%d fates=%d towers=%d spells=%d" % [
+			catalog.levels.size(), catalog.enemies.size(), catalog.fate_cards.size(),
+			catalog.towers.size(), catalog.spells.size()
 		])
 		quit(0)
 	else:

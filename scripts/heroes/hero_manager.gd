@@ -26,7 +26,8 @@ func initialize(ctx: BattleContext, root: Node2D) -> void:
 func _hero_start_position(level: LevelData) -> Vector2:
 	if level == null:
 		return Vector2.ZERO
-	var pts := level.path_points
+	level.ensure_routes_migrated()
+	var pts := level.get_route()
 	if pts.size() >= 2:
 		return pts[pts.size() - 2].lerp(pts[pts.size() - 1], 0.72)
 	return level.gate_position + Vector2(-100, 0)
@@ -40,7 +41,11 @@ func cancel_hero_move() -> void:
 func handle_ground_tap(pos: Vector2) -> void:
 	if hero == null or context == null:
 		return
+	if hero.is_dead():
+		return
 	if context.tutorial_active and not context.tutorial_allows("battlefield"):
+		return
+	if context.tower_manager and context.tower_manager.find_spot_at_any(pos) != null:
 		return
 	if context.tower_manager:
 		for spot in context.tower_manager.build_spots:

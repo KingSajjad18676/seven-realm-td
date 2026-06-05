@@ -1,7 +1,8 @@
 # Design 03 — Ethical Monetization and Business
 
-**Last updated:** 2026-06-04  
+**Last updated:** 2026-06-06  
 **Design canon** — build revenue by creating trust, not frustration.  
+**Owner override (2026-06-06):** optional real-money combat power (Spells, Serpent Spire tower, Forge Token packs) is in scope alongside earn-by-play paths. Purchases are deterministic SKUs, not loot boxes.
 **Related:** [liveops/retention.md](../liveops/retention.md) · [PRD.md](../product/prd.md)  
 **Note:** Code may contain IAP/subscription **stubs** for future use; they are **not** launch monetization per this doc.
 
@@ -85,7 +86,9 @@ Start **without ads** in internal testing.
 
 ## 5. What not to sell
 
-Stronger towers, paid overpowered heroes, stat boosts, paid cleanse advantages, boss skips, difficulty removal, loot boxes, randomized paid rewards, confusing multi-currency packs, fear-based limited offers, paid accessibility, power hidden in cosmetics.
+Loot boxes, randomized paid rewards, confusing multi-currency packs, fear-based limited offers, paid accessibility, power hidden in cosmetics.
+
+**In scope (owner decision):** direct-purchase combat Spells, the Serpent Spire unique tower, and Forge Token packs — each with a clear earn-by-play alternative (Horde mode full clear for tower; battle victories for tokens).
 
 ---
 
@@ -96,6 +99,7 @@ Stronger towers, paid overpowered heroes, stat boosts, paid cleanse advantages, 
 | Gold | Temporary battle economy | No |
 | Sacred Fire | Tactical anti-corruption | No |
 | Farr | Long-term mastery and progression | No direct purchase |
+| **Forge Token** | Buy collectible Spells in Kaveh's Forge | No direct purchase (earn from victories; token packs optional) |
 | Cosmetics | Store | Optional (direct price preferred) |
 
 Avoid multiple premium currencies unless operationally necessary.

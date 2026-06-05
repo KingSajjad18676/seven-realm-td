@@ -8,11 +8,18 @@ var _heroes: Dictionary = {}
 var _waves: Dictionary = {}
 var _levels: Dictionary = {}
 var _fate_cards: Dictionary = {}
+var _spells: Dictionary = {}
 var _relics: Dictionary = {}
 var _objectives: Dictionary = {}
 
 
 func _ready() -> void:
+	_load_bootstrap()
+
+
+func reload() -> void:
+	_relics.clear()
+	_objectives.clear()
 	_load_bootstrap()
 
 
@@ -62,6 +69,8 @@ func _merge_resource(res: Resource) -> void:
 		_replace_or_append_level(res)
 	elif res is FateCardData:
 		bootstrap.fate_cards.append(res)
+	elif res is SpellData:
+		bootstrap.spells.append(res)
 	elif res is RelicData:
 		if not bootstrap.has_method("get"):
 			pass
@@ -77,6 +86,7 @@ func _index_content() -> void:
 	_waves.clear()
 	_levels.clear()
 	_fate_cards.clear()
+	_spells.clear()
 	for t in bootstrap.towers:
 		_towers[t.tower_id] = t
 	for e in bootstrap.enemies:
@@ -89,6 +99,8 @@ func _index_content() -> void:
 		_levels[l.level_id] = l
 	for c in bootstrap.fate_cards:
 		_fate_cards[c.card_id] = c
+	for s in bootstrap.spells:
+		_spells[s.spell_id] = s
 	if _relics.is_empty():
 		for r in _build_default_relics():
 			_relics[r.relic_id] = r
@@ -125,6 +137,17 @@ func get_all_fate_cards() -> Array[FateCardData]:
 	var out: Array[FateCardData] = []
 	for c in _fate_cards.values():
 		out.append(c)
+	return out
+
+
+func get_spell(spell_id: String) -> SpellData:
+	return _spells.get(spell_id) as SpellData
+
+
+func get_all_spells() -> Array[SpellData]:
+	var out: Array[SpellData] = []
+	for s in _spells.values():
+		out.append(s)
 	return out
 
 
@@ -201,12 +224,32 @@ func _apply_level_override(base: LevelData, override: LevelData) -> void:
 		base.map_sprite_path = override.map_sprite_path
 	if not override.waves.is_empty():
 		base.waves = override.waves
+	if not override.path_routes.is_empty():
+		base.path_routes = override.path_routes
+	if not override.spawn_points.is_empty():
+		base.spawn_points = override.spawn_points
 	if not override.path_points.is_empty():
 		base.path_points = override.path_points
 	if not override.build_spot_positions.is_empty():
 		base.build_spot_positions = override.build_spot_positions
 	if not override.region_ids.is_empty():
 		base.region_ids = override.region_ids
+	if override.spawn_position != Vector2.ZERO:
+		base.spawn_position = override.spawn_position
+	if override.gate_position != Vector2.ZERO:
+		base.gate_position = override.gate_position
+	base.ensure_routes_migrated()
+	base.ensure_spawns_migrated()
+	base.sync_legacy_fields()
+	if not override.camera_anchors.is_empty():
+		base.camera_anchors = override.camera_anchors
+	if override.uses_large_map_camera:
+		base.uses_large_map_camera = override.uses_large_map_camera
+	if override.grid_width != 32:
+		base.grid_width = override.grid_width
+	if override.grid_height != 18:
+		base.grid_height = override.grid_height
+	base.minimap_bounds = MapCameraUtils.compute_world_bounds(base)
 
 
 func _build_default_objectives() -> Array[ObjectiveData]:

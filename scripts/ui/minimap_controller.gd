@@ -7,19 +7,27 @@ var context: BattleContext = null
 var camera: TouchCamera = null
 
 var _world_bounds: Rect2 = Rect2()
-var _path_points: PackedVector2Array = PackedVector2Array()
+var _route_paths: Array[PackedVector2Array] = []
 var _anchors: Array[Vector2] = []
 
 
 func initialize(ctx: BattleContext, cam: TouchCamera) -> void:
 	context = ctx
 	camera = cam
+	_route_paths.clear()
 	if ctx and ctx.level_data:
-		_world_bounds = ctx.level_data.minimap_bounds
+		var level := ctx.level_data
+		level.ensure_routes_migrated()
+		level.ensure_spawns_migrated()
+		_world_bounds = level.minimap_bounds
 		if _world_bounds.size.length_squared() <= 0.0:
-			_world_bounds = MapCameraUtils.compute_world_bounds(ctx.level_data)
-		_path_points = PackedVector2Array(ctx.level_data.path_points)
-		_anchors = ctx.level_data.camera_anchors.duplicate()
+			_world_bounds = MapCameraUtils.compute_world_bounds(level)
+		if not level.path_routes.is_empty():
+			for route in level.path_routes:
+				_route_paths.append(PackedVector2Array(route.points))
+		else:
+			_route_paths.append(PackedVector2Array(level.path_points))
+		_anchors = level.camera_anchors.duplicate()
 	elif cam:
 		_world_bounds = cam.get_world_bounds()
 		_anchors = cam.get_anchors()
@@ -31,15 +39,25 @@ func initialize(ctx: BattleContext, cam: TouchCamera) -> void:
 func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, size), Color(0.08, 0.1, 0.12, 0.88))
 	draw_rect(Rect2(Vector2.ZERO, size), Color(0.45, 0.55, 0.5, 0.6), false, 2.0)
-	if _path_points.size() >= 2:
+	for i in _route_paths.size():
+		var route_points := _route_paths[i]
+		if route_points.size() < 2:
+			continue
 		var mini_path: PackedVector2Array = PackedVector2Array()
-		for p in _path_points:
+		for p in route_points:
 			mini_path.append(_world_to_minimap(p))
-		draw_polyline(mini_path, Color(0.72, 0.58, 0.38, 0.9), 2.0, true)
+		draw_polyline(mini_path, MapEditorUtils.route_color(i), 2.0, true)
 	if context and context.level_data:
-		var spawn := _world_to_minimap(context.level_data.spawn_position)
-		draw_circle(spawn, 4.0, Color(0.9, 0.25, 0.2, 0.95))
-		var gate := _world_to_minimap(context.level_data.gate_position)
+		var level := context.level_data
+		level.ensure_spawns_migrated()
+		if not level.spawn_points.is_empty():
+			for spawn in level.spawn_points:
+				var spawn_pos := _world_to_minimap(spawn.position)
+				draw_circle(spawn_pos, 4.0, Color(0.9, 0.25, 0.2, 0.95))
+		elif level.spawn_position != Vector2.ZERO:
+			var spawn := _world_to_minimap(level.spawn_position)
+			draw_circle(spawn, 4.0, Color(0.9, 0.25, 0.2, 0.95))
+		var gate := _world_to_minimap(level.gate_position)
 		draw_circle(gate, 4.0, Color(0.85, 0.75, 0.35, 0.95))
 	for i in _anchors.size():
 		var anchor_pos := _world_to_minimap(_anchors[i])

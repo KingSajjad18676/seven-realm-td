@@ -32,9 +32,10 @@ func initialize(ctx: BattleContext) -> void:
 func get_region_for_position(pos: Vector2) -> String:
 	if context == null or context.level_data == null:
 		return ""
+	context.level_data.ensure_routes_migrated()
 	return MapRegionUtils.region_for_position(
 		pos,
-		context.level_data.path_points,
+		context.level_data.get_all_route_points(),
 		context.level_data.region_ids
 	)
 

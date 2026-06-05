@@ -24,23 +24,26 @@ func spawn_wave(wave: WaveData) -> void:
 			continue
 		for i in count:
 			var data := catalog_data.duplicate(true) as EnemyData
-			_spawn_enemy(data)
+			_spawn_enemy(data, group)
 			if wave.spawn_interval > 0.0:
 				await get_tree().create_timer(wave.spawn_interval).timeout
 
 
-func _spawn_enemy(data: EnemyData) -> void:
+func _spawn_enemy(data: EnemyData, spawn_group: Dictionary = {}) -> void:
 	var node := _pool.acquire() as EnemyController
 	if node == null:
 		return
-	node.initialize(context, data, context.path_points)
+	var route_info := context.resolve_enemy_route(spawn_group)
+	var path: PackedVector2Array = route_info.get("path", context.path_points)
+	var spawn_pos: Vector2 = route_info.get("position", Vector2.ZERO)
+	node.initialize(context, data, path)
 	if data.is_boss:
 		node.setup_as_boss()
 	if node.get_parent() != units_root:
 		if node.get_parent():
 			node.get_parent().remove_child(node)
 		units_root.add_child(node)
-	node.global_position = context.level_data.spawn_position if context.level_data else Vector2.ZERO
+	node.global_position = spawn_pos
 	context.active_enemies.append(node)
 	if context.state_controller:
 		context.state_controller.register_enemy_spawned()

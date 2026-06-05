@@ -10,21 +10,18 @@ var occupied: bool = false
 var tower: TowerController = null
 var battle_context: BattleContext = null
 
-@onready var _pad: ColorRect = $Pad
-@onready var _pad_border: ColorRect = $PadBorder
-@onready var _label: Label = $Label
+var _highlighted: bool = false
 
 
 func _ready() -> void:
 	input_pickable = true
-	if _pad:
-		_pad.color = Color(0.25, 0.55, 0.45, 0.35)
-		_pad.size = Vector2(48, 48)
-		_pad.position = Vector2(-24, -24)
-	if _label:
-		_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		_label.position = Vector2(-30, -40)
-		_label.add_theme_font_size_override("font_size", 10)
+	queue_redraw()
+
+
+func _draw() -> void:
+	if occupied:
+		return
+	BuildPadVisuals.draw_empty_pad(self, _highlighted)
 
 
 func _input_event(
@@ -45,12 +42,13 @@ func _input_event(
 
 
 func set_drag_highlight(active: bool) -> void:
-	if _pad_border:
-		_pad_border.color = Color(0.85, 1.0, 0.9, 1.0) if active else Color(0.55, 0.95, 0.75, 0.9)
+	if _highlighted == active:
+		return
+	_highlighted = active
+	queue_redraw()
 
 
 func set_occupied(t: TowerController) -> void:
 	occupied = t != null
 	tower = t
-	if _pad:
-		_pad.color = Color(0.4, 0.35, 0.2, 0.5) if occupied else Color(0.25, 0.55, 0.45, 0.35)
+	queue_redraw()

@@ -2,6 +2,7 @@ class_name TowerManager
 extends Node
 
 signal tower_spot_opened(spot: BuildSpot)
+signal build_radial_requested(spot: BuildSpot)
 
 var context: BattleContext = null
 var build_spots: Array[BuildSpot] = []
@@ -39,6 +40,26 @@ func find_spot_at(world_pos: Vector2, radius: float = 36.0) -> BuildSpot:
 			best_dist = dist
 			best = spot
 	return best
+
+
+func find_spot_at_any(world_pos: Vector2, radius: float = -1.0) -> BuildSpot:
+	var pick_radius := radius if radius > 0.0 else BuildPadVisuals.PAD_RADIUS + 8.0
+	var best: BuildSpot = null
+	var best_dist := pick_radius
+	for spot in build_spots:
+		var dist := world_pos.distance_to(spot.global_position)
+		if dist <= best_dist:
+			best_dist = dist
+			best = spot
+	return best
+
+
+func try_select_spot_at_world(world_pos: Vector2) -> bool:
+	var spot := find_spot_at_any(world_pos)
+	if spot == null:
+		return false
+	_on_spot_selected(spot)
+	return true
 
 
 func try_build_on_spot(spot: BuildSpot, tower_id: String = "") -> bool:
@@ -132,4 +153,4 @@ func _on_spot_selected(spot: BuildSpot) -> void:
 			return
 		tower_spot_opened.emit(spot)
 		return
-	try_build_on_spot(spot)
+	build_radial_requested.emit(spot)

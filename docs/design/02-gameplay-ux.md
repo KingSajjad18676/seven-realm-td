@@ -240,6 +240,8 @@ Every boss needs: readable entrance, recognizable silhouette, new battlefield qu
 - **Memory Div:** Rival that remembers prior success patterns; encourages adaptation  
 - **Daily Tale:** Validated seed — fair modifiers, fixed pool, score/mastery; no forced daily grind  
 - **Endless:** Post-campaign mastery; scale combinations and pressure, not HP only  
+- **Horde:** Per-Khan 15-wave survival; clear all 8 Khans to earn Serpent Spire tower (or buy)  
+- **Forge Tokens + Spells:** Meta collectibles earned from victories; buy with tokens or real money; cast in battle  
 
 ---
 

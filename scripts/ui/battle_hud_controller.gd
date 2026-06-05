@@ -3,16 +3,22 @@ extends CanvasLayer
 var context: BattleContext = null
 var _fate_draft: FateDraftController = null
 var _tower_spot_panel: TowerSpotPanelController = null
-var _tower_drag: TowerBuildDragController = null
+var _tower_radial: TowerRadialBuildController = null
 var _last_victory: bool = false
 var _tutorial_gating: bool = false
 var _last_tutorial_allowed: PackedStringArray = PackedStringArray()
+var _pending_victory: bool = false
+var _pending_reason: String = ""
+var _pending_summary: Dictionary = {}
 @onready var _gold_label: Label = %GoldLabel
 @onready var _sf_label: Label = %SacredFireLabel
 @onready var _lives_label: Label = %LivesLabel
 @onready var _wave_label: Label = %WaveLabel
 @onready var _morale_label: Label = %MoraleLabel
 @onready var _alert_label: Label = %AlertLabel
+@onready var _next_wave_panel: Panel = %NextWavePanel
+@onready var _next_wave_label: Label = %NextWaveLabel
+@onready var _early_call_btn: Button = %EarlyCallButton
 @onready var _cleanse_hint: Label = %CleanseHintLabel
 @onready var _start_btn: Button = %StartWaveButton
 @onready var _pause_btn: Button = %PauseButton
@@ -23,13 +29,16 @@ var _last_tutorial_allowed: PackedStringArray = PackedStringArray()
 @onready var _replay_btn: Button = %ReplayButton
 @onready var _map_btn: Button = %MapButton
 @onready var _results_panel: Panel = %ResultsPanel
-@onready var _results_label: Label = %ResultsLabel
+@onready var _results_title_label: Label = %ResultsTitleLabel
+@onready var _results_reason_label: Label = %ResultsReasonLabel
+@onready var _results_rewards_label: Label = %ResultsRewardsLabel
+@onready var _results_summary_label: Label = %ResultsSummaryLabel
 @onready var _pardeh_panel: Panel = %PardehPanel
-@onready var _tower_buttons: HBoxContainer = %TowerButtons
 @onready var _minimap: MinimapController = %MinimapPanel
 @onready var _threat_indicator: ThreatIndicatorController = %ThreatIndicators
-var _tower_button_group: ButtonGroup = null
 var _forge_wired: bool = false
+var _spell_row: HBoxContainer = null
+var _spell_buttons: Array[Button] = []
 func initialize(ctx: BattleContext, fate_draft: FateDraftController) -> void:
 	context = ctx
 	_fate_draft = fate_draft
@@ -38,6 +47,7 @@ func initialize(ctx: BattleContext, fate_draft: FateDraftController) -> void:
 		_tower_spot_panel.initialize(ctx)
 	if ctx.tower_manager:
 		ctx.tower_manager.tower_spot_opened.connect(_on_tower_spot_opened)
+		ctx.tower_manager.build_radial_requested.connect(_on_build_radial_requested)
 	if ctx.bridge:
 		ctx.bridge.gold_changed.connect(_on_gold)
 		ctx.bridge.sacred_fire_changed.connect(_on_sf)
@@ -51,12 +61,15 @@ func initialize(ctx: BattleContext, fate_draft: FateDraftController) -> void:
 		ctx.bridge.run_summary_ready.connect(_on_run_summary)
 		ctx.bridge.region_selected.connect(_on_region_selected)
 		ctx.bridge.region_light_changed.connect(_on_region_light_changed)
+		ctx.bridge.intermission_started.connect(_on_intermission_started)
+		ctx.bridge.intermission_ended.connect(_on_intermission_ended)
 	_on_gold(ctx.economy.gold if ctx.economy else 0)
 	_on_sf(ctx.economy.sacred_fire if ctx.economy else 0)
 	_on_lives(ctx.lives.current_lives if ctx.lives else 0, ctx.lives.max_lives if ctx.lives else 0)
 	_refresh_cleanse_hint()
-	_setup_tower_drag()
-	_setup_tower_buttons()
+	_apply_compact_hud_styles()
+	_setup_tower_radial()
+	setup_spell_bar(ctx)
 	setup_ancestral_forge(ctx)
 	if _results_panel:
 		_results_panel.visible = false
@@ -81,10 +94,12 @@ func _ready() -> void:
 		_replay_btn.pressed.connect(_on_replay)
 	if _map_btn:
 		_map_btn.pressed.connect(_on_map)
+	if _early_call_btn:
+		_early_call_btn.pressed.connect(_on_early_call)
 func get_highlight_target(key: String) -> Control:
 	match key:
-		"tower_buttons":
-			return _tower_buttons
+		"build_pads":
+			return _start_btn
 		"start_wave":
 			return _start_btn
 		"skill":
@@ -97,6 +112,8 @@ func get_highlight_target(key: String) -> Control:
 			return _sf_label
 		"lives":
 			return _lives_label
+		"morale":
+			return _morale_label
 		"pause":
 			return _pause_btn
 		"speed":
@@ -108,6 +125,71 @@ func get_highlight_target(key: String) -> Control:
 		"fate_draft":
 			return _pardeh_panel
 	return null
+func setup_spell_bar(ctx: BattleContext) -> void:
+	if _spell_row != null:
+		return
+	var bottom := get_node_or_null("BottomBar") as Control
+	if bottom == null:
+		return
+	_spell_row = HBoxContainer.new()
+	_spell_row.name = "SpellBar"
+	_spell_row.add_theme_constant_override("separation", 6)
+	bottom.add_child(_spell_row)
+	bottom.move_child(_spell_row, 0)
+	_refresh_spell_buttons(ctx)
+
+
+func _refresh_spell_buttons(ctx: BattleContext) -> void:
+	if _spell_row == null:
+		return
+	for btn in _spell_buttons:
+		btn.queue_free()
+	_spell_buttons.clear()
+	if ctx == null or ctx.spell_controller == null:
+		return
+	for spell in ctx.spell_controller.get_owned_spells():
+		var btn := Button.new()
+		btn.custom_minimum_size = Vector2(88, 36)
+		btn.add_theme_font_size_override("font_size", 10)
+		btn.text = spell.display_name
+		btn.pressed.connect(_on_spell_pressed.bind(spell.spell_id))
+		_spell_row.add_child(btn)
+		_spell_buttons.append(btn)
+
+
+func _on_spell_pressed(spell_id: String) -> void:
+	if context == null or context.spell_controller == null:
+		return
+	if context.spell_controller.is_on_cooldown(spell_id):
+		var remaining := context.spell_controller.cooldown_remaining(spell_id)
+		_on_alert("Spell cooling: %.0fs" % remaining, 40)
+		return
+	if context.spell_controller.cast_spell(spell_id):
+		for btn in _spell_buttons:
+			btn.disabled = false
+	else:
+		_on_alert("Cannot cast spell", 40)
+
+
+func _process(_delta: float) -> void:
+	if context == null or context.spell_controller == null or _spell_buttons.is_empty():
+		return
+	for i in _spell_buttons.size():
+		var btn := _spell_buttons[i]
+		var spell_id := ""
+		if context.spell_controller.get_owned_spells().size() > i:
+			spell_id = context.spell_controller.get_owned_spells()[i].spell_id
+		if spell_id == "":
+			continue
+		var on_cd := context.spell_controller.is_on_cooldown(spell_id)
+		btn.disabled = on_cd
+		if on_cd:
+			btn.text = "%.0fs" % context.spell_controller.cooldown_remaining(spell_id)
+		else:
+			var spell := ContentRegistry.get_spell(spell_id)
+			btn.text = spell.display_name if spell else spell_id
+
+
 func setup_ancestral_forge(ctx: BattleContext) -> void:
 	if _forge_btn == null or _forge_wired:
 		return
@@ -118,8 +200,55 @@ func setup_ancestral_forge(ctx: BattleContext) -> void:
 func setup_camera_ui(camera: TouchCamera) -> void:
 	if _minimap and camera:
 		_minimap.initialize(context, camera)
+		_minimap.visible = not camera.is_camera_locked()
 	if _threat_indicator and camera:
 		_threat_indicator.initialize(context, camera)
+		_threat_indicator.visible = not camera.is_camera_locked()
+	if _tower_radial:
+		_tower_radial.camera = camera
+
+
+func _apply_compact_hud_styles() -> void:
+	var compact_font := 11
+	for label in [_gold_label, _sf_label, _lives_label, _wave_label, _morale_label, _alert_label]:
+		if label:
+			label.add_theme_font_size_override("font_size", compact_font)
+	if _cleanse_hint:
+		_cleanse_hint.add_theme_font_size_override("font_size", 10)
+	for btn in [_pause_btn, _speed_btn, _cleanse_btn]:
+		if btn:
+			btn.custom_minimum_size = Vector2(44, 36)
+			btn.add_theme_font_size_override("font_size", compact_font)
+	if _skill_btn:
+		_skill_btn.custom_minimum_size = Vector2(100, 36)
+		_skill_btn.add_theme_font_size_override("font_size", compact_font)
+	if _forge_btn:
+		_forge_btn.custom_minimum_size = Vector2(100, 36)
+		_forge_btn.add_theme_font_size_override("font_size", compact_font)
+	if _start_btn:
+		_start_btn.add_theme_font_size_override("font_size", compact_font)
+
+
+func _setup_tower_radial() -> void:
+	if _tower_radial != null:
+		return
+	_tower_radial = TowerRadialBuildController.new()
+	_tower_radial.name = "TowerRadialBuildController"
+	add_child(_tower_radial)
+	if context:
+		var cam := get_viewport().get_camera_2d()
+		_tower_radial.initialize(context, cam)
+
+
+func _on_build_radial_requested(spot: BuildSpot) -> void:
+	if _tower_radial:
+		if _tower_spot_panel:
+			_tower_spot_panel.hide_panel()
+		_tower_radial.show_for_spot(spot)
+
+
+func is_tower_radial_open() -> bool:
+	return _tower_radial != null and _tower_radial.visible
 func _on_forge_pressed(ctx: BattleContext) -> void:
 	if ctx and ctx.ancestral_forge and ctx.ancestral_forge.try_fuse_any_adjacent_pair():
 		_on_alert("Adjacent towers fused!", 50)
@@ -137,7 +266,6 @@ func apply_tutorial_gating(allowed: PackedStringArray) -> void:
 	_set_control_enabled(_cleanse_btn, allow.get("cleanse", false))
 	_set_control_enabled(_skill_btn, allow.get("skill", false))
 	_set_control_enabled(_forge_btn, false)
-	_set_tower_buttons_enabled(allow.get("tower_buttons", false))
 func clear_tutorial_gating() -> void:
 	_tutorial_gating = false
 	_last_tutorial_allowed = PackedStringArray()
@@ -148,28 +276,12 @@ func clear_tutorial_gating() -> void:
 	_set_control_enabled(_skill_btn, true)
 	if _forge_btn:
 		_set_control_enabled(_forge_btn, true)
-	_set_tower_buttons_enabled(true)
 func _set_control_enabled(control: Control, enabled: bool) -> void:
 	if control == null:
 		return
 	if control is BaseButton:
 		(control as BaseButton).disabled = not enabled
 	control.mouse_filter = Control.MOUSE_FILTER_STOP if enabled else Control.MOUSE_FILTER_IGNORE
-func _set_tower_buttons_enabled(enabled: bool) -> void:
-	if _tower_buttons == null:
-		return
-	_tower_buttons.mouse_filter = Control.MOUSE_FILTER_STOP if enabled else Control.MOUSE_FILTER_IGNORE
-	for child in _tower_buttons.get_children():
-		if child is BaseButton:
-			(child as BaseButton).disabled = not enabled
-func _setup_tower_drag() -> void:
-	if _tower_drag != null:
-		return
-	_tower_drag = TowerBuildDragController.new()
-	_tower_drag.name = "TowerBuildDragController"
-	add_child(_tower_drag)
-	if context:
-		_tower_drag.initialize(context)
 func refresh_skill_label() -> void:
 	if _skill_btn == null or context == null or context.hero_manager == null:
 		return
@@ -180,35 +292,11 @@ func refresh_skill_label() -> void:
 				_skill_btn.text = "Zal Foresight"
 			_:
 				_skill_btn.text = "Rostam Skill"
-func _setup_tower_buttons() -> void:
-	if _tower_buttons == null or context == null or context.level_data == null:
-		return
-	if _tower_button_group == null:
-		_tower_button_group = ButtonGroup.new()
-	for child in _tower_buttons.get_children():
-		child.queue_free()
-	for tid in context.level_data.available_tower_ids:
-		var td := ContentRegistry.get_tower(tid)
-		if td == null:
-			continue
-		var btn := Button.new()
-		btn.text = "%s\n%dG" % [td.display_name, td.build_cost]
-		btn.toggle_mode = true
-		btn.button_group = _tower_button_group
-		btn.pressed.connect(func() -> void:
-			if context.tower_manager:
-				context.tower_manager.selected_tower_id = tid
-		)
-		_tower_buttons.add_child(btn)
-		if _tower_drag:
-			_tower_drag.register_tower_button(btn, tid)
-		if tid == "tower_archer":
-			btn.button_pressed = true
-	if _tutorial_gating:
-		apply_tutorial_gating(_last_tutorial_allowed)
 func _on_tower_spot_opened(spot: BuildSpot) -> void:
 	if _tower_spot_panel:
-		_tower_spot_panel.show_for_spot(spot)
+		_tower_spot_panel.hide_panel()
+	if _tower_radial:
+		_tower_radial.show_for_occupied_spot(spot)
 func _on_region_selected(region_id: String, _light: int) -> void:
 	_refresh_cleanse_hint()
 func _on_region_light_changed(region_id: String, _light: int, _state: GameEnums.RegionLightState) -> void:
@@ -224,7 +312,7 @@ func _refresh_cleanse_hint() -> void:
 	else:
 		var auto := ml.get_best_cleanse_target()
 		if auto != "":
-			_cleanse_hint.text = "Cleanse: auto â†’ %s (%d)" % [auto, ml.get_light(auto)]
+			_cleanse_hint.text = "Cleanse: auto → %s (%d)" % [auto, ml.get_light(auto)]
 		else:
 			_cleanse_hint.text = "Cleanse: auto"
 func _on_start() -> void:
@@ -302,8 +390,11 @@ func _on_map() -> void:
 				SceneFlowController.go_to_world_map()
 		else:
 			SceneFlowController.clear_roguelite_run()
-			if _results_label:
-				_results_label.text += "\n\nRoguelite run ended."
+			if _results_summary_label:
+				var extra := _results_summary_label.text
+				if not extra.is_empty():
+					extra += "\n"
+				_results_summary_label.text = extra + "Roguelite run ended."
 			SceneFlowController.go_to_world_map()
 		return
 	if launch and launch.is_endless_mode and not _last_victory and context and context.wave_manager:
@@ -312,6 +403,8 @@ func _on_map() -> void:
 func _on_gold(v: int) -> void:
 	if _gold_label:
 		_gold_label.text = "Gold: %d" % v
+	if _tower_radial and _tower_radial.visible:
+		_tower_radial.refresh_affordability()
 func _on_sf(v: int) -> void:
 	if _sf_label:
 		_sf_label.text = "Sacred Fire: %d" % v
@@ -325,26 +418,61 @@ func _on_morale(current: int, max_m: int) -> void:
 	if _morale_label:
 		_morale_label.text = "Morale: %d/%d" % [current, max_m]
 func _on_run_summary(summary: Dictionary) -> void:
-	if _results_label and summary:
-		var extra := "\nFate: %s | Morale: %s" % [
-			summary.get("fate_card", ""),
-			summary.get("morale", 0),
-		]
-		if bool(summary.get("objective_done", false)):
-			extra += " | Objective complete"
-		elif context and context.objectives and context.objectives.failed:
-			extra += " | Objective failed"
-		_results_label.text += extra
+	_pending_summary = summary
+	_try_populate_results_panel()
+
+
+func _try_populate_results_panel() -> void:
+	if _pending_reason.is_empty() or _pending_summary.is_empty():
+		return
+	_populate_results_panel(_pending_victory, _pending_reason, _pending_summary)
+
+
+func _populate_results_panel(victory: bool, reason: String, summary: Dictionary) -> void:
+	if _results_title_label:
+		_results_title_label.text = "Victory!" if victory else "Defeat"
+	if _results_reason_label:
+		_results_reason_label.text = BattleResultsFormatter.format_reason(reason)
+	if _results_rewards_label:
+		var rewards := ""
+		if victory and context and context.economy:
+			rewards = BattleResultsFormatter.format_rewards(context.economy)
+		_results_rewards_label.text = rewards
+		_results_rewards_label.visible = not rewards.is_empty()
+	if _results_summary_label:
+		_results_summary_label.text = BattleResultsFormatter.format_summary(summary, context)
 func _on_alert(msg: String, _prio: int) -> void:
 	if _alert_label:
 		_alert_label.text = msg
+
+
+func _on_intermission_started(preview_text: String, max_bonus_gold: int) -> void:
+	if _next_wave_panel:
+		_next_wave_panel.visible = true
+	if _next_wave_label:
+		_next_wave_label.text = preview_text
+	if _early_call_btn:
+		_early_call_btn.text = "Start Now (+%d gold)" % max_bonus_gold
+		_early_call_btn.disabled = false
+
+
+func _on_intermission_ended() -> void:
+	if _next_wave_panel:
+		_next_wave_panel.visible = false
+
+
+func _on_early_call() -> void:
+	if context and context.wave_manager:
+		context.wave_manager.request_early_call()
+	if _early_call_btn:
+		_early_call_btn.disabled = true
 func _on_state(state: GameEnums.BattleState) -> void:
 	if state == GameEnums.BattleState.PRE_BATTLE and _start_btn and not _tutorial_gating:
 		_start_btn.disabled = false
 	elif state == GameEnums.BattleState.PRE_BATTLE and _tutorial_gating:
 		apply_tutorial_gating(_last_tutorial_allowed)
-	if _tower_spot_panel and _tower_spot_panel.visible:
-		_tower_spot_panel.refresh_panel()
+	if _tower_radial and _tower_radial.visible:
+		_tower_radial.refresh_affordability()
 func _on_pardeh() -> void:
 	if _fate_draft:
 		_fate_draft.show_draft()
@@ -352,27 +480,34 @@ func _on_pardeh() -> void:
 		_pardeh_panel.visible = true
 	if _tower_spot_panel:
 		_tower_spot_panel.hide_panel()
+	if _tower_radial:
+		_tower_radial.hide_menu()
 func _on_results(victory: bool, reason: String) -> void:
 	_last_victory = victory
+	_pending_victory = victory
+	_pending_reason = reason
+	_pending_summary = {}
 	if _tower_spot_panel:
 		_tower_spot_panel.hide_panel()
+	if _tower_radial:
+		_tower_radial.hide_menu()
 	if _results_panel:
 		_results_panel.visible = true
+	if _alert_label:
+		_alert_label.text = ""
 	var is_tutorial := context and context.level_data and context.level_data.is_tutorial
-	if _results_label:
-		var msg := "Victory!" if victory else "Defeat"
-		_results_label.text = "%s\n(%s)" % [msg, reason]
-		if victory and context and context.economy:
-			var earned := context.economy.forge_materials_earned
-			if not earned.is_empty():
-				var lines: PackedStringArray = PackedStringArray()
-				lines.append("Star Iron earned:")
-				for mat_id in earned.keys():
-					var mat_name := ForgeService.get_material_name(str(mat_id)) if ForgeService else str(mat_id)
-					lines.append("  %s +%d" % [mat_name, int(earned[mat_id])])
-				_results_label.text += "\n\n" + "\n".join(lines)
+	if _results_title_label:
+		_results_title_label.text = "Victory!" if victory else "Defeat"
+	if _results_reason_label:
+		_results_reason_label.text = BattleResultsFormatter.format_reason(reason)
+	if _results_rewards_label:
+		_results_rewards_label.text = ""
+		_results_rewards_label.visible = false
+	if _results_summary_label:
+		_results_summary_label.text = ""
 	if _replay_btn:
 		_replay_btn.visible = true
 		_replay_btn.text = "Continue" if is_tutorial else "Replay"
 	if _map_btn:
 		_map_btn.visible = not is_tutorial
+	_try_populate_results_panel()

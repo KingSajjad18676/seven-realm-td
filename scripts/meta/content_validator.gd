@@ -5,6 +5,7 @@ const MIN_LEVELS := 9
 const MIN_ENEMIES := 20
 const MIN_FATE_CARDS := 8
 const MIN_TOWERS := 6
+const MIN_SPELLS := 6
 const MIN_HEROES := 2
 const WAVES_PER_LEVEL := 5
 
@@ -33,6 +34,8 @@ static func _check_minimum_counts(catalog: BootstrapContent) -> Array[String]:
 		errors.append("fate_cards count %d < %d" % [catalog.fate_cards.size(), MIN_FATE_CARDS])
 	if catalog.towers.size() < MIN_TOWERS:
 		errors.append("towers count %d < %d" % [catalog.towers.size(), MIN_TOWERS])
+	if catalog.spells.size() < MIN_SPELLS:
+		errors.append("spells count %d < %d" % [catalog.spells.size(), MIN_SPELLS])
 	if catalog.heroes.size() < MIN_HEROES:
 		errors.append("heroes count %d < %d" % [catalog.heroes.size(), MIN_HEROES])
 	return errors
@@ -45,6 +48,7 @@ static func _check_unique_ids(catalog: BootstrapContent) -> Array[String]:
 	errors.append_array(_unique_field(catalog.heroes, "hero_id", "hero"))
 	errors.append_array(_unique_field(catalog.levels, "level_id", "level"))
 	errors.append_array(_unique_field(catalog.fate_cards, "card_id", "fate_card"))
+	errors.append_array(_unique_field(catalog.spells, "spell_id", "spell"))
 	return errors
 
 

@@ -9,13 +9,12 @@ var relic_ids: Array[String] = []
 
 func generate_run() -> void:
 	seed = int(Time.get_unix_time_from_system()) % 100000
-	nodes = [
-		{"type": "battle", "level_id": "level_01", "label": "Woodland"},
-		{"type": "rest", "relic_pick": true, "label": "Sacred Rest"},
-		{"type": "battle", "level_id": "level_02", "label": "Desert"},
-		{"type": "elite", "level_id": "level_03", "label": "Canyon Elite"},
-		{"type": "battle", "level_id": "level_04", "label": "Feast Trial"},
-	]
+	nodes.clear()
+	nodes.append({"type": "battle", "level_id": "level_01", "label": "Woodland"})
+	nodes.append({"type": "rest", "relic_pick": true, "label": "Sacred Rest"})
+	nodes.append({"type": "battle", "level_id": "level_02", "label": "Desert"})
+	nodes.append({"type": "elite", "level_id": "level_03", "label": "Canyon Elite"})
+	nodes.append({"type": "battle", "level_id": "level_04", "label": "Feast Trial"})
 	current_index = 0
 	relic_ids.clear()
 
@@ -44,8 +43,11 @@ static func from_dict(data: Dictionary) -> RogueliteRunState:
 	var run := RogueliteRunState.new()
 	run.seed = int(data.get("seed", 0))
 	var saved_nodes: Variant = data.get("nodes", [])
+	run.nodes.clear()
 	if saved_nodes is Array:
-		run.nodes = saved_nodes.duplicate(true)
+		for node in saved_nodes:
+			if node is Dictionary:
+				run.nodes.append(node.duplicate(true))
 	run.current_index = int(data.get("current_index", 0))
 	run.relic_ids.clear()
 	var saved_relics: Variant = data.get("relic_ids", [])

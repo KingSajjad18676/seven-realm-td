@@ -8,10 +8,14 @@ const BASE_GRID := Vector2(32.0, 18.0)
 static func compute_world_bounds(level: LevelData) -> Rect2:
 	if level == null:
 		return Rect2(Vector2.ZERO, VIEWPORT_SIZE)
+	level.ensure_routes_migrated()
+	level.ensure_spawns_migrated()
 	var points: Array[Vector2] = []
-	points.append_array(level.path_points)
+	points.append_array(level.get_all_route_points())
 	points.append_array(level.build_spot_positions)
-	if level.spawn_position != Vector2.ZERO:
+	for spawn in level.spawn_points:
+		points.append(spawn.position)
+	if level.spawn_position != Vector2.ZERO and level.spawn_points.is_empty():
 		points.append(level.spawn_position)
 	if level.gate_position != Vector2.ZERO:
 		points.append(level.gate_position)
@@ -59,3 +63,18 @@ static func clamp_camera_center(center: Vector2, world_bounds: Rect2, zoom: floa
 		clampf(center.x, limits.min.x, limits.max.x),
 		clampf(center.y, limits.min.y, limits.max.y)
 	)
+
+
+static func compute_battle_view_bounds(level: LevelData) -> Rect2:
+	if level == null:
+		return Rect2(Vector2.ZERO, VIEWPORT_SIZE)
+	if not level.uses_large_map_camera:
+		return Rect2(Vector2.ZERO, VIEWPORT_SIZE)
+	return compute_world_bounds(level)
+
+
+static func compute_fit_to_view(world_bounds: Rect2, viewport: Vector2 = VIEWPORT_SIZE) -> Dictionary:
+	if world_bounds.size.x <= 0.0 or world_bounds.size.y <= 0.0:
+		return {"center": viewport * 0.5, "zoom": 1.0}
+	var fit_zoom := minf(viewport.x / world_bounds.size.x, viewport.y / world_bounds.size.y)
+	return {"center": world_bounds.get_center(), "zoom": fit_zoom}
