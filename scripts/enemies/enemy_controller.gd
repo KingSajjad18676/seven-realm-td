@@ -234,6 +234,8 @@ func _die() -> void:
 		context.hunt.on_enemy_slain(data)
 	if context and context.economy and not _decoy:
 		context.economy.apply_kill_rewards(data)
+	if context and context.loot_drops and not _decoy:
+		context.loot_drops.try_spawn_drop(global_position, data)
 	if data.corruption_pressure > 0.0 and context and context.map_light:
 		var region := context.map_light.get_region_for_position(global_position)
 		context.map_light.apply_corruption_pressure(region, data.corruption_pressure)

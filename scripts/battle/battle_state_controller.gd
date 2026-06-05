@@ -85,9 +85,7 @@ func trigger_victory(reason: String = "waves_cleared") -> void:
 		SaveSystem.record_hunt_binding(context.hunt.binding_shards)
 	if launch and launch.is_daily_tale and DailyTaleService:
 		DailyTaleService.mark_daily_completed()
-	if SaveSystem and context.economy and launch and (
-		launch.is_campaign_mode() or launch.is_hunt_mode or launch.is_daily_tale or launch.is_horde_mode
-	):
+	if SaveSystem and context.economy and launch and _should_bank_materials(launch):
 		SaveSystem.commit_battle_materials(context.economy.forge_materials_earned)
 	if SaveSystem and context.level_data and launch and launch.is_campaign_mode():
 		SaveSystem.add_forge_tokens(
@@ -96,9 +94,29 @@ func trigger_victory(reason: String = "waves_cleared") -> void:
 	_emit_run_summary(true, reason)
 
 
+func trigger_safe_retreat(reason: String = "safe_retreat") -> void:
+	if current_state == GameEnums.BattleState.VICTORY or current_state == GameEnums.BattleState.DEFEAT:
+		return
+	_set_state(GameEnums.BattleState.VICTORY)
+	Engine.time_scale = 0.0
+	if context.bridge:
+		context.bridge.results_requested.emit(true, reason)
+	var level_id := context.level_data.level_id if context.level_data else ""
+	CombatEvents.battle_completed.emit(true, level_id)
+	AnalyticsService.battle_completed(true, level_id)
+	var launch = context.launch_data if context else null
+	if SaveSystem and context.economy and launch and _should_bank_materials(launch):
+		SaveSystem.commit_battle_materials(context.economy.forge_materials_earned)
+	_emit_run_summary(true, reason)
+
+
 func trigger_defeat(reason: String = "gate_breached") -> void:
 	if current_state == GameEnums.BattleState.DEFEAT:
 		return
+	if context and context.economy:
+		context.economy.clear_unbanked_materials()
+	if context and context.loot_drops:
+		context.loot_drops.clear_all_drops()
 	_set_state(GameEnums.BattleState.DEFEAT)
 	Engine.time_scale = 0.0
 	if context.bridge:
@@ -133,6 +151,16 @@ func _emit_run_summary(victory: bool, reason: String) -> void:
 	}
 	context.run_summary = summary
 	context.bridge.run_summary_ready.emit(summary)
+
+
+func _should_bank_materials(launch: BattleLaunchData) -> bool:
+	return (
+		launch.is_campaign_mode()
+		or launch.is_campaign_run
+		or launch.is_hunt_mode
+		or launch.is_daily_tale
+		or launch.is_horde_mode
+	)
 
 
 func _set_state(state: GameEnums.BattleState) -> void:

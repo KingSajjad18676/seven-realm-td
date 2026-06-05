@@ -16,6 +16,19 @@ const _RANGE_PER_LEVEL := 0.01
 const _ELITE_DAMAGE_BONUS := 0.50
 const _ELITE_RANGE_BONUS := 0.20
 
+const EXPECTED_FORGE_BY_LEVEL: Dictionary = {
+	"level_00_tutorial": 1,
+	"level_01": 1,
+	"level_02": 2,
+	"level_03": 8,
+	"level_04": 12,
+	"level_05": 16,
+	"level_06": 20,
+	"level_07": 25,
+	"level_08_damavand": 30,
+}
+
+const FORGE_GATE_START_INDEX := 3
 
 func get_tower_data(tower_id: String) -> TowerData:
 	return ContentRegistry.get_tower(tower_id) if ContentRegistry else null
@@ -42,6 +55,38 @@ func get_all_forgeable_tower_ids() -> Array[String]:
 		if t.forge_material_id != "":
 			ids.append(t.tower_id)
 	return ids
+
+
+func get_unlock_cost(tower_id: String) -> int:
+	var td := get_tower_data(tower_id)
+	return td.unlock_material_cost if td else 0
+
+
+func get_locked_unlockable_tower_ids() -> Array[String]:
+	var ids: Array[String] = []
+	for tower_id in ContentCatalog.get_unlockable_tower_ids():
+		if SaveSystem and not SaveSystem.is_tower_in_pool(tower_id):
+			ids.append(tower_id)
+	return ids
+
+
+func can_unlock_tower(tower_id: String) -> bool:
+	if SaveSystem and SaveSystem.is_tower_in_pool(tower_id):
+		return false
+	var td := get_tower_data(tower_id)
+	if td == null or td.forge_material_id == "" or td.unlock_material_cost <= 0:
+		return false
+	return SaveSystem.get_material(td.forge_material_id) >= td.unlock_material_cost
+
+
+func unlock_tower_to_pool(tower_id: String) -> bool:
+	if not can_unlock_tower(tower_id):
+		return false
+	var td := get_tower_data(tower_id)
+	if not SaveSystem.spend_material(td.forge_material_id, td.unlock_material_cost):
+		return false
+	SaveSystem.unlock_tower_to_pool(tower_id)
+	return true
 
 
 func get_forge_state(tower_id: String) -> Dictionary:
@@ -189,3 +234,42 @@ func can_enter_damavand() -> bool:
 
 func is_damavand_level(level_id: String) -> bool:
 	return level_id == DAMAVAND_LEVEL_ID
+
+
+func expected_forge_level_for(level_id: String) -> int:
+	return int(EXPECTED_FORGE_BY_LEVEL.get(level_id, 1))
+
+
+func expected_damage_mult_for_level(level_id: String) -> float:
+	var expected := expected_forge_level_for(level_id)
+	return 1.0 + float(expected - 1) * _DAMAGE_PER_LEVEL
+
+
+func get_average_forge_level() -> float:
+	var ids := get_all_forgeable_tower_ids()
+	if ids.is_empty():
+		return 1.0
+	var total := 0.0
+	for tid in ids:
+		total += float(get_level(tid))
+	return total / float(ids.size())
+
+
+func get_average_forge_level_floor() -> int:
+	return int(floor(get_average_forge_level()))
+
+
+func is_under_forge_recommendation(level_id: String) -> bool:
+	if ContentCatalog.khan_index(level_id) < FORGE_GATE_START_INDEX:
+		return false
+	return get_average_forge_level() < float(expected_forge_level_for(level_id))
+
+
+func forge_gate_applies_to_level(level_id: String) -> bool:
+	return ContentCatalog.khan_index(level_id) >= FORGE_GATE_START_INDEX
+
+
+func format_forge_recommendation(level_id: String) -> String:
+	var expected := expected_forge_level_for(level_id)
+	var current := get_average_forge_level_floor()
+	return "Recommended forge: Lv %d (you: Lv %d)" % [expected, current]

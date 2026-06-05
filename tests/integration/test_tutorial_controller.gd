@@ -148,6 +148,21 @@ func test_fate_cards_step_passes_input_to_pardeh() -> void:
 	assert_eq(blocker.mouse_filter, Control.MOUSE_FILTER_IGNORE, "Map blocker should not intercept Pardeh taps")
 
 
+func test_scavenge_step_allows_battlefield_and_spawns_drop() -> void:
+	_tutorial.initialize(_ctx, null, null, null)
+	await get_tree().process_frame
+	var idx := _step_index_for("scavenge_star_iron")
+	assert_gte(idx, 0, "Tutorial should include scavenge_star_iron step")
+	_tutorial._show_step(idx)
+	await get_tree().process_frame
+	var step: Dictionary = _tutorial._steps[idx]
+	assert_false(
+		_tutorial.should_swallow_playfield_press(step, Vector2(640, 360)),
+		"Scavenge step should allow battlefield taps"
+	)
+	assert_true(step.get("allowed", []).has("battlefield"))
+
+
 func test_survive_step_does_not_swallow_playfield_press() -> void:
 	_tutorial.initialize(_ctx, null, null, null)
 	await get_tree().process_frame

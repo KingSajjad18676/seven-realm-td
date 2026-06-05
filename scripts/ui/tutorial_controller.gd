@@ -17,6 +17,7 @@ enum StepAdvance {
 	CLEANSE,
 	HIJACK_RECOVERED,
 	FATE_SELECTED,
+	MATERIAL_COLLECTED,
 	VICTORY,
 }
 
@@ -135,7 +136,7 @@ func _build_steps() -> Array[Dictionary]:
 	return [
 		{
 			"id": "welcome",
-			"text": "Welcome, champion. Defend the Sacred Fire and push back corruption before it claims your towers.\n\nTap Got it to begin.",
+			"text": "Welcome, champion. Defend the Sacred Fire, scavenge Star Iron, and push back corruption before it claims your towers.\n\nTap Got it to begin.",
 			"highlight": "",
 			"advance": StepAdvance.GOT_IT,
 			"pause": true,
@@ -167,7 +168,7 @@ func _build_steps() -> Array[Dictionary]:
 		},
 		{
 			"id": "gold_economy",
-			"text": "Defeating enemies earns Gold. Spend it to place more towers and hold the line.",
+			"text": "Gold (top bar) pays for towers on build pads only. It is separate from Star Iron materials you scavenge in battle.",
 			"highlight": "gold",
 			"advance": StepAdvance.GOT_IT,
 			"pause": true,
@@ -191,7 +192,7 @@ func _build_steps() -> Array[Dictionary]:
 		},
 		{
 			"id": "objective",
-			"text": "Each Khan has a bonus objective. Khan 1: let no enemy reach the Gate.",
+			"text": "Each Labour has a bonus objective. Labour 1: let no enemy reach the Gate.",
 			"highlight": "lives",
 			"advance": StepAdvance.GOT_IT,
 			"pause": true,
@@ -215,11 +216,28 @@ func _build_steps() -> Array[Dictionary]:
 		},
 		{
 			"id": "move_hero",
-			"text": "Tap the battlefield to move Rostam. Use him to plug leaks and pressure elites.",
+			"text": "Tap the battlefield to move Rostam. Use him to plug leaks, pressure elites, and pick up Star Iron drops.",
 			"highlight": "",
 			"advance": StepAdvance.HERO_MOVED,
 			"pause": false,
 			"allowed": ["battlefield"],
+		},
+		{
+			"id": "scavenge_star_iron",
+			"text": "Enemies can drop glowing Star Iron on the path. Walk Rostam over a drop to collect it into your unbanked tally (watch the Materials line). Drops vanish after 10 seconds.",
+			"highlight": "materials",
+			"advance": StepAdvance.MATERIAL_COLLECTED,
+			"pause": false,
+			"allowed": ["battlefield"],
+			"on_enter": "_lesson_spawn_tutorial_drop",
+		},
+		{
+			"id": "bank_materials",
+			"text": "Unbanked materials are risky: you lose them all if Lives hit zero. Clear the battle or use Retreat to Forge at Pardeh to bank Star Iron into Kaveh's Forge for tower unlocks and upgrades.",
+			"highlight": "materials",
+			"advance": StepAdvance.GOT_IT,
+			"pause": true,
+			"allowed": [],
 		},
 		{
 			"id": "hero_skill",
@@ -257,7 +275,7 @@ func _build_steps() -> Array[Dictionary]:
 		},
 		{
 			"id": "fate_cards",
-			"text": "Pardeh Break: choose one double-edged Fate card. Boon and curse both apply.",
+			"text": "Pardeh Break: choose one double-edged Fate card. Boon and curse both apply. In real battles you can also Retreat to Forge here to bank scavenged Star Iron and exit safely.",
 			"highlight": "",
 			"advance": StepAdvance.FATE_SELECTED,
 			"pause": true,
@@ -283,7 +301,7 @@ func _build_steps() -> Array[Dictionary]:
 		},
 		{
 			"id": "complete",
-			"text": "Training complete! Khan 1 awaits on the world map. Replay anytime to practice.",
+			"text": "Training complete! On the world map: play linear Labours 1–7, or start a Campaign Run (draft 3 towers, branch through skirmishes, bank materials at Kaveh's Forge). Replay anytime to practice.",
 			"highlight": "",
 			"advance": StepAdvance.GOT_IT,
 			"pause": true,
@@ -302,6 +320,8 @@ func _connect_events() -> void:
 	CombatEvents.tower_hijack_recovered.connect(_on_hijack_recovered)
 	CombatEvents.fate_card_selected.connect(_on_fate_selected)
 	CombatEvents.battle_completed.connect(_on_battle_completed)
+	if context and context.bridge:
+		context.bridge.materials_changed.connect(_on_materials_changed)
 
 
 func _show_step(index: int) -> void:
@@ -349,6 +369,7 @@ func _update_dim_for_step(step: Dictionary) -> void:
 	var needs_map: bool = step.advance in [
 		StepAdvance.TOWER_BUILT,
 		StepAdvance.HERO_MOVED,
+		StepAdvance.MATERIAL_COLLECTED,
 	]
 	_dim.visible = not needs_map
 	_dim.color.a = DIM_ALPHA_MAP if needs_map else DIM_ALPHA_COACH
@@ -473,6 +494,11 @@ func _on_battle_completed(victory: bool, _level_id: String) -> void:
 		_try_advance(StepAdvance.VICTORY)
 
 
+func _on_materials_changed(unbanked: Dictionary) -> void:
+	if not unbanked.is_empty():
+		_try_advance(StepAdvance.MATERIAL_COLLECTED)
+
+
 func _try_advance(expected: StepAdvance) -> void:
 	if _step_index >= _steps.size():
 		return
@@ -591,6 +617,15 @@ func _get_tower_region_id() -> String:
 	if context.level_data and context.level_data.region_ids.size() > 0:
 		return context.level_data.region_ids[0]
 	return "region_north"
+
+
+func _lesson_spawn_tutorial_drop() -> void:
+	if context == null or context.loot_drops == null:
+		return
+	var drop_pos := Vector2(480, 320)
+	if context.hero_manager and context.hero_manager.hero:
+		drop_pos = context.hero_manager.hero.global_position + Vector2(56, 0)
+	context.loot_drops.spawn_guaranteed_drop(drop_pos, "iron_falcon", 2)
 
 
 func _lesson_corruption_pressure() -> void:

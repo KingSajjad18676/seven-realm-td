@@ -1,7 +1,14 @@
 extends Node
 
 const SAVE_PATH := "user://shahnamehtd_save.json"
-const SAVE_VERSION := 5
+const SAVE_VERSION := 6
+
+const STARTER_TOWER_IDS: Array[String] = [
+	"tower_archer",
+	"tower_sacred_fire",
+	"tower_heavy",
+	"tower_control",
+]
 
 var _data: Dictionary = {}
 
@@ -30,6 +37,7 @@ func load_save() -> void:
 func _migrate_save() -> void:
 	var version_before := int(_data.get("save_version", 1))
 	_data = SaveMigration.migrate(_data, SAVE_VERSION)
+	ensure_starter_towers_in_pool()
 	if int(_data.get("save_version", 1)) != version_before:
 		save_game()
 
@@ -53,7 +61,7 @@ func save_game() -> void:
 
 
 func _default_data() -> Dictionary:
-	return {
+	var data := {
 		"save_version": SAVE_VERSION,
 		"tutorial_completed": false,
 		"unlocked_levels": ["level_00_tutorial"],
@@ -74,6 +82,7 @@ func _default_data() -> Dictionary:
 		"hunt_best_binding": 0,
 		"damavand_forge_notified": false,
 		"roguelite_run": {},
+		"campaign_run": {},
 		"relics_owned": [],
 		"cosmetic_entitlements": [],
 		"paid_entitlements": [],
@@ -81,8 +90,9 @@ func _default_data() -> Dictionary:
 		"forge_tokens": 0,
 		"spells_owned": [],
 		"horde_progress": {},
-		"unlocked_towers": [],
+		"unlocked_towers": STARTER_TOWER_IDS.duplicate(),
 	}
+	return data
 
 
 func _default_accessibility() -> Dictionary:
@@ -146,6 +156,47 @@ func set_roguelite_run(run_data: Dictionary) -> void:
 func clear_roguelite_run() -> void:
 	_data["roguelite_run"] = {}
 	save_game()
+
+
+func get_campaign_run() -> Dictionary:
+	var state: Variant = _data.get("campaign_run", {})
+	return state if state is Dictionary else {}
+
+
+func set_campaign_run(run_data: Dictionary) -> void:
+	_data["campaign_run"] = run_data.duplicate(true)
+	save_game()
+
+
+func clear_campaign_run() -> void:
+	_data["campaign_run"] = {}
+	save_game()
+
+
+func get_unlocked_tower_pool() -> Array[String]:
+	var raw: Variant = _data.get("unlocked_towers", [])
+	var ids: Array[String] = []
+	if raw is Array:
+		for entry in raw:
+			if entry is String:
+				ids.append(entry)
+	if ids.is_empty():
+		return STARTER_TOWER_IDS.duplicate()
+	return ids
+
+
+func is_tower_in_pool(tower_id: String) -> bool:
+	return tower_id in get_unlocked_tower_pool()
+
+
+func unlock_tower_to_pool(tower_id: String) -> void:
+	unlock_tower(tower_id)
+
+
+func ensure_starter_towers_in_pool() -> void:
+	for tid in STARTER_TOWER_IDS:
+		if not is_tower_in_pool(tid):
+			unlock_tower(tid)
 
 
 func get_daily_tale_state() -> Dictionary:

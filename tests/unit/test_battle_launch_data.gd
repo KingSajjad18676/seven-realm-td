@@ -19,6 +19,9 @@ func test_non_campaign_modes() -> void:
 	launch.is_endless_mode = false
 	launch.is_daily_tale = true
 	assert_false(launch.is_campaign_mode())
+	launch.is_daily_tale = false
+	launch.is_campaign_run = true
+	assert_false(launch.is_campaign_mode())
 
 
 func test_duplicate_launch_copies_relics() -> void:

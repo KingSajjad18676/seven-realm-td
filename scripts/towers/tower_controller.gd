@@ -363,6 +363,10 @@ func _apply_forge_visuals() -> void:
 		_forge_range_mult = ForgeService.get_range_mult(data.tower_id)
 		tier = ForgeService.get_visual_tier(data.tower_id)
 		elite = ForgeService.is_elite(data.tower_id)
+	if context:
+		var run_bonus := int(context.runtime_modifiers.get("run_upgrade_%s" % data.tower_id, 0))
+		if run_bonus > 0:
+			_forge_damage_mult += float(run_bonus) * 0.08
 	var size := 36.0
 	if ForgeService:
 		size = ForgeService.get_forge_size(tier, elite)

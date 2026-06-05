@@ -7,6 +7,22 @@ var sacred_fire: int = 0
 var forge_materials_earned: Dictionary = {}
 
 
+func get_unbanked_materials() -> Dictionary:
+	return forge_materials_earned.duplicate()
+
+
+func collect_material(material_id: String, amount: int) -> void:
+	if material_id == "" or amount <= 0:
+		return
+	forge_materials_earned[material_id] = int(forge_materials_earned.get(material_id, 0)) + amount
+	_emit_materials()
+
+
+func clear_unbanked_materials() -> void:
+	forge_materials_earned.clear()
+	_emit_materials()
+
+
 func initialize(ctx: BattleContext) -> void:
 	context = ctx
 	if ctx.level_data:
@@ -56,9 +72,6 @@ func apply_kill_rewards(enemy_data: EnemyData) -> void:
 	add_gold(enemy_data.gold_reward)
 	if enemy_data.sacred_fire_reward > 0:
 		add_sacred_fire(enemy_data.sacred_fire_reward)
-	if enemy_data.forge_material_id != "" and enemy_data.forge_material_drop > 0:
-		var mat_id := enemy_data.forge_material_id
-		forge_materials_earned[mat_id] = int(forge_materials_earned.get(mat_id, 0)) + enemy_data.forge_material_drop
 	CombatEvents.enemy_killed.emit(
 		enemy_data.enemy_id,
 		enemy_data.gold_reward,
@@ -70,3 +83,8 @@ func _emit() -> void:
 	if context and context.bridge:
 		context.bridge.gold_changed.emit(gold)
 		context.bridge.sacred_fire_changed.emit(sacred_fire)
+
+
+func _emit_materials() -> void:
+	if context and context.bridge:
+		context.bridge.materials_changed.emit(get_unbanked_materials())

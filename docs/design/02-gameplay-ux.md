@@ -64,7 +64,7 @@ read the next threat
   → move hero toward dangerous pressure
   → protect or cleanse a region
   → react to leak, elite, hijack, or objective
-  → collect rewards
+  → walk Rostam over Star Iron drops (unbanked until victory, retreat, or loss)
   → preview next wave
 ```
 
@@ -79,6 +79,7 @@ Every five waves, open a **Pardeh Break** (20–40 seconds):
 ```
 review the run
   → choose one of three Fate cards
+  → optionally **Retreat to Forge** (bank scavenged materials, end battle)
   → optionally reroll
   → accept or decline optional objective
   → select one strategic action
@@ -109,8 +110,16 @@ Sacred Fire must be important but usable (not hoarded forever, not spent mindles
 - **Main menu → Kaveh's Forge:** spend a tower's own material to raise its permanent forge level (1–30).
 - Every **10 levels** the tower's battlefield design tier advances (placeholder: color/size until art M4).
 - After level 30, a **5-step Elite path** marks the tower **Elite** (+large combat bonuses).
-- **Damavand Binding** requires at least one Elite tower before launch (logic wired; finale level deferred).
-- Distinct from **Ancestral Forge** (in-battle adjacent-tower hybrids — still deferred).
+- **Damavand Binding** requires at least one Elite tower before Hunt launch (logic wired).
+- Distinct from **Ancestral Forge** (in-battle adjacent-tower hybrids on nearest build pads).
+
+#### Forge as soft progression gate
+
+From **Labour 3** onward, campaign and Horde difficulty assumes towers are forged to an **expected average level** per map (L3 = 8, L7 = 25, Damavand = 30). Unforged players can enter but will realistically lose until they replay earlier Labours for Star Iron and forge.
+
+**Fairness vs pillar 2.5 (avoid grind walls):** This is a skill + preparation gate, not an energy timer or paid shortcut. Star Iron drops on every campaign/Horde victory (including replays). Forge levels are never purchasable. Labours 1–2 remain beatable unforged so the forge loop is learned voluntarily before the wall.
+
+**UX:** World map recommends forge level per node; defeat screen nudges replay + forge when under recommendation. No hard locks on map nodes.
 
 ---
 

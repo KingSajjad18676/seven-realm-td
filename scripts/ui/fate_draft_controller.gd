@@ -63,6 +63,11 @@ func _build_pardeh_ui() -> void:
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_content_root.add_child(hint)
+	if _can_retreat_to_forge():
+		var early_retreat := Button.new()
+		early_retreat.text = "Retreat to Forge (bank materials)"
+		early_retreat.pressed.connect(_on_retreat_pressed)
+		_content_root.add_child(early_retreat)
 	_card_row = HBoxContainer.new()
 	_card_row.name = "CardRow"
 	_card_row.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -111,6 +116,11 @@ func _build_phase_two(container: VBoxContainer) -> void:
 	_continue_btn.disabled = true
 	_continue_btn.pressed.connect(_on_continue_pressed)
 	container.add_child(_continue_btn)
+	if _can_retreat_to_forge():
+		var retreat_btn := Button.new()
+		retreat_btn.text = "Retreat to Forge (bank materials)"
+		retreat_btn.pressed.connect(_on_retreat_pressed)
+		container.add_child(retreat_btn)
 
 
 func _populate_cards(container: HBoxContainer) -> void:
@@ -248,6 +258,24 @@ func _on_continue_pressed() -> void:
 			context.bridge.alert_message.emit("Choose a Fate card first", 50)
 		return
 	_finish_draft()
+
+
+func _can_retreat_to_forge() -> bool:
+	if context == null or context.launch_data == null:
+		return false
+	if context.tutorial_active:
+		return false
+	var launch: BattleLaunchData = context.launch_data
+	return launch.is_campaign_run or launch.is_campaign_mode() or launch.is_horde_mode
+
+
+func _on_retreat_pressed() -> void:
+	if context == null or context.state_controller == null:
+		return
+	if _panel:
+		_panel.visible = false
+		_clear_content_root()
+	context.state_controller.trigger_safe_retreat("safe_retreat")
 
 
 func _finish_draft() -> void:

@@ -14,6 +14,7 @@ extends Resource
 @export var sacred_fire_reward: int = 0
 @export var forge_material_id: String = ""
 @export var forge_material_drop: int = 0
+@export var forge_material_drop_chance: float = 0.35
 @export var corruption_pressure: float = 0.0
 @export var is_boss: bool = false
 

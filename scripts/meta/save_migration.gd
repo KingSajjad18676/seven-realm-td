@@ -11,7 +11,7 @@ static func default_accessibility() -> Dictionary:
 	}
 
 
-static func migrate(data: Dictionary, target_version: int = 5) -> Dictionary:
+static func migrate(data: Dictionary, target_version: int = 6) -> Dictionary:
 	var result := data.duplicate(true)
 	var version := int(result.get("save_version", 1))
 	if version < 2 and target_version >= 2:
@@ -52,4 +52,46 @@ static func migrate(data: Dictionary, target_version: int = 5) -> Dictionary:
 		if not result.has("paid_entitlements"):
 			result["paid_entitlements"] = []
 		result["save_version"] = 5
+		version = 5
+	if version < 6 and target_version >= 6:
+		if not result.has("campaign_run"):
+			result["campaign_run"] = {}
+		var legacy: Variant = result.get("roguelite_run", {})
+		if legacy is Dictionary and not legacy.is_empty() and result.get("campaign_run", {}).is_empty():
+			result["campaign_run"] = _migrate_legacy_roguelite_run(legacy)
+			result["roguelite_run"] = {}
+		var unlocked: Variant = result.get("unlocked_towers", [])
+		if unlocked is Array:
+			for starter_id in SaveSystem.STARTER_TOWER_IDS:
+				if starter_id not in unlocked:
+					unlocked.append(starter_id)
+			result["unlocked_towers"] = unlocked
+		result["save_version"] = 6
 	return result
+
+
+static func _migrate_legacy_roguelite_run(legacy: Dictionary) -> Dictionary:
+	var nodes: Array = []
+	var saved_nodes: Variant = legacy.get("nodes", [])
+	if saved_nodes is Array:
+		for i in saved_nodes.size():
+			var n: Variant = saved_nodes[i]
+			if n is Dictionary:
+				var node := n.duplicate(true)
+				node["id"] = "legacy_%d" % i
+				node["cleared"] = i < int(legacy.get("current_index", 0))
+				if not node.has("edges"):
+					node["edges"] = []
+				nodes.append(node)
+	var current_index := int(legacy.get("current_index", 0))
+	var current_id := "legacy_%d" % clampi(current_index, 0, maxi(0, nodes.size() - 1))
+	return {
+		"seed": int(legacy.get("seed", 0)),
+		"nodes": nodes,
+		"current_node_id": current_id,
+		"visited_node_ids": [],
+		"run_tower_ids": [],
+		"run_tower_upgrades": {},
+		"relic_ids": legacy.get("relic_ids", []),
+		"act_index": 0,
+	}

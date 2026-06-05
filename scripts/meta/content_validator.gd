@@ -18,6 +18,7 @@ static func validate(catalog: BootstrapContent) -> Array[String]:
 
 	errors.append_array(_check_minimum_counts(catalog))
 	errors.append_array(_check_unique_ids(catalog))
+	errors.append_array(_check_unique_forge_materials(catalog))
 	errors.append_array(_check_level_waves(catalog))
 	errors.append_array(_check_spot_levels(catalog))
 	errors.append_array(_check_boss_factory())
@@ -65,6 +66,21 @@ static func _unique_field(items: Array, field: String, label: String) -> Array[S
 		if seen.has(id_val):
 			errors.append("duplicate %s id: %s" % [label, id_val])
 		seen[id_val] = true
+	return errors
+
+
+static func _check_unique_forge_materials(catalog: BootstrapContent) -> Array[String]:
+	var errors: Array[String] = []
+	var seen: Dictionary = {}
+	for t in catalog.towers:
+		if not (t is TowerData):
+			continue
+		var mat_id := t.forge_material_id
+		if mat_id == "":
+			continue
+		if seen.has(mat_id):
+			errors.append("duplicate forge_material_id: %s (tower %s)" % [mat_id, t.tower_id])
+		seen[mat_id] = t.tower_id
 	return errors
 
 

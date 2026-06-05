@@ -6,6 +6,7 @@ const REASON_LABELS := {
 	"gate_breached": "The gate fell",
 	"lives_depleted": "Lives depleted",
 	"debug": "Debug shortcut",
+	"safe_retreat": "Retreated to Kaveh's Forge — materials banked",
 }
 
 
@@ -39,7 +40,7 @@ static func format_rewards(economy: BattleEconomy) -> String:
 	return "\n".join(lines)
 
 
-static func format_summary(summary: Dictionary, ctx: BattleContext) -> String:
+static func format_summary(summary: Dictionary, ctx: BattleContext, victory: bool = true) -> String:
 	if summary.is_empty():
 		return ""
 	var lines: PackedStringArray = PackedStringArray()
@@ -57,4 +58,26 @@ static func format_summary(summary: Dictionary, ctx: BattleContext) -> String:
 	var vows_total := int(summary.get("vows_total", 0))
 	if vows_total > 0:
 		lines.append("Vows honored: %d/%d" % [vows_honored, vows_total])
+	if not victory:
+		lines.append("Unbanked Star Iron from this battle was lost.")
+	var guidance := format_forge_defeat_guidance(ctx, victory)
+	if not guidance.is_empty():
+		lines.append(guidance)
 	return "\n".join(lines)
+
+
+static func format_forge_defeat_guidance(ctx: BattleContext, victory: bool) -> String:
+	if victory or ctx == null or ctx.level_data == null or ForgeService == null:
+		return ""
+	var level_id := ctx.level_data.level_id
+	if not ForgeService.forge_gate_applies_to_level(level_id):
+		return ""
+	if not ForgeService.is_under_forge_recommendation(level_id):
+		return ""
+	var expected := ForgeService.expected_forge_level_for(level_id)
+	var current := ForgeService.get_average_forge_level_floor()
+	return (
+		"Forge your towers at Kaveh's Forge (need avg Lv %d, you: Lv %d).\n"
+		+ "Replay earlier Labours for Star Iron, then try again."
+		% [expected, current]
+	)

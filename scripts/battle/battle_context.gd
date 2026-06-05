@@ -17,6 +17,7 @@ var run_modifiers: RunModifierService = null
 var ancestral_forge: AncestralForgeController = null
 var hunt: HuntController = null
 var spell_controller: SpellController = null
+var loot_drops: LootDropManager = null
 var labour_mode: LabourMode = null
 var bridge: BattleContextBridge = null
 var run_summary: Dictionary = {}

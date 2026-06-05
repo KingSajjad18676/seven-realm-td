@@ -79,7 +79,11 @@ func _refresh_towers() -> void:
 			"Forge Tokens: %d | Horde: %d/8 | Elite towers: %d / %d (Damavand needs %d)"
 			% [tokens, horde, elite_count, ForgeService.get_all_forgeable_tower_ids().size(), need]
 		)
+	for tower_id in ForgeService.get_locked_unlockable_tower_ids():
+		_tower_list.add_child(_build_unlock_row(tower_id))
 	for tower_id in ForgeService.get_all_forgeable_tower_ids():
+		if SaveSystem and not SaveSystem.is_tower_in_pool(tower_id):
+			continue
 		_tower_list.add_child(_build_tower_row(tower_id))
 
 
@@ -99,6 +103,37 @@ func _refresh_store() -> void:
 		child.queue_free()
 	for product_id in StoreService.get_product_ids():
 		_store_list.add_child(_build_store_row(product_id))
+
+
+func _build_unlock_row(tower_id: String) -> PanelContainer:
+	var td := ForgeService.get_tower_data(tower_id)
+	var panel := PanelContainer.new()
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	panel.add_child(row)
+	var info := VBoxContainer.new()
+	info.custom_minimum_size = Vector2(320, 0)
+	var title := Label.new()
+	title.text = "%s (Locked)" % (td.display_name if td else tower_id)
+	title.add_theme_font_size_override("font_size", 18)
+	info.add_child(title)
+	var mat_id := ForgeService.get_material_id_for_tower(tower_id)
+	var mat_name := td.forge_material_name if td else mat_id
+	var balance := SaveSystem.get_material(mat_id) if SaveSystem else 0
+	var cost := ForgeService.get_unlock_cost(tower_id)
+	var status := Label.new()
+	status.text = "Unlock: %d %s (you have %d)" % [cost, mat_name, balance]
+	info.add_child(status)
+	row.add_child(info)
+	var unlock_btn := Button.new()
+	unlock_btn.text = "Unlock tower"
+	unlock_btn.disabled = not ForgeService.can_unlock_tower(tower_id)
+	unlock_btn.pressed.connect(func() -> void:
+		if ForgeService.unlock_tower_to_pool(tower_id):
+			_refresh()
+	)
+	row.add_child(unlock_btn)
+	return panel
 
 
 func _build_tower_row(tower_id: String) -> PanelContainer:

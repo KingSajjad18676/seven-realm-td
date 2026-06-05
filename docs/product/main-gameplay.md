@@ -33,7 +33,7 @@ Boot → Main Menu
 | Button | What it does | Unlock |
 |--------|--------------|--------|
 | **Campaign nodes** (T, 1–7, D) | Standard campaign battle on that map | Linear unlock; Damavand after Labour 7 |
-| **Roguelite Path** | 5-node run with relic picks | After tutorial |
+| **Campaign Run** | Branching run: draft 3 towers, scavenge Star Iron, skirmish/anvil/shrine nodes → Damavand | After tutorial |
 | **Endless** | Infinite waves on Labour 1 | 7 Labour seals |
 | **Horde** | 15-wave survival per map | After tutorial |
 | **Hunt for Zahhak** | Damavand boss hunt variant | 7 seals + 1 Elite tower at Kaveh's Forge |
@@ -65,8 +65,12 @@ Every 10 waves → mini-boss wave
 
 Final wave → map boss
 
-Victory → forge materials / tokens banked → replay or return to map
+Victory → unbanked materials banked to save → replay or return to map
+Defeat → unbanked materials lost (100%)
+Pardeh (campaign / horde / run) → optional Retreat to Forge banks materials and ends battle safely
 ```
+
+**Scavenging:** Enemies may drop physical Star Iron on the map. Move **Rostam** over drops to collect into an **unbanked** tally (10s despawn). Pads still cost **Gold** only; materials are spent at **Kaveh's Forge** for unlock + upgrade.
 
 ### Battle resources
 
@@ -259,9 +263,41 @@ Horde: 8/8 maps cleared
   → Serpent Spire tower unlocked (or IAP)
 ```
 
-**Kaveh's Forge (meta):** Enemies drop Star Iron materials on campaign victory → upgrade starter towers permanently (levels 1–30, then 5 Elite steps). Elite tower required for Hunt.
+**Kaveh's Forge (meta):** Banked Star Iron unlocks new tower types (per-tower material) and upgrades them (Lv 1–30, then 5 Elite). Each tower uses one material ID for both unlock and upgrades. Elite tower required for Hunt.
+
+| Tower | Material |
+|-------|----------|
+| Archer | Falcon Star Iron (`iron_falcon`) |
+| Sacred Fire | Ember Star Iron (`iron_ember`) |
+| Heavy | Anvil Star Iron (`iron_anvil`) |
+| Control | Frost Star Iron (`iron_frost`) |
+| Flame Archer | Serpent Star Iron (`iron_serpent`) |
+| Volcano Ram | Volcano Star Iron (`iron_volcano`) |
 
 **Forge Tokens:** Earned on victory → buy and cast **spells** from the battle HUD.
+
+### Forge progression gate (soft difficulty)
+
+Kaveh's Forge is the **primary power curve** for campaign, Horde, and Damavand. Nothing is hard-locked on the world map — Labour 3+ stays playable — but enemy HP and spawn pressure from Labour 3 onward assume your starter towers have been forged to the **expected level** for that map. Unforged towers hit a difficulty wall; losing sends you back to **replay earlier Labours** for Star Iron, forge at Kaveh's, then try again.
+
+This is intentional **replay-to-grow** (roguelite TD standard), not a paywall: Star Iron is free from victories, forge power is never sold, and Labours 1–2 stay clearable without forging so the loop is taught on a win.
+
+| Map | Expected avg forge level | Notes |
+|-----|--------------------------|-------|
+| Labour 1 | 1 | Forge optional — learn the TD loop |
+| Labour 2 | 2 | Light forge nudge |
+| Labour 3 | 8 | First real wall for unforged towers |
+| Labour 4 | 12 | |
+| Labour 5 | 16 | |
+| Labour 6 | 20 | |
+| Labour 7 | 25 | |
+| Damavand | 30 + 1 Elite | Elite gate for Hunt unchanged |
+
+**Average forge level** = mean forge level across the four starter towers (`tower_archer`, `tower_sacred_fire`, `tower_heavy`, `tower_control`).
+
+**Modes affected:** Campaign, Horde (uses same map difficulty), Damavand campaign. **Not affected:** Endless, Roguelite Path, Daily Tale (practice / side content).
+
+**Player-facing cues:** World map shows recommended vs your average forge on Labour 3+ nodes; defeat screen suggests replay + forge when under recommendation.
 
 ---
 
@@ -289,9 +325,15 @@ Horde: 8/8 maps cleared
 | Mode hazard logic | `scripts/battle/labours/mode_*.gd` |
 | Launch flags (Horde, Hunt, …) | `scripts/battle/battle_launch_data.gd` |
 | World map UI + unlocks | `scripts/meta/world_map_controller.gd` |
+| Campaign Run graph + draft | `campaign_run_state.gd`, `campaign_run_generator.gd`, `tower_draft_controller.gd` |
+| Material drops + scavenging | `loot_drop_manager.gd`, `material_drop.gd`, `battle_economy.gd` |
+| Safe retreat | `fate_draft_controller.gd` → `battle_state_controller.trigger_safe_retreat()` |
+| Per-tower forge unlock | `forge_service.gd`, `kaveh_forge_controller.gd` |
 | Campaign-only Labour attach | `scripts/battle/battle_bootstrap.gd` → `_attach_labour_mode()` |
 | Wave count + 5-wave block templates | `scripts/meta/campaign_wave_templates.gd` + `content_catalog.gd` → `wave_count_for()` |
 | Pardeh cadence (every 5 waves) | `scripts/battle/wave_manager.gd` → `_should_offer_pardeh()` |
+| Expected forge curve + gate | `scripts/meta/forge_service.gd` → `expected_forge_level_for()`, `is_under_forge_recommendation()` |
+| Forge-scaled difficulty (L3+) | `scripts/meta/content_catalog.gd` → `khan_difficulty()` |
 
 ---
 

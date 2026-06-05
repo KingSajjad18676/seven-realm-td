@@ -35,6 +35,8 @@ extends Resource
 ## Unique Star Iron ID; non-empty registers tower in Kaveh's Forge (see prompts/10-add-new-content.prompt.md).
 @export var forge_material_id: String = ""
 @export var forge_material_name: String = ""
+## One-time forge unlock cost; 0 = starter / always in draft pool.
+@export var unlock_material_cost: int = 0
 
 @export_group("Scene")
 @export var scene_path: String = "res://scenes/prefabs/tower.tscn"

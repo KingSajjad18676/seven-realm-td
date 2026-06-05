@@ -1,6 +1,6 @@
 # Implementation Tracker
 
-**Last updated:** 2026-06-06 (Labour Modes + reward towers)  
+**Last updated:** 2026-06-06 (Roguelite loop refactor)  
 **Repo truth:** [project-status.md](project-status.md)
 
 ---
@@ -33,7 +33,10 @@
 | Morale meter | ✅ | Multiplier applied at battle start |
 | Pardeh Break / Fate | ✅ | Pick or skip every 5 cleared waves; 8 cards with catalog-aligned effects |
 | Ancestral Forge | ✅ | `tower_flame_archer`, `tower_volcano_ram` replace pads |
-| Kaveh's Forge (meta) | ✅ | Elite gate for Hunt only |
+| Kaveh's Forge (meta) | ✅ | Elite gate for Hunt; **soft forge gate L3+**; **tower unlock** rows spend per-tower Star Iron |
+| Active scavenging | ✅ | `LootDropManager`, `MaterialDrop`, unbanked materials, retreat/defeat rules |
+| Campaign Run graph | ✅ | `CampaignRunGenerator`, world map panel, node types |
+| Tower draft | ✅ | `TowerDraftController` — 3 pre-run, +1 mid-run |
 
 ---
 
@@ -44,7 +47,8 @@
 | Khans 1–7 + Damavand data | ✅ Procedural waves + per-Khan rosters / mini-bosses |
 | World map unlock chain | ✅ Tutorial → Khan 1 → … → Damavand |
 | Khan seals (7) | ✅ Campaign clears only |
-| Roguelite 5-node run | ✅ `save_system.gd` + `SceneFlowController`; resume from world map |
+| Roguelite 5-node run (legacy) | 🟡 Migrated to Campaign Run save v6 |
+| Campaign Run | ✅ Save v6 `campaign_run`; branching world map UI |
 | Endless mode | ✅ No campaign progress on victory |
 | **Horde mode** | ✅ Per-Khan 15-wave survival; progress tracked separately from campaign seals |
 | Hunt Zahhak | ✅ Elite forge + **7 Labour seals** in UI and `go_to_battle()` gate |

@@ -25,15 +25,26 @@ const KHAN_LEVELS: Array[Dictionary] = [
 @onready var _horde_picker: Panel = %HordePickerPanel
 @onready var _horde_list: VBoxContainer = %HordeLevelList
 
+var _run: CampaignRunState = null
+var _campaign_panel: Panel = null
+var _campaign_canvas: Control = null
+var _campaign_desc: Label = null
+var _tower_draft: TowerDraftController = null
+var _anvil_ui: AnvilNodeController = null
+var _shrine_ui: ShrineNodeController = null
+var _pending_tower_pick_node_id: String = ""
+
 
 func _ready() -> void:
 	if _level_list:
 		_level_list.visible = false
+	_setup_campaign_run_ui()
 	_build_campaign_nodes()
 	if _back_btn:
 		_back_btn.pressed.connect(_on_back)
 	if _roguelite_btn:
 		_roguelite_btn.pressed.connect(_on_roguelite)
+		_roguelite_btn.text = "Campaign Run"
 	if _endless_btn:
 		_endless_btn.pressed.connect(_on_endless)
 	if _horde_btn:
@@ -44,6 +55,75 @@ func _ready() -> void:
 		_forge_btn.pressed.connect(_on_forge)
 	_refresh_mode_buttons()
 	_show_pending_alert()
+	_load_campaign_run()
+	_process_pending_campaign_battle_result()
+	if _run != null:
+		_show_campaign_run_panel()
+
+
+func _setup_campaign_run_ui() -> void:
+	_campaign_panel = Panel.new()
+	_campaign_panel.name = "CampaignRunPanel"
+	_campaign_panel.visible = false
+	_campaign_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_campaign_panel.offset_top = 90.0
+	_campaign_panel.offset_bottom = -120.0
+	add_child(_campaign_panel)
+	var root := VBoxContainer.new()
+	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	root.offset_left = 12.0
+	root.offset_top = 8.0
+	root.offset_right = -12.0
+	root.offset_bottom = -8.0
+	_campaign_panel.add_child(root)
+	_campaign_desc = Label.new()
+	_campaign_desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	root.add_child(_campaign_desc)
+	var canvas_scroll := ScrollContainer.new()
+	canvas_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	root.add_child(canvas_scroll)
+	_campaign_canvas = Control.new()
+	_campaign_canvas.custom_minimum_size = Vector2(900, 900)
+	canvas_scroll.add_child(_campaign_canvas)
+	var close_btn := Button.new()
+	close_btn.text = "Hide run map (linear campaign below)"
+	close_btn.pressed.connect(_hide_campaign_run_panel)
+	root.add_child(close_btn)
+	_tower_draft = TowerDraftController.new()
+	_tower_draft.name = "TowerDraft"
+	add_child(_tower_draft)
+	_tower_draft.draft_confirmed.connect(_on_draft_confirmed)
+	_tower_draft.draft_cancelled.connect(_on_draft_cancelled)
+	_anvil_ui = AnvilNodeController.new()
+	_anvil_ui.name = "AnvilNodeUI"
+	add_child(_anvil_ui)
+	_anvil_ui.upgrade_chosen.connect(_on_anvil_upgrade)
+	_anvil_ui.cancelled.connect(_refresh_campaign_graph)
+	_shrine_ui = ShrineNodeController.new()
+	_shrine_ui.name = "ShrineNodeUI"
+	add_child(_shrine_ui)
+	_shrine_ui.boon_chosen.connect(_on_shrine_boon)
+	_shrine_ui.cancelled.connect(_refresh_campaign_graph)
+
+
+func _load_campaign_run() -> void:
+	if SceneFlowController:
+		SceneFlowController.load_campaign_run_from_save()
+		if SceneFlowController.pending_campaign_run:
+			_run = SceneFlowController.pending_campaign_run
+
+
+func _process_pending_campaign_battle_result() -> void:
+	if SceneFlowController == null or SceneFlowController.pending_campaign_battle_result.is_empty():
+		return
+	var result := SceneFlowController.pending_campaign_battle_result.duplicate()
+	SceneFlowController.pending_campaign_battle_result = {}
+	_load_campaign_run()
+	complete_campaign_battle(
+		bool(result.get("victory", false)),
+		str(result.get("node_id", "")),
+		bool(result.get("safe_retreat", false))
+	)
 
 
 func _show_pending_alert() -> void:
@@ -109,6 +189,11 @@ func _level_tooltip(entry: Dictionary, unlocked: bool) -> String:
 		return "%s — Clear Labour 7 first" % text
 	if not unlocked:
 		return "%s — Locked" % text
+	if ForgeService and ForgeService.forge_gate_applies_to_level(level_id):
+		var rec := ForgeService.format_forge_recommendation(level_id)
+		if ForgeService.is_under_forge_recommendation(level_id):
+			return "%s — %s\nUnder-forged: replay earlier Labours for Star Iron, then forge at Kaveh's." % [text, rec]
+		return "%s — %s" % [text, rec]
 	return text
 
 
@@ -130,12 +215,18 @@ func _refresh_mode_buttons() -> void:
 	var seals := SaveSystem.get_khan_seals() if SaveSystem else 0
 	var horde_clears := SaveSystem.get_horde_clears_count() if SaveSystem else 0
 	if _seals_label:
-		_seals_label.text = "Labour seals: %d/7 | Horde cleared: %d/8" % [seals, horde_clears]
+		var forge_text := ""
+		if ForgeService:
+			forge_text = " | Avg forge: Lv %d" % ForgeService.get_average_forge_level_floor()
+		_seals_label.text = "Labour seals: %d/7 | Horde cleared: %d/8%s" % [seals, horde_clears, forge_text]
 	if _endless_btn:
 		_endless_btn.disabled = seals < 7
 	if _horde_btn:
 		_horde_btn.disabled = not SaveSystem.is_tutorial_completed() if SaveSystem else true
-		_horde_btn.tooltip_text = "Survive 15 waves per Labour — clear all 8 to unlock Serpent Spire"
+		var horde_tip := "Survive 15 waves per Labour — clear all 8 to unlock Serpent Spire"
+		if ForgeService:
+			horde_tip += "\nHorde uses campaign difficulty — forge towers for later maps."
+		_horde_btn.tooltip_text = horde_tip
 	if _hunt_btn:
 		var hunt_ready := seals >= 7 and ForgeService and ForgeService.can_enter_damavand()
 		_hunt_btn.disabled = not hunt_ready
@@ -146,6 +237,7 @@ func _refresh_mode_buttons() -> void:
 		)
 	if _roguelite_btn:
 		_roguelite_btn.disabled = not SaveSystem.is_tutorial_completed() if SaveSystem else true
+		_roguelite_btn.tooltip_text = "Branching campaign run — draft towers, scavenge materials, reach Damavand"
 	if _forge_btn:
 		var elite := ForgeService.count_elite_towers() if ForgeService else 0
 		_forge_btn.text = "Kaveh's Forge (%d Elite)" % elite
@@ -158,10 +250,209 @@ func _on_level(level_id: String) -> void:
 
 
 func _on_roguelite() -> void:
-	var has_active_run := SceneFlowController.pending_roguelite_run != null
-	if not has_active_run and SaveSystem:
-		has_active_run = not SaveSystem.get_roguelite_run().is_empty()
-	SceneFlowController.go_to_roguelite_map(not has_active_run)
+	if SaveSystem and not SaveSystem.is_tutorial_completed():
+		return
+	_load_campaign_run()
+	if _run != null:
+		_show_campaign_run_panel()
+		return
+	var pool := SaveSystem.get_unlocked_tower_pool() if SaveSystem else ContentCatalog.get_starter_tower_ids()
+	_tower_draft.show_start_draft(pool)
+
+
+func _on_draft_confirmed(tower_ids: Array[String]) -> void:
+	if _pending_tower_pick_node_id != "" and _run != null:
+		if not tower_ids.is_empty():
+			_run.add_run_tower(str(tower_ids[0]))
+		_pending_tower_pick_node_id = ""
+		_persist_and_refresh()
+		return
+	_run = CampaignRunState.new()
+	_run.generate_run()
+	_run.set_run_towers(tower_ids)
+	if SceneFlowController:
+		SceneFlowController.pending_campaign_run = _run
+		SceneFlowController.persist_campaign_run()
+	_show_campaign_run_panel()
+
+
+func _on_draft_cancelled() -> void:
+	pass
+
+
+func _show_campaign_run_panel() -> void:
+	if _campaign_panel:
+		_campaign_panel.visible = true
+	_refresh_campaign_graph()
+
+
+func _hide_campaign_run_panel() -> void:
+	if _campaign_panel:
+		_campaign_panel.visible = false
+
+
+func _refresh_campaign_graph() -> void:
+	if _run == null or _campaign_canvas == null:
+		return
+	for child in _campaign_canvas.get_children():
+		child.queue_free()
+	var reachable := _run.get_reachable_node_ids()
+	var current_id := _run.current_node_id
+	if _campaign_desc:
+		var current := _run.get_current_node()
+		_campaign_desc.text = (
+			"Campaign Run — Act %d | Towers: %s | Pick a reachable node."
+			% [
+				_run.act_index,
+				", ".join(_run.run_tower_ids),
+			]
+		)
+		if not current.is_empty():
+			_campaign_desc.text += " Current: %s" % current.get("label", current_id)
+	for n in _run.nodes:
+		var node_id := str(n.get("id", ""))
+		var pos_data: Variant = n.get("position", {})
+		var pos := Vector2(float(pos_data.get("x", 0)), float(pos_data.get("y", 0)))
+		var btn := Button.new()
+		btn.text = str(n.get("label", node_id))
+		btn.position = pos
+		btn.custom_minimum_size = Vector2(140, 44)
+		var cleared := bool(n.get("cleared", false))
+		if cleared:
+			btn.modulate = Color(0.5, 0.8, 0.5)
+			btn.disabled = true
+		elif node_id in reachable:
+			btn.modulate = Color(1.0, 0.95, 0.75)
+			btn.pressed.connect(_on_campaign_node_pressed.bind(node_id))
+		elif node_id == current_id:
+			btn.modulate = Color(0.8, 0.9, 1.0)
+			btn.disabled = true
+		else:
+			btn.modulate = Color(0.45, 0.45, 0.45)
+			btn.disabled = true
+		_campaign_canvas.add_child(btn)
+	_draw_campaign_edges()
+
+
+func _draw_campaign_edges() -> void:
+	if _run == null or _campaign_canvas == null:
+		return
+	for n in _run.nodes:
+		var from_id := str(n.get("id", ""))
+		var from_pos := _node_position(from_id)
+		var edges: Variant = n.get("edges", [])
+		if edges is Array:
+			for edge_id in edges:
+				var to_pos := _node_position(str(edge_id))
+				var line := Line2D.new()
+				line.width = 2.0
+				line.default_color = Color(0.6, 0.55, 0.4, 0.7)
+				line.points = PackedVector2Array([from_pos + Vector2(70, 22), to_pos + Vector2(70, 22)])
+				_campaign_canvas.add_child(line)
+				_campaign_canvas.move_child(line, 0)
+
+
+func _node_position(node_id: String) -> Vector2:
+	var node := _run.get_node(node_id)
+	var pos_data: Variant = node.get("position", {})
+	return Vector2(float(pos_data.get("x", 0)), float(pos_data.get("y", 0)))
+
+
+func _on_campaign_node_pressed(node_id: String) -> void:
+	if _run == null:
+		return
+	if not _run.advance_to_node(node_id):
+		return
+	if SceneFlowController:
+		SceneFlowController.pending_campaign_run = _run
+		SceneFlowController.persist_campaign_run()
+	var node := _run.get_node(node_id)
+	match str(node.get("type", "")):
+		CampaignRunState.NODE_ANVIL:
+			_anvil_ui.show_for_towers(_run.run_tower_ids)
+		CampaignRunState.NODE_SHRINE:
+			_shrine_ui.show_shrine_pick()
+		CampaignRunState.NODE_SKIRMISH, CampaignRunState.NODE_LABOUR_BOSS, CampaignRunState.NODE_FINALE:
+			_launch_campaign_battle(node)
+		_:
+			_refresh_campaign_graph()
+
+
+func _on_anvil_upgrade(tower_id: String) -> void:
+	if _run == null:
+		return
+	_run.add_run_tower_upgrade(tower_id)
+	_run.mark_node_cleared(_run.current_node_id)
+	_persist_and_refresh()
+	if bool(_run.get_current_node().get("grants_tower_pick", false)):
+		_offer_mid_run_tower_pick(_run.current_node_id)
+
+
+func _on_shrine_boon(card_id: String) -> void:
+	if _run == null:
+		return
+	_run.relic_ids.append(card_id)
+	_run.mark_node_cleared(_run.current_node_id)
+	_persist_and_refresh()
+
+
+func _offer_mid_run_tower_pick(node_id: String) -> void:
+	_pending_tower_pick_node_id = node_id
+	var pool := SaveSystem.get_unlocked_tower_pool() if SaveSystem else []
+	_tower_draft.show_add_one_draft(pool, _run.run_tower_ids)
+
+
+func _launch_campaign_battle(node: Dictionary) -> void:
+	if _run == null:
+		return
+	var launch := BattleLaunchData.new()
+	launch.is_campaign_run = true
+	launch.campaign_node_id = str(node.get("id", ""))
+	launch.level_id = str(node.get("level_id", "level_01"))
+	launch.run_tower_ids = _run.run_tower_ids.duplicate()
+	launch.run_tower_upgrades = _run.run_tower_upgrades.duplicate()
+	launch.active_relic_ids = _run.relic_ids.duplicate()
+	var node_type := str(node.get("type", ""))
+	if node_type == CampaignRunState.NODE_SKIRMISH:
+		launch.skirmish_waves = CampaignRunGenerator.SKIRMISH_WAVES
+	if SceneFlowController:
+		SceneFlowController.pending_campaign_run = _run
+		SceneFlowController.persist_campaign_run()
+		SceneFlowController.go_to_battle(launch)
+
+
+func _persist_and_refresh() -> void:
+	if SceneFlowController:
+		SceneFlowController.pending_campaign_run = _run
+		SceneFlowController.persist_campaign_run()
+	_refresh_campaign_graph()
+
+
+func complete_campaign_battle(victory: bool, node_id: String, safe_retreat: bool = false) -> void:
+	if _run == null:
+		_load_campaign_run()
+	if _run == null:
+		return
+	if victory and not safe_retreat and node_id != "":
+		_run.mark_node_cleared(node_id)
+		var node := _run.get_node(node_id)
+		if bool(node.get("grants_tower_pick", false)):
+			_offer_mid_run_tower_pick(node_id)
+	elif not victory:
+		if SceneFlowController:
+			SceneFlowController.clear_campaign_run()
+		_run = null
+		_hide_campaign_run_panel()
+		return
+	if _run.is_run_complete():
+		if SceneFlowController:
+			SceneFlowController.clear_campaign_run()
+			SceneFlowController.pending_alert = "Campaign Run complete!"
+		_run = null
+		_hide_campaign_run_panel()
+		return
+	_persist_and_refresh()
+	_show_campaign_run_panel()
 
 
 func _on_endless() -> void:

@@ -12,6 +12,7 @@ var _endless_mode: bool = false
 var _endless_wave: int = 0
 var _horde_mode: bool = false
 var _horde_wave: int = 0
+var _skirmish_max_waves: int = 0
 var _early_call_requested: bool = false
 
 
@@ -38,7 +39,15 @@ func enable_endless_mode() -> void:
 func enable_horde_mode() -> void:
 	_horde_mode = true
 	_horde_wave = 0
+	_skirmish_max_waves = 0
 	total_waves = ContentCatalog.HORDE_WAVES_TO_CLEAR
+
+
+func enable_skirmish_mode(wave_count: int) -> void:
+	_horde_mode = true
+	_horde_wave = 0
+	_skirmish_max_waves = maxi(1, wave_count)
+	total_waves = _skirmish_max_waves
 
 
 func start_waves() -> void:
@@ -151,7 +160,8 @@ func _spawn_horde_wave() -> void:
 	await _wait_for_wave_clear()
 	if context and context.morale:
 		context.morale.on_wave_cleared()
-	if _horde_wave >= ContentCatalog.HORDE_WAVES_TO_CLEAR:
+	var horde_target := _skirmish_max_waves if _skirmish_max_waves > 0 else ContentCatalog.HORDE_WAVES_TO_CLEAR
+	if _horde_wave >= horde_target:
 		if context.state_controller:
 			context.state_controller.notify_all_waves_spawned()
 		return

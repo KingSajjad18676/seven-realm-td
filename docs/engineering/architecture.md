@@ -64,8 +64,11 @@ repo root/
 
 ```text
 Boot → CompanySplash → MainMenu → WorldMap → Battle
-RogueliteMap → Battle (via BattleLaunchData)
+WorldMap → TowerDraft → CampaignRun graph → Battle (via BattleLaunchData)
+Legacy RogueliteMap → Battle (deprecated; migrated to Campaign Run)
 ```
+
+**Roguelite loop (2026-06):** `LootDropManager`, `CampaignRunState`, `TowerDraftController` on world map; save v6 `campaign_run`.
 
 ## Godot conventions
 

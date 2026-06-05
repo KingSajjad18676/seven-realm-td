@@ -1,6 +1,6 @@
 # Project Status (Godot)
 
-**Last updated:** 2026-06-06 (Rostam 7 Labours rebrand + Labour Modes + reward towers)  
+**Last updated:** 2026-06-06 (Roguelite loop refactor — scavenging, campaign run, tower draft)  
 **Milestones:** [design/04-production-roadmap.md](../design/04-production-roadmap.md) · **Identity:** [design/00-project-index.md](../design/00-project-index.md)
 
 ---
@@ -12,19 +12,25 @@
 | Godot project                  | ✅ `project.godot` — **Rostam 7 Labours: Shahname TD**, landscape mobile                                                                                          |
 | Main menu → world map → battle | ✅ Campaign, roguelite, endless, **horde**, hunt, daily tale                                                                                                                 |
 | Tutorial gate                  | ✅ Khan 1 locked until tutorial cleared                                                                                                                           |
-| Khan 1 onboarding              | ✅ Tutorial teaches objective/morale/boss; one-time contextual hints in battle (tower panel, forge, early call, tether)                                           |
+| Khan 1 onboarding              | ✅ Tutorial teaches scavenging, materials banking, Campaign Run; contextual hints in battle (tower panel, forge, early call, tether)                            |
 | Campaign levels                | ✅ Tutorial + **Labours 1–7** + Damavand; **30–100 block-templated waves** (+10 per Labour), **Pardeh every 5 waves**, mini-boss every 10th wave |
 | **Labour Modes (campaign)**    | ✅ Additive per-map story overlays (`scripts/battle/labours/`) — Lion, Thirst, Dragon, Temptress, Demons, Rescue, Blindness, Zahhak |
 | **Rostam Tahmtan Barracks**    | ✅ Unlock at 7 Labour seals or store IAP; summons Zabul Vanguard / Bull-Mace Bearer allies (in-battle upgrade) |
 | **Serpent Spire behavior**     | ✅ Twin-target venom + Hunger attack-speed (horde-clear or store unlock; no Star Iron forge) |
 | Hero's Vow (wave challenges)   | ✅ Optional Accept/Decline vow every 10 waves; honor = SF + morale; break = morale penalty (never fails battle) |
 | Signature systems              | ✅ Corruption, hijack (SF purify), Pardeh/Fate (skip or pick), Morale at start, Sacred Tether via tower panel, Ancestral Forge nearest-pad fusion                 |
-| Roguelite 5-node run           | ✅ Persisted to save v4; resume from world map; defeat clears run                                                                                                 |
+| Roguelite 5-node run (legacy)  | 🟡 Superseded by **Campaign Run** graph on world map; save migrates `roguelite_run` → `campaign_run`                                                             |
+| **Campaign Run (branching)**   | ✅ `CampaignRunState` + graph on world map; skirmish / anvil / shrine / labour boss / Damavand finale; save v6                                                     |
+| **Active material scavenging** | ✅ Physical `MaterialDrop` pickups; hero collection; unbanked HUD; defeat clears 100%; Pardeh **Retreat to Forge** banks loot                                    |
+| **Tower draft per run**        | ✅ Pre-run pick 3 from unlocked pool; mid-run +1 on elite nodes; `run_tower_ids` injected at battle bootstrap                                                      |
+| **Per-tower forge unlock**     | ✅ `unlock_material_cost` + Kaveh's Forge unlock rows (Flame Archer, Volcano Ram materials)                                                                      |
 | Hunt for Zahhak                | ✅ 7 seals + Elite forge enforced in scene flow; binding shards weaken Zahhak                                                                                     |
 | Campaign Damavand              | ✅ After Khan 7 clear; binding guards + chainbreakers before boss                                                                                                 |
 | Kaveh's Forge                  | ✅ World map link; Elite notification unlocks Hunt                                                                                                                |
+| **Forge progression gate**     | ✅ Soft difficulty from Labour 3+; expected forge curve in `ForgeService`; world map + defeat guidance; L1–2 unchanged                                            |
 | Save v4                        | ✅ Hunt best, forge notification, roguelite run state, mode-aware battle saves                                                                                    |
 | Save v5                        | ✅ Forge Tokens, spells owned, horde progress, unlocked towers, paid entitlements                                                                                 |
+| Save v6                        | ✅ `campaign_run`, starter towers seeded in `unlocked_towers` pool                                                                                                |
 | Khan difficulty scaling        | ✅ Per-Khan HP/speed/count mults; **5-wave block wave generator** (`CampaignWaveTemplates`) |
 | Horde mode                     | ✅ 15 waves per Khan; clear all 8 unlocks Serpent Spire tower                                                                                                     |
 | Forge Tokens + Spells          | ✅ Earn on victory; buy in Kaveh's Forge; cast in battle HUD                                                                                                      |
@@ -56,7 +62,7 @@
 1. Open repo root in **Godot 4.6** → **F5**.
 2. **Play** → tutorial (first time) → world map → campaign **Labours 1–7** → Damavand.
 3. Forge Elite at **Kaveh's Forge** (world map button) to unlock **Hunt Zahhak** after **7 Labour seals**.
-4. **Roguelite Path** — 5-node run with relic picks.
+4. **Campaign Run** — branching graph (draft 3 towers, scavenge, reach Damavand). Legacy 5-node roguelite scene deprecated.
 5. **Map editor (debug)** — F6 on `scenes/tools/map_editor.tscn`, or main menu **[DEV] Map Editor** → multiple routes/spawns, pads, gate → **Save .tres** → `resources/data/levels/{level_id}.tres`.
 
 ```powershell
@@ -86,6 +92,7 @@ In the editor: **Project → Tools → GUT** (bottom panel) → Run All.
 - **LabourMode framework:** campaign-only additive hazards wired in `battle_bootstrap._attach_labour_mode`
 - **Reward towers:** Barracks (7 seals / IAP); Serpent Spire twin venom + Hunger (8 horde clears / IAP); neither uses Star Iron forge materials
 - **5-wave block campaign waves:** `CampaignWaveTemplates` replaces flat procedural generator; Pardeh every 5 cleared waves (not wave 4 only)
+- **Forge progression gate:** `ForgeService.expected_forge_level_for()` drives Labour 3+ / Damavand / Horde HP+count scaling; replay earlier Labours for Star Iron; no hard map locks
 
 ## Known deferrals
 

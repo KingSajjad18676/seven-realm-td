@@ -9,6 +9,8 @@ const ROGUELITE_MAP := "res://scenes/roguelite_map/roguelite_map.tscn"
 
 var pending_launch: BattleLaunchData = null
 var pending_roguelite_run: RogueliteRunState = null
+var pending_campaign_run: CampaignRunState = null
+var pending_campaign_battle_result: Dictionary = {}
 var pending_alert: String = ""
 var forge_return_path: String = MAIN_MENU
 var _fade_layer: CanvasLayer = null
@@ -74,6 +76,27 @@ func clear_roguelite_run() -> void:
 func persist_roguelite_run() -> void:
 	if SaveSystem and pending_roguelite_run:
 		SaveSystem.set_roguelite_run(pending_roguelite_run.to_dict())
+
+
+func load_campaign_run_from_save() -> void:
+	if SaveSystem == null:
+		return
+	var saved := SaveSystem.get_campaign_run()
+	if saved.is_empty():
+		pending_campaign_run = null
+		return
+	pending_campaign_run = CampaignRunState.from_dict(saved)
+
+
+func persist_campaign_run() -> void:
+	if SaveSystem and pending_campaign_run:
+		SaveSystem.set_campaign_run(pending_campaign_run.to_dict())
+
+
+func clear_campaign_run() -> void:
+	pending_campaign_run = null
+	if SaveSystem:
+		SaveSystem.clear_campaign_run()
 
 
 func consume_pending_alert() -> String:

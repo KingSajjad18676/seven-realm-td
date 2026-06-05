@@ -3,6 +3,7 @@ extends Node
 
 signal gold_changed(amount: int)
 signal sacred_fire_changed(amount: int)
+signal materials_changed(unbanked: Dictionary)
 signal lives_changed(current: int, max_lives: int)
 signal wave_changed(current: int, total: int)
 signal battle_state_changed(state: GameEnums.BattleState)

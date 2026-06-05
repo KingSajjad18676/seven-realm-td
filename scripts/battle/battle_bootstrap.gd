@@ -104,6 +104,11 @@ func _setup_battle() -> void:
 	add_child(_context.enemy_spawner)
 	_context.enemy_spawner.initialize(_context, _units_root)
 
+	_context.loot_drops = LootDropManager.new()
+	_context.loot_drops.name = "LootDropManager"
+	add_child(_context.loot_drops)
+	_context.loot_drops.initialize(_context, _units_root)
+
 	_context.wave_manager = WaveManager.new()
 	_context.wave_manager.name = "WaveManager"
 	add_child(_context.wave_manager)
@@ -167,6 +172,7 @@ func _setup_battle() -> void:
 
 	_connect_region_updates(spots)
 	_apply_difficulty_and_unlocks(launch, level)
+	_apply_campaign_run(launch, level)
 	_apply_endless_or_hunt(launch, level)
 	_attach_labour_mode(launch, level)
 	if _hud and _hud.has_method("setup_ancestral_forge"):
@@ -396,8 +402,31 @@ func _apply_battlefield_tap(world: Vector2) -> void:
 	_context.hero_manager.handle_ground_tap(world)
 
 
+func _apply_campaign_run(launch: BattleLaunchData, level: LevelData) -> void:
+	if _context == null or level == null or launch == null:
+		return
+	if launch.run_tower_ids.size() >= 3:
+		level.available_tower_ids = launch.run_tower_ids.duplicate()
+	for tower_id in launch.run_tower_upgrades.keys():
+		var bonus := int(launch.run_tower_upgrades.get(tower_id, 0))
+		if bonus > 0:
+			_context.runtime_modifiers["run_upgrade_%s" % tower_id] = bonus
+	if launch.is_campaign_run and launch.skirmish_waves > 0 and _context.wave_manager:
+		_context.wave_manager.enable_skirmish_mode(launch.skirmish_waves)
+		if _context.bridge:
+			_context.bridge.alert_message.emit(
+				"Campaign Run — survive %d waves and scavenge Star Iron!" % launch.skirmish_waves,
+				90
+			)
+	elif launch.is_campaign_run and launch.skirmish_waves == 0:
+		if _context.bridge:
+			_context.bridge.alert_message.emit("Campaign Run — bank materials or retreat at Pardeh.", 80)
+
+
 func _apply_difficulty_and_unlocks(launch: BattleLaunchData, level: LevelData) -> void:
 	if _context == null or level == null:
+		return
+	if launch and launch.run_tower_ids.size() >= 3:
 		return
 	var diff := ContentCatalog.khan_difficulty(level.level_id)
 	var hp_mult := float(diff.hp_mult)

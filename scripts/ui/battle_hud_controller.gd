@@ -43,6 +43,7 @@ var _user_pause_modal_visible: bool = false
 @onready var _pause_panel: Panel = %PausePanel
 @onready var _pause_resume_btn: Button = %PauseResumeButton
 @onready var _pause_exit_btn: Button = %PauseExitButton
+var _materials_label: Label = null
 var _forge_wired: bool = false
 var _spell_row: HBoxContainer = null
 var _spell_buttons: Array[Button] = []
@@ -73,6 +74,8 @@ func initialize(ctx: BattleContext, fate_draft: FateDraftController, vow_offer: 
 		ctx.bridge.region_light_changed.connect(_on_region_light_changed)
 		ctx.bridge.intermission_started.connect(_on_intermission_started)
 		ctx.bridge.intermission_ended.connect(_on_intermission_ended)
+		ctx.bridge.materials_changed.connect(_on_materials)
+	_setup_materials_label()
 	_on_gold(ctx.economy.gold if ctx.economy else 0)
 	_on_sf(ctx.economy.sacred_fire if ctx.economy else 0)
 	_on_lives(ctx.lives.current_lives if ctx.lives else 0, ctx.lives.max_lives if ctx.lives else 0)
@@ -124,6 +127,8 @@ func get_highlight_target(key: String) -> Control:
 			return _cleanse_btn
 		"gold":
 			return _gold_label
+		"materials":
+			return _materials_label if _materials_label else _gold_label
 		"sacred_fire":
 			return _sf_label
 		"lives":
@@ -436,6 +441,15 @@ func _on_map() -> void:
 	var level_id := context.level_data.level_id if context and context.level_data else "level_01"
 	AnalyticsService.battle_exit_to_map(level_id, _last_victory)
 	var launch := _get_current_launch()
+	if launch and launch.is_campaign_run and SceneFlowController:
+		var safe_retreat := _pending_reason == "safe_retreat"
+		SceneFlowController.pending_campaign_battle_result = {
+			"victory": _last_victory or safe_retreat,
+			"node_id": launch.campaign_node_id,
+			"safe_retreat": safe_retreat,
+		}
+		SceneFlowController.go_to_world_map()
+		return
 	if launch and launch.is_roguelite_run:
 		if _last_victory and SceneFlowController.pending_roguelite_run:
 			if SceneFlowController.pending_roguelite_run.advance():
@@ -464,6 +478,29 @@ func _on_gold(v: int) -> void:
 func _on_sf(v: int) -> void:
 	if _sf_label:
 		_sf_label.text = "Sacred Fire: %d" % v
+
+
+func _setup_materials_label() -> void:
+	if _gold_label == null or _gold_label.get_parent() == null:
+		return
+	_materials_label = Label.new()
+	_materials_label.name = "MaterialsLabel"
+	_materials_label.add_theme_font_size_override("font_size", 14)
+	_gold_label.get_parent().add_child(_materials_label)
+	_on_materials(context.economy.get_unbanked_materials() if context and context.economy else {})
+
+
+func _on_materials(unbanked: Dictionary) -> void:
+	if _materials_label == null:
+		return
+	if unbanked.is_empty():
+		_materials_label.text = "Materials: —"
+		return
+	var parts: PackedStringArray = PackedStringArray()
+	for mat_id in unbanked.keys():
+		var mat_name := ForgeService.get_material_name(str(mat_id)) if ForgeService else str(mat_id)
+		parts.append("%s %d" % [mat_name, int(unbanked[mat_id])])
+	_materials_label.text = "Materials: %s" % ", ".join(parts)
 func _on_lives(c: int, m: int) -> void:
 	if _lives_label:
 		_lives_label.text = "Lives: %d/%d" % [c, m]
@@ -496,7 +533,7 @@ func _populate_results_panel(victory: bool, reason: String, summary: Dictionary)
 		_results_rewards_label.text = rewards
 		_results_rewards_label.visible = not rewards.is_empty()
 	if _results_summary_label:
-		_results_summary_label.text = BattleResultsFormatter.format_summary(summary, context)
+		_results_summary_label.text = BattleResultsFormatter.format_summary(summary, context, victory)
 func _on_alert(msg: String, _prio: int) -> void:
 	if _alert_label:
 		_alert_label.text = msg

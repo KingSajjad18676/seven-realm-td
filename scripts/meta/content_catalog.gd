@@ -79,6 +79,7 @@ static func build_towers() -> Array[TowerData]:
 
 	for t in [archer, sacred, heavy, control]:
 		t.max_level = 3
+		t.unlock_material_cost = 0
 
 	var flame_archer := TowerData.new()
 	flame_archer.tower_id = "tower_flame_archer"
@@ -91,6 +92,9 @@ static func build_towers() -> Array[TowerData]:
 	flame_archer.applies_burn = true
 	flame_archer.color = Color(1.0, 0.45, 0.15)
 	flame_archer.max_level = 3
+	flame_archer.forge_material_id = "iron_serpent"
+	flame_archer.forge_material_name = "Serpent Star Iron"
+	flame_archer.unlock_material_cost = 24
 
 	var volcano_ram := TowerData.new()
 	volcano_ram.tower_id = "tower_volcano_ram"
@@ -104,6 +108,9 @@ static func build_towers() -> Array[TowerData]:
 	volcano_ram.armor_break = true
 	volcano_ram.color = Color(0.85, 0.35, 0.2)
 	volcano_ram.max_level = 3
+	volcano_ram.forge_material_id = "iron_volcano"
+	volcano_ram.forge_material_name = "Volcano Star Iron"
+	volcano_ram.unlock_material_cost = 30
 
 	var zahhak_serpent := TowerData.new()
 	zahhak_serpent.tower_id = "tower_zahhak_serpent"
@@ -302,6 +309,9 @@ static func build_enemies() -> Array[EnemyData]:
 	serpent.max_hp = 55.0
 	serpent.move_speed = 75.0
 	serpent.gold_reward = 9
+	serpent.forge_material_id = "iron_serpent"
+	serpent.forge_material_drop = 2
+	serpent.forge_material_drop_chance = 0.4
 	serpent.color = Color(0.35, 0.6, 0.35)
 
 	var hound := EnemyData.new()
@@ -370,6 +380,9 @@ static func build_enemies() -> Array[EnemyData]:
 	div_brute.move_speed = 50.0
 	div_brute.armor = 8.0
 	div_brute.gold_reward = 18
+	div_brute.forge_material_id = "iron_volcano"
+	div_brute.forge_material_drop = 3
+	div_brute.forge_material_drop_chance = 0.35
 	div_brute.scale = 1.35
 	div_brute.color = Color(0.25, 0.2, 0.35)
 
@@ -534,10 +547,20 @@ static func khan_index(level_id: String) -> int:
 
 static func khan_difficulty(level_id: String) -> Dictionary:
 	var idx := khan_index(level_id)
+	var base_hp := 1.0 + float(idx - 1) * 0.12
+	var base_speed := 1.0 + float(idx - 1) * 0.04
+	var base_count := 1.0 + float(idx - 1) * 0.15
+	if idx < ForgeService.FORGE_GATE_START_INDEX:
+		return {
+			"hp_mult": base_hp,
+			"speed_mult": base_speed,
+			"count_mult": base_count,
+		}
+	var forge_dmg := ForgeService.expected_damage_mult_for_level(level_id) if ForgeService else 1.28
 	return {
-		"hp_mult": 1.0 + float(idx - 1) * 0.12,
-		"speed_mult": 1.0 + float(idx - 1) * 0.04,
-		"count_mult": 1.0 + float(idx - 1) * 0.15,
+		"hp_mult": base_hp * forge_dmg,
+		"speed_mult": base_speed + float(idx - 2) * 0.02,
+		"count_mult": base_count * (1.0 + (forge_dmg - 1.0) * 0.5),
 	}
 
 
@@ -656,6 +679,26 @@ static func build_khan_level(
 
 static func _starter_towers() -> Array[String]:
 	return ["tower_archer", "tower_sacred_fire", "tower_heavy", "tower_control"]
+
+
+static func get_starter_tower_ids() -> Array[String]:
+	return _starter_towers()
+
+
+static func get_unlockable_tower_ids() -> Array[String]:
+	var ids: Array[String] = []
+	for t in build_towers():
+		if t.unlock_material_cost > 0 and t.forge_material_id != "":
+			ids.append(t.tower_id)
+	return ids
+
+
+static func get_material_for_tower(tower_id: String) -> String:
+	if ContentRegistry:
+		var td := ContentRegistry.get_tower(tower_id)
+		if td:
+			return td.forge_material_id
+	return ""
 
 
 static func _region_ids_north_south() -> Array[String]:

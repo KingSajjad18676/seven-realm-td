@@ -7,8 +7,9 @@ func test_v1_migrates_to_v4() -> void:
 		"tutorial_completed": false,
 		"unlocked_levels": ["level_00_tutorial"],
 	}
-	var migrated := SaveMigration.migrate(v1, 5)
-	assert_eq(int(migrated.get("save_version", 0)), 5)
+	var migrated := SaveMigration.migrate(v1, 6)
+	assert_eq(int(migrated.get("save_version", 0)), 6)
+	assert_true(migrated.has("campaign_run"))
 	assert_true(migrated.has("star_iron"))
 	assert_true(migrated.has("tower_forge"))
 	assert_true(migrated.has("replay_stats"))
