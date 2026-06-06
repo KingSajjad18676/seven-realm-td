@@ -11,6 +11,8 @@ const LOADING_OVERLAY := preload("res://scenes/ui/battle_loading_overlay.tscn")
 var pending_launch: BattleLaunchData = null
 var pending_roguelite_run: RogueliteRunState = null
 var pending_campaign_run: CampaignRunState = null
+var pending_gauntlet_run: GauntletRunState = null
+var pending_gauntlet_battle_result: Dictionary = {}
 var pending_campaign_battle_result: Dictionary = {}
 var pending_alert: String = ""
 var forge_return_path: String = MAIN_MENU
@@ -101,6 +103,23 @@ func clear_campaign_run() -> void:
 		SaveSystem.clear_campaign_run()
 
 
+func clear_gauntlet_run() -> void:
+	pending_gauntlet_run = null
+	pending_gauntlet_battle_result = {}
+
+
+func advance_gauntlet_after_victory(elapsed_ms: int) -> bool:
+	if pending_gauntlet_run == null:
+		return false
+	pending_gauntlet_run.record_labour_clear(elapsed_ms)
+	if pending_gauntlet_run.labour_index >= GauntletRunState.GAUNTLET_LEVEL_IDS.size() - 1:
+		return false
+	pending_gauntlet_run.advance_labour()
+	pending_launch = pending_gauntlet_run.build_launch()
+	go_to_battle(pending_launch)
+	return true
+
+
 func consume_pending_alert() -> String:
 	var msg := pending_alert
 	pending_alert = ""
@@ -120,6 +139,8 @@ func go_to_battle(launch: BattleLaunchData) -> void:
 			go_to_world_map()
 			return
 	pending_launch = launch
+	if EquipmentService and launch:
+		EquipmentService.apply_to_launch(launch)
 	_go_to_battle_with_preload(launch)
 
 

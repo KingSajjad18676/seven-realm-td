@@ -52,7 +52,8 @@ func _spawn_enemy(data: EnemyData, spawn_group: Dictionary = {}) -> void:
 	var route_info := context.resolve_enemy_route(spawn_group)
 	var path: PackedVector2Array = route_info.get("path", context.path_points)
 	var spawn_pos: Vector2 = route_info.get("position", Vector2.ZERO)
-	node.initialize(context, data, path)
+	var route_id: String = str(route_info.get("route_id", ""))
+	node.initialize(context, data, path, route_id)
 	if data.is_boss:
 		node.setup_as_boss()
 	if node.get_parent() != units_root:

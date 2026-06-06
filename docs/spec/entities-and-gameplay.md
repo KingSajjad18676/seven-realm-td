@@ -267,7 +267,14 @@ Eight campaign battlefields + tutorial graybox ([design/00](../design/00-project
 
 **Khan 1 (in repo):** `enemy_jackal`, `enemy_boar`, `enemy_corruptor`, `enemy_lion_boss` — art IDs `enemy_corrupted_*`, `boss_mythic_lion` (§16).
 
-**Companion (Khan 1):** `companion_rakhsh` — narrative, not playable in code.
+**Companion (Khan 1 + Campaign Run):**
+
+| companion_id | Role | Built |
+|--------------|------|-------|
+| `companion_rakhsh` | Rostam mount (+200% move, grunt knockback; dismount for tether/skill) | ✅ |
+| `companion_royal_cheetah` | Auto-scavenge drops → bank at Rostam | ✅ Shrine pick |
+| `companion_simurgh_fledgling` | Orbit + 15s regional light pulse (+50) | ✅ Shrine pick |
+| `companion_zavareh` | Gate guard / leak interceptor | ✅ Shrine pick |
 
 ---
 

@@ -24,6 +24,16 @@ func test_relic_attack_mult_stacks() -> void:
 	assert_almost_eq(float(_ctx.runtime_modifiers.get("attack_mult", 1.0)), 1.32, 0.001)
 
 
+func test_tower_relic_lookup() -> void:
+	var relic := RelicData.new()
+	relic.relic_id = "relic_cup_of_jamshid"
+	relic.slot_tower_id = "tower_archer"
+	relic.global_targeting = true
+	_mods.slot_relic(relic, "tower_archer")
+	assert_eq(_mods.get_relic_for_tower("tower_archer").relic_id, "relic_cup_of_jamshid")
+	assert_null(_mods.get_relic_for_tower("tower_heavy"))
+
+
 func test_wave_gold_bonus_on_wave_started() -> void:
 	var relic := RelicData.new()
 	relic.relic_id = "relic_gold"

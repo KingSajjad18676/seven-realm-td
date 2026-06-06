@@ -10,7 +10,11 @@ var _levels: Dictionary = {}
 var _fate_cards: Dictionary = {}
 var _spells: Dictionary = {}
 var _relics: Dictionary = {}
+var _companions: Dictionary = {}
 var _objectives: Dictionary = {}
+var _equipment_pieces: Dictionary = {}
+var _equipment_sets: Dictionary = {}
+var _daily_missions: Dictionary = {}
 
 
 func _ready() -> void:
@@ -19,7 +23,11 @@ func _ready() -> void:
 
 func reload() -> void:
 	_relics.clear()
+	_companions.clear()
 	_objectives.clear()
+	_equipment_pieces.clear()
+	_equipment_sets.clear()
+	_daily_missions.clear()
 	_load_bootstrap()
 
 
@@ -75,8 +83,16 @@ func _merge_resource(res: Resource) -> void:
 		if not bootstrap.has_method("get"):
 			pass
 		_relics[res.relic_id] = res
+	elif res is CompanionData:
+		_companions[res.companion_id] = res
 	elif res is ObjectiveData:
 		_objectives[res.objective_id] = res
+	elif res is EquipmentPieceData:
+		_equipment_pieces[res.piece_id] = res
+	elif res is EquipmentSetData:
+		_equipment_sets[res.set_id] = res
+	elif res is DailyMissionDefinition:
+		_daily_missions[res.mission_id] = res
 
 
 func _index_content() -> void:
@@ -104,6 +120,17 @@ func _index_content() -> void:
 	if _relics.is_empty():
 		for r in _build_default_relics():
 			_relics[r.relic_id] = r
+	else:
+		for r in _build_default_relics():
+			if not _relics.has(r.relic_id):
+				_relics[r.relic_id] = r
+	if _companions.is_empty():
+		for c in ContentCatalog.build_companions():
+			_companions[c.companion_id] = c
+	else:
+		for c in ContentCatalog.build_companions():
+			if not _companions.has(c.companion_id):
+				_companions[c.companion_id] = c
 	if _objectives.is_empty():
 		for o in _build_default_objectives():
 			_objectives[o.objective_id] = o
@@ -111,6 +138,27 @@ func _index_content() -> void:
 		for o in _build_default_objectives():
 			if not _objectives.has(o.objective_id):
 				_objectives[o.objective_id] = o
+	if _equipment_pieces.is_empty():
+		for p in ContentCatalog.build_equipment_pieces():
+			_equipment_pieces[p.piece_id] = p
+	else:
+		for p in ContentCatalog.build_equipment_pieces():
+			if not _equipment_pieces.has(p.piece_id):
+				_equipment_pieces[p.piece_id] = p
+	if _equipment_sets.is_empty():
+		for s in ContentCatalog.build_equipment_sets():
+			_equipment_sets[s.set_id] = s
+	else:
+		for s in ContentCatalog.build_equipment_sets():
+			if not _equipment_sets.has(s.set_id):
+				_equipment_sets[s.set_id] = s
+	if _daily_missions.is_empty():
+		for m in ContentCatalog.build_daily_mission_definitions():
+			_daily_missions[m.mission_id] = m
+	else:
+		for m in ContentCatalog.build_daily_mission_definitions():
+			if not _daily_missions.has(m.mission_id):
+				_daily_missions[m.mission_id] = m
 
 
 func get_tower(tower_id: String) -> TowerData:
@@ -166,6 +214,38 @@ func get_all_relics() -> Array[RelicData]:
 	return out
 
 
+func get_companion(companion_id: String) -> CompanionData:
+	return _companions.get(companion_id) as CompanionData
+
+
+func get_all_companions() -> Array[CompanionData]:
+	var out: Array[CompanionData] = []
+	for c in _companions.values():
+		out.append(c)
+	return out
+
+
+func get_shrine_companions() -> Array[CompanionData]:
+	var out: Array[CompanionData] = []
+	for c in _companions.values():
+		var data := c as CompanionData
+		if data and data.is_shrine_pick():
+			out.append(data)
+	return out
+
+
+func get_relics_for_towers(tower_ids: Array[String]) -> Array[RelicData]:
+	var out: Array[RelicData] = []
+	var allowed: Dictionary = {}
+	for tower_id in tower_ids:
+		allowed[str(tower_id)] = true
+	for relic in _relics.values():
+		var r := relic as RelicData
+		if r and r.is_tower_relic() and allowed.has(r.slot_tower_id):
+			out.append(r)
+	return out
+
+
 func get_objective(objective_id: String) -> ObjectiveData:
 	return _objectives.get(objective_id) as ObjectiveData
 
@@ -201,11 +281,62 @@ func get_vow(vow_id: String) -> ObjectiveData:
 	return null
 
 
+func get_equipment_piece(piece_id: String) -> EquipmentPieceData:
+	return _equipment_pieces.get(piece_id) as EquipmentPieceData
+
+
+func get_all_equipment_pieces() -> Array[EquipmentPieceData]:
+	var out: Array[EquipmentPieceData] = []
+	for p in _equipment_pieces.values():
+		out.append(p)
+	return out
+
+
+func get_equipment_set(set_id: String) -> EquipmentSetData:
+	return _equipment_sets.get(set_id) as EquipmentSetData
+
+
+func get_all_equipment_sets() -> Array[EquipmentSetData]:
+	var out: Array[EquipmentSetData] = []
+	for s in _equipment_sets.values():
+		out.append(s)
+	return out
+
+
+func get_equipment_for_level(level_id: String) -> Array[EquipmentPieceData]:
+	var out: Array[EquipmentPieceData] = []
+	for p in _equipment_pieces.values():
+		var piece := p as EquipmentPieceData
+		if piece and piece.drop_level_id == level_id and piece.is_boss_drop():
+			out.append(piece)
+	return out
+
+
+func get_daily_equipment_pool() -> Array[EquipmentPieceData]:
+	var out: Array[EquipmentPieceData] = []
+	for p in _equipment_pieces.values():
+		var piece := p as EquipmentPieceData
+		if piece and piece.is_daily_drop():
+			out.append(piece)
+	return out
+
+
+func get_daily_mission_def(mission_id: String) -> DailyMissionDefinition:
+	return _daily_missions.get(mission_id) as DailyMissionDefinition
+
+
+func get_all_daily_mission_defs() -> Array[DailyMissionDefinition]:
+	var out: Array[DailyMissionDefinition] = []
+	for m in _daily_missions.values():
+		out.append(m)
+	return out
+
+
 func _build_default_relics() -> Array[RelicData]:
 	var r1 := RelicData.new()
 	r1.relic_id = "relic_derafsh_fragment"
 	r1.title = "Derafsh Fragment"
-	r1.description = "+8% tower damage."
+	r1.description = "+8% tower damage (all towers)."
 	r1.attack_mult = 1.08
 	var r2 := RelicData.new()
 	r2.relic_id = "relic_ember_coil"
@@ -219,7 +350,32 @@ func _build_default_relics() -> Array[RelicData]:
 	r3.description = "+8 gold each wave, -5% corruption."
 	r3.gold_bonus_per_wave = 8
 	r3.corruption_resist = 0.05
-	return [r1, r2, r3]
+	var jamshid := RelicData.new()
+	jamshid.relic_id = "relic_cup_of_jamshid"
+	jamshid.title = "Cup of Jamshid"
+	jamshid.description = "Archers shoot anywhere on the map, but attack 50% slower."
+	jamshid.slot_tower_id = "tower_archer"
+	jamshid.global_targeting = true
+	jamshid.tower_attack_rate_mult = 0.5
+	var hushang := RelicData.new()
+	hushang.relic_id = "relic_flame_of_hushang"
+	hushang.title = "Flame of Hushang"
+	hushang.description = "Sacred Fire burns foes and slowly restores Gate Lives on attack."
+	hushang.slot_tower_id = "tower_sacred_fire"
+	hushang.gate_lives_per_attack = 0.05
+	var anvil := RelicData.new()
+	anvil.relic_id = "relic_feridun_mace"
+	anvil.title = "Mace of Feridun"
+	anvil.description = "Heavy towers deal +25% damage."
+	anvil.slot_tower_id = "tower_heavy"
+	anvil.tower_damage_mult = 1.25
+	var frost := RelicData.new()
+	frost.relic_id = "relic_ring_of_kay_kavus"
+	frost.title = "Ring of Kay Kavus"
+	frost.description = "Control towers attack 15% faster."
+	frost.slot_tower_id = "tower_control"
+	frost.tower_attack_rate_mult = 1.15
+	return [r1, r2, r3, jamshid, hushang, anvil, frost]
 
 
 func _replace_or_append_level(override: LevelData) -> void:

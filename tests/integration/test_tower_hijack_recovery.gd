@@ -1,11 +1,9 @@
 extends GutTest
 
 const TOWER_SCENE := preload("res://scenes/prefabs/tower.tscn")
-const BUILD_SPOT_SCENE := preload("res://scenes/prefabs/build_spot.tscn")
 
 var _ctx: BattleContext = null
 var _tower: TowerController = null
-var _spot: BuildSpot = null
 var _recovered: bool = false
 
 
@@ -19,18 +17,13 @@ func before_each() -> void:
 	add_child(map_light)
 	map_light.initialize(_ctx)
 	_ctx.map_light = map_light
-	_spot = BUILD_SPOT_SCENE.instantiate() as BuildSpot
-	_spot.spot_id = "pad_test"
-	_spot.region_id = "region_north"
-	add_child(_spot)
 	_tower = TOWER_SCENE.instantiate() as TowerController
 	add_child(_tower)
 	var tower_data := ContentRegistry.get_tower("tower_archer")
 	assert_not_null(tower_data, "Need archer tower data for hijack test")
-	_tower.initialize(_ctx, tower_data.duplicate(true) as TowerData, _spot)
-	_spot.set_occupied(_tower)
+	_tower.initialize(_ctx, tower_data.duplicate(true) as TowerData, Vector2(400, 300), "region_north", "tower_hijack_test")
 	_ctx.bridge.region_light_changed.connect(func(region_id: String, light: int, _state: GameEnums.RegionLightState) -> void:
-		if _spot.region_id == region_id:
+		if _tower.region_id == region_id:
 			_tower.on_region_light_changed(light)
 	)
 	CombatEvents.tower_hijack_recovered.connect(_on_hijack_recovered)
@@ -40,11 +33,10 @@ func after_each() -> void:
 	if CombatEvents.tower_hijack_recovered.is_connected(_on_hijack_recovered):
 		CombatEvents.tower_hijack_recovered.disconnect(_on_hijack_recovered)
 	_tower = null
-	_spot = null
 	_ctx = null
 
 
-func _on_hijack_recovered(_spot_id: String) -> void:
+func _on_hijack_recovered(_placement_id: String) -> void:
 	_recovered = true
 
 

@@ -56,7 +56,8 @@ func _populate_levels() -> void:
 func _wire_toolbar() -> void:
 	_level_select.item_selected.connect(_on_level_selected)
 	_tool_road.pressed.connect(func() -> void: _set_tool(MapEditorCanvas.Tool.ROAD))
-	_tool_pads.pressed.connect(func() -> void: _set_tool(MapEditorCanvas.Tool.PADS))
+	if _tool_pads:
+		_tool_pads.visible = false
 	_tool_spawn.pressed.connect(func() -> void: _set_tool(MapEditorCanvas.Tool.SPAWN))
 	_tool_gate.pressed.connect(func() -> void: _set_tool(MapEditorCanvas.Tool.GATE))
 	_tool_select.pressed.connect(func() -> void: _set_tool(MapEditorCanvas.Tool.SELECT))
@@ -68,7 +69,10 @@ func _wire_toolbar() -> void:
 	%SaveButton.pressed.connect(_on_save_pressed)
 	%ReloadButton.pressed.connect(_load_selected_level)
 	%ClearToolButton.pressed.connect(_on_clear_tool_pressed)
-	%AutoPadsButton.pressed.connect(_on_auto_pads_pressed)
+	if has_node("%AutoPadsButton"):
+		get_node("%AutoPadsButton").visible = false
+	if _pad_count_spin:
+		_pad_count_spin.visible = false
 	%FitMapButton.pressed.connect(_on_fit_map_pressed)
 	%BackButton.pressed.connect(_on_back_pressed)
 	%AddRouteButton.pressed.connect(_on_add_route_pressed)
@@ -113,12 +117,17 @@ func _set_tool(tool: MapEditorCanvas.Tool) -> void:
 func _update_tool_status() -> void:
 	if _canvas == null:
 		return
-	var names := ["Road", "Pads", "Spawn", "Gate", "Select"]
+	var tool_names := {
+		MapEditorCanvas.Tool.ROAD: "Road",
+		MapEditorCanvas.Tool.SPAWN: "Spawn",
+		MapEditorCanvas.Tool.GATE: "Gate",
+		MapEditorCanvas.Tool.SELECT: "Select",
+	}
 	var route_id := _canvas.get_active_route_id()
 	var spawn_count := _canvas.spawn_points.size()
 	_set_status(
-		"Tool: %s — route %s, %d spawn(s). LMB place/drag, RMB delete (road/pads/spawn)."
-		% [names[_canvas.active_tool], route_id, spawn_count]
+		"Tool: %s — route %s, %d spawn(s). LMB place/drag, RMB delete (road/spawn)."
+		% [tool_names.get(_canvas.active_tool, "Road"), route_id, spawn_count]
 	)
 
 

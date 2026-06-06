@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="RelicData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/relic_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+relic_id = "relic_flame_of_hushang"
+title = "Flame of Hushang"
+description = "Sacred Fire burns foes and slowly restores Gate Lives on attack."
+slot_tower_id = "tower_sacred_fire"
+gate_lives_per_attack = 0.05

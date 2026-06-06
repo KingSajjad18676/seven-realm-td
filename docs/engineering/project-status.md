@@ -1,6 +1,6 @@
 # Project Status (Godot)
 
-**Last updated:** 2026-06-06 (Roguelite loop refactor — scavenging, campaign run, tower draft)  
+**Last updated:** 2026-06-07 (Haft-Khan Gauntlet speedrun mode)  
 **Milestones:** [design/04-production-roadmap.md](../design/04-production-roadmap.md) · **Identity:** [design/00-project-index.md](../design/00-project-index.md)
 
 ---
@@ -10,7 +10,7 @@
 | Item                           | Status                                                                                                                                                            |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Godot project                  | ✅ `project.godot` — **Rostam 7 Labours: Shahname TD**, landscape mobile                                                                                          |
-| Main menu → world map → battle | ✅ Campaign, roguelite, endless, **horde**, hunt, daily tale                                                                                                                 |
+| Main menu → world map → battle | ✅ Campaign, roguelite, endless, **horde**, **Brothers in Arms**, **Defend the Throne**, **Haft-Khan Gauntlet**, hunt, daily tale                                                                                                                 |
 | Tutorial gate                  | ✅ Khan 1 locked until tutorial cleared                                                                                                                           |
 | Khan 1 onboarding              | ✅ Tutorial teaches scavenging, materials banking, Campaign Run; contextual hints in battle (tower panel, forge, early call, tether)                            |
 | Campaign levels                | ✅ Tutorial + **Labours 1–7** + Damavand; **30–100 block-templated waves** (+10 per Labour), **Pardeh every 5 waves**, mini-boss every 10th wave |
@@ -18,11 +18,14 @@
 | **Rostam Tahmtan Barracks**    | ✅ Unlock at 7 Labour seals or store IAP; summons Zabul Vanguard / Bull-Mace Bearer allies (in-battle upgrade) |
 | **Serpent Spire behavior**     | ✅ Twin-target venom + Hunger attack-speed (horde-clear or store unlock; no Star Iron forge) |
 | Hero's Vow (wave challenges)   | ✅ Optional Accept/Decline vow every 10 waves; honor = SF + morale; break = morale penalty (never fails battle) |
-| Signature systems              | ✅ Corruption, hijack (SF purify), Pardeh/Fate (skip or pick), Morale at start, Sacred Tether via tower panel, Ancestral Forge nearest-pad fusion                 |
+| Signature systems              | ✅ Corruption, hijack (SF purify), Pardeh/Fate (skip or pick), Morale at start, Sacred Tether via tower panel, **Tower Resonance** (adjacent combo buffs), free road-adjacent placement, **Rostam Naft path traps + Sacred Fire ignition** |
 | Roguelite 5-node run (legacy)  | 🟡 Superseded by **Campaign Run** graph on world map; save migrates `roguelite_run` → `campaign_run`                                                             |
-| **Campaign Run (branching)**   | ✅ `CampaignRunState` + graph on world map; skirmish / anvil / shrine / labour boss / Damavand finale; save v6                                                     |
+| **Campaign Run (branching)**   | ✅ `CampaignRunState` + graph on world map; skirmish / anvil / shrine / **Throne of Kavus** / labour boss / Damavand finale; save v6                                                     |
+| **Ahriman's Shroud**           | ✅ Endgame Campaign Run hard mode — Damavand clear unlocks toggle; hidden nodes; SF reveal gate; shared run SF wallet into battles                                  |
 | **Active material scavenging** | ✅ Physical `MaterialDrop` pickups; hero collection; unbanked HUD; defeat clears 100%; Pardeh **Retreat to Forge** banks loot                                    |
+| **Rostam companions**          | ✅ Rakhsh mount (Rostam); Campaign Run Shrine pick: Royal Cheetah / Simurgh Fledgling / Zavareh (max 1 per run)                                                     |
 | **Tower draft per run**        | ✅ Pre-run pick 3 from unlocked pool; mid-run +1 on elite nodes; `run_tower_ids` injected at battle bootstrap                                                      |
+| **Relics of the Shahs**        | ✅ Per-tower relic slots (run/battle scoped); shrine / Pardeh / roguelite rest discovery; save v7 `tower_relic_slots`                                               |
 | **Per-tower forge unlock**     | ✅ `unlock_material_cost` + Kaveh's Forge unlock rows (Flame Archer, Volcano Ram materials)                                                                      |
 | Hunt for Zahhak                | ✅ 7 seals + Elite forge enforced in scene flow; binding shards weaken Zahhak                                                                                     |
 | Campaign Damavand              | ✅ After Khan 7 clear; binding guards + chainbreakers before boss                                                                                                 |
@@ -31,6 +34,12 @@
 | Save v4                        | ✅ Hunt best, forge notification, roguelite run state, mode-aware battle saves                                                                                    |
 | Save v5                        | ✅ Forge Tokens, spells owned, horde progress, unlocked towers, paid entitlements                                                                                 |
 | Save v6                        | ✅ `campaign_run`, starter towers seeded in `unlocked_towers` pool                                                                                                |
+| Save v7                        | ✅ `tower_relic_slots` + global `active_relic_ids`; migrates legacy `relic_ids`                                                                                  |
+| Save v8                        | ✅ `gauntlet_best` personal-best splits + trace for ghost HUD                                                                                                    |
+| Save v9                        | ✅ Haft-Khan equipment loadout + daily missions + mission lifetime stats                                                                                          |
+| **Haft-Khan Gauntlet**         | ✅ 7-Labour boss rush; 3-tower draft; ms timer + ghost; Rush / early-call overwhelm; save v8 PB                                                                    |
+| **Haft-Khan Equipment Sets**   | ✅ 7 sets × 4 pieces; boss + daily drops; set rules in battle; Equipment + Daily Missions UI on world map                                                         |
+| **Daily Missions**             | ✅ 3/day rotation; 10-mission pool; Royal Bounty +3; loot chest → helm/talisman                                                                                   |
 | Khan difficulty scaling        | ✅ Per-Khan HP/speed/count mults; **10-wave master block generator** (`CampaignWaveTemplates`) |
 | Horde mode                     | ✅ 15 waves per Khan; clear all 8 unlocks Serpent Spire tower                                                                                                     |
 | Forge Tokens + Spells          | ✅ Earn on victory; buy in Kaveh's Forge; cast in battle HUD                                                                                                      |

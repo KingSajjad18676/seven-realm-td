@@ -8,6 +8,8 @@ const KHAN_HORDE_LEVELS: Array[String] = [
 	"level_01", "level_02", "level_03", "level_04",
 	"level_05", "level_06", "level_07", "level_08_damavand",
 ]
+const THRONE_ARENA_LEVEL_ID := "level_throne_arena"
+const THRONE_SPAWN_COUNT := 10
 
 
 static func build_bootstrap() -> BootstrapContent:
@@ -454,6 +456,16 @@ static func build_heroes() -> Array[HeroData]:
 	rostam.attack_damage = 28.0
 	rostam.skill_damage = 60.0
 	rostam.tether_radius = 120.0
+	rostam.secondary_skill_id = "rostam_naft"
+	rostam.naft_max_charges = 2
+	rostam.naft_refill_sec = 20.0
+	rostam.naft_max_active = 2
+	rostam.naft_slick_half_length = 70.0
+	rostam.naft_slow_mult = 0.35
+	rostam.naft_oil_duration_sec = 35.0
+	rostam.naft_blaze_duration_sec = 3.5
+	rostam.naft_blaze_burst_damage = 40.0
+	rostam.naft_blaze_dps = 22.0
 	rostam.color = Color(0.2, 0.45, 0.85)
 	rostam.sprite_path = VisualAssetLoader.khan1_sprite("rostam")
 
@@ -469,7 +481,20 @@ static func build_heroes() -> Array[HeroData]:
 	zal.tether_radius = 140.0
 	zal.color = Color(0.55, 0.75, 0.9)
 
-	return [rostam, zal]
+	var sohrab := HeroData.new()
+	sohrab.hero_id = "sohrab"
+	sohrab.display_name = "Sohrab"
+	sohrab.max_hp = 200.0
+	sohrab.move_speed = 205.0
+	sohrab.attack_damage = 30.0
+	sohrab.skill_id = "sohrab_rage"
+	sohrab.skill_cooldown = 12.0
+	sohrab.skill_damage = 70.0
+	sohrab.tether_radius = 120.0
+	sohrab.color = Color(0.9, 0.45, 0.25)
+	sohrab.sprite_path = VisualAssetLoader.khan1_sprite("sohrab")
+
+	return [rostam, zal, sohrab]
 
 
 static func build_fate_cards() -> Array[FateCardData]:
@@ -611,6 +636,7 @@ static func build_levels() -> Array[LevelData]:
 		build_khan_level("level_06", "Labour 6 — Arzhang Fortress", 52, 30, 185, 6, "enemy_arzhang_div", _khan6_path(), true),
 		build_khan_level("level_07", "Labour 7 — White Div Cavern", 56, 32, 190, 6, "enemy_white_div", _khan7_path(), true),
 		build_khan_level("level_08_damavand", "Damavand Binding", 64, 36, 200, 8, "enemy_zahhak", _damavand_path(), true),
+		build_throne_arena_level(),
 	]
 
 
@@ -631,7 +657,6 @@ static func build_tutorial() -> LevelData:
 	level.gate_position = Vector2(1180, 360)
 	level.path_points = _khan1_path()
 	level.map_sprite_path = VisualAssetLoader.map_sprite("level_00_tutorial")
-	level.build_spot_positions = [Vector2(320, 300), Vector2(520, 220), Vector2(700, 300)]
 	level.waves = _tutorial_waves()
 	level.minimap_bounds = MapCameraUtils.compute_world_bounds(level)
 	return level
@@ -667,8 +692,6 @@ static func build_khan_level(
 	level.map_sprite_path = VisualAssetLoader.map_sprite(id)
 	if large_cam:
 		level.camera_anchors = [Vector2(640, 360), Vector2(900, 400), Vector2(400, 320)]
-	var pad_count := 4 if not large_cam else 6
-	level.build_spot_positions = _pads_along_path(path, pad_count)
 	level.waves = CampaignWaveTemplates.generate(id, boss_id)
 	level.block_size = 10
 	level.default_objective_id = _default_objective_for(id)
@@ -707,6 +730,68 @@ static func _region_ids_north_south() -> Array[String]:
 
 static func _region_ids_large_map() -> Array[String]:
 	return ["region_north", "region_south", "region_east"]
+
+
+static func _region_ids_compass() -> Array[String]:
+	return ["region_north", "region_east", "region_south", "region_west"]
+
+
+static func build_radial_routes(center: Vector2, radius: float, count: int) -> Dictionary:
+	var routes: Array[PathRouteData] = []
+	var spawns: Array[SpawnPointData] = []
+	for i in count:
+		var angle := (TAU * float(i)) / float(count)
+		var spawn_pos := center + Vector2(cos(angle), sin(angle)) * radius
+		var route_id := "route_throne_%d" % i
+		var spawn_id := "spawn_throne_%d" % i
+		var route := PathRouteData.new()
+		route.route_id = route_id
+		route.points = [spawn_pos, center]
+		routes.append(route)
+		var spawn := SpawnPointData.new()
+		spawn.spawn_id = spawn_id
+		spawn.position = spawn_pos
+		spawn.route_id = route_id
+		spawns.append(spawn)
+	return {"routes": routes, "spawns": spawns}
+
+
+static func build_throne_arena_level() -> LevelData:
+	var center := Vector2(640, 360)
+	var radial := build_radial_routes(center, 520.0, THRONE_SPAWN_COUNT)
+	var level := LevelData.new()
+	level.level_id = THRONE_ARENA_LEVEL_ID
+	level.display_name = "Defend the Throne"
+	level.grid_width = 32
+	level.grid_height = 18
+	level.starting_gold = 180
+	level.starting_lives = 18
+	level.starting_sacred_fire = 5
+	level.hero_id = "rostam"
+	level.available_tower_ids = _starter_towers()
+	level.region_ids = _region_ids_compass()
+	level.gate_position = center
+	level.spawn_position = radial["spawns"][0].position as Vector2
+	level.path_routes = radial["routes"] as Array[PathRouteData]
+	level.spawn_points = radial["spawns"] as Array[SpawnPointData]
+	level.path_points = (radial["routes"][0] as PathRouteData).points.duplicate()
+	level.build_spot_positions = _throne_build_spots(center)
+	level.default_objective_id = "obj_survive_waves"
+	level.labour_mode_id = ""
+	level.block_size = 10
+	level.camera_anchors = [center]
+	level.minimap_bounds = MapCameraUtils.compute_world_bounds(level)
+	level.waves = []
+	return level
+
+
+static func _throne_build_spots(center: Vector2) -> Array[Vector2]:
+	var spots: Array[Vector2] = []
+	var ring_radius := 160.0
+	for i in 10:
+		var angle := (TAU * float(i)) / 10.0
+		spots.append(center + Vector2(cos(angle), sin(angle)) * ring_radius)
+	return spots
 
 
 static func _tutorial_waves() -> Array[WaveData]:
@@ -898,3 +983,263 @@ static func get_ally_unit(unit_id: String) -> AllyUnitData:
 		if unit.unit_id == unit_id:
 			return unit
 	return null
+
+
+static func build_companions() -> Array[CompanionData]:
+	var cheetah := CompanionData.new()
+	cheetah.companion_id = "companion_royal_cheetah"
+	cheetah.display_name = "Royal Cheetah"
+	cheetah.description = "Auto-scavenges Star Iron drops and banks them at Rostam."
+	cheetah.behavior = CompanionData.Behavior.CHEETAH_SCAVENGER
+	cheetah.move_speed = 320.0
+	cheetah.color = Color(0.9, 0.65, 0.2)
+
+	var simurgh := CompanionData.new()
+	simurgh.companion_id = "companion_simurgh_fledgling"
+	simurgh.display_name = "Simurgh Fledgling"
+	simurgh.description = "Orbits Rostam; every 15s restores 50 regional light."
+	simurgh.behavior = CompanionData.Behavior.SIMURGH_ORBITER
+	simurgh.orbit_radius = 70.0
+	simurgh.orbit_speed = 0.8
+	simurgh.pulse_interval_sec = 15.0
+	simurgh.pulse_light_amount = 50
+	simurgh.color = Color(0.95, 0.85, 0.45)
+
+	var zavareh := CompanionData.new()
+	zavareh.companion_id = "companion_zavareh"
+	zavareh.display_name = "Zavareh"
+	zavareh.description = "Guards the Gate and blocks enemies that slip past your towers."
+	zavareh.behavior = CompanionData.Behavior.ZAVAREH_GATE_GUARD
+	zavareh.move_speed = 130.0
+	zavareh.gate_offset = Vector2(-55, 0)
+	zavareh.max_hp = 240.0
+	zavareh.attack_damage = 24.0
+	zavareh.attack_rate = 0.85
+	zavareh.color = Color(0.35, 0.5, 0.75)
+
+	return [cheetah, simurgh, zavareh]
+
+
+static func build_equipment_sets() -> Array[EquipmentSetData]:
+	var sets: Array[EquipmentSetData] = []
+	sets.append(_make_equipment_set(
+		"set_rakhsh_vigor", "Rakhsh's Vigor",
+		"rakhsh_dash_knockdown", "Dashing through light enemies knocks them down.",
+		"rakhsh_tower_range_near_hero", "Towers placed near Rostam gain +10% attack range.",
+		"rakhsh_spectral_horse", "Heavy attacks summon a spectral horse that tramples and stuns foes for 3 seconds."
+	))
+	sets.append(_make_equipment_set(
+		"set_thirst_turan", "Thirst of Turan",
+		"thirst_forge_token_drop", "Enemies have a 10% higher chance to drop Forge Tokens.",
+		"thirst_tower_refund", "Building a tower refunds 10% of its Gold cost.",
+		"thirst_tower_sell_bonus", "Once per map, selling a tower grants 200% Gold value and heals the Gate by 1 Life."
+	))
+	sets.append(_make_equipment_set(
+		"set_azhdaha_scale", "Scale of the Azhdaha",
+		"azhdaha_melee_burn", "Rostam's melee attacks apply a 3-second burn.",
+		"azhdaha_fire_extra_shot", "All Fire Towers shoot an extra projectile.",
+		"azhdaha_fire_nova", "Below 20% HP, Rostam erupts in a fire nova that vaporizes non-boss enemies."
+	))
+	sets.append(_make_equipment_set(
+		"set_mazandaran_venom", "Venom of Mazandaran",
+		"mazandaran_melee_slow", "Rostam's attacks slow enemy movement speed by 30%.",
+		"mazandaran_archer_armor_break", "Enemies shot by Archer Towers lose 20% of their armor rating.",
+		"mazandaran_toxic_explosion", "Enemies dying from poison or debuffs explode into a toxic cloud that stops movement for 2 seconds."
+	))
+	sets.append(_make_equipment_set(
+		"set_kaveh_iron", "Iron of Kaveh",
+		"kaveh_periodic_shield", "Rostam passively generates a small shield every 10 seconds.",
+		"kaveh_heavy_vs_brute", "Heavy Artillery towers deal double damage to Div Brutes.",
+		"kaveh_gate_rebuild", "If the Gate is destroyed, Kaveh's magic rebuilds it with 1 Life for all your Gold."
+	))
+	sets.append(_make_equipment_set(
+		"set_arzhang_fury", "Arzhang's Fury",
+		"arzhang_cleave", "Rostam's melee attacks hit in a 180-degree cleave arc.",
+		"arzhang_combat_tower_haste", "While Rostam is in combat, all towers fire 15% faster.",
+		"arzhang_blood_frenzy", "Activating Sacred Tether sends Rostam into Blood Frenzy: 2x attack speed and invincible for 5 seconds."
+	))
+	sets.append(_make_equipment_set(
+		"set_simurgh_talon", "Simurgh's Talon",
+		"simurgh_cleanse_discount", "Sacred Fire costs for cleansing regions are reduced by half.",
+		"simurgh_beam_cleanse", "Tower attack beams illuminate the map, acting as free cleansers.",
+		"simurgh_wings_dash_cleanse", "Rostam can dash across the map to any corrupted zone and instantly cleanse it for free."
+	))
+	return sets
+
+
+static func _make_equipment_set(
+	id: String,
+	name: String,
+	rule2: String,
+	desc2: String,
+	rule3: String,
+	desc3: String,
+	rule4: String,
+	desc4: String
+) -> EquipmentSetData:
+	var s := EquipmentSetData.new()
+	s.set_id = id
+	s.set_name = name
+	s.two_piece_rule_id = rule2
+	s.two_piece_description = desc2
+	s.three_piece_rule_id = rule3
+	s.three_piece_description = desc3
+	s.four_piece_rule_id = rule4
+	s.four_piece_description = desc4
+	return s
+
+
+static func build_equipment_pieces() -> Array[EquipmentPieceData]:
+	var pieces: Array[EquipmentPieceData] = []
+	# Set 1 — Rakhsh's Vigor
+	pieces.append(_equip_piece("equip_rakhsh_lion_bone_club", "The Lion-Bone Club", "set_rakhsh_vigor",
+		EquipmentPieceData.SlotType.WEAPON, EquipmentPieceData.DropSource.KHAN_BOSS, "level_01",
+		{"hero_melee_damage_mult": 1.05}))
+	pieces.append(_equip_piece("equip_rakhsh_mantle_steed", "Mantle of the Steed", "set_rakhsh_vigor",
+		EquipmentPieceData.SlotType.ARMOR, EquipmentPieceData.DropSource.KHAN_BOSS, "level_01",
+		{"hero_move_speed_mult": 1.10}))
+	pieces.append(_equip_piece("equip_rakhsh_mane_helm", "Mane of Rakhsh", "set_rakhsh_vigor",
+		EquipmentPieceData.SlotType.HELM, EquipmentPieceData.DropSource.DAILY_MISSION, "",
+		{"hero_max_hp_mult": 1.05}))
+	pieces.append(_equip_piece("equip_rakhsh_golden_horseshoe", "The Golden Horseshoe", "set_rakhsh_vigor",
+		EquipmentPieceData.SlotType.TALISMAN, EquipmentPieceData.DropSource.DAILY_MISSION, "",
+		{"hero_dash_distance_mult": 1.10}))
+	# Set 2 — Thirst of Turan
+	pieces.append(_equip_piece("equip_thirst_blade_mirage", "Blade of the Mirage", "set_thirst_turan",
+		EquipmentPieceData.SlotType.WEAPON, EquipmentPieceData.DropSource.KHAN_BOSS, "level_02",
+		{"hero_attack_rate_mult": 1.05}))
+	pieces.append(_equip_piece("equip_thirst_desert_cloak", "Desert Wanderer's Cloak", "set_thirst_turan",
+		EquipmentPieceData.SlotType.ARMOR, EquipmentPieceData.DropSource.KHAN_BOSS, "level_02",
+		{"hero_dodge_chance": 0.10}))
+	pieces.append(_equip_piece("equip_thirst_sun_cowl", "Sun-Bleached Cowl", "set_thirst_turan",
+		EquipmentPieceData.SlotType.HELM, EquipmentPieceData.DropSource.DAILY_MISSION, "",
+		{"sacred_fire_drain_mult": 0.95}))
+	pieces.append(_equip_piece("equip_thirst_diviner_coin", "The Water Diviner's Coin", "set_thirst_turan",
+		EquipmentPieceData.SlotType.TALISMAN, EquipmentPieceData.DropSource.DAILY_MISSION, "",
+		{"gold_magnet_radius_mult": 1.50}))
+	# Set 3 — Scale of Azhdaha
+	pieces.append(_equip_piece("equip_azhdaha_dragons_fang", "The Dragon's Fang", "set_azhdaha_scale",
+		EquipmentPieceData.SlotType.WEAPON, EquipmentPieceData.DropSource.KHAN_BOSS, "level_03",
+		{"hero_armor_pierce": 0.10}))
+	pieces.append(_equip_piece("equip_azhdaha_charred_scalemail", "Charred Scalemail", "set_azhdaha_scale",
+		EquipmentPieceData.SlotType.ARMOR, EquipmentPieceData.DropSource.KHAN_BOSS, "level_03",
+		{"hero_env_fire_immune": true, "hero_env_poison_immune": true}))
+	pieces.append(_equip_piece("equip_azhdaha_horns", "Horns of the Azhdaha", "set_azhdaha_scale",
+		EquipmentPieceData.SlotType.HELM, EquipmentPieceData.DropSource.DAILY_MISSION, "",
+		{"hero_melee_damage_mult": 1.05}))
+	pieces.append(_equip_piece("equip_azhdaha_smoldering_ember", "Smoldering Ember", "set_azhdaha_scale",
+		EquipmentPieceData.SlotType.TALISMAN, EquipmentPieceData.DropSource.DAILY_MISSION, "",
+		{"tower_fire_damage_mult": 1.05}))
+	# Set 4 — Venom of Mazandaran
+	pieces.append(_equip_piece("equip_mazandaran_witch_dagger", "The Witch-Hunter's Dagger", "set_mazandaran_venom",
+		EquipmentPieceData.SlotType.WEAPON, EquipmentPieceData.DropSource.KHAN_BOSS, "level_04",
+		{"hero_attack_rate_mult": 1.15}))
+	pieces.append(_equip_piece("equip_mazandaran_shroud", "Shroud of Illusions", "set_mazandaran_venom",
+		EquipmentPieceData.SlotType.ARMOR, EquipmentPieceData.DropSource.KHAN_BOSS, "level_04",
+		{"hero_ranged_evasion": 0.10}))
+	pieces.append(_equip_piece("equip_mazandaran_enchantress_veil", "The Enchantress Veil", "set_mazandaran_venom",
+		EquipmentPieceData.SlotType.HELM, EquipmentPieceData.DropSource.DAILY_MISSION, "",
+		{"sacred_fire_max_bonus": 0.05}))
+	pieces.append(_equip_piece("equip_mazandaran_black_blood", "Vial of Black Blood", "set_mazandaran_venom",
+		EquipmentPieceData.SlotType.TALISMAN, EquipmentPieceData.DropSource.DAILY_MISSION, "",
+		{"corruption_duration_bonus": 2.0}))
+	# Set 5 — Iron of Kaveh
+	pieces.append(_equip_piece("equip_kaveh_blacksmith_hammer", "The Blacksmith's Hammer", "set_kaveh_iron",
+		EquipmentPieceData.SlotType.WEAPON, EquipmentPieceData.DropSource.KHAN_BOSS, "level_05",
+		{"hero_knockback_mult": 2.50}))
+	pieces.append(_equip_piece("equip_kaveh_commander_plate", "Heavy Commander's Plate", "set_kaveh_iron",
+		EquipmentPieceData.SlotType.ARMOR, EquipmentPieceData.DropSource.KHAN_BOSS, "level_05",
+		{"hero_move_speed_mult": 0.90, "hero_max_hp_mult": 1.50}))
+	pieces.append(_equip_piece("equip_kaveh_vanguard_bascinet", "The Vanguard Bascinet", "set_kaveh_iron",
+		EquipmentPieceData.SlotType.HELM, EquipmentPieceData.DropSource.DAILY_MISSION, "",
+		{"hero_stagger_immune": true}))
+	pieces.append(_equip_piece("equip_kaveh_anvil_stone", "The Anvil Stone", "set_kaveh_iron",
+		EquipmentPieceData.SlotType.TALISMAN, EquipmentPieceData.DropSource.DAILY_MISSION, "",
+		{"heavy_tower_cost_mult": 0.90}))
+	# Set 6 — Arzhang's Fury
+	pieces.append(_equip_piece("equip_arzhang_demon_cleaver", "The Demon-Cleaver", "set_arzhang_fury",
+		EquipmentPieceData.SlotType.WEAPON, EquipmentPieceData.DropSource.KHAN_BOSS, "level_06",
+		{"hero_melee_damage_mult": 1.15}))
+	pieces.append(_equip_piece("equip_arzhang_flayed_cuirass", "Flayed Skin Cuirass", "set_arzhang_fury",
+		EquipmentPieceData.SlotType.ARMOR, EquipmentPieceData.DropSource.KHAN_BOSS, "level_06",
+		{"hero_damage_speed_boost": true}))
+	pieces.append(_equip_piece("equip_arzhang_skull_vanguard", "Skull of the Vanguard", "set_arzhang_fury",
+		EquipmentPieceData.SlotType.HELM, EquipmentPieceData.DropSource.DAILY_MISSION, "",
+		{"hero_crit_chance": 0.10}))
+	pieces.append(_equip_piece("equip_arzhang_bloodied_tusks", "Bloodied Tusks", "set_arzhang_fury",
+		EquipmentPieceData.SlotType.TALISMAN, EquipmentPieceData.DropSource.DAILY_MISSION, "",
+		{"hero_lifesteal_on_kill": 0.01}))
+	# Set 7 — Simurgh's Talon
+	pieces.append(_equip_piece("equip_simurgh_sun_spear", "The Sun-Forged Spear", "set_simurgh_talon",
+		EquipmentPieceData.SlotType.WEAPON, EquipmentPieceData.DropSource.KHAN_BOSS, "level_07",
+		{"hero_light_damage": true}))
+	pieces.append(_equip_piece("equip_simurgh_guardian_feathers", "Feathers of the Guardian", "set_simurgh_talon",
+		EquipmentPieceData.SlotType.ARMOR, EquipmentPieceData.DropSource.KHAN_BOSS, "level_07",
+		{"hero_trap_immune": true}))
+	pieces.append(_equip_piece("equip_simurgh_crown_alborz", "Crown of Alborz", "set_simurgh_talon",
+		EquipmentPieceData.SlotType.HELM, EquipmentPieceData.DropSource.DAILY_MISSION, "",
+		{"sacred_fire_regen": 1.0}))
+	pieces.append(_equip_piece("equip_simurgh_white_div_horn", "The White Div's Horn", "set_simurgh_talon",
+		EquipmentPieceData.SlotType.TALISMAN, EquipmentPieceData.DropSource.DAILY_MISSION, "",
+		{"corruption_drain_mult": 0.50}))
+	return pieces
+
+
+static func _equip_piece(
+	id: String,
+	name: String,
+	set_id: String,
+	slot: EquipmentPieceData.SlotType,
+	source: EquipmentPieceData.DropSource,
+	level_id: String,
+	stats: Dictionary
+) -> EquipmentPieceData:
+	var p := EquipmentPieceData.new()
+	p.piece_id = id
+	p.display_name = name
+	p.set_id = set_id
+	p.slot_type = slot
+	p.drop_source = source
+	p.drop_level_id = level_id
+	p.stat_modifiers = stats
+	return p
+
+
+static func build_daily_mission_definitions() -> Array[DailyMissionDefinition]:
+	var defs: Array[DailyMissionDefinition] = []
+	defs.append(_mission_def("mission_slayer_demons", "Slayer of Demons: Kill 500 Divs total across any game mode.", 500, "total_div_kills"))
+	defs.append(_mission_def("mission_untouchable", "The Untouchable Pahlavan: Complete any map wave without taking Hero damage.", 1, "untouchable_wave"))
+	defs.append(_mission_def("mission_master_architect", "Master Architect: Build 20 fully upgraded towers in a single run.", 20, "run_max_upgraded_towers"))
+	defs.append(_mission_def("mission_hoarder", "Hoarder of Turan: Accumulate 5,000 Gold in a single run without spending it.", 5000, "run_peak_unspent_gold"))
+	defs.append(_mission_def("mission_light_bringer", "Light Bringer: Cleanse 15 Corrupted regions using Sacred Fire.", 15, "total_cleanses"))
+	defs.append(_mission_def("mission_pristine_defense", "Pristine Defense: Defeat a Boss wave without losing a single Gate Life.", 1, "pristine_boss_wave"))
+	defs.append(_mission_def("mission_blacksmith_patron", "The Blacksmith's Patron: Spend 1,000 Forge Tokens on meta-upgrades.", 1000, "total_forge_tokens_spent"))
+	defs.append(_mission_def("mission_close_quarters", "Close Quarters: Kill 50 enemies using only Rostam's melee attacks.", 50, "run_melee_kills"))
+	defs.append(_mission_def("mission_rain_of_arrows", "Rain of Arrows: Deal 10,000 damage using only Archer Towers.", 10000, "run_archer_damage"))
+	defs.append(_mission_def("mission_earth_shaker", "Earth Shaker: Stun 100 enemies using Heavy Towers or Hero Abilities.", 100, "run_stun_count"))
+	return defs
+
+
+static func _mission_def(id: String, desc: String, target: int, key: String) -> DailyMissionDefinition:
+	var m := DailyMissionDefinition.new()
+	m.mission_id = id
+	m.description = desc
+	m.goal_target = target
+	m.tracking_key = key
+	return m
+
+
+static func equipment_pieces_for_level(level_id: String) -> Array[EquipmentPieceData]:
+	var out: Array[EquipmentPieceData] = []
+	for p in build_equipment_pieces():
+		if p.drop_level_id == level_id and p.is_boss_drop():
+			out.append(p)
+	return out
+
+
+static func daily_helm_talisman_pool() -> Array[EquipmentPieceData]:
+	var out: Array[EquipmentPieceData] = []
+	for p in build_equipment_pieces():
+		if p.is_daily_drop():
+			out.append(p)
+	return out

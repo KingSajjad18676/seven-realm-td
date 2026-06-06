@@ -8,7 +8,6 @@ func test_compute_world_bounds_from_path_and_pads() -> void:
 	level.path_points = [
 		Vector2(80, 360), Vector2(640, 260), Vector2(1180, 360),
 	]
-	level.build_spot_positions = [Vector2(320, 300), Vector2(700, 300)]
 	level.spawn_position = Vector2(80, 360)
 	level.gate_position = Vector2(1180, 360)
 	var bounds := MapCameraUtils.compute_world_bounds(level)
@@ -23,7 +22,6 @@ func test_large_map_expands_bounds_with_grid() -> void:
 	level.grid_height = 27
 	level.uses_large_map_camera = true
 	level.path_points = [Vector2(80, 200), Vector2(1200, 360)]
-	level.build_spot_positions = [Vector2(500, 300)]
 	level.spawn_position = Vector2(80, 200)
 	level.gate_position = Vector2(1200, 360)
 	level.camera_anchors = [Vector2(640, 360), Vector2(900, 400)]

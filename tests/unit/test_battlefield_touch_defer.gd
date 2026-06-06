@@ -16,7 +16,6 @@ func test_should_block_pan_gesture_on_large_map() -> void:
 	var level := LevelData.new()
 	level.uses_large_map_camera = true
 	level.path_points = [Vector2(80, 200), Vector2(1200, 360)]
-	level.build_spot_positions = [Vector2(500, 300)]
 	level.minimap_bounds = MapCameraUtils.compute_world_bounds(level)
 	camera.configure_from_level(level)
 	camera._pan_moved = true

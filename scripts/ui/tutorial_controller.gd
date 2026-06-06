@@ -152,7 +152,7 @@ func _build_steps() -> Array[Dictionary]:
 		},
 		{
 			"id": "tower_families",
-			"text": "Four tower families: Archer (steady DPS), Sacred Fire (burn), Heavy (armor break), Control (slow). Tap a build pad to choose one.",
+			"text": "Four tower families: Archer (steady DPS), Sacred Fire (burn), Heavy (armor break), Control (slow). Tap beside the road to build.",
 			"highlight": "build_pads",
 			"advance": StepAdvance.GOT_IT,
 			"pause": true,
@@ -160,7 +160,7 @@ func _build_steps() -> Array[Dictionary]:
 		},
 		{
 			"id": "place_tower",
-			"text": "Tap a build pad and pick a tower from the radial menu.",
+			"text": "Tap beside the road and pick a tower from the radial menu.",
 			"highlight": "build_pads",
 			"advance": StepAdvance.TOWER_BUILT,
 			"pause": false,
@@ -530,16 +530,16 @@ func _update_highlight(key: String) -> void:
 			_highlight.size = Vector2(400, 160)
 			_highlight.visible = true
 			return
-	if key == "build_pads" and _battle_root and context and context.tower_manager:
-		for spot in context.tower_manager.build_spots:
-			if not spot.occupied:
-				var screen_pos := BattleUiCoords.world_to_screen(
-					_battle_root.get_viewport(), spot.global_position
-				)
-				_highlight.global_position = screen_pos - Vector2(36, 36)
-				_highlight.size = Vector2(72, 72)
-				_highlight.visible = true
-				return
+	if key == "build_pads" and _battle_root and context and context.level_data:
+		var pts := context.level_data.get_all_route_points()
+		if pts.size() >= 2:
+			var mid := pts[pts.size() / 2]
+			var hint_pos := mid + Vector2(0, -60)
+			var screen_pos := BattleUiCoords.world_to_screen(_battle_root.get_viewport(), hint_pos)
+			_highlight.global_position = screen_pos - Vector2(36, 36)
+			_highlight.size = Vector2(72, 72)
+			_highlight.visible = true
+			return
 	var target := _resolve_highlight_target(key)
 	if target == null:
 		_highlight.visible = false
@@ -612,8 +612,8 @@ func _get_tower_region_id() -> String:
 	if context == null or context.tower_manager == null:
 		return "region_north"
 	for t in context.tower_manager.towers:
-		if t and t.build_spot:
-			return t.build_spot.region_id
+		if t and t.region_id != "":
+			return t.region_id
 	if context.level_data and context.level_data.region_ids.size() > 0:
 		return context.level_data.region_ids[0]
 	return "region_north"
@@ -638,7 +638,7 @@ func _lesson_hijack_collapse() -> void:
 		var region_id := _get_tower_region_id()
 		context.map_light.apply_corruption_pressure(region_id, 100.0)
 		for t in context.tower_manager.towers if context.tower_manager else []:
-			if t and t.build_spot and t.build_spot.region_id == region_id:
+			if t and t.region_id == region_id:
 				t.on_region_light_changed(0)
 
 

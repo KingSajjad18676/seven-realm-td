@@ -7,6 +7,8 @@ const ACT_LEVELS: Array[String] = [
 ]
 
 const SKIRMISH_WAVES := 15
+const THRONE_SPAWN_CHANCE := 0.2
+const MAX_THRONES_PER_RUN := 2
 
 
 static func generate(run_seed: int) -> Array[Dictionary]:
@@ -16,6 +18,7 @@ static func generate(run_seed: int) -> Array[Dictionary]:
 	var y_step := 120.0
 	var x_spread := 180.0
 	var prev_boss_id := ""
+	var throne_count := 0
 
 	for act in range(1, 4):
 		var level_id := ACT_LEVELS[act - 1]
@@ -63,8 +66,7 @@ static func generate(run_seed: int) -> Array[Dictionary]:
 		nodes.append(anvil)
 		nodes.append(shrine)
 
-		skirmish["edges"] = [branch_a_id, branch_b_id]
-
+		var skirmish_edges: Array = [branch_a_id, branch_b_id]
 		var boss_id := "act%d_boss" % act
 		var boss := {
 			"id": boss_id,
@@ -78,6 +80,25 @@ static func generate(run_seed: int) -> Array[Dictionary]:
 			"grants_tower_pick": false,
 		}
 		nodes.append(boss)
+
+		if act >= 2 and throne_count < MAX_THRONES_PER_RUN and rng.randf() < THRONE_SPAWN_CHANCE:
+			var throne_id := "act%d_throne_kavus" % act
+			var throne := {
+				"id": throne_id,
+				"type": CampaignRunState.NODE_THRONE_KAVUS,
+				"level_id": level_id,
+				"act": act,
+				"label": "Throne of Kavus",
+				"position": {"x": base_x + x_spread * 1.5, "y": base_y + y_step * 0.25},
+				"edges": [boss_id],
+				"cleared": false,
+				"grants_tower_pick": false,
+			}
+			nodes.append(throne)
+			skirmish_edges.append(throne_id)
+			throne_count += 1
+
+		skirmish["edges"] = skirmish_edges
 
 		if rng.randf() > 0.5:
 			anvil["edges"] = [boss_id]
@@ -98,6 +119,7 @@ static func generate(run_seed: int) -> Array[Dictionary]:
 		var base_y := 80.0 + float(act) * y_step * 1.8
 		var skirmish_id := "act%d_skirmish" % act
 		var boss_id := "act%d_boss" % act
+		var skirmish_edges: Array = [boss_id]
 		var skirmish := {
 			"id": skirmish_id,
 			"type": CampaignRunState.NODE_SKIRMISH,
@@ -105,7 +127,7 @@ static func generate(run_seed: int) -> Array[Dictionary]:
 			"act": act,
 			"label": "Skirmish %d" % act,
 			"position": {"x": 120.0, "y": base_y},
-			"edges": [boss_id],
+			"edges": skirmish_edges,
 			"cleared": false,
 			"grants_tower_pick": act == 5,
 		}
@@ -120,6 +142,23 @@ static func generate(run_seed: int) -> Array[Dictionary]:
 			"cleared": false,
 			"grants_tower_pick": false,
 		}
+		if act <= 6 and throne_count < MAX_THRONES_PER_RUN and rng.randf() < THRONE_SPAWN_CHANCE:
+			var throne_id := "act%d_throne_kavus" % act
+			var throne := {
+				"id": throne_id,
+				"type": CampaignRunState.NODE_THRONE_KAVUS,
+				"level_id": level_id,
+				"act": act,
+				"label": "Throne of Kavus",
+				"position": {"x": 210.0, "y": base_y + y_step * 0.35},
+				"edges": [boss_id],
+				"cleared": false,
+				"grants_tower_pick": false,
+			}
+			nodes.append(throne)
+			skirmish_edges.append(throne_id)
+			throne_count += 1
+		skirmish["edges"] = skirmish_edges
 		nodes.append(skirmish)
 		nodes.append(boss)
 		if prev_boss_id != "":

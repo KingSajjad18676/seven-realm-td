@@ -5,6 +5,7 @@ const REASON_LABELS := {
 	"waves_cleared": "All waves cleared",
 	"gate_breached": "The gate fell",
 	"lives_depleted": "Lives depleted",
+	"throne_breached": "The throne fell",
 	"debug": "Debug shortcut",
 	"safe_retreat": "Retreated to Kaveh's Forge — materials banked",
 }

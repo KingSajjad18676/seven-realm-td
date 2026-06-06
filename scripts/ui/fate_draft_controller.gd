@@ -13,6 +13,7 @@ var _card_picked: bool = false
 var _continue_btn: Button = null
 var _card_row: HBoxContainer = null
 var _phase_two_root: VBoxContainer = null
+var _relic_picker: RelicSlotPickerController = null
 
 
 func initialize(ctx: BattleContext, panel: Control) -> void:
@@ -21,6 +22,13 @@ func initialize(ctx: BattleContext, panel: Control) -> void:
 	if _panel:
 		_panel.visible = false
 		_content_root = _panel.get_node_or_null("ContentRoot") as VBoxContainer
+		var overlay_parent := _panel.get_parent()
+		if overlay_parent:
+			_relic_picker = RelicSlotPickerController.new()
+			_relic_picker.name = "PardehRelicPicker"
+			overlay_parent.add_child(_relic_picker)
+			_relic_picker.relic_slotted.connect(_on_pardeh_relic_slotted)
+			_relic_picker.cancelled.connect(_finish_draft)
 
 
 func show_draft() -> void:
@@ -259,6 +267,58 @@ func _on_continue_pressed() -> void:
 		if context and context.bridge:
 			context.bridge.alert_message.emit("Choose a Fate card first", 50)
 		return
+	if _should_offer_relic():
+		_offer_relic_pick()
+		return
+	_finish_draft()
+
+
+func _should_offer_relic() -> bool:
+	if context == null or context.tutorial_active:
+		return false
+	if context.launch_data == null or not context.launch_data.is_scavenge_mode():
+		return false
+	if context.wave_manager == null:
+		return false
+	var cleared := context.wave_manager.current_wave_index + 1
+	var pardeh_index := cleared / 5
+	return pardeh_index % 2 == 1
+
+
+func _tower_ids_for_relic_pick() -> Array[String]:
+	if context and context.launch_data and context.launch_data.run_tower_ids.size() >= 3:
+		return context.launch_data.run_tower_ids.duplicate()
+	if context and context.level_data:
+		return context.level_data.available_tower_ids.duplicate()
+	return ContentCatalog.get_starter_tower_ids()
+
+
+func _current_relic_slots() -> Dictionary:
+	if context and context.launch_data:
+		return context.launch_data.tower_relic_slots.duplicate()
+	return {}
+
+
+func _offer_relic_pick() -> void:
+	if _relic_picker == null:
+		_finish_draft()
+		return
+	if _panel:
+		_panel.visible = false
+	_relic_picker.show_pick(
+		_tower_ids_for_relic_pick(),
+		_current_relic_slots(),
+		"Pardeh — Relics of the Shahs"
+	)
+
+
+func _on_pardeh_relic_slotted(tower_id: String, relic_id: String) -> void:
+	if context and context.launch_data:
+		context.launch_data.tower_relic_slots[tower_id] = relic_id
+	if context and context.run_modifiers:
+		var relic := ContentRegistry.get_relic(relic_id) if ContentRegistry else null
+		if relic:
+			context.run_modifiers.slot_relic(relic, tower_id)
 	_finish_draft()
 
 

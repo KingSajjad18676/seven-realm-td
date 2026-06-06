@@ -85,13 +85,16 @@ func trigger_victory(reason: String = "waves_cleared") -> void:
 		SaveSystem.record_hunt_binding(context.hunt.binding_shards)
 	if launch and launch.is_daily_tale and DailyTaleService:
 		DailyTaleService.mark_daily_completed()
-	if SaveSystem and context.economy and launch and _should_bank_materials(launch):
-		SaveSystem.commit_battle_materials(context.economy.forge_materials_earned)
+	if SaveSystem and launch and _should_bank_materials(launch):
+		_commit_battle_materials_to_save()
 	if SaveSystem and context.level_data and launch and launch.is_campaign_mode():
 		SaveSystem.add_forge_tokens(
 			ContentCatalog.forge_tokens_for_victory(context.level_data.level_id, false)
 		)
-	_emit_run_summary(true, reason)
+	var equipment_drops: Array[String] = []
+	if launch and launch.is_campaign_mode() and EquipmentService and context.level_data:
+		equipment_drops = EquipmentService.grant_boss_drops(context.level_data.level_id)
+	_emit_run_summary(true, reason, equipment_drops)
 
 
 func trigger_safe_retreat(reason: String = "safe_retreat") -> void:
@@ -105,8 +108,8 @@ func trigger_safe_retreat(reason: String = "safe_retreat") -> void:
 	CombatEvents.battle_completed.emit(true, level_id)
 	AnalyticsService.battle_completed(true, level_id)
 	var launch = context.launch_data if context else null
-	if SaveSystem and context.economy and launch and _should_bank_materials(launch):
-		SaveSystem.commit_battle_materials(context.economy.forge_materials_earned)
+	if SaveSystem and launch and _should_bank_materials(launch):
+		_commit_battle_materials_to_save()
 	_emit_run_summary(true, reason)
 
 
@@ -115,6 +118,8 @@ func trigger_defeat(reason: String = "gate_breached") -> void:
 		return
 	if context and context.economy:
 		context.economy.clear_unbanked_materials()
+	if context and context.coop_players and context.coop_players.is_active():
+		context.coop_players.clear_all_unbanked_materials()
 	if context and context.loot_drops:
 		context.loot_drops.clear_all_drops()
 	_set_state(GameEnums.BattleState.DEFEAT)
@@ -136,7 +141,7 @@ func _check_victory() -> void:
 		trigger_victory()
 
 
-func _emit_run_summary(victory: bool, reason: String) -> void:
+func _emit_run_summary(victory: bool, reason: String, equipment_drops: Array[String] = []) -> void:
 	if context == null or context.bridge == null:
 		return
 	var summary := {
@@ -149,6 +154,8 @@ func _emit_run_summary(victory: bool, reason: String) -> void:
 		"vows_honored": context.objectives.vows_honored if context.objectives else 0,
 		"vows_total": context.objectives.vows_offered if context.objectives else 0,
 	}
+	if not equipment_drops.is_empty():
+		summary["equipment_drops"] = equipment_drops
 	context.run_summary = summary
 	context.bridge.run_summary_ready.emit(summary)
 
@@ -160,7 +167,18 @@ func _should_bank_materials(launch: BattleLaunchData) -> bool:
 		or launch.is_hunt_mode
 		or launch.is_daily_tale
 		or launch.is_horde_mode
+		or launch.is_brothers_mode
+		or launch.is_throne_defense_mode
 	)
+
+
+func _commit_battle_materials_to_save() -> void:
+	if context == null or SaveSystem == null:
+		return
+	if context.coop_players and context.coop_players.is_active():
+		SaveSystem.commit_battle_materials(context.coop_players.get_merged_materials())
+	elif context.economy:
+		SaveSystem.commit_battle_materials(context.economy.forge_materials_earned)
 
 
 func _set_state(state: GameEnums.BattleState) -> void:

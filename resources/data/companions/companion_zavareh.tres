@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CompanionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/companion_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+companion_id = "companion_zavareh"
+display_name = "Zavareh"
+description = "Guards the Gate and blocks enemies that slip past your towers."
+behavior = 3
+move_speed = 130.0
+gate_offset = Vector2(-55, 0)
+max_hp = 240.0
+attack_damage = 24.0
+attack_rate = 0.85
+color = Color(0.35, 0.5, 0.75, 1)

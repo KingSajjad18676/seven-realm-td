@@ -6,11 +6,12 @@ const DRAG_THRESHOLD := 12.0
 var context: BattleContext = null
 var _ghost: Control = null
 var _ghost_label: Label = null
+var _ghost_bg: ColorRect = null
 var _armed: bool = false
 var _dragging: bool = false
 var _armed_tower_id: String = ""
 var _start_pos: Vector2 = Vector2.ZERO
-var _highlighted_spot: BuildSpot = null
+var _last_world_pos: Vector2 = Vector2.ZERO
 
 
 func initialize(ctx: BattleContext) -> void:
@@ -48,8 +49,8 @@ func _input(event: InputEvent) -> void:
 		if _armed and not _dragging and pos.distance_to(_start_pos) >= DRAG_THRESHOLD:
 			_begin_drag()
 		if _dragging:
+			_last_world_pos = _screen_to_world(pos)
 			_update_ghost(pos)
-			_update_pad_highlight(pos)
 			get_viewport().set_input_as_handled()
 	elif _is_release(event):
 		if _dragging:
@@ -75,11 +76,11 @@ func _begin_drag() -> void:
 	_ghost.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_ghost.custom_minimum_size = Vector2(72, 72)
 	_ghost.size = Vector2(72, 72)
-	var bg := ColorRect.new()
-	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	bg.color = td.color if td else Color(0.4, 0.7, 0.6, 0.85)
-	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_ghost.add_child(bg)
+	_ghost_bg = ColorRect.new()
+	_ghost_bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_ghost_bg.color = td.color if td else Color(0.4, 0.7, 0.6, 0.85)
+	_ghost_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_ghost.add_child(_ghost_bg)
 	_ghost_label = Label.new()
 	_ghost_label.text = td.display_name if td else "Tower"
 	_ghost_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -95,40 +96,26 @@ func _begin_drag() -> void:
 func _update_ghost(screen_pos: Vector2) -> void:
 	if _ghost:
 		_ghost.global_position = screen_pos - _ghost.size * 0.5
-
-
-func _update_pad_highlight(screen_pos: Vector2) -> void:
-	if context == null or context.tower_manager == null:
-		return
-	var world := _screen_to_world(screen_pos)
-	var spot := context.tower_manager.find_spot_at(world)
-	if spot == _highlighted_spot:
-		return
-	if _highlighted_spot:
-		_highlighted_spot.set_drag_highlight(false)
-	_highlighted_spot = spot
-	if _highlighted_spot:
-		_highlighted_spot.set_drag_highlight(true)
+	if _ghost_bg and context and context.tower_manager:
+		var valid := context.tower_manager.is_valid_build_position(_last_world_pos)
+		var base := _ghost_bg.color
+		_ghost_bg.color = base if valid else Color(0.85, 0.25, 0.2, 0.85)
 
 
 func _finish_drag(screen_pos: Vector2) -> void:
 	if context == null or context.tower_manager == null:
 		return
 	var world := _screen_to_world(screen_pos)
-	var spot := context.tower_manager.find_spot_at(world)
-	if spot:
-		context.tower_manager.try_build_on_spot(spot, _armed_tower_id)
+	context.tower_manager.try_build_at(world, _armed_tower_id)
 	_clear_ghost()
 
 
 func _clear_ghost() -> void:
-	if _highlighted_spot:
-		_highlighted_spot.set_drag_highlight(false)
-		_highlighted_spot = null
 	if _ghost:
 		_ghost.queue_free()
 		_ghost = null
 		_ghost_label = null
+		_ghost_bg = null
 
 
 func _reset_drag_state() -> void:

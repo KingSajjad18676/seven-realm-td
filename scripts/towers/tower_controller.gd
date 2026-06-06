@@ -1,14 +1,20 @@
 class_name TowerController
 extends Node2D
 
+signal tower_selected(tower: TowerController)
+
 var context: BattleContext = null
 var data: TowerData = null
-var build_spot: BuildSpot = null
+var region_id: String = ""
+var placement_id: String = ""
 var level: int = 1
 var gold_invested: int = 0
 var hijack_phase: GameEnums.HijackPhase = GameEnums.HijackPhase.NONE
+var resonance_links: Array[String] = []
+var resonance_partners: Array[TowerController] = []
 const LEVEL_DAMAGE_BONUS := 0.25
 const LEVEL_RANGE_BONUS := 0.10
+const QUAKE_BIND_RADIUS := 100.0
 var _cooldown: float = 0.0
 var _hijack_timer: float = 0.0
 var _efficiency: float = 1.0
@@ -35,19 +41,33 @@ func _ready() -> void:
 	refresh_pick_area()
 
 
-func initialize(ctx: BattleContext, tower_data: TowerData, spot: BuildSpot) -> void:
+func initialize(
+	ctx: BattleContext,
+	tower_data: TowerData,
+	world_pos: Vector2,
+	p_region_id: String,
+	p_placement_id: String
+) -> void:
 	context = ctx
 	data = tower_data
-	build_spot = spot
+	global_position = world_pos
+	region_id = p_region_id
+	placement_id = p_placement_id
 	level = 1
 	gold_invested = tower_data.build_cost
 	hijack_phase = GameEnums.HijackPhase.NONE
+	resonance_links.clear()
+	resonance_partners.clear()
 	_cooldown = 0.0
 	_apply_forge_visuals()
 	_update_efficiency()
 	if data and data.attack_behavior == GameEnums.AttackBehavior.BARRACKS:
 		_spawn_barracks_units()
 	CombatEvents.tower_built.emit(tower_data.tower_id)
+
+
+func has_resonance(combo_id: String) -> bool:
+	return combo_id in resonance_links
 
 
 func _process(delta: float) -> void:
@@ -83,6 +103,11 @@ func _process(delta: float) -> void:
 		rate *= float(context.runtime_modifiers["attack_mult"])
 	if context.runtime_modifiers.has("tower_attack_rate_mult"):
 		rate *= float(context.runtime_modifiers["tower_attack_rate_mult"])
+	if context.runtime_modifiers.has("equipment_tower_rate_mult"):
+		rate *= float(context.runtime_modifiers["equipment_tower_rate_mult"])
+	var relic := _get_tower_relic()
+	if relic and relic.tower_attack_rate_mult != 1.0:
+		rate *= relic.tower_attack_rate_mult
 	rate *= MoraleController.get_rate_mult(context)
 	rate *= _hunger_rate_mult()
 	_cooldown = 1.0 / maxf(0.1, rate)
@@ -145,16 +170,16 @@ func try_upgrade() -> bool:
 func try_recover_hijack() -> bool:
 	if hijack_phase == GameEnums.HijackPhase.NONE:
 		return false
-	if context and context.map_light and build_spot:
-		if context.map_light.try_cleanse_region(build_spot.region_id):
+	if context and context.map_light and region_id != "":
+		if context.map_light.try_cleanse_region(region_id):
 			_recover_from_hijack()
 			return true
 	return false
 
 
 func _update_efficiency() -> void:
-	if context and context.map_light and build_spot:
-		var light := context.map_light.get_light(build_spot.region_id)
+	if context and context.map_light and region_id != "":
+		var light := context.map_light.get_light(region_id)
 		on_region_light_changed(light)
 
 
@@ -190,18 +215,40 @@ func _fire_at(target: EnemyController) -> void:
 		dmg *= float(context.runtime_modifiers["tower_damage_mult"])
 	if context.runtime_modifiers.has("attack_mult"):
 		dmg *= float(context.runtime_modifiers["attack_mult"])
+	var relic := _get_tower_relic()
+	if relic and relic.tower_damage_mult != 1.0:
+		dmg *= relic.tower_damage_mult
+	if data.applies_burn or data.tower_id == "tower_sacred_fire":
+		if context.runtime_modifiers.has("tower_fire_damage_mult"):
+			dmg *= float(context.runtime_modifiers["tower_fire_damage_mult"])
+	if context.runtime_modifiers.has("equipment_heavy_brute_mult") and data.tower_id == "tower_heavy" and target.has_tag("div_brute"):
+		dmg *= float(context.runtime_modifiers["equipment_heavy_brute_mult"])
 	target.take_damage(dmg)
+	CombatEvents.tower_damage_dealt.emit(data.tower_id, dmg, target.data.enemy_id if target.data else "")
+	if data.tower_id == "tower_archer" and context.runtime_modifiers.has("equipment_archer_armor_break"):
+		target.add_armor_delta(-target.data.armor * float(context.runtime_modifiers["equipment_archer_armor_break"]) if target.data else 0.0)
+	if context.runtime_modifiers.get("equipment_beam_cleanse", false) and context.map_light:
+		var region := context.map_light.get_region_for_position(target.global_position)
+		if region != "":
+			context.map_light.repair_region_light(region, 15)
+	if context.runtime_modifiers.get("equipment_fire_extra_shot", false) and (data.applies_burn or data.tower_id == "tower_sacred_fire"):
+		target.take_damage(dmg * 0.85)
 	if data.attack_behavior == GameEnums.AttackBehavior.TWIN:
 		target.apply_venom(1, 5.0, 3.0, self)
 	elif data.applies_burn:
 		target.apply_burn(2.5)
+		if context and context.naft_traps:
+			context.naft_traps.try_ignite_from_fire(target, data)
+	elif has_resonance("fire_string") and data.tower_id == "tower_archer":
+		target.apply_burn(2.5)
 	if data.applies_slow:
-		var slow_mult := 0.55
-		if context.runtime_modifiers.has("control_slow_mult"):
-			slow_mult = float(context.runtime_modifiers["control_slow_mult"])
-		target.apply_slow(slow_mult, 1.5)
+		_apply_slow_to(target)
 	if data.armor_break:
 		target.apply_armor_break()
+	if relic and relic.gate_lives_per_attack > 0.0 and context and context.lives:
+		context.lives.restore_fraction(relic.gate_lives_per_attack)
+	if has_resonance("quake_bind") and data.tower_id == "tower_heavy":
+		_apply_quake_bind_shockwave(target.global_position)
 
 
 func _fire_twin_at(primary: EnemyController) -> void:
@@ -214,8 +261,31 @@ func _fire_twin_at(primary: EnemyController) -> void:
 		dmg *= MoraleController.get_damage_mult(context)
 		if context.runtime_modifiers.has("tower_damage_mult"):
 			dmg *= float(context.runtime_modifiers["tower_damage_mult"])
+		var relic := _get_tower_relic()
+		if relic and relic.tower_damage_mult != 1.0:
+			dmg *= relic.tower_damage_mult
 		secondary.take_damage(dmg)
 		secondary.apply_venom(1, 5.0, 3.0, self)
+
+
+func _apply_slow_to(target: EnemyController) -> void:
+	var slow_mult := 0.55
+	if context.runtime_modifiers.has("control_slow_mult"):
+		slow_mult = float(context.runtime_modifiers["control_slow_mult"])
+	target.apply_slow(slow_mult, 1.5)
+
+
+func _apply_quake_bind_shockwave(center: Vector2) -> void:
+	if context == null:
+		return
+	var slow_mult := 0.55
+	if context.runtime_modifiers.has("control_slow_mult"):
+		slow_mult = float(context.runtime_modifiers["control_slow_mult"])
+	for e in context.active_enemies:
+		if e is EnemyController:
+			var enemy: EnemyController = e
+			if enemy.global_position.distance_to(center) <= QUAKE_BIND_RADIUS:
+				enemy.apply_slow(slow_mult, 1.5)
 
 
 func _pick_second_target(exclude: EnemyController) -> EnemyController:
@@ -328,14 +398,14 @@ func get_effective_range() -> float:
 static func compute_preview_range(
 	ctx: BattleContext,
 	tower_data: TowerData,
-	region_id: String,
+	p_region_id: String,
 	preview_level: int = 1
 ) -> float:
 	if tower_data == null:
 		return 0.0
 	var efficiency := 1.0
-	if ctx and ctx.map_light:
-		var light := ctx.map_light.get_light(region_id)
+	if ctx and ctx.map_light and p_region_id != "":
+		var light := ctx.map_light.get_light(p_region_id)
 		efficiency = 1.0 if light >= 30 else float(light) / 30.0
 	var forge_mult := 1.0
 	if ForgeService:
@@ -344,6 +414,9 @@ static func compute_preview_range(
 	var debuff_mult := 1.0
 	if ctx and ctx.runtime_modifiers.has("vision_radius_mult"):
 		debuff_mult = float(ctx.runtime_modifiers["vision_radius_mult"])
+	var relic := _preview_relic_for_tower(ctx, tower_data.tower_id)
+	if relic and relic.global_targeting and ctx and ctx.level_data:
+		return _map_targeting_range(ctx.level_data)
 	return tower_data.range * efficiency * forge_mult * level_mult * debuff_mult
 
 
@@ -354,10 +427,38 @@ func set_selected_visual(selected: bool) -> void:
 
 
 func _effective_range() -> float:
+	var relic := _get_tower_relic()
+	if relic and relic.global_targeting and context and context.level_data:
+		return _map_targeting_range(context.level_data)
 	var mult := 1.0
 	if context and context.runtime_modifiers.has("vision_radius_mult"):
 		mult = float(context.runtime_modifiers["vision_radius_mult"])
-	return data.range * _efficiency * _forge_range_mult * _level_range_mult() * mult
+	var range_val := data.range * _efficiency * _forge_range_mult * _level_range_mult() * mult
+	if context and context.equipment_battle:
+		range_val *= context.equipment_battle.get_tower_range_mult_near_hero(self)
+	return range_val
+
+
+func _get_tower_relic() -> RelicData:
+	if context == null or context.run_modifiers == null or data == null:
+		return null
+	return context.run_modifiers.get_relic_for_tower(data.tower_id)
+
+
+static func _preview_relic_for_tower(ctx: BattleContext, tower_id: String) -> RelicData:
+	if ctx == null:
+		return null
+	if ctx.run_modifiers:
+		return ctx.run_modifiers.get_relic_for_tower(tower_id)
+	if ctx.launch_data and ctx.launch_data.tower_relic_slots.has(tower_id):
+		var relic_id := str(ctx.launch_data.tower_relic_slots[tower_id])
+		return ContentRegistry.get_relic(relic_id) if ContentRegistry else null
+	return null
+
+
+static func _map_targeting_range(level_data: LevelData) -> float:
+	var bounds := level_data.minimap_bounds
+	return bounds.size.length()
 
 
 func _apply_forge_visuals() -> void:
@@ -409,13 +510,9 @@ func refresh_pick_area() -> void:
 	if shape_node == null or not shape_node.shape is CircleShape2D:
 		return
 	(shape_node.shape as CircleShape2D).radius = get_pick_radius()
-	if build_spot != null:
-		build_spot.refresh_pick_collision()
 
 
 func _on_pick_input(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if build_spot == null:
-		return
 	var pressed := false
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		pressed = true
@@ -426,7 +523,9 @@ func _on_pick_input(_viewport: Node, event: InputEvent, _shape_idx: int) -> void
 	if context and context.tutorial_active and not context.tutorial_allows("build_pads"):
 		return
 	get_viewport().set_input_as_handled()
-	build_spot.spot_selected.emit(build_spot)
+	tower_selected.emit(self)
+	if context and context.tower_manager:
+		context.tower_manager._on_tower_selected(self)
 
 
 func trigger_hijack_warning() -> void:
@@ -440,13 +539,10 @@ func _start_hijack_warning() -> void:
 	_hijack_timer = 3.5
 	if _sprite:
 		_sprite.color = Color(0.35, 0.15, 0.45)
-	if context and context.map_light and build_spot:
-		context.map_light.register_hijack_warning(build_spot.spot_id)
-	var spot_id := build_spot.spot_id if build_spot else ""
-	CombatEvents.tower_hijack_started.emit(spot_id)
-	AnalyticsService.tower_hijack_started(spot_id)
-	if context and context.objectives:
-		context.objectives.on_hijack()
+	if context and context.map_light and placement_id != "":
+		context.map_light.register_hijack_warning(placement_id)
+	CombatEvents.tower_hijack_started.emit(placement_id)
+	AnalyticsService.tower_hijack_started(placement_id)
 
 
 func force_enter_hijacked() -> void:
@@ -468,9 +564,8 @@ func _recover_from_hijack() -> void:
 		_apply_forge_visuals()
 	hijack_phase = GameEnums.HijackPhase.NONE
 	_update_efficiency()
-	var spot_id := build_spot.spot_id if build_spot else ""
-	CombatEvents.tower_hijack_recovered.emit(spot_id)
-	AnalyticsService.tower_hijack_recovered(spot_id)
+	CombatEvents.tower_hijack_recovered.emit(placement_id)
+	AnalyticsService.tower_hijack_recovered(placement_id)
 
 
 func _process_hijack_attack(delta: float) -> void:

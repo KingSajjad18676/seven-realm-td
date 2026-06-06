@@ -29,9 +29,9 @@ func tick(delta: float) -> void:
 			_alert("Sorceress hex — hijack risk rises!", 86)
 		Phase.HEX:
 			if _enemy and _enemy.context and _enemy.context.tower_manager:
-				for spot in _enemy.context.tower_manager.build_spots:
-					if spot.tower and randf() < 0.25:
-						spot.tower.trigger_hijack_warning()
+				for tower in _enemy.context.tower_manager.towers:
+					if is_instance_valid(tower) and randf() < 0.25:
+						tower.trigger_hijack_warning()
 			_phase = Phase.FEAST
 			_phase_timer = 1.3
 			_alert("Feast of shadows — cleanse a region!", 88)

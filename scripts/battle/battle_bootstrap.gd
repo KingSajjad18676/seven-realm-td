@@ -4,7 +4,6 @@ extends Node2D
 @onready var _path: Path2D = $MapRoot/Route
 @onready var _gate: Node2D = $MapRoot/Gate
 @onready var _spawn_marker: Node2D = $MapRoot/Spawn
-@onready var _build_spots_root: Node2D = $MapRoot/BuildPads
 @onready var _units_root: Node2D = $UnitsRoot
 @onready var _towers_root: Node2D = $UnitsRoot/Towers
 @onready var _projectiles_root: Node2D = $UnitsRoot/Projectiles
@@ -15,7 +14,6 @@ extends Node2D
 
 var _context: BattleContext = null
 var _bridge: BattleContextBridge = null
-var _build_spot_scene: PackedScene = preload("res://scenes/prefabs/build_spot.tscn")
 var _tutorial_overlay_scene: PackedScene = preload("res://scenes/ui/tutorial_overlay.tscn")
 var _contextual_hint_scene: PackedScene = preload("res://scenes/ui/contextual_hint_overlay.tscn")
 var _touch_pending: bool = false
@@ -88,16 +86,26 @@ func _setup_battle() -> void:
 	add_child(_context.run_modifiers)
 	_context.run_modifiers.initialize(_context)
 
-	_context.ancestral_forge = AncestralForgeController.new()
-	_context.ancestral_forge.name = "AncestralForgeController"
-	add_child(_context.ancestral_forge)
-	_context.ancestral_forge.initialize(_context)
+	_context.tower_resonance = TowerResonanceController.new()
+	_context.tower_resonance.name = "TowerResonanceController"
+	add_child(_context.tower_resonance)
+	_context.tower_resonance.initialize(_context, _map_root)
 
-	if launch and launch.active_relic_ids.size() > 0:
-		for rid in launch.active_relic_ids:
-			var relic := ContentRegistry.get_relic(rid)
-			if relic:
-				_context.run_modifiers.add_relic(relic)
+	if launch:
+		_context.run_modifiers.load_slots(
+			launch.tower_relic_slots,
+			launch.active_relic_ids
+		)
+
+	_context.equipment_battle = EquipmentBattleService.new()
+	_context.equipment_battle.name = "EquipmentBattleService"
+	add_child(_context.equipment_battle)
+	var equip_ids: Array[String] = []
+	if launch:
+		equip_ids = launch.equipped_piece_ids
+	elif EquipmentService:
+		equip_ids = EquipmentService.get_equipped_piece_ids()
+	_context.equipment_battle.initialize(_context, equip_ids)
 
 	_context.enemy_spawner = EnemySpawner.new()
 	_context.enemy_spawner.name = "EnemySpawner"
@@ -128,10 +136,26 @@ func _setup_battle() -> void:
 	add_child(_context.hero_manager)
 	_context.hero_manager.initialize(_context, _heroes_root)
 
+	_context.companion_manager = CompanionManager.new()
+	_context.companion_manager.name = "CompanionManager"
+	add_child(_context.companion_manager)
+	_context.companion_manager.initialize(_context, _units_root)
+
+	if (
+		_context.hero_manager
+		and _context.hero_manager.hero
+		and (launch == null or not launch.is_brothers_mode)
+	):
+		_context.rakhsh_mount = RakhshMountController.new()
+		_context.rakhsh_mount.name = "RakhshMountController"
+		add_child(_context.rakhsh_mount)
+		_context.rakhsh_mount.initialize(
+			_context, _context.hero_manager.hero, _units_root
+		)
+
 	_build_map_visuals(level)
 	_assign_level_objective(level)
-	var spots := _create_build_spots(level)
-	_context.tower_manager.initialize(_context, spots, _towers_root, _projectiles_root, _units_root)
+	_context.tower_manager.initialize(_context, _towers_root, _projectiles_root, _units_root)
 
 	var fate_draft := FateDraftController.new()
 	fate_draft.name = "FateDraftController"
@@ -170,15 +194,18 @@ func _setup_battle() -> void:
 	if _camera:
 		_camera.configure_from_level(level)
 
-	_connect_region_updates(spots)
+	_connect_region_updates()
 	_apply_difficulty_and_unlocks(launch, level)
 	_apply_campaign_run(launch, level)
 	_apply_endless_or_hunt(launch, level)
+	_attach_throne_mode(launch, level)
+	_attach_brothers_mode(launch, level)
 	_attach_labour_mode(launch, level)
-	if _hud and _hud.has_method("setup_ancestral_forge"):
-		_hud.setup_ancestral_forge(_context)
+	_attach_kavus_folly(launch)
 	if _hud and _hud.has_method("refresh_skill_label"):
 		_hud.refresh_skill_label()
+	if launch.is_brothers_mode and _hud and _hud.has_method("setup_brothers_hud"):
+		_hud.setup_brothers_hud()
 
 	if launch.auto_start:
 		_context.state_controller.start_battle()
@@ -331,27 +358,14 @@ func _assign_level_objective(level: LevelData) -> void:
 		_context.objectives.assign_objective(obj)
 
 
-func _create_build_spots(level: LevelData) -> Array[BuildSpot]:
-	var spots: Array[BuildSpot] = []
-	var idx := 0
-	var total := level.build_spot_positions.size()
-	for pos in level.build_spot_positions:
-		var spot := _build_spot_scene.instantiate() as BuildSpot
-		spot.spot_id = "pad_%d" % idx
-		spot.region_id = MapRegionUtils.region_for_pad_index(idx, total, level.region_ids)
-		spot.global_position = pos
-		_build_spots_root.add_child(spot)
-		spots.append(spot)
-		idx += 1
-	return spots
-
-
-func _connect_region_updates(spots: Array[BuildSpot]) -> void:
+func _connect_region_updates() -> void:
 	if _bridge:
 		_bridge.region_light_changed.connect(func(region_id: String, light: int, _state: GameEnums.RegionLightState) -> void:
-			for spot in spots:
-				if spot.region_id == region_id and spot.tower:
-					spot.tower.on_region_light_changed(light)
+			if _context == null or _context.tower_manager == null:
+				return
+			for tower in _context.tower_manager.towers:
+				if is_instance_valid(tower) and tower.region_id == region_id:
+					tower.on_region_light_changed(light)
 		)
 
 
@@ -373,7 +387,7 @@ func _handle_battlefield_tap(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if _camera and _camera.should_block_battlefield_tap():
 			return
-		_apply_battlefield_tap(_screen_to_world(event.position))
+		_apply_battlefield_tap(_screen_to_world(event.position), event.position.x)
 		get_viewport().set_input_as_handled()
 
 
@@ -390,16 +404,24 @@ func _handle_screen_touch_tap(event: InputEventScreenTouch) -> void:
 		return
 	if event.position.distance_to(_touch_start_screen) >= TouchCamera.DRAG_THRESHOLD:
 		return
-	_apply_battlefield_tap(_touch_start_world)
+	_apply_battlefield_tap(_touch_start_world, _touch_start_screen.x)
 	get_viewport().set_input_as_handled()
 
 
-func _apply_battlefield_tap(world: Vector2) -> void:
-	if _context.tower_manager and _context.tower_manager.try_select_spot_at_world(world):
+func _apply_battlefield_tap(world: Vector2, screen_x: float = -1.0) -> void:
+	if _context.tower_manager and _context.tower_manager.try_select_at_world(world):
 		return
 	if _context.tutorial_active and not _context.tutorial_allows("battlefield"):
 		return
-	_context.hero_manager.handle_ground_tap(world)
+	if _context.naft_traps and _context.naft_traps.is_armed():
+		_context.naft_traps.try_place_at(world)
+		return
+	var x_ratio := 0.5
+	if screen_x >= 0.0:
+		var vp := get_viewport().get_visible_rect().size
+		if vp.x > 0.0:
+			x_ratio = screen_x / vp.x
+	_context.hero_manager.handle_ground_tap(world, x_ratio)
 
 
 func _apply_campaign_run(launch: BattleLaunchData, level: LevelData) -> void:
@@ -421,6 +443,13 @@ func _apply_campaign_run(launch: BattleLaunchData, level: LevelData) -> void:
 	elif launch.is_campaign_run and launch.skirmish_waves == 0:
 		if _context.bridge:
 			_context.bridge.alert_message.emit("Campaign Run — bank materials or retreat at Pardeh.", 80)
+	if launch.ahrimans_shroud_enabled and _context.economy:
+		_context.economy.set_sacred_fire(launch.run_sacred_fire)
+		if _context.bridge:
+			_context.bridge.alert_message.emit(
+				"Ahriman's Shroud — Sacred Fire is shared across the run.",
+				90
+			)
 
 
 func _apply_difficulty_and_unlocks(launch: BattleLaunchData, level: LevelData) -> void:
@@ -431,7 +460,7 @@ func _apply_difficulty_and_unlocks(launch: BattleLaunchData, level: LevelData) -
 	var diff := ContentCatalog.khan_difficulty(level.level_id)
 	var hp_mult := float(diff.hp_mult)
 	var speed_mult := float(diff.speed_mult)
-	if launch and launch.is_horde_mode:
+	if launch and (launch.is_horde_mode or launch.is_throne_defense_mode):
 		hp_mult *= 1.15
 		speed_mult *= 1.08
 	_context.runtime_modifiers["enemy_hp_mult"] = hp_mult
@@ -456,6 +485,8 @@ func _apply_endless_or_hunt(launch: BattleLaunchData, level: LevelData) -> void:
 				"Horde Mode — survive %d waves!" % ContentCatalog.HORDE_WAVES_TO_CLEAR,
 				90
 			)
+	if launch.is_throne_defense_mode and _context.wave_manager:
+		_context.wave_manager.enable_throne_defense_mode()
 	if launch.is_hunt_mode:
 		_context.runtime_modifiers["hunt_mode"] = true
 		_context.hunt = HuntController.new()
@@ -468,6 +499,42 @@ func _apply_endless_or_hunt(launch: BattleLaunchData, level: LevelData) -> void:
 		_context.runtime_modifiers["damavand_binding_progress"] = 0.0
 		if _context.bridge:
 			_context.bridge.enemy_died.connect(_on_damavand_enemy_died)
+
+
+func _attach_throne_mode(launch: BattleLaunchData, level: LevelData) -> void:
+	if launch == null or _context == null or not launch.is_throne_defense_mode:
+		return
+	_context.runtime_modifiers["throne_defense_mode"] = true
+	if _gate:
+		_gate.global_position = level.gate_position
+		for child in _gate.get_children():
+			if child is ColorRect:
+				(child as ColorRect).color = Color(0.85, 0.65, 0.15, 0.95)
+	if _path:
+		_path.visible = false
+	if _context.bridge:
+		_context.bridge.alert_message.emit(
+			"Defend the Throne — enemies march from all sides!",
+			95
+		)
+
+
+func _attach_brothers_mode(launch: BattleLaunchData, level: LevelData) -> void:
+	if launch == null or _context == null or not launch.is_brothers_mode:
+		return
+	var hero_ids := launch.coop_player_heroes.duplicate()
+	if hero_ids.size() < 2:
+		hero_ids = CoopPlayerManager.BROTHERS_HERO_POOL.duplicate()
+	_context.coop_players = CoopPlayerManager.new()
+	var starting_sf := level.starting_sacred_fire if level else 3
+	_context.coop_players.initialize(hero_ids, starting_sf)
+	if _context.hero_manager:
+		_context.hero_manager.initialize_brothers(hero_ids)
+	if _context.bridge:
+		_context.bridge.alert_message.emit(
+			"Brothers in Arms — shared gold and lives, separate Sacred Fire!",
+			95
+		)
 
 
 func _attach_labour_mode(launch: BattleLaunchData, level: LevelData) -> void:
@@ -505,6 +572,16 @@ func _on_labour_wave_completed(wave_index: int) -> void:
 func _on_labour_cleanse(region_id: String) -> void:
 	if _context and _context.labour_mode:
 		_context.labour_mode.on_cleanse(region_id)
+
+
+func _attach_kavus_folly(launch: BattleLaunchData) -> void:
+	if launch == null or not launch.kavus_folly_active or _context == null:
+		return
+	var ctrl := KavusFollyController.new()
+	ctrl.name = "KavusFollyController"
+	add_child(ctrl)
+	ctrl.set_vfx_root(_map_root)
+	ctrl.initialize(_context)
 
 
 func _screen_to_world(screen_pos: Vector2) -> Vector2:

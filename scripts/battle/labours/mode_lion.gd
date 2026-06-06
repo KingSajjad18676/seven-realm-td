@@ -7,7 +7,7 @@ const AMBUSH_COUNT := 4
 func initialize(ctx: BattleContext) -> void:
 	super.initialize(ctx)
 	if context and context.bridge:
-		context.bridge.alert_message.emit("Labour of the Lion — Rakhsh keeps watch", 70)
+		context.bridge.alert_message.emit("Labour of the Lion — stand by Rakhsh to mount", 70)
 
 
 func on_wave_started(wave_index: int) -> void:

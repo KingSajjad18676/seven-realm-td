@@ -10,6 +10,7 @@ const LANE_BLOCK_WINDOW_AHEAD := 10.0
 
 var context: BattleContext = null
 var data: HeroData = null
+var player_index: int = 0
 var current_hp: float = 0.0
 var _skill_cooldown: float = 0.0
 var _attack_cooldown: float = 0.0
@@ -30,6 +31,8 @@ func initialize(ctx: BattleContext, hero_data: HeroData, start_pos: Vector2) -> 
 	context = ctx
 	data = hero_data
 	current_hp = hero_data.max_hp
+	if context and context.runtime_modifiers.has("hero_max_hp_mult"):
+		current_hp *= float(context.runtime_modifiers["hero_max_hp_mult"])
 	global_position = start_pos
 	_spawn_position = start_pos
 	_move_target = start_pos
@@ -66,11 +69,14 @@ func get_respawn_remaining() -> float:
 	return _respawn_remaining if _dead else 0.0
 
 
-func get_lane_block_path_distance() -> float:
-	if context == null or context.path_points.size() < 2:
+func get_lane_block_path_distance(path: PackedVector2Array = PackedVector2Array()) -> float:
+	var route := path
+	if route.size() < 2 and context != null:
+		route = context.path_points
+	if route.size() < 2:
 		return -1.0
-	var path_dist := PathFollower.closest_distance_on_path(context.path_points, global_position)
-	var on_path := PathFollower.position_at_distance(context.path_points, path_dist)
+	var path_dist := PathFollower.closest_distance_on_path(route, global_position)
+	var on_path := PathFollower.position_at_distance(route, path_dist)
 	if global_position.distance_to(on_path) > LANE_BLOCK_PATH_RADIUS:
 		return -1.0
 	return path_dist
@@ -79,18 +85,21 @@ func get_lane_block_path_distance() -> float:
 func should_block_enemy(enemy: EnemyController) -> bool:
 	if enemy == null or context == null:
 		return false
-	var block_dist := get_lane_block_path_distance()
+	var enemy_path := enemy.get_path_points()
+	var block_dist := get_lane_block_path_distance(enemy_path)
 	if block_dist < 0.0:
 		return false
-	var blocked := _pick_lane_blocked_enemies(block_dist)
+	var blocked := _pick_lane_blocked_enemies(block_dist, enemy.get_route_id())
 	return enemy in blocked
 
 
-func _pick_lane_blocked_enemies(block_dist: float) -> Array:
+func _pick_lane_blocked_enemies(block_dist: float, route_id: String) -> Array:
 	var contenders: Array[EnemyController] = []
 	for e in context.active_enemies:
 		if e is EnemyController:
 			var enemy: EnemyController = e
+			if route_id != "" and enemy.get_route_id() != route_id:
+				continue
 			var ed := enemy.get_path_progress()
 			if ed > block_dist + LANE_BLOCK_WINDOW_AHEAD:
 				continue
@@ -110,6 +119,8 @@ func _pick_lane_blocked_enemies(block_dist: float) -> Array:
 func tether_to_tower(tower: TowerController) -> void:
 	if tower == null or data == null:
 		return
+	if _is_mounted():
+		_dismount_rakhsh("Dismounted for Sacred Tether")
 	if global_position.distance_to(tower.global_position) > data.tether_radius:
 		if context and context.bridge:
 			context.bridge.alert_message.emit("Too far to tether", 35)
@@ -117,6 +128,8 @@ func tether_to_tower(tower: TowerController) -> void:
 	tethered_tower = tower
 	_has_target = false
 	tower.set_tether_bonus(TETHER_AS_MULT)
+	if context and context.equipment_battle:
+		context.equipment_battle.on_tether_activated()
 	if context and context.bridge:
 		context.bridge.alert_message.emit("Sacred Tether active", 40)
 
@@ -124,13 +137,20 @@ func tether_to_tower(tower: TowerController) -> void:
 func use_skill() -> void:
 	if _dead or _skill_cooldown > 0.0 or context == null or data == null:
 		return
+	if _is_mounted():
+		_dismount_rakhsh("Dismounted for skill")
 	_skill_cooldown = data.skill_cooldown
 	CombatEvents.hero_skill_used.emit(data.skill_id)
 	match data.skill_id:
 		"zal_foresight":
 			_use_zal_foresight()
+		"sohrab_rage":
+			_use_sohrab_rage()
 		_:
-			_use_rostam_charge()
+			if context and context.runtime_modifiers.get("equipment_spectral_horse", false):
+				EquipmentSetRules.spectral_horse_charge(context.equipment_battle, self)
+			else:
+				_use_rostam_charge()
 
 
 func _use_rostam_charge() -> void:
@@ -138,6 +158,9 @@ func _use_rostam_charge() -> void:
 	for e in context.active_enemies:
 		if e is EnemyController and global_position.distance_to(e.global_position) <= hit_radius:
 			e.take_damage(data.skill_damage, false)
+			e.apply_slow(0.0, 1.5)
+			if e.data:
+				CombatEvents.enemy_stunned.emit("hero_skill", e.data.enemy_id)
 	if context.bridge:
 		context.bridge.alert_message.emit("Rostam charge!", 40)
 
@@ -160,13 +183,50 @@ func _use_zal_foresight() -> void:
 		context.bridge.alert_message.emit("Zal foresight — %d foes marked!" % marked, 45)
 
 
+func _use_sohrab_rage() -> void:
+	var hit_radius := 110.0
+	var hits := 0
+	for e in context.active_enemies:
+		if e is EnemyController and global_position.distance_to(e.global_position) <= hit_radius:
+			e.take_damage(data.skill_damage, false)
+			hits += 1
+	current_hp = maxf(1.0, current_hp - data.max_hp * 0.12)
+	_refresh_hp_bar()
+	if context.bridge:
+		context.bridge.alert_message.emit("Sohrab's rage — %d foes struck!" % hits, 45)
+
+
 func take_damage(amount: float) -> void:
 	if _dead:
 		return
+	if context and context.runtime_modifiers.get("hero_invincible", false):
+		return
+	if context and float(context.runtime_modifiers.get("hero_dodge_chance", 0.0)) > randf():
+		if context.bridge:
+			context.bridge.alert_message.emit("Dodged!", 25)
+		return
+	if context and context.equipment_battle:
+		amount = context.equipment_battle.absorb_shield_damage(amount)
+		if amount <= 0.0:
+			return
+	if _is_mounted():
+		_dismount_rakhsh("Dismounted — Rostam struck!")
+	var old_hp := current_hp
 	current_hp -= amount
+	CombatEvents.hero_damaged.emit(amount)
+	if context and context.equipment_battle:
+		context.equipment_battle.notify_hero_damaged(amount)
+		context.equipment_battle.notify_hero_hp_changed(old_hp, current_hp, data.max_hp if data else 200.0)
 	_refresh_hp_bar()
 	if current_hp <= 0.0:
 		_die()
+
+
+func heal(amount: float) -> void:
+	if _dead or amount <= 0.0:
+		return
+	current_hp = minf(data.max_hp if data else 200.0, current_hp + amount)
+	_refresh_hp_bar()
 
 
 func _die() -> void:
@@ -185,7 +245,10 @@ func _die() -> void:
 
 func _respawn() -> void:
 	_dead = false
-	current_hp = data.max_hp if data else 200.0
+	var max_hp := data.max_hp if data else 200.0
+	if context and context.runtime_modifiers.has("hero_max_hp_mult"):
+		max_hp *= float(context.runtime_modifiers["hero_max_hp_mult"])
+	current_hp = max_hp
 	global_position = _spawn_position
 	_move_target = _spawn_position
 	visible = true
@@ -218,6 +281,8 @@ func _physics_process(delta: float) -> void:
 			_has_target = false
 		else:
 			var speed := data.move_speed
+			if _is_mounted() and context.rakhsh_mount:
+				speed *= context.rakhsh_mount.get_speed_mult()
 			if context.runtime_modifiers.has("hero_move_speed_mult"):
 				speed *= float(context.runtime_modifiers["hero_move_speed_mult"])
 			velocity = dir * speed
@@ -284,14 +349,30 @@ func _clear_tether() -> void:
 
 
 func _attack_nearby(delta: float) -> void:
+	if _is_mounted():
+		return
 	_attack_cooldown -= delta
 	if _attack_cooldown > 0.0:
 		return
 	var dmg := data.attack_damage * MoraleController.get_damage_mult(context)
+	if context.runtime_modifiers.has("hero_melee_damage_mult"):
+		dmg *= float(context.runtime_modifiers["hero_melee_damage_mult"])
+	if context.runtime_modifiers.has("hero_attack_rate_mult"):
+		pass
 	for e in context.active_enemies:
 		if e is EnemyController and global_position.distance_to(e.global_position) < 55.0:
-			e.take_damage(dmg, false)
+			var enemy: EnemyController = e
+			var hp_before := enemy.current_hp
+			enemy.take_damage(dmg, false)
+			if context and context.equipment_battle:
+				context.equipment_battle.notify_hero_melee_hit(enemy, dmg)
+			if hp_before > 0.0 and enemy.current_hp <= 0.0:
+				CombatEvents.hero_melee_kill.emit(enemy.data.enemy_id if enemy.data else "")
+				if context and context.equipment_battle:
+					context.equipment_battle.notify_hero_kill(enemy)
 			var rate := data.attack_rate * MoraleController.get_rate_mult(context)
+			if context.runtime_modifiers.has("hero_attack_rate_mult"):
+				rate *= float(context.runtime_modifiers["hero_attack_rate_mult"])
 			_attack_cooldown = 1.0 / maxf(0.1, rate)
 			break
 
@@ -299,6 +380,18 @@ func _attack_nearby(delta: float) -> void:
 func _refresh_hp_bar() -> void:
 	if _hp_bar == null or data == null:
 		return
-	_hp_bar.max_value = data.max_hp
+	var max_hp := data.max_hp
+	if context and context.runtime_modifiers.has("hero_max_hp_mult"):
+		max_hp *= float(context.runtime_modifiers["hero_max_hp_mult"])
+	_hp_bar.max_value = max_hp
 	_hp_bar.value = current_hp
 	_hp_bar.visible = true
+
+
+func _is_mounted() -> bool:
+	return context != null and context.rakhsh_mount != null and context.rakhsh_mount.is_mounted()
+
+
+func _dismount_rakhsh(reason: String) -> void:
+	if context and context.rakhsh_mount:
+		context.rakhsh_mount.dismount(reason)

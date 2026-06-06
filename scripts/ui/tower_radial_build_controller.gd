@@ -10,7 +10,8 @@ const CENTER_LABEL_SIZE := Vector2(80, 40)
 var context: BattleContext = null
 var camera: Camera2D = null
 
-var _spot: BuildSpot = null
+var _world_pos: Vector2 = Vector2.ZERO
+var _region_id: String = ""
 var _mode: Mode = Mode.BUILD
 var _option_buttons: Array[Button] = []
 var _center_label: Label = null
@@ -61,7 +62,7 @@ func _connect_light_refresh() -> void:
 
 
 func _on_region_light_changed_for_ring(region_id: String, _light: int, _state: GameEnums.RegionLightState) -> void:
-	if not visible or _spot == null or _spot.region_id != region_id:
+	if not visible or _region_id != region_id:
 		return
 	_refresh_range_ring()
 
@@ -92,27 +93,30 @@ func _on_backdrop_gui_input(event: InputEvent) -> void:
 		hide_menu()
 
 
-func show_for_spot(spot: BuildSpot) -> void:
-	if context == null or spot == null or spot.occupied:
+func show_for_position(world_pos: Vector2, region_id: String) -> void:
+	if context == null:
 		return
 	if context.tutorial_active and not context.tutorial_allows("build_pads"):
 		return
 	_mode = Mode.BUILD
-	_spot = spot
+	_world_pos = world_pos
+	_region_id = region_id
+	_selected_tower = null
 	_rebuild_build_options()
 	if _option_buttons.is_empty():
 		return
 	_open_menu()
 
 
-func show_for_occupied_spot(spot: BuildSpot) -> void:
-	if context == null or spot == null or not spot.occupied or spot.tower == null:
+func show_for_tower(tower: TowerController) -> void:
+	if context == null or tower == null:
 		return
 	if context.tutorial_active and not context.tutorial_allows("build_pads"):
 		return
 	_mode = Mode.MANAGE
-	_spot = spot
-	_selected_tower = spot.tower
+	_selected_tower = tower
+	_world_pos = tower.global_position
+	_region_id = tower.region_id
 	_selected_tower.set_selected_visual(true)
 	_rebuild_manage_options()
 	if _option_buttons.is_empty() and _center_label == null:
@@ -142,7 +146,8 @@ func hide_menu() -> void:
 	visible = false
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_opening_guard = false
-	_spot = null
+	_world_pos = Vector2.ZERO
+	_region_id = ""
 	_mode = Mode.BUILD
 	if _backdrop:
 		_backdrop.visible = false
@@ -203,9 +208,9 @@ func _apply_build_affordability() -> void:
 
 func _rebuild_manage_options() -> void:
 	_clear_options()
-	if _spot == null or _spot.tower == null or _spot.tower.data == null:
+	if _selected_tower == null or _selected_tower.data == null:
 		return
-	var tower := _spot.tower
+	var tower := _selected_tower
 	var td := tower.data
 	var hijacked := tower.hijack_phase != GameEnums.HijackPhase.NONE
 	var actions_enabled := _can_act()
@@ -261,12 +266,10 @@ func _make_option_button(text: String) -> Button:
 
 
 func _position_options() -> void:
-	if _spot == null:
-		return
 	var vp := get_viewport()
 	if vp == null:
 		return
-	var screen_pos := BattleUiCoords.world_to_screen(vp, _spot.global_position)
+	var screen_pos := BattleUiCoords.world_to_screen(vp, _world_pos)
 	var count := _option_buttons.size()
 	if count == 0:
 		return
@@ -281,12 +284,12 @@ func _position_options() -> void:
 
 
 func _position_center_label() -> void:
-	if _center_label == null or _spot == null:
+	if _center_label == null:
 		return
 	var vp := get_viewport()
 	if vp == null:
 		return
-	var screen_pos := BattleUiCoords.world_to_screen(vp, _spot.global_position)
+	var screen_pos := BattleUiCoords.world_to_screen(vp, _world_pos)
 	_center_label.position = screen_pos - CENTER_LABEL_SIZE * 0.5
 	_center_label.position = _clamp_control_position(_center_label.position, CENTER_LABEL_SIZE)
 
@@ -307,17 +310,17 @@ func _can_act() -> bool:
 
 
 func _on_build_option_pressed(tower_id: String) -> void:
-	if _spot == null or context == null or context.tower_manager == null:
+	if context == null or context.tower_manager == null:
 		hide_menu()
 		return
-	context.tower_manager.try_build_on_spot(_spot, tower_id)
+	context.tower_manager.try_build_at(_world_pos, tower_id)
 	hide_menu()
 
 
 func _on_upgrade_pressed() -> void:
-	if _spot == null or _spot.tower == null or context == null or context.tower_manager == null:
+	if _selected_tower == null or context == null or context.tower_manager == null:
 		return
-	if context.tower_manager.try_upgrade_tower(_spot.tower):
+	if context.tower_manager.try_upgrade_tower(_selected_tower):
 		_rebuild_manage_options()
 		_position_options()
 		_position_center_label()
@@ -341,21 +344,21 @@ func _default_build_preview_tower_id() -> String:
 
 
 func _show_build_preview(tower_id: String) -> void:
-	if _range_ring == null or _spot == null or context == null:
+	if _range_ring == null or context == null:
 		return
 	var td := ContentRegistry.get_tower(tower_id)
 	if td == null:
 		return
-	var radius := TowerController.compute_preview_range(context, td, _spot.region_id, 1)
-	_range_ring.show_at(_spot.global_position, radius, true)
+	var radius := TowerController.compute_preview_range(context, td, _region_id, 1)
+	_range_ring.show_at(_world_pos, radius, true)
 
 
 func _refresh_range_ring() -> void:
-	if _range_ring == null or _spot == null:
+	if _range_ring == null:
 		return
-	if _mode == Mode.MANAGE and _spot.tower != null:
-		var radius := _spot.tower.get_effective_range()
-		_range_ring.show_at(_spot.global_position, radius, false)
+	if _mode == Mode.MANAGE and _selected_tower != null:
+		var radius := _selected_tower.get_effective_range()
+		_range_ring.show_at(_world_pos, radius, false)
 	elif _mode == Mode.BUILD:
 		var tid := _default_build_preview_tower_id()
 		if tid != "":
@@ -367,17 +370,17 @@ func _refresh_range_ring() -> void:
 
 
 func _on_sell_pressed() -> void:
-	if _spot == null or _spot.tower == null or context == null or context.tower_manager == null:
+	if _selected_tower == null or context == null or context.tower_manager == null:
 		hide_menu()
 		return
-	if context.tower_manager.try_sell_tower(_spot.tower):
+	if context.tower_manager.try_sell_tower(_selected_tower):
 		hide_menu()
 
 
 func _on_purify_pressed() -> void:
-	if _spot == null or _spot.tower == null:
+	if _selected_tower == null:
 		return
-	if _spot.tower.try_recover_hijack():
+	if _selected_tower.try_recover_hijack():
 		_rebuild_manage_options()
 		_position_options()
 		_position_center_label()

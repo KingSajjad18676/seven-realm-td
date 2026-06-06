@@ -1,7 +1,7 @@
 extends Node
 
 const SAVE_PATH := "user://shahnamehtd_save.json"
-const SAVE_VERSION := 6
+const SAVE_VERSION := 9
 
 const STARTER_TOWER_IDS: Array[String] = [
 	"tower_archer",
@@ -91,8 +91,31 @@ func _default_data() -> Dictionary:
 		"spells_owned": [],
 		"horde_progress": {},
 		"unlocked_towers": STARTER_TOWER_IDS.duplicate(),
+		"gauntlet_best": _default_gauntlet_best(),
+		"equipment_owned": [],
+		"equipment_equipped": {
+			"weapon": "",
+			"armor": "",
+			"helm": "",
+			"talisman": "",
+		},
+		"daily_missions": {},
+		"mission_lifetime": {
+			"total_div_kills": 0,
+			"total_cleanses": 0,
+			"total_forge_tokens_spent": 0,
+		},
+		"royal_bounty_tickets": 0,
 	}
 	return data
+
+
+func _default_gauntlet_best() -> Dictionary:
+	return {
+		"total_ms": 0,
+		"splits_ms": [],
+		"trace": [],
+	}
 
 
 func _default_accessibility() -> Dictionary:
@@ -256,6 +279,8 @@ func spend_forge_tokens(amount: int) -> bool:
 	if get_forge_tokens() < amount:
 		return false
 	_data["forge_tokens"] = get_forge_tokens() - amount
+	if MissionProgressTracker:
+		MissionProgressTracker.record_forge_tokens_spent(amount)
 	save_game()
 	return true
 
@@ -344,6 +369,30 @@ func set_endless_best(wave: int) -> void:
 	if wave > get_endless_best():
 		_data["endless_best"] = wave
 		save_game()
+
+
+func get_gauntlet_best() -> Dictionary:
+	var best: Variant = _data.get("gauntlet_best", {})
+	if best is Dictionary:
+		return best.duplicate(true)
+	return _default_gauntlet_best()
+
+
+func try_set_gauntlet_best(run: GauntletRunState) -> bool:
+	if run == null:
+		return false
+	var elapsed := run.get_elapsed_ms()
+	var current := get_gauntlet_best()
+	var prev_ms := int(current.get("total_ms", 0))
+	if prev_ms > 0 and elapsed >= prev_ms:
+		return false
+	_data["gauntlet_best"] = {
+		"total_ms": elapsed,
+		"splits_ms": run.splits_ms.duplicate(),
+		"trace": run.trace.duplicate(true),
+	}
+	save_game()
+	return true
 
 
 func get_hunt_best_binding() -> int:
@@ -529,3 +578,77 @@ func set_setting(key: String, value: Variant) -> void:
 	settings[key] = value
 	_data["settings"] = settings
 	save_game()
+
+
+func get_save_data() -> Dictionary:
+	return _data
+
+
+func get_equipment_owned() -> Array[String]:
+	var raw: Variant = _data.get("equipment_owned", [])
+	var ids: Array[String] = []
+	if raw is Array:
+		for entry in raw:
+			if entry is String:
+				ids.append(entry)
+	return ids
+
+
+func set_equipment_owned(ids: Array[String]) -> void:
+	_data["equipment_owned"] = ids.duplicate()
+	save_game()
+
+
+func get_equipment_equipped() -> Dictionary:
+	var raw: Variant = _data.get("equipment_equipped", {})
+	if raw is Dictionary:
+		return raw.duplicate()
+	return {"weapon": "", "armor": "", "helm": "", "talisman": ""}
+
+
+func set_equipment_equipped(slots: Dictionary) -> void:
+	_data["equipment_equipped"] = slots.duplicate()
+	save_game()
+
+
+func get_daily_missions_state() -> Dictionary:
+	var state: Variant = _data.get("daily_missions", {})
+	return state if state is Dictionary else {}
+
+
+func set_daily_missions_state(state: Dictionary) -> void:
+	_data["daily_missions"] = state.duplicate(true)
+	save_game()
+
+
+func get_mission_lifetime(key: String) -> int:
+	var stats: Dictionary = _data.get("mission_lifetime", {})
+	return int(stats.get(key, 0))
+
+
+func add_mission_lifetime(key: String, delta: int) -> void:
+	if key == "" or delta == 0:
+		return
+	var stats: Dictionary = _data.get("mission_lifetime", {})
+	stats[key] = get_mission_lifetime(key) + delta
+	_data["mission_lifetime"] = stats
+	save_game()
+
+
+func get_royal_bounty_tickets() -> int:
+	return int(_data.get("royal_bounty_tickets", 0))
+
+
+func add_royal_bounty_tickets(amount: int) -> void:
+	if amount <= 0:
+		return
+	_data["royal_bounty_tickets"] = get_royal_bounty_tickets() + amount
+	save_game()
+
+
+func consume_royal_bounty_ticket() -> bool:
+	if get_royal_bounty_tickets() <= 0:
+		return false
+	_data["royal_bounty_tickets"] = get_royal_bounty_tickets() - 1
+	save_game()
+	return true

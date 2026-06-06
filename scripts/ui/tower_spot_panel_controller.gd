@@ -2,7 +2,7 @@ class_name TowerSpotPanelController
 extends Panel
 
 var context: BattleContext = null
-var _spot: BuildSpot = null
+var _tower: TowerController = null
 
 @onready var _title_label: Label = %TitleLabel
 @onready var _upgrade_btn: Button = %UpgradeButton
@@ -26,11 +26,11 @@ func initialize(ctx: BattleContext) -> void:
 	_ensure_tether_button()
 
 
-func show_for_spot(spot: BuildSpot) -> void:
+func show_for_tower(tower: TowerController) -> void:
 	if context and context.tutorial_active:
 		return
-	_spot = spot
-	if spot == null or spot.tower == null:
+	_tower = tower
+	if tower == null or tower.data == null:
 		hide_panel()
 		return
 	_refresh()
@@ -38,7 +38,7 @@ func show_for_spot(spot: BuildSpot) -> void:
 
 
 func hide_panel() -> void:
-	_spot = null
+	_tower = null
 	visible = false
 
 
@@ -47,9 +47,9 @@ func refresh_panel() -> void:
 
 
 func _refresh() -> void:
-	if _spot == null or _spot.tower == null or _spot.tower.data == null:
+	if _tower == null or _tower.data == null:
 		return
-	var tower := _spot.tower
+	var tower := _tower
 	var td := tower.data
 	var hijacked := tower.hijack_phase != GameEnums.HijackPhase.NONE
 
@@ -82,7 +82,7 @@ func _refresh() -> void:
 
 	if _tether_btn:
 		var in_range := _hero_can_tether()
-		_tether_btn.visible = not hijacked and _spot.occupied
+		_tether_btn.visible = not hijacked
 		_tether_btn.disabled = not actions_enabled or not in_range
 
 
@@ -94,23 +94,23 @@ func _can_act() -> bool:
 
 
 func _on_upgrade() -> void:
-	if _spot == null or _spot.tower == null or context == null or context.tower_manager == null:
+	if _tower == null or context == null or context.tower_manager == null:
 		return
-	if context.tower_manager.try_upgrade_tower(_spot.tower):
+	if context.tower_manager.try_upgrade_tower(_tower):
 		_refresh()
 
 
 func _on_sell() -> void:
-	if _spot == null or _spot.tower == null or context == null or context.tower_manager == null:
+	if _tower == null or context == null or context.tower_manager == null:
 		return
-	if context.tower_manager.try_sell_tower(_spot.tower):
+	if context.tower_manager.try_sell_tower(_tower):
 		hide_panel()
 
 
 func _on_purify() -> void:
-	if _spot == null or _spot.tower == null:
+	if _tower == null:
 		return
-	if _spot.tower.try_recover_hijack():
+	if _tower.try_recover_hijack():
 		_refresh()
 
 
@@ -129,20 +129,20 @@ func _ensure_tether_button() -> void:
 
 
 func _hero_can_tether() -> bool:
-	if context == null or context.hero_manager == null or context.hero_manager.hero == null or _spot == null:
+	if context == null or context.hero_manager == null or context.hero_manager.hero == null or _tower == null:
 		return false
 	var hero := context.hero_manager.hero
 	if hero.data == null:
 		return false
-	return hero.global_position.distance_to(_spot.global_position) <= hero.data.tether_radius * 1.2
+	return hero.global_position.distance_to(_tower.global_position) <= hero.data.tether_radius * 1.2
 
 
 func _on_tether() -> void:
-	if _spot == null or _spot.tower == null or context == null or context.hero_manager == null:
+	if _tower == null or context == null or context.hero_manager == null:
 		return
 	var hero := context.hero_manager.hero
 	if hero:
-		hero.tether_to_tower(_spot.tower)
+		hero.tether_to_tower(_tower)
 		hide_panel()
 
 

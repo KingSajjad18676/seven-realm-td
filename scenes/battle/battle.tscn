@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://battle_scene"]
+[gd_scene load_steps=10 format=3 uid="uid://battle_scene"]
 
 [ext_resource type="Script" path="res://scripts/battle/battle_bootstrap.gd" id="1_battle"]
 [ext_resource type="Script" path="res://scripts/ui/touch_camera.gd" id="2_camera"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/ui/tower_spot_panel_controller.gd" id="5_tower_panel"]
 [ext_resource type="Script" path="res://scripts/ui/minimap_controller.gd" id="6_minimap"]
 [ext_resource type="Script" path="res://scripts/ui/threat_indicator_controller.gd" id="7_threat"]
+[ext_resource type="Script" path="res://scripts/ui/gauntlet_hud_widget.gd" id="8_gauntlet_hud"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_topbar"]
 bg_color = Color(0.06, 0.08, 0.1, 0.55)
@@ -198,6 +199,48 @@ offset_right = 760.0
 offset_bottom = 40.0
 text = "Start Wave"
 
+[node name="GauntletRushButton" type="Button" parent="CanvasLayer"]
+unique_name_in_owner = true
+visible = false
+offset_left = 768.0
+offset_top = 8.0
+offset_right = 900.0
+offset_bottom = 40.0
+text = "Rush!"
+
+[node name="GauntletTimerPanel" type="Panel" parent="CanvasLayer"]
+unique_name_in_owner = true
+visible = false
+script = ExtResource("8_gauntlet_hud")
+
+[node name="GauntletChainOverlay" type="Panel" parent="CanvasLayer"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -40.0
+offset_right = 240.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GauntletChainLabel" type="Label" parent="CanvasLayer/GauntletChainOverlay"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "Labour cleared"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="BottomBar" type="HBoxContainer" parent="CanvasLayer"]
 anchors_preset = 12
 anchor_top = 1.0
@@ -216,6 +259,12 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 36)
 layout_mode = 2
 text = "Rostam Skill"
+
+[node name="NaftButton" type="Button" parent="CanvasLayer/BottomBar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(88, 36)
+layout_mode = 2
+text = "Naft 2/2"
 
 [node name="ForgeButton" type="Button" parent="CanvasLayer/BottomBar"]
 unique_name_in_owner = true

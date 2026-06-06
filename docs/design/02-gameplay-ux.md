@@ -158,7 +158,7 @@ Never silently disable a tower. Early maps: generous recovery windows. Late maps
 
 ## 9. Hero control and Sacred Tether
 
-**Rostam (starter):** frontline fighter, boss responder, leak interceptor, emergency defender, Sacred Tether amplifier.
+**Rostam (starter):** frontline fighter, boss responder, leak interceptor, emergency defender, Sacred Tether amplifier. **Naft Pouch:** spill oil on the enemy path to heavily slow foes; Sacred Fire (and burn hybrids) ignite the slick into a blazing kill-zone.
 
 Hero solves problems towers cannot alone: hold breach, intercept runner, interrupt boss, protect purification, activate regional points, strengthen nearby towers, recover from route changes. Movement should be **strategic, not exhausting**.
 

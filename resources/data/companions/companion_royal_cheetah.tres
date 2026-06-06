@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="CompanionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/companion_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+companion_id = "companion_royal_cheetah"
+display_name = "Royal Cheetah"
+description = "Auto-scavenges Star Iron drops and banks them at Rostam."
+behavior = 1
+move_speed = 320.0
+bank_radius = 48.0
+color = Color(0.9, 0.65, 0.2, 1)

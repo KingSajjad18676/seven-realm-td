@@ -67,10 +67,10 @@ func _do_drought() -> void:
 				labour.set_drought(false)
 		, CONNECT_ONE_SHOT)
 	if _enemy and _enemy.context and _enemy.context.map_light and _enemy.context.tower_manager:
-		for spot in _enemy.context.tower_manager.build_spots:
-			if spot.tower == null:
+		for tower in _enemy.context.tower_manager.towers:
+			if not is_instance_valid(tower):
 				continue
-			var light := _enemy.context.map_light.get_light(spot.region_id)
+			var light := _enemy.context.map_light.get_light(tower.region_id)
 			if light < 50 and _enemy.context.economy:
 				_enemy.context.economy.spend_sacred_fire(1)
 	_phase = Phase.SURGE

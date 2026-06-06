@@ -24,14 +24,16 @@ var _venom_timer: float = 0.0
 var _venom_dps: float = 0.0
 var _damage_taken_mult: float = 1.0
 var _venom_source: TowerController = null
+var _route_id: String = ""
 
 @onready var _sprite: ColorRect = $Sprite
 @onready var _hp_bar: ProgressBar = $HPBar
 
 
-func initialize(ctx: BattleContext, enemy_data: EnemyData, path: PackedVector2Array) -> void:
+func initialize(ctx: BattleContext, enemy_data: EnemyData, path: PackedVector2Array, route_id: String = "") -> void:
 	context = ctx
 	data = enemy_data
+	_route_id = route_id
 	_boss_controller = null
 	_armor_delta = 0.0
 	_move_speed_bonus = 0.0
@@ -75,8 +77,7 @@ func _process(delta: float) -> void:
 		return
 	if context.state_controller.current_state != GameEnums.BattleState.WAVE_ACTIVE:
 		return
-	var hero := context.hero_manager.hero if context.hero_manager else null
-	if hero and hero.should_block_enemy(self):
+	if _is_blocked_by_hero():
 		if _is_boss and _boss_controller and _boss_controller.has_method("tick"):
 			_boss_controller.tick(delta)
 		_apply_corruption_trail()
@@ -110,14 +111,28 @@ func _process(delta: float) -> void:
 	_apply_corruption_trail()
 
 
+func has_active_debuff() -> bool:
+	return _burn_timer > 0.0 or _venom_timer > 0.0 or (_slow_timer > 0.0 and _slow_mult < 1.0)
+
+
 func take_damage(amount: float, from_tower: bool = true) -> void:
 	if from_tower and _burrowed:
 		return
 	var dmg := maxf(1.0, amount - _effective_armor() * 0.5)
+	if not from_tower and context and context.runtime_modifiers.has("hero_armor_pierce"):
+		dmg += amount * float(context.runtime_modifiers["hero_armor_pierce"])
 	dmg *= _damage_taken_mult
 	if _is_boss and from_tower and _boss_controller and _boss_controller.has_method("blocks_tower_damage") and _boss_controller.blocks_tower_damage():
 		dmg *= 0.5
 	current_hp -= dmg
+	if _hp_bar:
+		_hp_bar.value = current_hp
+	if current_hp <= 0.0:
+		_die()
+
+
+func take_true_damage(amount: float) -> void:
+	current_hp -= amount
 	if _hp_bar:
 		_hp_bar.value = current_hp
 	if current_hp <= 0.0:
@@ -131,6 +146,17 @@ func apply_burn(duration: float = 2.0) -> void:
 func apply_slow(mult: float, duration: float) -> void:
 	_slow_mult = minf(_slow_mult, mult)
 	_slow_timer = maxf(_slow_timer, duration)
+
+
+func has_tag(tag: String) -> bool:
+	return data != null and tag in data.tags
+
+
+func apply_path_knockback(distance: float) -> void:
+	if distance <= 0.0:
+		return
+	_follower.knockback(distance)
+	global_position = _follower.advance(0.0)
 
 
 func apply_armor_break() -> void:
@@ -222,6 +248,8 @@ func _effective_max_hp() -> float:
 
 
 func _die() -> void:
+	if context and context.equipment_battle:
+		context.equipment_battle.notify_enemy_death(self)
 	if has_venom() and _venom_source and is_instance_valid(_venom_source):
 		_venom_source.on_venom_kill()
 	if _is_boss and _boss_controller and _boss_controller.has_method("cleanup"):
@@ -233,7 +261,7 @@ func _die() -> void:
 	if context and context.hunt and data:
 		context.hunt.on_enemy_slain(data)
 	if context and context.economy and not _decoy:
-		context.economy.apply_kill_rewards(data)
+		context.economy.apply_kill_rewards(data, global_position)
 	if context and context.loot_drops and not _decoy:
 		context.loot_drops.try_spawn_drop(global_position, data)
 	if data.corruption_pressure > 0.0 and context and context.map_light:
@@ -271,6 +299,23 @@ func is_near_gate(threshold: float = 0.75) -> bool:
 
 func get_path_progress() -> float:
 	return _follower.get_progress_distance()
+
+
+func get_route_id() -> String:
+	return _route_id
+
+
+func get_path_points() -> PackedVector2Array:
+	return _follower.path_points
+
+
+func _is_blocked_by_hero() -> bool:
+	if context == null or context.hero_manager == null:
+		return false
+	for hero in context.hero_manager.get_living_heroes():
+		if hero.should_block_enemy(self):
+			return true
+	return false
 
 
 func _hp_multiplier() -> float:

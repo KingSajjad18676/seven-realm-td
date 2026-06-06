@@ -11,7 +11,7 @@ static func default_accessibility() -> Dictionary:
 	}
 
 
-static func migrate(data: Dictionary, target_version: int = 6) -> Dictionary:
+static func migrate(data: Dictionary, target_version: int = 9) -> Dictionary:
 	var result := data.duplicate(true)
 	var version := int(result.get("save_version", 1))
 	if version < 2 and target_version >= 2:
@@ -67,7 +67,71 @@ static func migrate(data: Dictionary, target_version: int = 6) -> Dictionary:
 					unlocked.append(starter_id)
 			result["unlocked_towers"] = unlocked
 		result["save_version"] = 6
+		version = 6
+	if version < 7 and target_version >= 7:
+		_migrate_run_relic_slots(result.get("campaign_run", {}))
+		_migrate_run_relic_slots(result.get("roguelite_run", {}))
+		_migrate_run_companion(result.get("campaign_run", {}))
+		result["save_version"] = 7
+		version = 7
+	if version < 8 and target_version >= 8:
+		if not result.has("gauntlet_best"):
+			result["gauntlet_best"] = {
+				"total_ms": 0,
+				"splits_ms": [],
+				"trace": [],
+			}
+		result["save_version"] = 8
+		version = 8
+	if version < 9 and target_version >= 9:
+		if not result.has("equipment_owned"):
+			result["equipment_owned"] = []
+		if not result.has("equipment_equipped"):
+			result["equipment_equipped"] = {
+				"weapon": "",
+				"armor": "",
+				"helm": "",
+				"talisman": "",
+			}
+		if not result.has("daily_missions"):
+			result["daily_missions"] = {}
+		if not result.has("mission_lifetime"):
+			result["mission_lifetime"] = {
+				"total_div_kills": 0,
+				"total_cleanses": 0,
+				"total_forge_tokens_spent": 0,
+			}
+		if not result.has("royal_bounty_tickets"):
+			result["royal_bounty_tickets"] = 0
+		result["save_version"] = 9
+		version = 9
 	return result
+
+
+static func _migrate_run_companion(run_data: Variant) -> void:
+	if not run_data is Dictionary:
+		return
+	var run: Dictionary = run_data
+	if not run.has("active_companion_id"):
+		run["active_companion_id"] = ""
+
+
+static func _migrate_run_relic_slots(run_data: Variant) -> void:
+	if not run_data is Dictionary:
+		return
+	var run: Dictionary = run_data
+	if run.has("tower_relic_slots"):
+		return
+	var saved_relics: Variant = run.get("relic_ids", [])
+	if not saved_relics is Array:
+		run["tower_relic_slots"] = {}
+		run["active_relic_ids"] = []
+		run.erase("relic_ids")
+		return
+	var migrated := RelicSlotHelper.migrate_relic_ids(saved_relics)
+	run["tower_relic_slots"] = migrated.get("tower_relic_slots", {}).duplicate()
+	run["active_relic_ids"] = migrated.get("active_relic_ids", [])
+	run.erase("relic_ids")
 
 
 static func _migrate_legacy_roguelite_run(legacy: Dictionary) -> Dictionary:
@@ -92,6 +156,8 @@ static func _migrate_legacy_roguelite_run(legacy: Dictionary) -> Dictionary:
 		"visited_node_ids": [],
 		"run_tower_ids": [],
 		"run_tower_upgrades": {},
-		"relic_ids": legacy.get("relic_ids", []),
+		"tower_relic_slots": {},
+		"active_relic_ids": [],
+		"active_companion_id": "",
 		"act_index": 0,
 	}

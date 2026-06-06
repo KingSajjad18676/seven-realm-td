@@ -74,5 +74,17 @@ func battle_exit_to_map(level_id: String, victory: bool) -> void:
 	track_event("battle_exit_to_map", {"level_id": level_id, "victory": victory})
 
 
+func gauntlet_started() -> void:
+	track_event("gauntlet_started", {})
+
+
+func gauntlet_completed(total_ms: int) -> void:
+	track_event("gauntlet_completed", {"total_ms": total_ms})
+
+
+func gauntlet_pb_beaten(total_ms: int) -> void:
+	track_event("gauntlet_pb_beaten", {"total_ms": total_ms})
+
+
 func get_buffered_events() -> Array[Dictionary]:
 	return _session_events.duplicate()

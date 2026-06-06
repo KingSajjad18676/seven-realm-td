@@ -73,13 +73,20 @@ func tick_decay(delta: float) -> void:
 		_emit_region(region_id)
 
 
-func try_cleanse_region(region_id: String) -> bool:
-	if context == null or context.economy == null:
-		return false
-	if not context.economy.spend_sacred_fire(CLEANSE_COST):
-		if context.bridge:
-			context.bridge.alert_message.emit("Need %d Sacred Fire to cleanse" % CLEANSE_COST, 50)
-		return false
+func get_cleanse_cost() -> int:
+	var cost := CLEANSE_COST
+	if context and context.runtime_modifiers.has("cleanse_cost_mult"):
+		cost = maxi(1, int(roundf(float(CLEANSE_COST) * float(context.runtime_modifiers["cleanse_cost_mult"]))))
+	return cost
+
+
+func find_region_at(pos: Vector2) -> String:
+	return get_region_for_position(pos)
+
+
+func force_cleanse_region(region_id: String) -> void:
+	if region_id == "" or not region_light.has(region_id):
+		return
 	region_light[region_id] = LIGHT_MAX
 	region_decay_rate[region_id] = 0.0
 	_update_state(region_id)
@@ -88,6 +95,20 @@ func try_cleanse_region(region_id: String) -> bool:
 	AnalyticsService.cleanse_used(region_id)
 	if context and context.objectives:
 		context.objectives.on_cleanse()
+
+
+func try_cleanse_region(region_id: String) -> bool:
+	if context == null or context.economy == null:
+		return false
+	var player_index := -1
+	if context.coop_players and context.coop_players.is_active():
+		player_index = context.coop_players.focused_player_index
+	var cost := get_cleanse_cost()
+	if not context.economy.spend_sacred_fire(cost, player_index):
+		if context.bridge:
+			context.bridge.alert_message.emit("Need %d Sacred Fire to cleanse" % cost, 50)
+		return false
+	force_cleanse_region(region_id)
 	if context.bridge:
 		context.bridge.alert_message.emit("Region cleansed!", 30)
 	return true
@@ -198,11 +219,11 @@ func process_hijack_timers(delta: float) -> void:
 		_force_hijack_at_spot(spot_id)
 
 
-func _force_hijack_at_spot(spot_id: String) -> void:
+func _force_hijack_at_spot(placement_id: String) -> void:
 	if context == null or context.tower_manager == null:
 		return
-	for spot in context.tower_manager.build_spots:
-		if spot.spot_id == spot_id and spot.tower:
-			if spot.tower.hijack_phase == GameEnums.HijackPhase.WARNING:
-				spot.tower.force_enter_hijacked()
+	for tower in context.tower_manager.towers:
+		if is_instance_valid(tower) and tower.placement_id == placement_id:
+			if tower.hijack_phase == GameEnums.HijackPhase.WARNING:
+				tower.force_enter_hijacked()
 			return

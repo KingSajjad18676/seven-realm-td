@@ -1,7 +1,7 @@
 class_name TowerDraftController
 extends Control
 
-signal draft_confirmed(tower_ids: Array[String])
+signal draft_confirmed(tower_ids: Array[String], ahrimans_shroud_enabled: bool)
 signal draft_cancelled
 
 const REQUIRED_START_COUNT := 3
@@ -13,6 +13,8 @@ var _title_label: Label = null
 var _status_label: Label = null
 var _grid: GridContainer = null
 var _confirm_btn: Button = null
+var _shroud_row: HBoxContainer = null
+var _shroud_check: CheckButton = null
 
 
 func _ready() -> void:
@@ -56,6 +58,17 @@ func _ready() -> void:
 	_grid.add_theme_constant_override("h_separation", 8)
 	_grid.add_theme_constant_override("v_separation", 8)
 	scroll.add_child(_grid)
+	_shroud_row = HBoxContainer.new()
+	_shroud_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	_shroud_check = CheckButton.new()
+	_shroud_check.text = "Ahriman's Shroud"
+	_shroud_check.tooltip_text = (
+		"Hide the path. Spend Sacred Fire to reveal nodes before entering. "
+		+ "SF carries into battles."
+	)
+	_shroud_row.add_child(_shroud_check)
+	root.add_child(_shroud_row)
+	_shroud_row.visible = false
 	var row := HBoxContainer.new()
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	row.add_theme_constant_override("separation", 12)
@@ -70,11 +83,26 @@ func _ready() -> void:
 	root.add_child(row)
 
 
-func show_start_draft(pool: Array[String]) -> void:
+func show_start_draft(pool: Array[String], shroud_unlocked: bool = false) -> void:
 	_pick_count = REQUIRED_START_COUNT
 	_pool = pool.duplicate()
 	_selected.clear()
 	_title_label.text = "Draft your starting towers"
+	if _shroud_row:
+		_shroud_row.visible = shroud_unlocked
+	if _shroud_check:
+		_shroud_check.button_pressed = false
+	_refresh()
+	visible = true
+
+
+func show_gauntlet_draft(pool: Array[String]) -> void:
+	_pick_count = REQUIRED_START_COUNT
+	_pool = pool.duplicate()
+	_selected.clear()
+	_title_label.text = "Haft-Khan Gauntlet — draft 3 towers"
+	if _shroud_row:
+		_shroud_row.visible = false
 	_refresh()
 	visible = true
 
@@ -87,6 +115,8 @@ func show_add_one_draft(pool: Array[String], exclude: Array[String]) -> void:
 			_pool.append(tid)
 	_selected.clear()
 	_title_label.text = "Add a tower to your run"
+	if _shroud_row:
+		_shroud_row.visible = false
 	_refresh()
 	visible = true
 
@@ -123,7 +153,8 @@ func _on_confirm() -> void:
 	if _selected.size() != _pick_count:
 		return
 	visible = false
-	draft_confirmed.emit(_selected.duplicate())
+	var shroud_on := _shroud_check.button_pressed if _shroud_check and _shroud_row.visible else false
+	draft_confirmed.emit(_selected.duplicate(), shroud_on)
 
 
 func _on_cancel() -> void:

@@ -7,6 +7,7 @@ extends Control
 @onready var _back_btn: Button = $BackButton
 
 var _run: RogueliteRunState = RogueliteRunState.new()
+var _relic_picker: RelicSlotPickerController = null
 
 
 func _ready() -> void:
@@ -17,11 +18,22 @@ func _ready() -> void:
 		if SceneFlowController:
 			SceneFlowController.pending_roguelite_run = _run
 			SceneFlowController.persist_roguelite_run()
+	_relic_picker = RelicSlotPickerController.new()
+	_relic_picker.name = "RelicPicker"
+	add_child(_relic_picker)
+	_relic_picker.relic_slotted.connect(_on_relic_slotted)
+	_relic_picker.cancelled.connect(_on_relic_pick_cancelled)
 	_refresh()
 	if _action_btn:
 		_action_btn.pressed.connect(_on_action)
 	if _back_btn:
 		_back_btn.pressed.connect(_on_back)
+
+
+func _roguelite_tower_ids() -> Array[String]:
+	if SaveSystem:
+		return SaveSystem.get_unlocked_tower_pool()
+	return ContentCatalog.get_starter_tower_ids()
 
 
 func _refresh() -> void:
@@ -67,24 +79,40 @@ func _on_action() -> void:
 
 
 func _pick_relic() -> void:
-	var relics: Array[RelicData] = []
-	if ContentRegistry:
-		relics = ContentRegistry.get_all_relics()
-	if relics.is_empty():
+	var picks := RelicSlotHelper.pick_relic_pool(
+		_roguelite_tower_ids(),
+		_run.tower_relic_slots,
+		3
+	)
+	if picks.is_empty():
 		_advance_run()
 		return
-	var pick: RelicData = relics[randi() % relics.size()]
-	_run.relic_ids.append(pick.relic_id)
+	_relic_picker.show_pick(
+		_roguelite_tower_ids(),
+		_run.tower_relic_slots,
+		"Sacred Rest — Relics of the Shahs"
+	)
+
+
+func _on_relic_slotted(tower_id: String, relic_id: String) -> void:
+	_run.slot_relic(relic_id, tower_id)
 	if _desc:
-		_desc.text = "Relic acquired: %s" % pick.title
-	get_tree().create_timer(1.0).timeout.connect(_advance_run, CONNECT_ONE_SHOT)
+		var relic := ContentRegistry.get_relic(relic_id) if ContentRegistry else null
+		_desc.text = "Relic slotted: %s" % (relic.title if relic else relic_id)
+	get_tree().create_timer(0.6).timeout.connect(_advance_run, CONNECT_ONE_SHOT)
+
+
+func _on_relic_pick_cancelled() -> void:
+	if _desc:
+		_desc.text = "No relic chosen."
 
 
 func _start_battle(level_id: String) -> void:
 	var launch := BattleLaunchData.new()
 	launch.level_id = level_id
 	launch.is_roguelite_run = true
-	launch.active_relic_ids = _run.relic_ids.duplicate()
+	launch.tower_relic_slots = _run.tower_relic_slots.duplicate()
+	launch.active_relic_ids = _run.active_relic_ids.duplicate()
 	launch.roguelite_node_index = _run.current_index
 	SceneFlowController.pending_roguelite_run = _run
 	SceneFlowController.persist_roguelite_run()

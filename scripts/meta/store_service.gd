@@ -28,6 +28,12 @@ const PRODUCTS: Dictionary = {
 	"forge_token_pack_small": {"display_name": "Forge Token Pack (50)", "price_label": "$2.99", "type": "tokens", "amount": 50},
 	"forge_token_pack_large": {"display_name": "Forge Token Pack (200)", "price_label": "$9.99", "type": "tokens", "amount": 200},
 	"ad_removal": {"display_name": "Ad Removal", "price_label": "$3.99", "type": "cosmetic", "grant_id": "ad_removal"},
+	"royal_bounty_ticket": {
+		"display_name": "Royal Bounty",
+		"price_label": "$1.99",
+		"type": "consumable",
+		"grant_id": "royal_bounty_ticket",
+	},
 }
 
 var _cosmetic_entitlements: Array[String] = []
@@ -79,6 +85,9 @@ func purchase(product_id: String) -> bool:
 		"cosmetic":
 			if str(product.get("grant_id", "")) not in _cosmetic_entitlements:
 				_cosmetic_entitlements.append(str(product.get("grant_id", "")))
+		"consumable":
+			if SaveSystem:
+				SaveSystem.add_royal_bounty_tickets(1)
 		_:
 			return false
 	if product_id not in _paid_entitlements:
@@ -100,6 +109,14 @@ func buy_spell_with_tokens(spell_id: String) -> bool:
 		return false
 	SaveSystem.add_spell(spell_id)
 	return true
+
+
+func consume_royal_bounty() -> bool:
+	if SaveSystem == null or DailyMissionService == null:
+		return false
+	if not SaveSystem.consume_royal_bounty_ticket():
+		return false
+	return DailyMissionService.add_bonus_missions(3)
 
 
 func restore_purchases() -> void:

@@ -14,7 +14,6 @@ func test_configure_from_level_uses_fit_center_for_medium_maps() -> void:
 	level.grid_width = 32
 	level.grid_height = 18
 	level.path_points = [Vector2(80, 360), Vector2(1180, 360)]
-	level.build_spot_positions = [Vector2(400, 300)]
 	level.spawn_position = Vector2(80, 360)
 	level.gate_position = Vector2(1180, 360)
 	level.camera_anchors = [Vector2(500, 320), Vector2(900, 360)]
@@ -142,7 +141,6 @@ func _sample_level() -> LevelData:
 	level.grid_height = 22
 	level.uses_large_map_camera = true
 	level.path_points = [Vector2(80, 200), Vector2(1200, 360)]
-	level.build_spot_positions = [Vector2(500, 300)]
 	level.spawn_position = Vector2(80, 200)
 	level.gate_position = Vector2(1200, 360)
 	level.camera_anchors = [Vector2(640, 360), Vector2(900, 400)]

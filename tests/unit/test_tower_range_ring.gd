@@ -1,6 +1,5 @@
 extends GutTest
 
-const BUILD_SPOT_SCENE := preload("res://scenes/prefabs/build_spot.tscn")
 const TOWER_SCENE := preload("res://scenes/prefabs/tower.tscn")
 
 
@@ -27,13 +26,10 @@ func test_compute_preview_range_barracks_is_zero() -> void:
 
 func test_get_effective_range_increases_on_upgrade() -> void:
 	var ctx := BattleTestFixtures.minimal_context(self)
-	var spot := BUILD_SPOT_SCENE.instantiate() as BuildSpot
-	add_child_autofree(spot)
-	spot.region_id = "region_north"
 	var tower := TOWER_SCENE.instantiate() as TowerController
 	add_child_autofree(tower)
 	var td := ContentRegistry.get_tower("tower_archer")
-	tower.initialize(ctx, td, spot)
+	tower.initialize(ctx, td, Vector2(400, 300), "region_north", "tower_ring_test")
 	tower._efficiency = 1.0
 	tower._forge_range_mult = 1.0
 	var before := tower.get_effective_range()
@@ -58,9 +54,6 @@ func test_radial_shows_manage_range_ring() -> void:
 	var camera := Camera2D.new()
 	camera.global_position = Vector2(640, 360)
 	add_child_autofree(camera)
-	var spot := BUILD_SPOT_SCENE.instantiate() as BuildSpot
-	add_child_autofree(spot)
-	spot.global_position = Vector2(400, 300)
 	var ctx := BattleTestFixtures.context_with_level(self, 200, 5)
 	var level := ContentRegistry.get_level("level_01")
 	ctx.level_data = level
@@ -73,12 +66,12 @@ func test_radial_shows_manage_range_ring() -> void:
 	radial.set_range_ring(ring)
 	var tower := TOWER_SCENE.instantiate() as TowerController
 	add_child_autofree(tower)
+	tower.global_position = Vector2(400, 300)
 	var td := ContentRegistry.get_tower("tower_archer")
-	tower.initialize(ctx, td, spot)
+	tower.initialize(ctx, td, Vector2(400, 300), "region_north", "tower_ring_radial")
 	tower._efficiency = 1.0
 	tower._forge_range_mult = 1.0
-	spot.set_occupied(tower)
-	radial.show_for_occupied_spot(spot)
+	radial.show_for_tower(tower)
 	await get_tree().process_frame
 	assert_true(ring.is_showing())
 	assert_almost_eq(ring.get_radius(), 150.0, 0.01)

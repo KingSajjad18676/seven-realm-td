@@ -24,7 +24,8 @@ func test_get_level_01_merges_map_override() -> void:
 	assert_not_null(level)
 	assert_eq(level.map_sprite_path, "res://art/maps/level_01.jpg")
 	assert_gte(level.path_points.size(), 3)
-	assert_gte(level.build_spot_positions.size(), 3)
+	level.ensure_routes_migrated()
+	assert_gte(level.get_all_route_points().size(), 2)
 	level.ensure_routes_migrated()
 	level.ensure_spawns_migrated()
 	assert_gte(level.path_routes.size(), 1)
@@ -36,3 +37,17 @@ func test_get_level_01_merges_map_override() -> void:
 func test_fate_cards_available() -> void:
 	var cards := ContentRegistry.get_all_fate_cards()
 	assert_gte(cards.size(), 8)
+
+
+func test_equipment_catalog_integrity() -> void:
+	var pieces := ContentRegistry.get_all_equipment_pieces()
+	assert_eq(pieces.size(), 28)
+	var sets := ContentRegistry.get_all_equipment_sets()
+	assert_eq(sets.size(), 7)
+	for piece in pieces:
+		assert_ne(piece.set_id, "")
+		var set_data := ContentRegistry.get_equipment_set(piece.set_id)
+		assert_not_null(set_data)
+	for level_id in ["level_01", "level_02", "level_03", "level_04", "level_05", "level_06", "level_07"]:
+		var boss_pieces := ContentRegistry.get_equipment_for_level(level_id)
+		assert_eq(boss_pieces.size(), 2)

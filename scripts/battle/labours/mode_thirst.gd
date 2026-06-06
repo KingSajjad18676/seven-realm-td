@@ -11,9 +11,10 @@ var _drought_active := false
 
 func initialize(ctx: BattleContext) -> void:
 	super.initialize(ctx)
-	if context and context.level_data and not context.level_data.build_spot_positions.is_empty():
-		var mid := context.level_data.build_spot_positions.size() / 2
-		_fountain_pos = context.level_data.build_spot_positions[mid]
+	if context and context.level_data:
+		var pts := context.level_data.get_all_route_points()
+		if not pts.is_empty():
+			_fountain_pos = pts[pts.size() / 2]
 	if context and context.bridge:
 		context.bridge.alert_message.emit("Labour of Thirst — the desert saps strength", 70)
 

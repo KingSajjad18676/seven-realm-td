@@ -1,11 +1,10 @@
 class_name TowerManager
 extends Node
 
-signal tower_spot_opened(spot: BuildSpot)
-signal build_radial_requested(spot: BuildSpot)
+signal tower_opened(tower: TowerController)
+signal build_radial_requested(world_pos: Vector2, region_id: String)
 
 var context: BattleContext = null
-var build_spots: Array[BuildSpot] = []
 var towers: Array[TowerController] = []
 var tower_scene: PackedScene = preload("res://scenes/prefabs/tower.tscn")
 var projectile_scene: PackedScene = preload("res://scenes/prefabs/projectile.tscn")
@@ -14,76 +13,81 @@ var projectiles_root: Node2D = null
 var units_root: Node2D = null
 var _projectile_pool: ObjectPool = null
 var selected_tower_id: String = "tower_archer"
+var _next_placement_index: int = 0
 
 
-func initialize(ctx: BattleContext, spots: Array[BuildSpot], t_root: Node2D, p_root: Node2D, u_root: Node2D = null) -> void:
+func initialize(ctx: BattleContext, t_root: Node2D, p_root: Node2D, u_root: Node2D = null) -> void:
 	context = ctx
-	build_spots = spots
 	towers_root = t_root
 	projectiles_root = p_root
 	units_root = u_root if u_root else t_root
 	_projectile_pool = ObjectPool.new(projectile_scene, p_root, 12)
-	for spot in build_spots:
-		spot.battle_context = ctx
-		spot.spot_selected.connect(_on_spot_selected)
-		if ctx.map_light:
-			var light := ctx.map_light.get_light(spot.region_id)
-			# Connect region updates via bootstrap
 
 
-func find_spot_at(world_pos: Vector2, radius: float = 36.0) -> BuildSpot:
-	var best: BuildSpot = null
-	var best_dist := radius
-	for spot in build_spots:
-		if spot.occupied:
-			continue
-		var dist := world_pos.distance_to(spot.global_position)
-		if dist <= best_dist:
-			best_dist = dist
-			best = spot
-	return best
-
-
-func find_spot_at_any(world_pos: Vector2, radius: float = -1.0) -> BuildSpot:
-	var best: BuildSpot = null
+func find_tower_at(world_pos: Vector2, radius: float = -1.0) -> TowerController:
+	var best: TowerController = null
 	var best_dist := -1.0
-	for spot in build_spots:
-		var pick_radius := radius if radius > 0.0 else spot.get_pick_radius()
-		var dist := world_pos.distance_to(spot.global_position)
+	for tower in towers:
+		if not is_instance_valid(tower):
+			continue
+		var pick_radius := radius if radius > 0.0 else tower.get_pick_radius()
+		var dist := world_pos.distance_to(tower.global_position)
 		if dist <= pick_radius and (best == null or dist < best_dist):
 			best_dist = dist
-			best = spot
+			best = tower
 	return best
 
 
-func try_select_spot_at_world(world_pos: Vector2) -> bool:
-	var spot := find_spot_at_any(world_pos)
-	if spot == null:
+func is_valid_build_position(world_pos: Vector2) -> bool:
+	if context == null or context.level_data == null:
 		return false
-	return _on_spot_selected(spot)
+	return TowerPlacementValidator.is_valid(world_pos, context.level_data, towers)
 
 
-func try_build_on_spot(spot: BuildSpot, tower_id: String = "") -> bool:
+func try_select_at_world(world_pos: Vector2) -> bool:
+	var tower := find_tower_at(world_pos)
+	if tower != null:
+		return _on_tower_selected(tower)
+	if not is_valid_build_position(world_pos):
+		return false
+	return _request_build_radial(world_pos)
+
+
+func try_build_at(world_pos: Vector2, tower_id: String = "") -> bool:
 	if context and context.tutorial_active and not context.tutorial_allows("build_pads"):
 		return false
-	if spot.occupied or context == null or context.economy == null:
+	if context == null or context.economy == null or context.level_data == null:
+		return false
+	if not TowerPlacementValidator.is_valid(world_pos, context.level_data, towers):
+		var reason := TowerPlacementValidator.rejection_reason(world_pos, context.level_data, towers)
+		if context.bridge:
+			context.bridge.alert_message.emit(reason if reason != "" else "Cannot build here", 45)
 		return false
 	var tid := tower_id if tower_id != "" else selected_tower_id
 	var tower_data := ContentRegistry.get_tower(tid)
 	if tower_data == null:
 		return false
-	if not context.economy.spend_gold(tower_data.build_cost):
+	var build_cost := tower_data.build_cost
+	if tid == "tower_heavy" and context.runtime_modifiers.has("heavy_tower_cost_mult"):
+		build_cost = int(roundf(float(build_cost) * float(context.runtime_modifiers["heavy_tower_cost_mult"])))
+	if not context.economy.spend_gold(build_cost):
 		if context.bridge:
 			context.bridge.alert_message.emit("Not enough gold", 40)
 		return false
+	var region_id := _region_for_position(world_pos)
+	var placement_id := "tower_%d" % _next_placement_index
+	_next_placement_index += 1
 	var node := tower_scene.instantiate() as TowerController
 	towers_root.add_child(node)
-	node.global_position = spot.global_position
-	node.initialize(context, tower_data, spot)
-	spot.set_occupied(node)
+	node.global_position = world_pos
+	node.initialize(context, tower_data, world_pos, region_id, placement_id)
 	towers.append(node)
+	if context.equipment_battle:
+		context.equipment_battle.on_tower_built(node, build_cost)
 	if context.map_light:
-		node.on_region_light_changed(context.map_light.get_light(spot.region_id))
+		node.on_region_light_changed(context.map_light.get_light(region_id))
+	if context.tower_resonance:
+		context.tower_resonance.on_tower_placed(node)
 	return true
 
 
@@ -91,28 +95,6 @@ func try_upgrade_tower(tower: TowerController) -> bool:
 	if tower == null:
 		return false
 	return tower.try_upgrade()
-
-
-func replace_with_hybrid(keep_spot: BuildSpot, remove_spot: BuildSpot, hybrid_id: String) -> bool:
-	if context == null or keep_spot == null or remove_spot == null:
-		return false
-	if keep_spot.tower == null or remove_spot.tower == null:
-		return false
-	var hybrid_data := ContentRegistry.get_tower(hybrid_id)
-	if hybrid_data == null:
-		return false
-	var keep_tower := keep_spot.tower
-	var invested := keep_tower.gold_invested + remove_spot.tower.gold_invested
-	var keep_level := maxi(keep_tower.level, remove_spot.tower.level)
-	towers.erase(remove_spot.tower)
-	remove_spot.tower.queue_free()
-	remove_spot.set_occupied(null)
-	keep_tower.data = hybrid_data
-	keep_tower.gold_invested = invested
-	keep_tower.level = keep_level
-	if keep_tower.has_method("_apply_forge_visuals"):
-		keep_tower._apply_forge_visuals()
-	return true
 
 
 func try_sell_tower(tower: TowerController) -> bool:
@@ -123,14 +105,33 @@ func try_sell_tower(tower: TowerController) -> bool:
 			context.bridge.alert_message.emit("Cannot sell while hijacked", 40)
 		return false
 	var refund := tower.get_sell_refund()
+	var original_cost := tower.gold_invested
 	var tower_id := tower.data.tower_id if tower.data else ""
-	if tower.build_spot:
-		tower.build_spot.set_occupied(null)
 	context.economy.add_gold(refund)
+	if context.equipment_battle:
+		context.equipment_battle.on_tower_sold(refund, original_cost)
 	towers.erase(tower)
 	tower.queue_free()
+	if context.tower_resonance:
+		context.tower_resonance.on_tower_removed(tower)
 	CombatEvents.tower_sold.emit(tower_id, refund)
 	AnalyticsService.tower_sold(tower_id, refund)
+	return true
+
+
+func destroy_tower(tower: TowerController, refund: bool = false) -> bool:
+	if tower == null or context == null:
+		return false
+	if tower.hijack_phase != GameEnums.HijackPhase.NONE:
+		return false
+	var tower_id := tower.data.tower_id if tower.data else ""
+	var refund_amount := tower.get_sell_refund() if refund else 0
+	if refund and context.economy:
+		context.economy.add_gold(refund_amount)
+	towers.erase(tower)
+	tower.queue_free()
+	if context.tower_resonance:
+		context.tower_resonance.on_tower_removed(tower)
 	return true
 
 
@@ -144,19 +145,35 @@ func spawn_projectile(tower: TowerController, target: EnemyController) -> void:
 	, CONNECT_ONE_SHOT)
 
 
-func _on_spot_selected(spot: BuildSpot) -> bool:
-	if context == null:
+func _region_for_position(world_pos: Vector2) -> String:
+	if context == null or context.level_data == null:
+		return ""
+	context.level_data.ensure_routes_migrated()
+	return MapRegionUtils.region_for_position(
+		world_pos,
+		context.level_data.get_all_route_points(),
+		context.level_data.region_ids
+	)
+
+
+func _on_tower_selected(tower: TowerController) -> bool:
+	if context == null or tower == null:
 		return false
-	if context.map_light:
-		context.map_light.select_region(spot.region_id)
-	if spot.occupied:
-		if spot.tower == null:
-			return false
-		if context.tutorial_active and not context.tutorial_allows("build_pads"):
-			return false
-		tower_spot_opened.emit(spot)
-		return true
+	if context.map_light and tower.region_id != "":
+		context.map_light.select_region(tower.region_id)
 	if context.tutorial_active and not context.tutorial_allows("build_pads"):
 		return false
-	build_radial_requested.emit(spot)
+	tower_opened.emit(tower)
+	return true
+
+
+func _request_build_radial(world_pos: Vector2) -> bool:
+	if context == null:
+		return false
+	if context.tutorial_active and not context.tutorial_allows("build_pads"):
+		return false
+	var region_id := _region_for_position(world_pos)
+	if context.map_light and region_id != "":
+		context.map_light.select_region(region_id)
+	build_radial_requested.emit(world_pos, region_id)
 	return true

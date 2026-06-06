@@ -111,7 +111,7 @@ static func apply_level_to_state(level: LevelData) -> Dictionary:
 		"path_routes": routes_to_state(level.path_routes),
 		"spawn_points": spawns_to_state(level.spawn_points),
 		"path_points": level.path_points.duplicate(),
-		"build_spot_positions": level.build_spot_positions.duplicate(),
+		"build_spot_positions": [],
 		"spawn_position": level.spawn_position,
 		"gate_position": level.gate_position,
 		"region_ids": level.region_ids.duplicate(),
@@ -158,7 +158,7 @@ static func merge_save_payload(
 	out.map_sprite_path = geometry.get("map_sprite_path", "")
 	out.path_routes = state_to_routes(geometry.get("path_routes", []))
 	out.spawn_points = state_to_spawns(geometry.get("spawn_points", []))
-	out.build_spot_positions = typed_vector2_array(geometry.get("build_spot_positions", []))
+	out.build_spot_positions = []
 	out.gate_position = geometry.get("gate_position", Vector2.ZERO)
 	out.region_ids = geometry.get("region_ids", [])
 	out.uses_large_map_camera = geometry.get("uses_large_map_camera", false)

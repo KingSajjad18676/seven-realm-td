@@ -38,6 +38,8 @@ func try_spawn_drop(world_pos: Vector2, enemy_data: EnemyData) -> void:
 	var drop_chance := enemy_data.forge_material_drop_chance
 	if wave != null:
 		drop_chance *= wave.material_drop_mult
+	if context.runtime_modifiers.has("equipment_forge_drop_bonus"):
+		drop_chance = minf(1.0, drop_chance + float(context.runtime_modifiers["equipment_forge_drop_bonus"]))
 	if randf() > drop_chance:
 		return
 	if _root == null or _drop_scene == null:
@@ -51,14 +53,23 @@ func try_spawn_drop(world_pos: Vector2, enemy_data: EnemyData) -> void:
 	_active_drops.append(drop)
 
 
-func on_drop_collected(drop: MaterialDrop) -> void:
+func on_drop_collected(drop: MaterialDrop, collector: HeroController = null) -> void:
 	_active_drops.erase(drop)
 	if context and context.economy:
-		context.economy.collect_material(drop.material_id, drop.amount)
+		var player_index := collector.player_index if collector else -1
+		context.economy.collect_material(drop.material_id, drop.amount, player_index)
 
 
 func on_drop_despawned(drop: MaterialDrop) -> void:
 	_active_drops.erase(drop)
+
+
+func get_active_drops() -> Array[MaterialDrop]:
+	var out: Array[MaterialDrop] = []
+	for drop in _active_drops:
+		if is_instance_valid(drop):
+			out.append(drop)
+	return out
 
 
 func clear_all_drops() -> void:

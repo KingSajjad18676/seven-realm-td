@@ -1,6 +1,6 @@
 # Main Gameplay Overview
 
-**Last updated:** 2026-06-06  
+**Last updated:** 2026-06-07 (Haft-Khan Gauntlet speedrun mode)  
 **Purpose:** Quick reference for how the whole game works — play modes, maps, and what each Labour adds.  
 **Repo truth:** [engineering/project-status.md](../engineering/project-status.md) · **Deep mechanics:** [spec/gameplay.md](../spec/gameplay.md)
 
@@ -33,9 +33,12 @@ Boot → Main Menu
 | Button | What it does | Unlock |
 |--------|--------------|--------|
 | **Campaign nodes** (T, 1–7, D) | Standard campaign battle on that map | Linear unlock; Damavand after Labour 7 |
-| **Campaign Run** | Branching run: draft 3 towers, scavenge Star Iron, skirmish/anvil/shrine nodes → Damavand | After tutorial |
+| **Campaign Run** | Branching run: draft 3 towers, scavenge Star Iron, skirmish/anvil/shrine/**Throne of Kavus** nodes → Damavand | After tutorial |
 | **Endless** | Infinite waves on Labour 1 | 7 Labour seals |
+| **Haft-Khan Gauntlet** | Race Labours 1–7 back-to-back; ms timer, ghost PB, Rush / early-call risk | 7 Labour seals |
 | **Horde** | 15-wave survival per map | After tutorial |
+| **Brothers in Arms** | Local couch co-op — Zal + Sohrab pick, shared gold/lives, separate Sacred Fire and scavenged loot | After tutorial |
+| **Defend the Throne** | 360° radial arena — enemies march inward to the center throne | After tutorial |
 | **Hunt for Zahhak** | Damavand boss hunt variant | 7 seals + 1 Elite tower at Kaveh's Forge |
 | **Kaveh's Forge** | Permanent tower upgrades | Always (main menu or world map) |
 
@@ -278,6 +281,8 @@ Horde: 8/8 maps cleared
 
 **Forge Tokens:** Earned on victory → buy and cast **spells** from the battle HUD.
 
+**Relics of the Shahs (run/battle):** Separate from Kaveh's Forge. During scavenging modes, find crowns and rings at **Campaign Run shrines**, **Roguelite rest nodes**, and every **other Pardeh Break** (after Fate pick). Each relic slots onto one tower **type** in your loadout for the rest of the run or battle. Examples: **Cup of Jamshid** (`tower_archer` — map-wide range, −50% attack speed); **Flame of Hushang** (`tower_sacred_fire` — burn + slow Gate Life recovery on attack). One slot per tower type; picking a duplicate slot prompts replace confirmation.
+
 ### Forge progression gate (soft difficulty)
 
 Kaveh's Forge is the **primary power curve** for campaign, Horde, and Damavand. Nothing is hard-locked on the world map — Labour 3+ stays playable — but enemy HP and spawn pressure from Labour 3 onward assume your starter towers have been forged to the **expected level** for that map. Unforged towers hit a difficulty wall; losing sends you back to **replay earlier Labours** for Star Iron, forge at Kaveh's, then try again.
@@ -300,6 +305,23 @@ This is intentional **replay-to-grow** (roguelite TD standard), not a paywall: S
 **Modes affected:** Campaign, Horde (uses same map difficulty), Damavand campaign. **Not affected:** Endless, Roguelite Path, Daily Tale (practice / side content).
 
 **Player-facing cues:** World map shows recommended vs your average forge on Labour 3+ nodes; defeat screen suggests replay + forge when under recommendation.
+
+---
+
+## 7b. Ahriman's Shroud (Campaign Run hard mode)
+
+Unlocked after clearing **campaign Damavand** (`level_08_damavand`) once. On **Campaign Run** start, an optional toggle blankets the branching graph in darkness:
+
+| Rule | Behavior |
+|------|----------|
+| Unlock | `SaveSystem.is_level_cleared("level_08_damavand")` |
+| Toggle | **Ahriman's Shroud** on tower draft (default off) |
+| Hidden nodes | Reachable unrevealed nodes show `???` until paid reveal |
+| Reveal | Costs run **Sacred Fire** (1–3 by node type); must reveal before entering |
+| Run wallet | Starts at 5 SF; persists across map nodes and battles (cleanse / purify draw from same pool) |
+| Defeat | Run ends as normal Campaign Run |
+
+**Code:** `campaign_run_state.gd`, `shroud_reveal_controller.gd`, `world_map_controller.gd`, `battle_launch_data.gd`, `battle_bootstrap.gd`.
 
 ---
 
@@ -328,6 +350,7 @@ This is intentional **replay-to-grow** (roguelite TD standard), not a paywall: S
 | Launch flags (Horde, Hunt, …) | `scripts/battle/battle_launch_data.gd` |
 | World map UI + unlocks | `scripts/meta/world_map_controller.gd` |
 | Campaign Run graph + draft | `campaign_run_state.gd`, `campaign_run_generator.gd`, `tower_draft_controller.gd` |
+| Ahriman's Shroud hard mode | `campaign_run_state.gd`, `shroud_reveal_controller.gd`, `world_map_controller.gd` |
 | Material drops + scavenging | `loot_drop_manager.gd`, `material_drop.gd`, `battle_economy.gd` |
 | Safe retreat | `fate_draft_controller.gd` → `battle_state_controller.trigger_safe_retreat()` |
 | Per-tower forge unlock | `forge_service.gd`, `kaveh_forge_controller.gd` |

@@ -116,6 +116,65 @@ static func generate_horde_slice(level_id: String, wave_num: int) -> WaveData:
 	return wave
 
 
+static func generate_throne_slice(wave_num: int) -> WaveData:
+	var spawn_count := ContentCatalog.THRONE_SPAWN_COUNT
+	var wave := WaveData.new()
+	wave.wave_id = "throne_%d" % wave_num
+	wave.pre_wave_delay = 1.6 if wave_num <= 3 else 1.4
+	wave.spawn_interval = 0.35 if wave_num >= 8 else 0.5
+	var scale := 1.0 + float(wave_num - 1) * 0.12
+	var groups: Array[Dictionary] = []
+	if wave_num % 10 == 0:
+		wave.wave_phase = "mini_boss"
+		groups.append({
+			"enemy_id": "enemy_lion_boss",
+			"count": 1,
+			"spawn_id": "spawn_throne_0",
+		})
+		var escort := maxi(2, int(3 * scale))
+		groups.append({
+			"enemy_id": "enemy_div_brute",
+			"count": escort,
+			"spawn_id": "spawn_throne_4",
+		})
+	elif wave_num >= 13:
+		var per_spawn := maxi(1, int(2 * scale))
+		for i in spawn_count:
+			groups.append({
+				"enemy_id": _throne_enemy_for_wave(wave_num, i),
+				"count": per_spawn,
+				"spawn_id": "spawn_throne_%d" % i,
+			})
+	else:
+		var active_spawns := mini(3 + wave_num / 3, spawn_count)
+		var start_spawn := (wave_num - 1) % spawn_count
+		for j in active_spawns:
+			var spawn_idx := (start_spawn + j) % spawn_count
+			groups.append({
+				"enemy_id": _throne_enemy_for_wave(wave_num, spawn_idx),
+				"count": maxi(1, int((2 + wave_num / 2) * scale / float(active_spawns))),
+				"spawn_id": "spawn_throne_%d" % spawn_idx,
+			})
+		if wave_num % 5 == 0:
+			groups.append({
+				"enemy_id": "enemy_corruptor",
+				"count": 2,
+				"spawn_id": "spawn_throne_%d" % ((start_spawn + 2) % spawn_count),
+			})
+	wave.spawn_groups = groups
+	return wave
+
+
+static func _throne_enemy_for_wave(wave_num: int, spawn_idx: int) -> String:
+	if wave_num <= 4:
+		return "enemy_jackal"
+	if wave_num <= 8:
+		return "enemy_boar" if spawn_idx % 2 == 0 else "enemy_jackal"
+	if wave_num <= 12:
+		return "enemy_div_brute" if spawn_idx % 3 == 0 else "enemy_boar"
+	return "enemy_div_brute" if spawn_idx % 2 == 0 else "enemy_corruptor"
+
+
 static func macro_role_for_wave_index(wave_index: int) -> int:
 	return wave_index % MACRO_BLOCK_SIZE
 

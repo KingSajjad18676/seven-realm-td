@@ -5,7 +5,7 @@ signal geometry_changed
 signal cursor_moved(world_pos: Vector2)
 signal routes_changed
 
-enum Tool { ROAD, PADS, SPAWN, GATE, SELECT }
+enum Tool { ROAD, SPAWN, GATE, SELECT }
 
 const SPAWN_COLOR := Color(0.9, 0.25, 0.2, 0.95)
 const GATE_COLOR := Color(0.85, 0.75, 0.35, 0.95)
@@ -62,7 +62,7 @@ func load_geometry(state: Dictionary) -> void:
 			"position": state.get("spawn_position", Vector2.ZERO),
 			"route_id": _route_id_at(0),
 		})
-	build_spot_positions = state.get("build_spot_positions", [])
+	build_spot_positions.clear()
 	gate_position = state.get("gate_position", Vector2.ZERO)
 	region_ids = state.get("region_ids", [])
 	map_sprite_path = state.get("map_sprite_path", "")
@@ -80,7 +80,7 @@ func get_geometry_state() -> Dictionary:
 		"path_routes": _duplicate_routes(),
 		"spawn_points": _duplicate_spawns(),
 		"path_points": _active_route_points().duplicate(),
-		"build_spot_positions": build_spot_positions.duplicate(),
+		"build_spot_positions": [],
 		"spawn_position": _primary_spawn_position(),
 		"gate_position": gate_position,
 		"region_ids": region_ids.duplicate(),
@@ -138,19 +138,11 @@ func clear_active_tool_data() -> void:
 		Tool.ROAD:
 			if active_route_index >= 0 and active_route_index < path_routes.size():
 				path_routes[active_route_index]["points"] = []
-		Tool.PADS:
-			build_spot_positions.clear()
 		Tool.SPAWN:
 			spawn_points.clear()
 		Tool.GATE:
 			gate_position = Vector2.ZERO
 	_refresh_route_lines()
-	queue_redraw()
-	geometry_changed.emit()
-
-
-func auto_pads_along_path(count: int) -> void:
-	build_spot_positions = MapEditorUtils.pads_along_path(_active_route_points(), count)
 	queue_redraw()
 	geometry_changed.emit()
 
@@ -223,11 +215,6 @@ func _handle_mouse_motion(event: InputEventMouseMotion) -> void:
 					_refresh_route_lines()
 					queue_redraw()
 					geometry_changed.emit()
-		"pad":
-			if _drag_index >= 0 and _drag_index < build_spot_positions.size():
-				build_spot_positions[_drag_index] = world
-				queue_redraw()
-				geometry_changed.emit()
 		"spawn":
 			if _drag_index >= 0 and _drag_index < spawn_points.size():
 				spawn_points[_drag_index]["position"] = world
@@ -248,15 +235,6 @@ func _on_left_press(world: Vector2) -> void:
 				points.append(world)
 				path_routes[active_route_index]["points"] = points
 				_refresh_route_lines()
-				queue_redraw()
-				geometry_changed.emit()
-		Tool.PADS:
-			var pad_hit := _hit_pad(world)
-			if pad_hit >= 0:
-				_drag_kind = "pad"
-				_drag_index = pad_hit
-			else:
-				build_spot_positions.append(world)
 				queue_redraw()
 				geometry_changed.emit()
 		Tool.SPAWN:
@@ -283,24 +261,16 @@ func _on_left_press(world: Vector2) -> void:
 				_drag_kind = "spawn"
 				_drag_index = spawn_hit
 				return
-			var select_pad := _hit_pad(world)
-			if select_pad >= 0:
-				_drag_kind = "pad"
-				_drag_index = select_pad
-
 
 func _on_right_press(world: Vector2) -> void:
 	match active_tool:
 		Tool.ROAD:
 			_delete_path_point(world, active_route_index)
-		Tool.PADS:
-			_delete_pad(world)
 		Tool.SPAWN:
 			_delete_spawn(world)
 		Tool.SELECT:
 			if not _delete_path_point(world):
-				if not _delete_spawn(world):
-					_delete_pad(world)
+				_delete_spawn(world)
 
 
 func _delete_path_point(world: Vector2, route_index: int = -1) -> bool:
@@ -312,16 +282,6 @@ func _delete_path_point(world: Vector2, route_index: int = -1) -> bool:
 		points.remove_at(hit.y)
 		path_routes[hit.x]["points"] = points
 		_refresh_route_lines()
-		queue_redraw()
-		geometry_changed.emit()
-		return true
-	return false
-
-
-func _delete_pad(world: Vector2) -> bool:
-	var pad_hit := _hit_pad(world)
-	if pad_hit >= 0:
-		build_spot_positions.remove_at(pad_hit)
 		queue_redraw()
 		geometry_changed.emit()
 		return true
@@ -358,15 +318,6 @@ func _hit_path_point(world: Vector2, route_index: int = -1) -> Vector2i:
 	return Vector2i(-1, -1)
 
 
-func _hit_pad(world: Vector2) -> int:
-	var half := MapEditorUtils.PAD_SIZE * 0.5
-	for i in build_spot_positions.size():
-		var rect := Rect2(build_spot_positions[i] - Vector2(half, half), Vector2.ONE * MapEditorUtils.PAD_SIZE)
-		if rect.has_point(world):
-			return i
-	return -1
-
-
 func _hit_spawn(world: Vector2) -> int:
 	for i in spawn_points.size():
 		var pos: Vector2 = spawn_points[i].get("position", Vector2.ZERO)
@@ -386,13 +337,6 @@ func _draw() -> void:
 			draw_line(Vector2(x, 0), Vector2(x, MapEditorUtils.VIEW_SIZE.y), grid_color)
 		for y in range(0, int(MapEditorUtils.VIEW_SIZE.y) + 1, grid_size):
 			draw_line(Vector2(0, y), Vector2(MapEditorUtils.VIEW_SIZE.x, y), grid_color)
-
-	for i in build_spot_positions.size():
-		var pos := build_spot_positions[i]
-		var region_id := MapRegionUtils.region_for_pad_index(i, build_spot_positions.size(), region_ids)
-		var pad_color := _region_color(region_id)
-		draw_circle(pos, MapEditorUtils.PAD_SIZE * 0.5, pad_color)
-		draw_arc(pos, MapEditorUtils.PAD_SIZE * 0.5, 0.0, TAU, 32, Color(1, 1, 1, 0.35), 2.0)
 
 	for ri in path_routes.size():
 		var route_id: String = str(path_routes[ri].get("route_id", ""))

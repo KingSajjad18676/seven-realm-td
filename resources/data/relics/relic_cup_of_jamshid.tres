@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="RelicData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/relic_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+relic_id = "relic_cup_of_jamshid"
+title = "Cup of Jamshid"
+description = "Archers shoot anywhere on the map, but attack 50% slower."
+slot_tower_id = "tower_archer"
+global_targeting = true
+tower_attack_rate_mult = 0.5

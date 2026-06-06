@@ -12,7 +12,6 @@ static func compute_world_bounds(level: LevelData) -> Rect2:
 	level.ensure_spawns_migrated()
 	var points: Array[Vector2] = []
 	points.append_array(level.get_all_route_points())
-	points.append_array(level.build_spot_positions)
 	for spawn in level.spawn_points:
 		points.append(spawn.position)
 	if level.spawn_position != Vector2.ZERO and level.spawn_points.is_empty():

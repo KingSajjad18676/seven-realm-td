@@ -37,6 +37,10 @@ func advance(distance: float) -> Vector2:
 	return path_points[path_points.size() - 1]
 
 
+func knockback(distance: float) -> void:
+	progress_distance = maxf(0.0, progress_distance - distance)
+
+
 func is_at_end() -> bool:
 	return total_length > 0.0 and progress_distance >= total_length - 1.0
 

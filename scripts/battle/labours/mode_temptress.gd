@@ -65,6 +65,6 @@ func _apply_corruptor_pressure() -> void:
 	if context == null or context.map_light == null or context.tower_manager == null:
 		return
 	for tower in context.tower_manager.towers:
-		if tower == null or tower.build_spot == null:
+		if tower == null or tower.region_id == "":
 			continue
-		context.map_light.apply_corruption_pressure(tower.build_spot.region_id, 18.0)
+		context.map_light.apply_corruption_pressure(tower.region_id, 18.0)

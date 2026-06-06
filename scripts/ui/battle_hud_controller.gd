@@ -24,10 +24,15 @@ var _user_pause_modal_visible: bool = false
 @onready var _early_call_btn: Button = %EarlyCallButton
 @onready var _cleanse_hint: Label = %CleanseHintLabel
 @onready var _start_btn: Button = %StartWaveButton
+@onready var _gauntlet_rush_btn: Button = %GauntletRushButton
+@onready var _gauntlet_timer_panel: GauntletHudWidget = %GauntletTimerPanel
+@onready var _gauntlet_chain_overlay: Panel = %GauntletChainOverlay
+@onready var _gauntlet_chain_label: Label = %GauntletChainLabel
 @onready var _pause_btn: Button = %PauseButton
 @onready var _speed_btn: Button = %SpeedButton
 @onready var _cleanse_btn: Button = %CleanseButton
 @onready var _skill_btn: Button = %SkillButton
+@onready var _naft_btn: Button = %NaftButton
 @onready var _forge_btn: Button = %ForgeButton
 @onready var _replay_btn: Button = %ReplayButton
 @onready var _map_btn: Button = %MapButton
@@ -44,9 +49,15 @@ var _user_pause_modal_visible: bool = false
 @onready var _pause_resume_btn: Button = %PauseResumeButton
 @onready var _pause_exit_btn: Button = %PauseExitButton
 var _materials_label: Label = null
-var _forge_wired: bool = false
 var _spell_row: HBoxContainer = null
 var _spell_buttons: Array[Button] = []
+var _coop_row: HBoxContainer = null
+var _coop_sf_labels: Array[Label] = []
+var _coop_mat_labels: Array[Label] = []
+var _coop_skill_buttons: Array[Button] = []
+var _coop_portrait_buttons: Array[Button] = []
+var _gauntlet_timer: GauntletTimerController = null
+var _gauntlet_handling: bool = false
 func initialize(ctx: BattleContext, fate_draft: FateDraftController, vow_offer: VowOfferController = null) -> void:
 	context = ctx
 	_fate_draft = fate_draft
@@ -55,7 +66,7 @@ func initialize(ctx: BattleContext, fate_draft: FateDraftController, vow_offer: 
 	if _tower_spot_panel:
 		_tower_spot_panel.initialize(ctx)
 	if ctx.tower_manager:
-		ctx.tower_manager.tower_spot_opened.connect(_on_tower_spot_opened)
+		ctx.tower_manager.tower_opened.connect(_on_tower_opened)
 		ctx.tower_manager.build_radial_requested.connect(_on_build_radial_requested)
 	if ctx.bridge:
 		ctx.bridge.gold_changed.connect(_on_gold)
@@ -83,7 +94,11 @@ func initialize(ctx: BattleContext, fate_draft: FateDraftController, vow_offer: 
 	_apply_compact_hud_styles()
 	_setup_tower_radial()
 	setup_spell_bar(ctx)
-	setup_ancestral_forge(ctx)
+	if _forge_btn:
+		_forge_btn.visible = false
+	_setup_naft_button()
+	if context.launch_data and context.launch_data.is_gauntlet_mode:
+		_setup_gauntlet_mode(ctx)
 	if _results_panel:
 		_results_panel.visible = false
 	if _pardeh_panel:
@@ -94,6 +109,122 @@ func initialize(ctx: BattleContext, fate_draft: FateDraftController, vow_offer: 
 	if _map_btn:
 		_map_btn.visible = false
 	_hide_pause_modal()
+func setup_brothers_hud() -> void:
+	if context == null or context.coop_players == null or not context.coop_players.is_active():
+		return
+	if _coop_row != null:
+		return
+	var top := get_node_or_null("TopBar") as Control
+	if top == null:
+		return
+	_coop_row = HBoxContainer.new()
+	_coop_row.name = "CoopHudRow"
+	_coop_row.add_theme_constant_override("separation", 16)
+	top.add_child(_coop_row)
+	for i in context.coop_players.slots.size():
+		var slot := context.coop_players.slots[i]
+		var col := VBoxContainer.new()
+		col.add_theme_constant_override("separation", 2)
+		var hero := ContentRegistry.get_hero(slot.hero_id)
+		var portrait := Button.new()
+		portrait.text = "P%d %s" % [i + 1, hero.display_name if hero else slot.hero_id]
+		portrait.custom_minimum_size = Vector2(120, 28)
+		portrait.pressed.connect(_on_coop_portrait_pressed.bind(i))
+		col.add_child(portrait)
+		_coop_portrait_buttons.append(portrait)
+		var sf_label := Label.new()
+		sf_label.add_theme_font_size_override("font_size", 11)
+		sf_label.text = "SF: %d" % slot.sacred_fire
+		col.add_child(sf_label)
+		_coop_sf_labels.append(sf_label)
+		var mat_label := Label.new()
+		mat_label.add_theme_font_size_override("font_size", 10)
+		mat_label.text = "Loot: —"
+		col.add_child(mat_label)
+		_coop_mat_labels.append(mat_label)
+		var skill_btn := Button.new()
+		skill_btn.custom_minimum_size = Vector2(120, 30)
+		skill_btn.add_theme_font_size_override("font_size", 10)
+		skill_btn.text = _skill_label_for_hero(slot.hero_id)
+		skill_btn.pressed.connect(_on_coop_skill_pressed.bind(i))
+		col.add_child(skill_btn)
+		_coop_skill_buttons.append(skill_btn)
+		_coop_row.add_child(col)
+	if _skill_btn:
+		_skill_btn.visible = false
+	if _sf_label:
+		_sf_label.visible = false
+	if _materials_label:
+		_materials_label.visible = false
+	context.coop_players.sacred_fire_changed.connect(_on_coop_sf_changed)
+	context.coop_players.materials_changed.connect(_on_coop_materials_changed)
+	context.coop_players.focused_slot_changed.connect(_on_coop_focus_changed)
+	_refresh_coop_hud()
+	_on_coop_focus_changed(context.coop_players.focused_player_index)
+
+
+func _skill_label_for_hero(hero_id: String) -> String:
+	match hero_id:
+		"zal":
+			return "Zal Foresight"
+		"sohrab":
+			return "Sohrab Rage"
+		_:
+			return "Skill"
+
+
+func _on_coop_portrait_pressed(player_index: int) -> void:
+	if context and context.coop_players:
+		context.coop_players.set_focused_slot(player_index)
+
+
+func _on_coop_skill_pressed(player_index: int) -> void:
+	if context == null or context.hero_manager == null:
+		return
+	var hero := context.hero_manager.get_hero_for_slot(player_index)
+	if hero:
+		hero.use_skill()
+
+
+func _on_coop_sf_changed(player_index: int, amount: int) -> void:
+	if player_index >= 0 and player_index < _coop_sf_labels.size():
+		_coop_sf_labels[player_index].text = "SF: %d" % amount
+	if context and context.coop_players and player_index == context.coop_players.focused_player_index:
+		_on_sf(amount)
+
+
+func _on_coop_materials_changed(player_index: int, materials: Dictionary) -> void:
+	if player_index < 0 or player_index >= _coop_mat_labels.size():
+		return
+	if materials.is_empty():
+		_coop_mat_labels[player_index].text = "Loot: —"
+		return
+	var parts: PackedStringArray = PackedStringArray()
+	for mat_id in materials.keys():
+		parts.append("%s x%d" % [mat_id, int(materials.get(mat_id, 0))])
+	_coop_mat_labels[player_index].text = "Loot: %s" % ", ".join(parts)
+
+
+func _on_coop_focus_changed(player_index: int) -> void:
+	for i in _coop_portrait_buttons.size():
+		var btn := _coop_portrait_buttons[i]
+		btn.modulate = Color(1.2, 1.15, 0.85) if i == player_index else Color.WHITE
+	if context and context.coop_players:
+		var slot := context.coop_players.get_slot(player_index)
+		if slot:
+			_on_sf(slot.sacred_fire)
+	_refresh_cleanse_hint()
+
+
+func _refresh_coop_hud() -> void:
+	if context == null or context.coop_players == null:
+		return
+	for i in context.coop_players.slots.size():
+		var slot := context.coop_players.slots[i]
+		_on_coop_sf_changed(i, slot.sacred_fire)
+		_on_coop_materials_changed(i, slot.get_unbanked_materials())
+
+
 func _ready() -> void:
 	if _start_btn:
 		_start_btn.pressed.connect(_on_start)
@@ -105,16 +236,41 @@ func _ready() -> void:
 		_cleanse_btn.pressed.connect(_on_cleanse)
 	if _skill_btn:
 		_skill_btn.pressed.connect(_on_skill)
+	if _naft_btn:
+		_naft_btn.pressed.connect(_on_naft)
 	if _replay_btn:
 		_replay_btn.pressed.connect(_on_replay)
 	if _map_btn:
 		_map_btn.pressed.connect(_on_map)
 	if _early_call_btn:
 		_early_call_btn.pressed.connect(_on_early_call)
+	if _gauntlet_rush_btn:
+		_gauntlet_rush_btn.pressed.connect(_on_gauntlet_rush)
 	if _pause_resume_btn:
 		_pause_resume_btn.pressed.connect(_on_pause_resume)
 	if _pause_exit_btn:
 		_pause_exit_btn.pressed.connect(_on_pause_exit)
+func _setup_gauntlet_mode(ctx: BattleContext) -> void:
+	if _gauntlet_rush_btn:
+		_gauntlet_rush_btn.visible = true
+	_gauntlet_timer = GauntletTimerController.new()
+	_gauntlet_timer.name = "GauntletTimerController"
+	add_child(_gauntlet_timer)
+	_gauntlet_timer.initialize(ctx, _gauntlet_timer_panel)
+	if ctx.bridge:
+		ctx.bridge.alert_message.emit("Haft-Khan Gauntlet — beat your ghost!", 95)
+
+
+func _on_gauntlet_rush() -> void:
+	if context == null or context.wave_manager == null:
+		return
+	context.wave_manager.request_pre_battle_rush()
+	if _gauntlet_rush_btn:
+		_gauntlet_rush_btn.disabled = true
+	if _start_btn:
+		_start_btn.disabled = true
+
+
 func get_highlight_target(key: String) -> Control:
 	match key:
 		"build_pads":
@@ -123,6 +279,8 @@ func get_highlight_target(key: String) -> Control:
 			return _start_btn
 		"skill":
 			return _skill_btn
+		"naft":
+			return _naft_btn
 		"cleanse":
 			return _cleanse_btn
 		"gold":
@@ -193,6 +351,7 @@ func _on_spell_pressed(spell_id: String) -> void:
 
 
 func _process(_delta: float) -> void:
+	_refresh_naft_button()
 	if context == null or context.spell_controller == null or _spell_buttons.is_empty():
 		return
 	for i in _spell_buttons.size():
@@ -209,13 +368,6 @@ func _process(_delta: float) -> void:
 		else:
 			var spell := ContentRegistry.get_spell(spell_id)
 			btn.text = spell.display_name if spell else spell_id
-
-
-func setup_ancestral_forge(ctx: BattleContext) -> void:
-	if _forge_btn == null or _forge_wired:
-		return
-	_forge_wired = true
-	_forge_btn.pressed.connect(_on_forge_pressed.bind(ctx))
 
 
 func setup_camera_ui(camera: TouchCamera) -> void:
@@ -243,6 +395,9 @@ func _apply_compact_hud_styles() -> void:
 	if _skill_btn:
 		_skill_btn.custom_minimum_size = Vector2(100, 36)
 		_skill_btn.add_theme_font_size_override("font_size", compact_font)
+	if _naft_btn:
+		_naft_btn.custom_minimum_size = Vector2(88, 36)
+		_naft_btn.add_theme_font_size_override("font_size", compact_font)
 	if _forge_btn:
 		_forge_btn.custom_minimum_size = Vector2(100, 36)
 		_forge_btn.add_theme_font_size_override("font_size", compact_font)
@@ -267,20 +422,15 @@ func setup_tower_range_ring(ring: TowerRangeRing) -> void:
 		_tower_radial.set_range_ring(ring)
 
 
-func _on_build_radial_requested(spot: BuildSpot) -> void:
+func _on_build_radial_requested(world_pos: Vector2, region_id: String) -> void:
 	if _tower_radial:
 		if _tower_spot_panel:
 			_tower_spot_panel.hide_panel()
-		_tower_radial.show_for_spot(spot)
+		_tower_radial.show_for_position(world_pos, region_id)
 
 
 func is_tower_radial_open() -> bool:
 	return _tower_radial != null and _tower_radial.visible
-func _on_forge_pressed(ctx: BattleContext) -> void:
-	if ctx and ctx.ancestral_forge and ctx.ancestral_forge.try_fuse_any_adjacent_pair():
-		_on_alert("Adjacent towers fused!", 50)
-	elif ctx and ctx.bridge:
-		ctx.bridge.alert_message.emit("Place two adjacent towers to fuse", 45)
 func apply_tutorial_gating(allowed: PackedStringArray) -> void:
 	_tutorial_gating = true
 	_last_tutorial_allowed = allowed
@@ -292,7 +442,7 @@ func apply_tutorial_gating(allowed: PackedStringArray) -> void:
 	_set_control_enabled(_speed_btn, allow.get("speed", false) or allow.get("pause_speed", false))
 	_set_control_enabled(_cleanse_btn, allow.get("cleanse", false))
 	_set_control_enabled(_skill_btn, allow.get("skill", false))
-	_set_control_enabled(_forge_btn, false)
+	_set_control_enabled(_naft_btn, allow.get("skill", false))
 func clear_tutorial_gating() -> void:
 	_tutorial_gating = false
 	_last_tutorial_allowed = PackedStringArray()
@@ -301,8 +451,8 @@ func clear_tutorial_gating() -> void:
 	_set_control_enabled(_speed_btn, true)
 	_set_control_enabled(_cleanse_btn, true)
 	_set_control_enabled(_skill_btn, true)
-	if _forge_btn:
-		_set_control_enabled(_forge_btn, true)
+	if _naft_btn and _naft_has_hero_skill():
+		_set_control_enabled(_naft_btn, true)
 func _set_control_enabled(control: Control, enabled: bool) -> void:
 	if control == null:
 		return
@@ -317,13 +467,54 @@ func refresh_skill_label() -> void:
 		match hero.data.skill_id:
 			"zal_foresight":
 				_skill_btn.text = "Zal Foresight"
+			"sohrab_rage":
+				_skill_btn.text = "Sohrab Rage"
 			_:
 				_skill_btn.text = "Rostam Skill"
-func _on_tower_spot_opened(spot: BuildSpot) -> void:
+
+
+func _setup_naft_button() -> void:
+	_refresh_naft_button()
+
+
+func _naft_has_hero_skill() -> bool:
+	if context == null or context.hero_manager == null or context.hero_manager.hero == null:
+		return false
+	var hero := context.hero_manager.hero
+	return hero.data != null and hero.data.secondary_skill_id == "rostam_naft"
+
+
+func _refresh_naft_button() -> void:
+	if _naft_btn == null:
+		return
+	var enabled := _naft_has_hero_skill()
+	_naft_btn.visible = enabled
+	if not enabled:
+		return
+	var traps := context.naft_traps if context else null
+	var max_c := traps.get_max_charges() if traps else 0
+	var charges := traps.get_charges() if traps else 0
+	var armed := traps.is_armed() if traps else false
+	_naft_btn.text = "Naft %d/%d" % [charges, max_c]
+	var can_arm := charges >= 1
+	if context and context.hero_manager and context.hero_manager.hero:
+		can_arm = can_arm and not context.hero_manager.hero.is_dead()
+	if _tutorial_gating and context and context.tutorial_active:
+		can_arm = can_arm and context.tutorial_allows("skill")
+	_naft_btn.disabled = not can_arm and not armed
+	_naft_btn.modulate = Color(1.15, 1.0, 0.75) if armed else Color.WHITE
+
+
+func _on_naft() -> void:
+	if context == null or context.naft_traps == null:
+		return
+	context.naft_traps.toggle_arm()
+	_refresh_naft_button()
+func _on_tower_opened(tower: TowerController) -> void:
 	if _tower_spot_panel:
 		_tower_spot_panel.hide_panel()
 	if _tower_radial:
-		_tower_radial.show_for_occupied_spot(spot)
+		_tower_radial.show_for_tower(tower)
 func _on_region_selected(region_id: String, _light: int) -> void:
 	_refresh_cleanse_hint()
 func _on_region_light_changed(region_id: String, _light: int, _state: GameEnums.RegionLightState) -> void:
@@ -354,6 +545,8 @@ func _on_pause() -> void:
 	if state != GameEnums.BattleState.WAVE_ACTIVE and state != GameEnums.BattleState.PRE_BATTLE:
 		return
 	context.state_controller.pause_battle()
+	if _gauntlet_timer:
+		_gauntlet_timer.pause_timer()
 	_show_pause_modal()
 
 
@@ -363,6 +556,8 @@ func _on_pause_resume() -> void:
 	_hide_pause_modal()
 	if context.state_controller.current_state == GameEnums.BattleState.PAUSED:
 		context.state_controller.resume_battle()
+	if _gauntlet_timer:
+		_gauntlet_timer.resume_timer()
 
 
 func _on_pause_exit() -> void:
@@ -400,6 +595,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _handle_back_pressed() -> void:
+	if context and context.naft_traps and context.naft_traps.is_armed():
+		context.naft_traps.disarm()
+		_refresh_naft_button()
+		return
 	if _tower_radial and _tower_radial.visible:
 		_tower_radial.hide_menu()
 		return
@@ -434,6 +633,8 @@ func _on_cleanse() -> void:
 func _on_skill() -> void:
 	if context and context.hero_manager and context.hero_manager.hero:
 		context.hero_manager.hero.use_skill()
+
+
 func _on_replay() -> void:
 	var launch := _get_current_launch()
 	var level_id: String = "level_01"
@@ -464,6 +665,8 @@ func _on_replay() -> void:
 		var fresh := BattleLaunchData.new()
 		fresh.level_id = level_id
 		SceneFlowController.go_to_battle(fresh)
+
+
 func _get_current_launch() -> BattleLaunchData:
 	if context and context.launch_data:
 		return context.launch_data
@@ -474,6 +677,10 @@ func _on_map() -> void:
 	var level_id := context.level_data.level_id if context and context.level_data else "level_01"
 	AnalyticsService.battle_exit_to_map(level_id, _last_victory)
 	var launch := _get_current_launch()
+	if launch and launch.is_gauntlet_mode:
+		SceneFlowController.clear_gauntlet_run()
+		SceneFlowController.go_to_world_map()
+		return
 	if launch and launch.is_campaign_run and SceneFlowController:
 		var safe_retreat := _pending_reason == "safe_retreat"
 		SceneFlowController.pending_campaign_battle_result = {
@@ -578,7 +785,10 @@ func _on_intermission_started(preview_text: String, max_bonus_gold: int) -> void
 	if _next_wave_label:
 		_next_wave_label.text = preview_text
 	if _early_call_btn:
-		_early_call_btn.text = "Start Now (+%d gold)" % max_bonus_gold
+		if _is_gauntlet_active():
+			_early_call_btn.text = "Start Now — swells!"
+		else:
+			_early_call_btn.text = "Start Now (+%d gold)" % max_bonus_gold
 		_early_call_btn.disabled = false
 
 
@@ -597,8 +807,12 @@ func _on_state(state: GameEnums.BattleState) -> void:
 		_hide_pause_modal()
 	if state == GameEnums.BattleState.PRE_BATTLE and _start_btn and not _tutorial_gating:
 		_start_btn.disabled = false
+		if _is_gauntlet_active() and _gauntlet_rush_btn:
+			_gauntlet_rush_btn.disabled = false
 	elif state == GameEnums.BattleState.PRE_BATTLE and _tutorial_gating:
 		apply_tutorial_gating(_last_tutorial_allowed)
+	elif state == GameEnums.BattleState.WAVE_ACTIVE and _gauntlet_rush_btn and _is_gauntlet_active():
+		_gauntlet_rush_btn.disabled = true
 	if _tower_radial and _tower_radial.visible:
 		_tower_radial.refresh_affordability()
 func _on_pardeh() -> void:
@@ -657,6 +871,10 @@ func _on_results(victory: bool, reason: String) -> void:
 	_pending_victory = victory
 	_pending_reason = reason
 	_pending_summary = {}
+	var launch := _get_current_launch()
+	if launch and launch.is_gauntlet_mode:
+		_handle_gauntlet_results(victory)
+		return
 	if _tower_spot_panel:
 		_tower_spot_panel.hide_panel()
 	if _tower_radial:
@@ -681,3 +899,99 @@ func _on_results(victory: bool, reason: String) -> void:
 	if _map_btn:
 		_map_btn.visible = not is_tutorial
 	_try_populate_results_panel()
+
+
+func _is_gauntlet_active() -> bool:
+	return context != null and context.launch_data != null and context.launch_data.is_gauntlet_mode
+
+
+func _handle_gauntlet_results(victory: bool) -> void:
+	if _gauntlet_handling:
+		return
+	_gauntlet_handling = true
+	if _tower_spot_panel:
+		_tower_spot_panel.hide_panel()
+	if _tower_radial:
+		_tower_radial.hide_menu()
+	if _alert_label:
+		_alert_label.text = ""
+	var run := SceneFlowController.pending_gauntlet_run if SceneFlowController else null
+	var elapsed := run.get_elapsed_ms() if run else 0
+	var launch := _get_current_launch()
+	if not victory:
+		if run and launch:
+			AnalyticsService.track_event(
+				"gauntlet_failed",
+				{"total_ms": elapsed, "labour_index": launch.gauntlet_labour_index}
+			)
+		_show_gauntlet_final(false, elapsed)
+		return
+	if launch and launch.gauntlet_labour_index >= GauntletRunState.GAUNTLET_LEVEL_IDS.size() - 1:
+		if run:
+			run.record_labour_clear(elapsed)
+		_show_gauntlet_final(true, elapsed)
+		return
+	_chain_next_gauntlet_labour(elapsed)
+
+
+func _chain_next_gauntlet_labour(elapsed_ms: int) -> void:
+	var launch := _get_current_launch()
+	var cleared_num := launch.gauntlet_labour_index + 1 if launch else 1
+	if _gauntlet_chain_overlay:
+		_gauntlet_chain_overlay.visible = true
+	if _gauntlet_chain_label:
+		_gauntlet_chain_label.text = (
+			"Labour %d cleared — %s"
+			% [cleared_num, GauntletGhostController.format_time_ms(elapsed_ms)]
+		)
+	if _results_panel:
+		_results_panel.visible = false
+	get_tree().create_timer(1.5).timeout.connect(
+		func() -> void:
+			if _gauntlet_chain_overlay:
+				_gauntlet_chain_overlay.visible = false
+			if SceneFlowController:
+				SceneFlowController.advance_gauntlet_after_victory(elapsed_ms)
+			_gauntlet_handling = false
+		,
+		CONNECT_ONE_SHOT
+	)
+
+
+func _show_gauntlet_final(victory: bool, elapsed_ms: int) -> void:
+	var run := SceneFlowController.pending_gauntlet_run if SceneFlowController else null
+	var improved := false
+	if victory and run and SaveSystem:
+		improved = SaveSystem.try_set_gauntlet_best(run)
+		AnalyticsService.gauntlet_completed(elapsed_ms)
+		if improved:
+			AnalyticsService.gauntlet_pb_beaten(elapsed_ms)
+	if SceneFlowController:
+		SceneFlowController.clear_gauntlet_run()
+	if _results_panel:
+		_results_panel.visible = true
+	if _results_title_label:
+		_results_title_label.text = "Gauntlet Complete!" if victory else "Gauntlet Failed"
+	if _results_reason_label:
+		if victory:
+			var pb := SaveSystem.get_gauntlet_best() if SaveSystem else {}
+			var extra := "New personal best!" if improved else ""
+			if not improved and int(pb.get("total_ms", 0)) > 0:
+				var delta := GauntletGhostController.delta_vs_pb(elapsed_ms, pb)
+				extra = "%s vs PB" % GauntletGhostController.format_delta_sec(delta)
+			_results_reason_label.text = "%s\n%s" % [
+				GauntletGhostController.format_time_ms(elapsed_ms),
+				extra,
+			]
+		else:
+			_results_reason_label.text = "Stopped at %s" % GauntletGhostController.format_time_ms(elapsed_ms)
+	if _results_rewards_label:
+		_results_rewards_label.text = ""
+		_results_rewards_label.visible = false
+	if _results_summary_label:
+		_results_summary_label.text = ""
+	if _replay_btn:
+		_replay_btn.visible = false
+	if _map_btn:
+		_map_btn.visible = true
+	_gauntlet_handling = false
