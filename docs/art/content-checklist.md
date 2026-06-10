@@ -1,6 +1,6 @@
 # Gameplay, Mechanics & Asset Requirements
 
-**Last updated:** 2026-06-04  
+**Last updated:** 2026-06-09  
 **Purpose:** Player-facing overview of how the game works today, what is implemented in code, and which art/audio assets are still needed.  
 **Design canon:** [design/02](../design/02-gameplay-ux.md) · [design/01](../design/01-art-phases.md)  
 **Related:** [engineering/game-logic.md](../engineering/game-logic.md) · [spec/gameplay.md](../spec/gameplay.md) · [engineering/implementation-tracker.md](../engineering/implementation-tracker.md) · [engineering/project-status.md](../engineering/project-status.md) · [art/pipeline.md](../art/pipeline.md) · [art/visual-vfx.md](../art/visual-vfx.md)
@@ -11,21 +11,20 @@
 
 ```mermaid
 flowchart LR
-    Boot[Boot] --> Splash[Company Splash]
-    Splash --> Menu[Main Menu]
+    Boot[Boot] --> Menu[Main Menu]
     Menu --> World[World Map]
+    Menu --> Forge[Kaveh Forge]
+    Menu --> DailyTale[Daily Tale]
     World --> Battle[Battle]
     Battle --> World
-    Menu --> World
 ```
 
 | Step | Scene | What happens |
 |------|-------|----------------|
-| 1 | **Boot** | Loads save, audio, `SceneFlowController` (loading fade overlay). |
-| 2 | **CompanySplash** | Studio title ~2.5s; tap or Skip → async load. |
-| 3 | **MainMenu** | **Play Campaign** → World Map. Toolbar opens meta panels (Hero, Towers, Relics, Daily, Bazaar, Quests, Forge, etc.). Premium/Battle Pass UI may be stubbed — not launch catalog ([design/03](../design/03-monetization.md)). **Settings** for volume. **Quit**. |
-| 4 | **WorldMap** | Seven **Khan** nodes (campaign). **Endless** and **Hunt Zahhak** unlock after finishing all Khans (Hunt also needs First Talisman from Khan 7). Tap node → popup → Start battle. |
-| 5 | **Battle** | Tower defense loop. Victory → rewards + return to World Map (or Hunt/Roguelite return scene). |
+| 1 | **Boot** | Loads save v9, autoloads, `SceneFlowController` → Main Menu (no company splash). |
+| 2 | **MainMenu** | **Play** → World Map; **Daily Tale**; **Kaveh's Forge**; settings. Store UI is stub IAP ([design/03](../design/03-monetization.md)). |
+| 3 | **WorldMap** | Campaign **Labours** 1–7 + Damavand; **Campaign Run**; Horde; Brothers; Throne; Gauntlet; Endless + Hunt (7 seals); **Equipment** + **Daily Missions** panels. |
+| 4 | **Battle** | Shared battle scene. Victory → rewards → return to map or Campaign Run graph. |
 
 **Test in Godot:** Open the repository root in Godot 4.6, press **F5** (boot) or **F6** (current scene). See [engineering/project-status.md](../engineering/project-status.md).
 
@@ -33,50 +32,36 @@ flowchart LR
 
 ---
 
-## 2. Campaign — Seven Khans (Haft Khan)
+## 2. Campaign — Seven Labours + Damavand
 
-Rostam’s seven labors are the main campaign chain on the world map:
+Rostam’s seven Labours + Damavand are the main campaign chain on the world map:
 
 | # | Level ID | Display name (generated) | Boss |
 |---|----------|--------------------------|------|
-| 1 | `level_01` | Khan 1 — Lion and Rakhsh (32×18) | Lion of the First Khan |
-| 2 | `level_02` | Khan 2 — Desert of Thirst | Manifestation of Thirst |
-| 3 | `level_03` | Khan 3 — Azhdaha Canyon | Azhdaha |
-| 4 | `level_04` | Khan 4 — Sorceress Feast | Sorceress |
-| 5 | `level_05` | Khan 5 — Olad Camp | Olad champion |
-| 6 | `level_06` | Khan 6 — Arzhang Fortress | Arzhang Div |
-| 7 | `level_07` | Khan 7 — White Div Cavern | Div-e Sepid |
-| 8 | (finale) | Damavand Binding (64×36) | Zahhak binding (campaign finale) |
+| T | `level_00_tutorial` | Sacred Fire Training | — |
+| 1–7 | `level_01` … `level_07` | Labour 1–7 | Per-Labour boss |
+| 8 | `level_08_damavand` | Damavand Binding | Zahhak |
 
-**Progression rules**
-
-- Only `level_01` is unlocked at start.
-- Winning a level completes it, grants soft currency, and unlocks `nextLevelId`.
-- Each Khan first-clear grants one **Khan seal** (7-piece binding mosaic on world map).
-- All **7 seals** unlock **Hunt for Zahhak** (`DamavandQuestManager.can_enter_hunt_mode()`); Khan 7 also sets **First Talisman** for legacy saves.
-- **Endless** requires `SaveSystem.all_khans_completed()` (all seven Khans cleared).
-- **Khan 7** campaign battle may include a one-time Damavand/Zahhak teaser; repeatable bind-to-Damavand is **Hunt only**.
+**Progression:** Tutorial gates Labour 1. Linear unlock; **Labour seal** per first-clear with default objective. **7 seals** → Endless, Gauntlet, Barracks tower, Hunt (+ Elite forge). Full table: [main-gameplay.md](../product/main-gameplay.md) §5.
 
 ---
 
-## 3. Post-campaign modes
+## 3. Side and post-campaign modes
 
-### Endless
+| Mode | Unlock | Notes |
+|------|--------|-------|
+| **Campaign Run** | Tutorial | Primary roguelite graph — tower draft, scavenging, relics |
+| **Horde** | Tutorial | 15 waves × 8 maps → Serpent Spire |
+| **Brothers in Arms** | Tutorial | Local co-op — Zal + Sohrab |
+| **Defend the Throne** | Tutorial | Radial arena `level_throne_arena` |
+| **Haft-Khan Gauntlet** | 7 seals | 7-boss rush; timer + ghost PB |
+| **Endless** | 7 seals | Labour 1 infinite waves |
+| **Hunt for Zahhak** | 7 seals + Elite forge | Damavand hunt binding |
+| **Daily Tale** | Main menu | Seeded Labour 1 daily |
+| **Equipment / Daily Missions** | World map panels | 7 sets × 4 pieces; 3 missions/day |
+| **Roguelite (legacy)** | Deprecated | Save migrates to Campaign Run |
 
-- Procedural waves via `EndlessWaveGenerator`; best wave stored in save.
-- Launched from World Map quick button or **Endless** meta panel.
-- Gated until all 7 Khans are completed.
-
-### Hunt for Zahhak
-
-- Survival mode: milestone waves grant **Star Iron**; 100 iron → 1 **Damavand anchor** (3 per binding; 2 after three lifetime bindings).
-- Finale when **7 campaign seals + anchors ready + wave 50**: Forge unlock, Zahhak spawns, drag to **Damavand** with 2 adjacent Forge towers.
-- Each Hunt binding victory resets anchors and raises **Zahhak Fury** for the next run.
-- Gated until all **7 Khan seals** are collected.
-
-### Roguelite (separate)
-
-- **RogueliteMap** scene: node graph, blessings between fights. Not part of the 7-Khan gate.
+Full detail: [product/main-gameplay.md](../product/main-gameplay.md) §6–7.
 
 ---
 
@@ -85,8 +70,8 @@ Rostam’s seven labors are the main campaign chain on the world map:
 ### Standard tower defense loop
 
 1. **Waves** spawn enemies along waypoints (`WaveManager`, `EnemySpawner`).
-2. **Build spots:** tap empty spot → bottom-center **tower cards** → build for gold.
-3. **Occupied spot:** upgrade / sell panel.
+2. **Build pads:** tap empty pad → **build radial** (afford-gated) → build for gold.
+3. **Occupied pad:** **manage radial** — upgrade, sell, purify, Sacred Tether; **range ring** on select.
 4. **Lives** decrease when enemies leak; **0 lives** → defeat (optional **Simorgh Feather** continue once).
 5. Clear all waves → **Victory** (results panel: waves, lives, coins, hero XP, veterancy souls).
 

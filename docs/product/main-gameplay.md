@@ -1,6 +1,6 @@
 # Main Gameplay Overview
 
-**Last updated:** 2026-06-07 (Haft-Khan Gauntlet speedrun mode)  
+**Last updated:** 2026-06-09 (full game inventory sync)  
 **Purpose:** Quick reference for how the whole game works — play modes, maps, and what each Labour adds.  
 **Repo truth:** [engineering/project-status.md](../engineering/project-status.md) · **Deep mechanics:** [spec/gameplay.md](../spec/gameplay.md)
 
@@ -33,7 +33,7 @@ Boot → Main Menu
 | Button | What it does | Unlock |
 |--------|--------------|--------|
 | **Campaign nodes** (T, 1–7, D) | Standard campaign battle on that map | Linear unlock; Damavand after Labour 7 |
-| **Campaign Run** | Branching run: draft 3 towers, scavenge Star Iron, skirmish/anvil/shrine/**Throne of Kavus** nodes → Damavand | After tutorial |
+| **Campaign Run** | **Primary roguelite** — branching run: draft 3 towers, scavenge Star Iron, skirmish/anvil/shrine/**Throne of Kavus** nodes → Damavand | After tutorial |
 | **Endless** | Infinite waves on Labour 1 | 7 Labour seals |
 | **Haft-Khan Gauntlet** | Race Labours 1–7 back-to-back; ms timer, ghost PB, Rush / early-call risk | 7 Labour seals |
 | **Horde** | 15-wave survival per map | After tutorial |
@@ -41,6 +41,8 @@ Boot → Main Menu
 | **Defend the Throne** | 360° radial arena — enemies march inward to the center throne | After tutorial |
 | **Hunt for Zahhak** | Damavand boss hunt variant | 7 seals + 1 Elite tower at Kaveh's Forge |
 | **Kaveh's Forge** | Permanent tower upgrades | Always (main menu or world map) |
+| **Equipment** | Equip 4-piece sets (weapon/armor/helm/talisman) | World map panel |
+| **Daily Missions** | 3 rotating objectives per day | World map panel |
 
 ---
 
@@ -74,6 +76,21 @@ Pardeh (campaign / horde / run) → optional Retreat to Forge banks materials an
 ```
 
 **Scavenging:** Enemies may drop physical Star Iron on the map. Move **Rostam** over drops to collect into an **unbanked** tally (10s despawn). Pads still cost **Gold** only; materials are spent at **Kaveh's Forge** for unlock + upgrade.
+
+### Battle HUD (landscape mobile)
+
+| Zone | Elements |
+|------|----------|
+| Top bar | Lives, gold, wave, Sacred Fire, morale, unbanked materials |
+| Pad tap (empty) | **Build radial** — afford-gated tower picks at world position |
+| Pad tap (occupied) | **Manage radial** — upgrade, sell, purify (SF), Sacred Tether when hero in range |
+| Pad select | **Attack-range ring** — preview on build, live on manage, grows on upgrade |
+| Hero | Portrait + skill button; tap ground to move |
+| Actions | Cleanse, Naft trap (Rostam), spell bar, early call, pause / 1× / 2× |
+| Overlays | Pardeh panel, Hero's Vow chip, gauntlet timer + ghost PB, co-op HUD row |
+| Map fit | Medium maps (e.g. Labour 1) lock full-map view; minimap/threat hidden when map fully visible |
+
+Bottom tower card bar removed — all build/manage flows use pad radials.
 
 ### Battle resources
 
@@ -112,11 +129,15 @@ A **map** is a battlefield (`level_id`). A **mode** is how you launch that map (
 | **Campaign** | default | ✅ Yes | 30–100 (procedural + boss) | Tutorial + Labours 1–7 + Damavand |
 | **Horde** | `is_horde_mode` | ❌ No | 15 fixed | Any unlocked campaign map (not tutorial) |
 | **Endless** | `is_endless_mode` | ❌ No | Infinite | Labour 1 only |
-| **Roguelite** | `is_roguelite_run` | ❌ No | Per node | Mixed run (L1, L2, L3 elite, L4) |
+| **Campaign Run** | `is_campaign_run` | ❌ No | Per node | Mixed campaign maps |
+| **Roguelite (legacy)** | `is_roguelite_run` | ❌ No | Per node | Mixed run (L1–L4) — **deprecated**; save migrates to Campaign Run |
 | **Hunt for Zahhak** | `is_hunt_mode` | ✅ Yes (`mode_zahhak`) | Damavand hunt rules | `level_08_damavand` only |
 | **Daily Tale** | `is_daily_tale` | ❌ No | Labour 1 layout | `level_01` (daily seed) |
+| **Brothers in Arms** | `is_brothers_mode` | ❌ No | Campaign-length | Any unlocked map |
+| **Defend the Throne** | `is_throne_defense_mode` | ❌ No | 15 fixed | `level_throne_arena` |
+| **Haft-Khan Gauntlet** | `is_gauntlet_mode` | ✅ Yes (per boss) | 7-boss chain | Labours 1–7 in sequence |
 
-**Labour Modes only run in campaign** (`is_campaign_mode()`). Horde, Endless, Roguelite, and Daily Tale use the map layout and enemies but **not** the story hazard overlay.
+**Labour Modes only run in campaign** (`is_campaign_mode()`) and gauntlet boss transitions. Horde, Endless, Campaign Run nodes, Brothers, Throne, and Daily Tale use map layout and enemies but **not** the full campaign Labour overlay (except gauntlet per-boss modes).
 
 ---
 
@@ -225,11 +246,42 @@ Each mode is implemented in `scripts/battle/labours/`.
 - Waves never end until you lose.
 - Requires **7 Labour seals** (full campaign clear with seal objectives).
 
-### Roguelite Path
+### Campaign Run (primary roguelite)
 
-- **5 nodes:** Woodland (L1) → Sacred Rest (relic pick) → Desert (L2) → Canyon Elite (L3) → Feast Trial (L4).
-- Run state saved — resume from world map.
-- Defeat clears the run; relics carry into battles.
+- **Entry:** World Map → **Campaign Run** (after tutorial).
+- **Tower draft:** Pick 3 towers from unlocked pool pre-run; +1 tower on elite nodes.
+- **Node types:** skirmish, anvil (forge rest), shrine (companion or relic pick), **Throne of Kavus** (Kay Kavus Folly bombardment), labour boss, Damavand finale.
+- **Scavenging:** Physical Star Iron drops; unbanked until victory, Pardeh Retreat, or defeat (100% loss).
+- **Companions:** Shrine pick — Royal Cheetah, Simurgh Fledgling, or Zavareh (max 1 per run).
+- **Relics:** Shrine + alternating Pardeh (relic slot instead of Fate pick); per-tower relic slots via `RunModifierService`.
+- **Hard mode:** **Ahriman's Shroud** after campaign Damavand clear — see §7b.
+- Save v6 `campaign_run`; legacy 5-node roguelite scene deprecated.
+
+### Roguelite Path (legacy)
+
+- **5 nodes:** Woodland (L1) → Sacred Rest → Desert (L2) → Canyon Elite (L3) → Feast Trial (L4).
+- Superseded by **Campaign Run**; existing saves migrate `roguelite_run` → `campaign_run`.
+
+### Brothers in Arms (local co-op)
+
+- Pick **Zal** or **Sohrab** as second hero; shared gold and lives, **split** Sacred Fire and scavenged loot.
+- Any unlocked campaign map; no Labour Mode overlay.
+- `CoopPlayerManager` routes input and economy per player.
+
+### Defend the Throne
+
+- **Map:** `level_throne_arena` — 360° radial arena, 10 spawn routes marching inward.
+- **15 waves** survival; no campaign seals or Labour overlay.
+- Rostam only; starter four towers.
+
+### Haft-Khan Gauntlet
+
+- **Unlock:** 7 Labour seals.
+- **Flow:** Labours 1–7 bosses back-to-back in one session; **3-tower draft** at start.
+- **Timer:** Millisecond speedrun clock; personal-best **ghost** replay HUD (save v8 `gauntlet_best`).
+- **Risk mechanics:** Rush waves and early-call overwhelm for faster clears.
+- **No Pardeh Break or Hero's Vow** — pure boss-rush pacing.
+- Labour Modes apply per boss map during the chain.
 
 ### Hunt for Zahhak
 
@@ -250,7 +302,7 @@ Each mode is implemented in `scripts/battle/labours/`.
 ```
 Tutorial complete
   → Labour 1 unlocked
-  → Horde + Roguelite + Daily Tale available
+  → Horde + Campaign Run + Brothers + Throne + Daily Tale available
 
 Clear Labour N
   → Labour N+1 unlocked
@@ -261,11 +313,15 @@ Clear Labour 7
 
 7 Labour seals
   → Endless unlocked
+  → Haft-Khan Gauntlet unlocked
   → Rostam Barracks tower unlocked (or IAP)
   → Hunt for Zahhak eligible (also needs Elite forge)
 
 Horde: 8/8 maps cleared
   → Serpent Spire tower unlocked (or IAP)
+
+Campaign Damavand clear (once)
+  → Ahriman's Shroud toggle on Campaign Run
 ```
 
 **Kaveh's Forge (meta):** Banked Star Iron unlocks new tower types (per-tower material) and upgrades them (Lv 1–30, then 5 Elite). Each tower uses one material ID for both unlock and upgrades. Elite tower required for Hunt.
@@ -325,6 +381,42 @@ Unlocked after clearing **campaign Damavand** (`level_08_damavand`) once. On **C
 
 ---
 
+## 7c. Haft-Khan Equipment Sets
+
+**Entry:** World Map → **Equipment** panel (`EquipmentService`).
+
+| Set ID | Theme | Boss drops (weapon + armor) | Daily mission drops (helm + talisman) |
+|--------|-------|----------------------------|--------------------------------------|
+| `set_rakhsh_vigor` | Labour 1 — Lion | `level_01` clear | Daily mission loot chest |
+| `set_thirst_turan` | Labour 2 — Thirst | `level_02` clear | Daily mission loot chest |
+| `set_azhdaha_scale` | Labour 3 — Dragon | `level_03` clear | Daily mission loot chest |
+| `set_mazandaran_venom` | Labour 4 — Temptress | `level_04` clear | Daily mission loot chest |
+| `set_kaveh_iron` | Labour 5 — Demons | `level_05` clear | Daily mission loot chest |
+| `set_arzhang_fury` | Labour 6 — Rescue | `level_06` clear | Daily mission loot chest |
+| `set_simurgh_talon` | Labour 7 — Blindness | `level_07` clear | Daily mission loot chest |
+
+- **28 pieces** total (7 sets × 4 slots: weapon, armor, helm, talisman).
+- Equipped loadout applies in battle via `EquipmentBattleService` + `equipment_set_rules.gd` (set bonuses, toxic cloud, etc.).
+- Save v9 tracks `equipment_owned` and `equipment_equipped`.
+
+**Code:** `equipment_service.gd`, `equipment_screen_controller.gd`, `equipment_battle_service.gd`, `content_catalog.gd` → `build_equipment_pieces()`.
+
+---
+
+## 7d. Daily Missions
+
+**Entry:** World Map → **Daily Missions** panel (`DailyMissionService`).
+
+- **3 missions per day** drawn from a **10-mission pool**; rotates at calendar day boundary.
+- Progress tracked in save v9; lifetime stats via `MissionProgressTracker`.
+- **Royal Bounty** consumable: +3 mission progress on one active mission.
+- **Loot chest** on claim → helm or talisman equipment piece (random from eligible pool).
+- Missions span all modes (e.g. total div kills, pristine boss wave, archer damage in a run).
+
+**Code:** `daily_mission_service.gd`, `daily_missions_panel_controller.gd`, `content_catalog.gd` → `build_daily_mission_definitions()`.
+
+---
+
 ## 8. Enemy themes per map
 
 | Map | Main enemy types |
@@ -359,6 +451,10 @@ Unlocked after clearing **campaign Damavand** (`level_08_damavand`) once. On **C
 | Pardeh cadence (every 5 waves) | `scripts/battle/wave_manager.gd` → `_should_offer_pardeh()` |
 | Expected forge curve + gate | `scripts/meta/forge_service.gd` → `expected_forge_level_for()`, `is_under_forge_recommendation()` |
 | Forge-scaled difficulty (L3+) | `scripts/meta/content_catalog.gd` → `khan_difficulty()` |
+| Equipment sets + battle rules | `equipment_service.gd`, `equipment_battle_service.gd`, `equipment_set_rules.gd` |
+| Daily missions | `daily_mission_service.gd`, `mission_progress_tracker.gd` |
+| Gauntlet timer + ghost PB | `gauntlet_run_state.gd`, gauntlet HUD in `battle_hud_controller.gd` |
+| Co-op split economy | `coop_player_manager.gd` |
 
 ---
 

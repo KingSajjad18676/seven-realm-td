@@ -1,6 +1,6 @@
 ﻿# Design 00 — Project Index
 
-**Last updated:** 2026-06-06  
+**Last updated:** 2026-06-09  
 **Design canon** for project identity, reading order, and locked decisions.  
 **Implementation truth:** [engineering/project-status.md](../engineering/project-status.md) · [engineering/implementation-tracker.md](../engineering/implementation-tracker.md)
 
@@ -145,10 +145,15 @@ A tester should answer:
 
 ---
 
+## Beyond Khan 1 gate (coded in repo)
+
+Logic for full campaign, Campaign Run, Horde, Hunt, Gauntlet, equipment, and daily missions is **already implemented** — see [product/main-gameplay.md](../product/main-gameplay.md). The Khan 1 gate remains the **production priority** for art polish and voluntary replay validation, not a scope limit on code.
+
 ## Related implementation docs
 
 | Doc | Use for |
 |-----|---------|
+| [product/main-gameplay.md](../product/main-gameplay.md) | **Full game inventory** — modes, maps, progression |
 | [engineering/handoff.md](../engineering/handoff.md) | Onboarding: flow + how code maps to design |
 | [spec/gameplay.md](../spec/gameplay.md) | Detailed mechanics (may include post-launch systems) |
 | [PRD.md](../product/prd.md) | Product summary aligned to this index |

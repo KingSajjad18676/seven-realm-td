@@ -1,6 +1,6 @@
 # Product Roadmap
 
-**Last updated:** 2026-06-04  
+**Last updated:** 2026-06-09  
 **Canon:** [../design/04-production-roadmap.md](../design/04-production-roadmap.md) · [../design/00-project-index.md](../design/00-project-index.md)  
 **Status:** [../engineering/project-status.md](../engineering/project-status.md) · [../engineering/implementation-tracker.md](../engineering/implementation-tracker.md)
 
@@ -12,15 +12,15 @@ Executive summary of milestones **M0–M8**. Full detail lives in **design/04**.
 
 | Milestone | Focus | Exit gate |
 |-----------|--------|-----------|
-| **M0** | Technical proof | Touch, route, tower, enemy, gate |
-| **M1** | Khan 1 graybox | Rostam, 4 towers, 5 waves, replay |
-| **M2** | Signature systems | Corruption, Sacred Fire, hijack readable |
-| **M3** | Lion boss | Telegraphs + defeat clarity |
-| **M4** | Visual slice | design/01 Phase 0/1 art in scenes |
-| **M5** | Roguelite foundation | Pardeh Break, Fate draft |
-| **M6** | Content pipeline | Validators; add enemy without core rewrite |
-| **M7** | Campaign expansion | Khans 2–7 + Damavand |
-| **M8** | Release | Soft launch checklist (design/05) |
+| **M0** | Technical proof | ✅ Touch, route, tower, enemy, gate |
+| **M1** | Khan 1 graybox | ✅ Rostam, 4 towers, replay |
+| **M2** | Signature systems | ✅ Corruption, Sacred Fire, hijack |
+| **M3** | Lion boss | ✅ Telegraphs + defeat clarity |
+| **M4** | Visual slice | 🟡 Khan 1 map art wired; other maps placeholder |
+| **M5** | Roguelite foundation | ✅ Pardeh, Fate, Campaign Run, relics |
+| **M6** | Content pipeline | ✅ Validators, GUT, CI |
+| **M7** | Campaign expansion | ✅ Labours 2–7 + Damavand logic |
+| **M8** | Release | 🟡 Accessibility + stubs; platform SDK deferred |
 
 **Stop before M7:** voluntary Khan 1 replay ([design/00](../design/00-project-index.md)).
 
@@ -39,8 +39,8 @@ Executive summary of milestones **M0–M8**. Full detail lives in **design/04**.
 
 ## Current focus
 
-1. **M0** — skeleton folders, graybox battle, honest [project-status](../engineering/project-status.md)  
-2. **M1–M2** — Khan 1 + corruption/hijack on device  
-3. **M3–M4** — Lion boss + art integration  
+1. **Khan 1 gate** — voluntary replay on device before marketing scale ([design/00](../design/00-project-index.md))  
+2. **M4 polish** — production art for Labours 2–8; device export testing  
+3. **M8** — platform IAP/crash SDK; Simorgh continue / Zervan Dial if scoped  
 
-See [../engineering/project-status.md](../engineering/project-status.md) for what is on disk today.
+**Built today:** [main-gameplay.md](main-gameplay.md) · [project-status](../engineering/project-status.md)

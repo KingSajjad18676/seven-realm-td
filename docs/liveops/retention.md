@@ -1,6 +1,6 @@
 # LiveOps, Retention, Events, Shops
 
-**Last updated:** 2026-06-04  
+**Last updated:** 2026-06-09  
 **Design canon:** [design/03-monetization.md](../design/03-monetization.md) · [design/05-launch-liveops.md](../design/05-launch-liveops.md)
 
 Launch with a **polished authored game** and small repeatable modes — not a large battle-pass or subscription economy on day one.
@@ -32,7 +32,13 @@ Launch with a **polished authored game** and small repeatable modes — not a la
 
 ---
 
-## 3. Daily and weekly systems (post-launch cadence)
+## 3. Daily and weekly systems
+
+**Built today (save v9):**
+- **Daily Tale** — main menu; seeded Labour 1 challenge (`DailyTaleService`)
+- **Daily Missions** — 3/day from 10-mission pool; Royal Bounty consumable; equipment loot chest (`DailyMissionService`)
+
+**Post-launch cadence (design target):**
 
 **Weekly:** validated Daily Tale seeds, one weekly challenge, bug triage, community post, support review.
 

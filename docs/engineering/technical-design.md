@@ -1,6 +1,6 @@
 # Technical Design Document
 
-**Last updated:** 2026-06-04  
+**Last updated:** 2026-06-09  
 **Design canon:** [design/04-production-roadmap.md](../design/04-production-roadmap.md)  
 **Logic overview:** [engineering/game-logic.md](engineering/game-logic.md) · **Implementation truth:** [engineering/implementation-tracker.md](engineering/implementation-tracker.md) · [engineering/project-status.md](engineering/project-status.md)
 
@@ -15,16 +15,25 @@ Shared product constraints:
 - Scene-based gameplay entities (PackedScene)
 - Object pooling for runtime performance
 
-### Godot autoloads
+### Godot autoloads (15)
 
 | Autoload | Role |
 |----------|------|
-| `SaveSystem` | JSON persistence at `user://shahnamehtd_save.json` |
-| `SceneFlowController` | Async scene load + fade overlay |
-| `ContentRegistry` | Bootstrap + level catalog |
+| `SaveSystem` | JSON save **v9** at `user://shahnamehtd_save.json` |
+| `ForgeService` | Star Iron forge, elite gate, soft difficulty |
+| `SceneFlowController` | Async scene load + fade + battle preload |
+| `ContentRegistry` | Runtime catalog + `resources/data/` merge |
 | `SettingsService` | Audio/settings |
-| `AudioManager` | SFX/music hooks |
+| `AudioManager` | SFX/music hooks (placeholder) |
 | `CombatEvents` | Global combat event bus |
+| `AnalyticsService` | In-memory session events |
+| `LocalizationService` | Stub localization |
+| `DailyTaleService` | Daily challenge flag |
+| `EquipmentService` | Equipment sets + loadout |
+| `DailyMissionService` | 3/day mission rotation |
+| `MissionProgressTracker` | Lifetime mission stats |
+| `StoreService` | Stub IAP |
+| `CrashReporter` | Stub crash reporting |
 
 ### Godot scene paths
 
@@ -32,9 +41,12 @@ Shared product constraints:
 |-------|------|
 | Boot | `scenes/boot/boot.tscn` |
 | Main menu | `scenes/main_menu/main_menu.tscn` |
+| Kaveh's Forge | `scenes/main_menu/kaveh_forge.tscn` |
 | World map | `scenes/world_map/world_map.tscn` |
 | Battle | `scenes/battle/battle.tscn` |
-| Roguelite map | `scenes/roguelite_map/roguelite_map.tscn` |
+| Roguelite map (legacy) | `scenes/roguelite_map/roguelite_map.tscn` |
+| Map editor (dev) | `scenes/tools/map_editor.tscn` |
+| Battle loading overlay | `scenes/ui/battle_loading_overlay.tscn` |
 
 ---
 
@@ -98,29 +110,47 @@ Tracks in-battle gold and rewards.
 
 Applies, ticks, and removes effects.
 
-### Deep-system battle managers (implemented)
+### Battle managers — implemented and wired
 
 | Manager | Role |
 |---------|------|
-| `MapLightManager` | Regional light, corruption, hijack triggers (`BattleContext.Corruption`) |
-| `AncestralForgeManager` | Adjacency recipes → hybrid tower upgrade |
-| `ZervanDialController` | 50-slot chrono ring buffer + rewind |
-| `CoupletComboManager` | Rhyme Window + Epic Couplet payoff |
-| `KhanEscalationManager` | Boss HP phase steps |
-| `AhrimanDirector` | Adaptive boss modifiers on phase |
-| `PlayerTacticsAnalyzer` | Dominant `TowerFamily` tally |
-| `AStarPathfinder` | Light-weighted paths (per-level flag) |
-| `PathRecalcListener` | Throttled enemy path refresh |
-| `ZahhakTributeManager` | Serpent sacrifice timer |
-| `FateMechanics` | Static tuning from Fate boons/curses |
-| `StarIronShardService` | Shard accrual, chain forging (100→1) |
-| `PremiumGateway` / `IAP.StubPurchaseProvider` | IAP stub — **deferred** for launch ([design/03](../design/03-monetization.md)) |
-| `SimorghBlessingService` | Subscription stub — **not** launch catalog |
-| `KavehForgeService` | Offline shard production |
-| `SimorghContinueService` | One-per-run feather continue |
-| `FateRerollService` | Fate/blessing draft reroll economy |
-| `HeroOwnershipService` | Premium hero gates |
-| `ZahhakFuryService` | Post-finale heat scaffold |
+| `MapLightManager` | Regional light, corruption, hijack |
+| `MoraleController` | 0–100 battle momentum |
+| `ObjectiveController` | Map objectives + Hero's Vow evaluation |
+| `TowerResonanceController` | Adjacent tower combo buffs |
+| `LootDropManager` | Material scavenging pickups |
+| `RunModifierService` | Fate cards, per-tower relic slots |
+| `HuntController` | Hunt binding + shard pacing |
+| `SpellController` | Forge Token battle spells |
+| `EquipmentBattleService` | Equipped set rules in battle |
+| `NaftTrapController` | Rostam path oil + SF ignition |
+| `CoopPlayerManager` | Brothers in Arms split economy |
+| `CompanionManager` / `RakhshMountController` | Run companions + mount |
+| `LabourMode` (×8) | Campaign story overlays |
+| Boss controllers (×8) | Per-boss phase logic via `boss_controller_factory.gd` |
+| `CampaignWaveTemplates` | 10-wave master block generation |
+| `KavusFollyController` | Campaign Run Throne of Kavus bombardment |
+
+### Meta services — implemented
+
+| Service | Role |
+|---------|------|
+| `CampaignRunState` / `CampaignRunGenerator` | Branching roguelite graph (save v6) |
+| `GauntletRunState` | Gauntlet timer + ghost PB (save v8) |
+| `EquipmentService` | 28 pieces, 7 sets (save v9) |
+| `DailyMissionService` | 3/day missions (save v9) |
+| `ForgeService` | Kaveh's Forge progression |
+| `StoreService` | Stub IAP SKUs |
+
+### Deferred / stub (not launch-critical)
+
+| Manager | Role |
+|---------|------|
+| `ZervanDialController` | Rewind snapshots — **not built** |
+| `SimorghContinueService` | Feather continue — **not built** |
+| `AncestralForgeManager` | Hybrid tower recipes — **deferred** |
+| `AhrimanDirector` | Adaptive boss modifiers — **partial/stub** |
+| Platform IAP / crash SDK | Wire at soft launch |
 
 ## 4. Data Layer
 
@@ -146,28 +176,20 @@ Use Resources:
 - ChroniclePageData
 - JinnEncounterData
 
-## 5. Save System
+## 5. Save System (v9)
 
-Save:
+Migration chain: `scripts/meta/save_migration.gd` (v4→v9).
 
-- player level
-- campaign progress
-- hero ownership and levels
-- hero upgrade ranks (Hero Camp)
-- tower unlock progress
-- tower family souls and lineage levels
-- chronicle pages (collected + inserted)
-- relic inventory
-- currencies
-- settings
-- daily streak
-- event progress
-- star iron shards + chain progress
-- simorgh blessing expiry, feather count
-- kaveh forge offline accumulator
-- owned premium hero ids
+| Version | Key fields added |
+|---------|------------------|
+| v4 | Hunt best, forge notification, roguelite run, mode-aware battle saves |
+| v5 | Forge Tokens, spells owned, horde progress, unlocked towers, paid entitlements |
+| v6 | `campaign_run`, starter towers in `unlocked_towers` |
+| v7 | `tower_relic_slots`, `active_relic_ids` (migrates legacy `relic_ids`) |
+| v8 | `gauntlet_best` personal-best splits + ghost trace |
+| v9 | Haft-Khan equipment loadout, daily missions, mission lifetime stats |
 
-`GlobalBattleModifierService` aggregates inserted chronicle pages + lineage for battle bootstrap.
+**Core persisted fields:** tutorial gate, level unlock chain, `khan_seals` (7), Star Iron + per-tower forge levels, `campaign_run`, equipment owned/equipped, accessibility, analytics consent, replay stats, seen hints.
 
 Use stable IDs, not display names.
 

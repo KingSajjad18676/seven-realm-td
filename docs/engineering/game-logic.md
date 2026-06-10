@@ -1,6 +1,6 @@
 # Game Logic & Essentials
 
-**Last updated:** 2026-06-04  
+**Last updated:** 2026-06-09  
 **Audience:** Developers and AI agents working in this repo  
 **Purpose:** Fast onboarding — how the game thinks, who owns what, and where to look in code.
 
@@ -67,28 +67,27 @@ From `.cursor/rules/code-battle.mdc` — enforce in all battle code:
 
 ```mermaid
 flowchart TB
-    Boot[Boot: SaveSystem, SceneFlowController]
-    Splash[CompanySplash]
-    Menu[MainMenu: meta panels]
-    Map[WorldMap: 7 Khans + mode buttons]
+    Boot[Boot: SaveSystem v9]
+    Menu[MainMenu]
+    Map[WorldMap: campaign + modes]
+    Run[CampaignRun graph]
     Battle[Battle: BattleBootstrap]
-    Roguelite[RogueliteMap]
 
-    Boot --> Splash --> Menu
+    Boot --> Menu
     Menu --> Map
     Map -->|BattleLaunchData| Battle
+    Map --> Run
+    Run -->|node fight| Battle
     Battle -->|victory/defeat| Map
-    Menu --> Roguelite
-    Roguelite -->|node fight| Battle
 ```
 
 **Launching a battle**
 
-1. `WorldMapController` (or roguelite / daily / endless UI) sets `BattleLaunchData.SelectedLevel`, flags (`IsHuntMode`, `IsRogueliteRun`, `IsEndlessMode`, etc.).
-2. `SceneFlowController` async-loads **Battle** scene.
-3. `BattleBootstrap` reads launch data + `LevelData` → builds map, initializes `BattleContext`, optionally `autoStartBattle`.
+1. `WorldMapController` (or Campaign Run / daily / endless / horde / gauntlet UI) sets `BattleLaunchData` — `level_id` + flags (`is_hunt_mode`, `is_campaign_run`, `is_horde_mode`, `is_gauntlet_mode`, etc.).
+2. `SceneFlowController` async-loads **Battle** with optional preload overlay (`LevelAssetCollector`).
+3. `BattleBootstrap` reads launch data + `LevelData` → builds map, initializes `BattleContext`, attaches `LabourMode` when `is_campaign_mode()`.
 
-**Save:** `SaveSystem` loads in Boot / World Map; campaign unlocks, currencies, shards, hunt progress persist there.
+**Save:** `SaveSystem` v9 — campaign unlocks, forge, `campaign_run`, equipment, daily missions, gauntlet PB, hunt progress.
 
 ---
 
@@ -152,41 +151,56 @@ sequenceDiagram
 
 | Mode | When | Behavior |
 |------|------|----------|
-| **Campaign** | Default `LevelData.waves[]` | Fixed wave list; victory when all cleared |
-| **Endless** | `BattleLaunchData.IsEndlessMode` | `EndlessWaveGenerator` loops until defeat |
-| **Hunt** | `BattleLaunchData.IsHuntMode` | `HuntWaveGenerator` milestones; `HuntDirector` may end loop at wave 100 + finale rules |
+| **Campaign** | `is_campaign_mode()` | Procedural waves via `CampaignWaveTemplates` — 10-wave master blocks; 30–100 waves per map |
+| **Endless** | `is_endless_mode` | `EndlessWaveGenerator` loops until defeat |
+| **Hunt** | `is_hunt_mode` | `HuntWaveGenerator` + `HuntController` binding sequence |
+| **Horde** | `is_horde_mode` | 15 fixed waves per map |
+| **Gauntlet** | `is_gauntlet_mode` | 7-boss chain; no Pardeh/Vow |
 
-Pre-wave **gates** (e.g. Blood Oath UI) register on `WaveManager` and run as coroutines before spawns.
+**Campaign wave cadence:**
+- **Pardeh Break** every **5 cleared waves** (`_should_offer_pardeh()`); waits for enemy clear before offering.
+- **Hero's Vow** every **10 cleared waves** (`VowOfferController`).
+- **Mini-boss** every 10th wave within 10-wave blocks.
+
+**10-wave block roles** (`CampaignWaveTemplates`): Bait (1–3) → Trap (4–5) → Hijack (6–8) → Push (9) → Mini-boss (10).
+
+**Labour modes:** `BattleBootstrap._attach_labour_mode()` attaches `LabourModeFactory` overlay on campaign only.
+
+Pre-wave **gates** (vow offer, Pardeh) register on `WaveManager` and run as coroutines before next wave spawns.
 
 ---
 
 ## 6. `BattleContext` — service map
 
-All battle systems receive the same `BattleContext` reference (set in `BattleBootstrap`).
+All battle systems receive the same `BattleContext` reference (set in `BattleBootstrap`). Source: `scripts/battle/battle_context.gd`.
 
-| Property | Type | Responsibility |
-|----------|------|----------------|
-| `LevelData` | `LevelData` | Waves, map layout, flags, starting gold |
-| `StateController` | `BattleStateController` | Win/loss/pause/speed |
-| `WaveManager` | `WaveManager` | Wave coroutines |
-| `EnemySpawner` | `EnemySpawner` | Prefab spawn + pool |
-| `Economy` | `BattleEconomy` | Gold, Sacred Fire, kill rewards |
-| `Lives` | `LivesController` | Gate leaks |
-| `TowerManager` | `TowerManager` | Build spots, placement, sell |
-| `HeroManager` | `HeroManager` | Hero spawn + input routing |
-| `Blessings` | `BlessingSystem` | Fate/boon modifiers this run |
-| `Corruption` | `MapLightManager` | Regional light, cleanse, hijack |
-| `Morale` | `MoraleController` | 0–100 momentum |
-| `Chrono` | `ZervanDialController` | Rewind snapshots |
-| `Couplet` | `CoupletComboManager` | Rhyme Window |
-| `Khan` | `KhanEscalationManager` | Boss HP phases |
-| `Forge` | `AncestralForgeManager` | Adjacent tower hybrids |
-| `Director` | `AhrimanDirector` | Counter-pick boss modifiers |
-| `Tribute` | `ZahhakTributeManager` | Serpent sacrifice timer |
-| `HuntDirector` | `HuntDirector` | Hunt finale / shard pacing |
-| `Paths` | `WaypointPath` list | Enemy routes (multi-path supported) |
+| Property | Responsibility |
+|----------|----------------|
+| `level_data` / `launch_data` | Waves, map layout, mode flags, starting gold |
+| `state_controller` | Win/loss/pause/speed |
+| `wave_manager` | Wave coroutines, Pardeh/Vow gates |
+| `enemy_spawner` | Spawn + pool |
+| `economy` | Gold, Sacred Fire, kill rewards, materials |
+| `lives` | Gate leaks |
+| `tower_manager` | Build pads, placement, sell, radials |
+| `hero_manager` | Hero spawn + input routing |
+| `map_light` | Regional light, cleanse, hijack |
+| `objectives` | Map objectives + vow evaluation |
+| `morale` | 0–100 momentum |
+| `run_modifiers` | Fate cards, per-tower relic slots |
+| `tower_resonance` | Adjacent tower combo buffs |
+| `hunt` | Hunt binding + finale |
+| `spell_controller` | Forge Token spells |
+| `loot_drops` | Material scavenging |
+| `companion_manager` / `rakhsh_mount` | Run companions + Rostam mount |
+| `equipment_battle` | Equipped set rules |
+| `naft_traps` | Rostam path oil + SF ignition |
+| `labour_mode` | Campaign story overlay |
+| `coop_players` | Brothers in Arms split economy |
+| `active_allies` | Barracks-summoned units |
+| `bridge` | `BattleContextBridge` signals for UI |
 
-Deep systems are also spawned/configured in `BattleBootstrap.ConfigureDeepSystems()` if not on the scene.
+**Deferred (not on BattleContext today):** Zervan Dial, Ancestral Forge hybrids, Simorgh continue, Ahriman Director.
 
 ---
 
@@ -203,7 +217,7 @@ Deep systems are also spawned/configured in `BattleBootstrap.ConfigureDeepSystem
 
 ### Towers
 
-1. Player taps **build spot** → `TowerBuildPanel` (build / upgrade / sell / cleanse / brazier).
+1. Player taps **build pad** → build radial (empty) or manage radial (occupied) + range ring.
 2. `TowerController` picks targets by mode (first, last, strong, etc.), respects range and cooldown.
 3. Damage scales with regional light: below 30, efficiency `E = L/30` on cooldown and range.
 4. Projectiles from pool; on-hit may apply `StatusEffectData`.

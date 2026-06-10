@@ -1,6 +1,6 @@
 # Product Requirements Document — Shahnameh Mobile Landscape TD
 
-**Last updated:** 2026-06-04  
+**Last updated:** 2026-06-09  
 **Design canon:** [design/00-project-index.md](../design/00-project-index.md) · [design/02-gameplay-ux.md](../design/02-gameplay-ux.md)  
 **Monetization canon:** [design/03-monetization.md](../design/03-monetization.md)  
 **Implementation truth:** [engineering/project-status.md](../engineering/project-status.md) · [engineering/implementation-tracker.md](../engineering/implementation-tracker.md)
@@ -60,21 +60,37 @@ Per [design/00](../design/00-project-index.md) — **do not expand campaign art 
 | Systems | Corruption states, hijack/recovery, 5 waves, one Pardeh Break, small Fate pool |
 | UX | One-tap replay, clear defeat explanation, analytics stub |
 
-**Not required for Khan 1 gate:** full roguelite map, battle pass, subscription economy, seven polished maps, Hunt/Endless/Daily Tale at launch quality.
+**Not required for Khan 1 gate:** production art on maps 2–8, platform IAP SDK, battle pass — logic for many modes is already coded (see §5b).
 
-## 6. Full Launch Feature Set (target)
+## 5b. Built beyond Khan 1 gate (repo today)
 
-**Campaign:** Seven Khans + **Damavand Binding** (8 maps, scaling grids per [design/02](../design/02-gameplay-ux.md)).
+Per [implementation-tracker.md](../engineering/implementation-tracker.md) — coded and playable, art polish deferred:
 
-**Heroes (staggered):** Rostam first; then Zal, Gordafarid, Esfandiyar, Sohrab, Kaveh, Simorgh as identities are proven.
+| Area | Built |
+|------|-------|
+| **Campaign** | Tutorial + Labours 1–7 + Damavand; procedural 30–100 waves; 8 Labour modes |
+| **Modes** | Campaign Run, Horde, Endless, Hunt, Daily Tale, Brothers in Arms, Defend the Throne, Haft-Khan Gauntlet |
+| **Content** | 8 towers, 3 heroes, 22 enemies, 8 Fate cards, 6 spells, 7 relics, 28 equipment pieces |
+| **Meta** | Kaveh's Forge, equipment sets, daily missions, relic slots, stub IAP store |
+| **Signature** | Corruption/hijack, Pardeh, Morale, Vow, Resonance, scavenging, Naft traps |
+| **Tests** | GUT + ContentValidator + CI |
 
-**Modes:** Campaign, Hunt for Zahhak, Endless, Daily Tale, roguelite routes.
+**Full inventory:** [main-gameplay.md](main-gameplay.md) · [entities-and-gameplay.md](../spec/entities-and-gameplay.md)
 
-**Meta:** Relics, collections, Farr mastery, optional objectives, Forge hybrids.
+## 6. Full Launch Feature Set (target vs built)
 
-**Monetization (launch):** Cosmetics, Founder’s Supporter Pack, ad removal, limited optional rewarded ads — see [design/03](../design/03-monetization.md). **Not launch:** battle pass, paid combat power, premium overpowered heroes.
+| Target | Status |
+|--------|--------|
+| Campaign 8 maps | ✅ Logic; 🟡 Art (Khan 1 map only) |
+| Heroes Rostam + Zal + Sohrab | ✅ Rostam/Zal/Sohrab (co-op) |
+| Modes: Campaign, Hunt, Endless, Daily, roguelite | ✅ + Horde, Gauntlet, co-op, Throne |
+| Meta: Relics, objectives, Forge | ✅ + equipment, daily missions |
+| Forge hybrids, 43 Fate cards, premium heroes | ❌ Deferred |
+| Farr mastery, collections | ❌ Design target |
 
-**Live-ops:** Small sustainable events per [design/05](../design/05-launch-liveops.md).
+**Monetization (launch):** Cosmetics, Founder’s Supporter Pack, ad removal, see [design/03](../design/03-monetization.md). Stub tower/spell IAP exists for testing.
+
+**Live-ops:** Daily Missions + Daily Tale built; broader events per [design/05](../design/05-launch-liveops.md).
 
 ## 7. Success Criteria
 

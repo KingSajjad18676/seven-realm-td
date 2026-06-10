@@ -1,74 +1,88 @@
 # Godot Architecture
 
-**Last updated:** 2026-06-06  
+**Last updated:** 2026-06-09  
 **Design canon:** [design/04-production-roadmap.md](../design/04-production-roadmap.md)  
 **Engine:** Godot 4.6 Mobile  
 **Project root:** repository folder containing `project.godot`  
-**Logic onboarding:** [engineering/game-logic.md](engineering/game-logic.md)
+**Logic onboarding:** [engineering/game-logic.md](engineering/game-logic.md)  
+**Full inventory:** [product/main-gameplay.md](../product/main-gameplay.md)
 
-## Folder layout (target)
+## Folder layout
 
 ```text
 repo root/
   project.godot
-  scenes/           boot, main_menu, world_map, battle, roguelite_map, prefabs
+  scenes/           boot, main_menu, world_map, battle, roguelite_map, prefabs, ui, tools
   scripts/
-    core/           enums, DamageInfo, status instances
+    core/           enums, DamageInfo, combat_events
     data/           Resource class definitions (.gd)
     battle/         WaveManager, BattleBootstrap, MapLightManager, labours/, deep systems
     enemies/        EnemyController, PathFollower
-    towers/         TowerController, TowerManager, build spots
-    heroes/         HeroController, Sacred Tether
+    towers/         TowerController, TowerManager, build spots, range ring
+    heroes/         HeroController, HeroManager
+    companions/     Rakhsh mount, run companion behaviors
     units/          AllyUnitController (barracks summons)
     projectiles/
     status_effects/
-    ui/             Battle HUD + meta panels
-    meta/           SaveSystem, WorldMap, liveops services
-    utilities/      ObjectPool, AudioManager
-  resources/        design data (.tres)
-  art/_placeholders/
-  addons/           editor plugins (e.g. level map editor)
-  tools/            validate_resources, smoke_test.gd
-  tests/            GUT unit, integration, validation tests
-  addons/gut/       GUT v9.6.0 test framework
+    ui/             Battle HUD + meta panels (29 controllers)
+    meta/           SaveSystem, WorldMap, content catalog, liveops services
+    tools/          Map editor (dev)
+    utilities/      ObjectPool, AudioManager, VisualAssetLoader, LevelAssetCollector
+  resources/data/   Sparse .tres overrides (levels, relics, companions)
+  art/_placeholders/ + art/maps/level_01.jpg
+  addons/gut/       GUT v9.6.0
+  tests/            unit, integration, validation
+  tools/            validate_resources.ps1, smoke_test.gd
   docs/
 ```
 
-## Autoloads
+## Autoloads (15)
 
 | Name | Role |
 |------|------|
-| `SaveSystem` | JSON save at `user://shahnamehtd_save.json` |
-| `SceneFlowController` | Async scene load + fade overlay |
-| `ContentRegistry` | Loads `bootstrap_content.tres`, `level_catalog.tres` |
+| `SaveSystem` | JSON save v9 at `user://shahnamehtd_save.json` |
+| `ForgeService` | Star Iron forge, elite gate, soft difficulty curve L3+ |
+| `SceneFlowController` | Async scene load + fade + battle preload overlay |
+| `ContentRegistry` | Runtime catalog from `content_catalog.gd` + `resources/data/` merge |
 | `SettingsService` | Audio/settings prefs |
 | `AudioManager` | Placeholder SFX |
 | `CombatEvents` | Global combat signal bus |
+| `AnalyticsService` | In-memory session events |
+| `LocalizationService` | Stub (~7 English keys) |
+| `DailyTaleService` | Daily battle launch flag |
+| `EquipmentService` | 7 equipment sets × 4 pieces |
+| `DailyMissionService` | 3/day from 10-mission pool |
+| `MissionProgressTracker` | Lifetime mission stats |
+| `StoreService` | Stub IAP — instant grant to save |
+| `CrashReporter` | Stub — warns + analytics event |
+
+## Content pipeline
+
+- **Primary catalog:** `scripts/meta/content_catalog.gd` builds towers, enemies, heroes, levels, waves, fate cards, spells, equipment, missions at runtime.
+- **Overrides:** `ContentRegistry._merge_folder_resources()` merges sparse `resources/data/` `.tres` files (e.g. `level_01.tres`, relic overrides).
+- **Stable IDs:** `lowercase_snake_case` — never display names in gameplay code.
 
 ## Battle wiring
 
-- **`BattleBootstrap`** — scene root; builds `BattleContext`, map, managers; attaches **`LabourMode`** on campaign launches only
-- **`BattleContext`** — RefCounted service locator (managers only); holds `labour_mode` and `active_allies`
-- **`LabourMode` + `LabourModeFactory`** — `scripts/battle/labours/`; per-map additive hazards via wave/cleanse/boss hooks
-- **`AllyUnitController`** — barracks melee blockers tracked on `BattleContext.active_allies`
+- **`BattleBootstrap`** — scene root; builds `BattleContext`, map, managers; attaches **`LabourMode`** on campaign launches; wires equipment, co-op, gauntlet as needed
+- **`BattleContext`** — RefCounted service locator; see [game-logic.md](game-logic.md) §6
+- **`LabourMode` + `LabourModeFactory`** — `scripts/battle/labours/`; per-map additive hazards
+- **`AllyUnitController`** — barracks melee blockers on `BattleContext.active_allies`
 - **`BattleContextBridge`** — Node wrapper exposing signals for UI
 - **Ownership rules** — see `.cursor/rules/code-battle.mdc`
-
-## Data
-
-- Design data: Godot `Resource` subclasses + `.tres` files under `resources/`
-- Stable IDs: `lowercase_snake_case` (save/analytics)
-- Runtime state on nodes/controllers — never mutate shared `.tres` at runtime
 
 ## Scene flow
 
 ```text
-Boot → CompanySplash → MainMenu → WorldMap → Battle
-WorldMap → TowerDraft → CampaignRun graph → Battle (via BattleLaunchData)
-Legacy RogueliteMap → Battle (deprecated; migrated to Campaign Run)
+Boot → MainMenu → WorldMap → Battle (via BattleLaunchData)
+MainMenu → KavehForge / DailyTale
+WorldMap → CampaignRun graph → TowerDraft → Battle
+WorldMap → Horde / Brothers / Throne / Gauntlet / Hunt / Endless pickers → Battle
+Legacy RogueliteMap → Battle (deprecated; save migrates to Campaign Run)
+[DEV] MapEditor → save LevelData .tres
 ```
 
-**Roguelite loop (2026-06):** `LootDropManager`, `CampaignRunState`, `TowerDraftController` on world map; save v6 `campaign_run`.
+**Campaign Run:** `LootDropManager`, `CampaignRunState`, `TowerDraftController` on world map; save v6 `campaign_run`.
 
 ## Godot conventions
 
@@ -76,7 +90,7 @@ Legacy RogueliteMap → Battle (deprecated; migrated to Campaign Run)
 |---------|----------------|
 | Prefab | `PackedScene` |
 | Manager script | Child `Node` + `.gd` |
-| Design data | `Resource` + `.tres` |
+| Design data | `Resource` + `.tres` (or runtime catalog) |
 | Launch payload | `BattleLaunchData` |
 | Time scale | `Engine.time_scale` |
 
@@ -84,6 +98,6 @@ Legacy RogueliteMap → Battle (deprecated; migrated to Campaign Run)
 
 Follow [design/04](../design/04-production-roadmap.md) milestones **M0→M8**.
 
-**Khan 1 gate:** voluntary replay before campaign expansion ([design/00](../design/00-project-index.md)).
+**Khan 1 gate:** voluntary replay before campaign art scale ([design/00](../design/00-project-index.md)).
 
 See [engineering/project-status.md](engineering/project-status.md) for implementation status.

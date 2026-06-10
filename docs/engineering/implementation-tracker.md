@@ -1,6 +1,6 @@
 # Implementation Tracker
 
-**Last updated:** 2026-06-07 (Haft-Khan Gauntlet)  
+**Last updated:** 2026-06-09 (full doc sync)  
 **Repo truth:** [project-status.md](project-status.md)
 
 ---
@@ -105,6 +105,9 @@
 | Crash reporter stub | ✅ |
 | Debug menu (debug builds) | ✅ |
 | Map editor (debug) | ✅ Multi-route + multi-spawn; `path_routes` / `spawn_points` in `.tres`; wave `route_id` / `spawn_id` optional |
+| Equipment battle rules | ✅ `EquipmentBattleService`, `equipment_set_rules.gd` |
+| Daily Missions UI | ✅ `daily_missions_panel_controller.gd` on world map |
+| Battle HUD back navigation | ✅ Return to map/menu from battle |
 
 ---
 

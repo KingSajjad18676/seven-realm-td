@@ -1,6 +1,6 @@
 # Project Status (Godot)
 
-**Last updated:** 2026-06-07 (Haft-Khan Gauntlet speedrun mode)  
+**Last updated:** 2026-06-09 (full doc sync)  
 **Milestones:** [design/04-production-roadmap.md](../design/04-production-roadmap.md) · **Identity:** [design/00-project-index.md](../design/00-project-index.md)
 
 ---
@@ -46,7 +46,7 @@
 | Paid power store (stub IAP)    | ✅ Tower, spells, token packs via StoreService                                                                                                                      |
 | Automated tests                | ✅ GUT v9.6.0 (`tests/`), ContentValidator, SaveMigration, GitHub Actions CI                                                                                      |
 | Khan 1 map art                 | ✅ `art/maps/level_01.jpg` + geometry override in `resources/data/levels/level_01.tres`; battle hides green Terrain fallback when map sprite loads                |
-| Battle camera / HUD (Khan 1)   | ✅ Full-map fit-locked view; compact HUD; build radial (afford-gated) + manage radial on pad tap; **range ring** on pad select (build preview + manage, resizes on upgrade); bottom tower bar removed |
+| Battle camera / HUD (Khan 1)   | ✅ Full-map fit-locked view; compact HUD; build radial (afford-gated) + manage radial on pad tap; **range ring** on pad select (build preview + manage, resizes on upgrade); bottom tower bar removed; **back navigation** from battle HUD |
 | Map editor (dev)               | ✅ Multi-route + multi-spawn editor; `PathRouteData` / `SpawnPointData` in level `.tres`; battle resolves `route_id` / `spawn_id` per wave group |
 | Per-map battle preload         | ✅ `LevelAssetCollector` + threaded preload overlay before battle; map/enemy/hero/tower sprites + `battle.tscn` warmed per `level_id` |
 

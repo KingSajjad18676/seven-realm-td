@@ -1,11 +1,12 @@
 # Engineering Handoff
 
-**Last updated:** 2026-06-04  
+**Last updated:** 2026-06-09  
 **Audience:** New designers, programmers, artists, or collaborators  
-**Purpose:** What the game is, how it should play, and **where Godot code will live**.
+**Purpose:** What the game is, how it plays, and **where Godot code lives**.
 
 **Design canon:** [../index.md](../index.md) → [../design/00-project-index.md](../design/00-project-index.md) · [../design/02-gameplay-ux.md](../design/02-gameplay-ux.md)  
-**Repo today:** [project-status.md](project-status.md) — scaffold only; most sections describe the **target** build.
+**Repo today:** [project-status.md](project-status.md) — full playable build (10+ modes, 8 campaign maps, meta progression).  
+**Full player inventory:** [../product/main-gameplay.md](../product/main-gameplay.md) · **Content IDs:** [../spec/entities-and-gameplay.md](../spec/entities-and-gameplay.md)
 
 **Engine:** Godot 4.6 — repository root (`project.godot`)
 
@@ -35,22 +36,22 @@ It plays like Kingdom Rush–style TD with an **active hero**, but identity come
 
 ```mermaid
 flowchart LR
-    Boot[Boot] --> Splash[Company Splash]
-    Splash --> Menu[Main Menu]
+    Boot[Boot] --> Menu[Main Menu]
     Menu --> World[World Map]
+    Menu --> Forge[Kaveh Forge]
+    Menu --> DailyTale[Daily Tale]
     World --> Battle[Battle]
+    World --> CampaignRun[Campaign Run graph]
+    CampaignRun --> Battle
     Battle --> World
-    Menu --> Roguelite[Roguelite Map]
-    Roguelite --> Battle
 ```
 
 | Step | Scene | What happens |
 |------|-------|----------------|
-| 1 | **Boot** | Loads save, audio, scene flow (fade overlay) |
-| 2 | **CompanySplash** | Studio title ~2.5s; tap or skip |
-| 3 | **MainMenu** | Play Campaign → World Map; toolbar opens meta panels (Hero, Towers, Relics, Daily, Bazaar, Quests, Forge, etc.). Premium/Battle Pass UI may exist as **stubs** — not launch monetization ([design/03](../design/03-monetization.md)). |
-| 4 | **WorldMap** | Seven **Labour** campaign nodes; **Endless** and **Hunt Zahhak** unlock after all Labours cleared |
-| 5 | **Battle** | Tower defense loop; victory/defeat → rewards → return to map |
+| 1 | **Boot** | Loads save (v9), autoloads, scene flow (fade overlay) → Main Menu directly (no company splash) |
+| 2 | **MainMenu** | **Play** → World Map; **Daily Tale**; **Kaveh's Forge**; settings; **[DEV] Map Editor** (debug). Store UI is stub IAP — not launch monetization ([design/03](../design/03-monetization.md)). |
+| 3 | **WorldMap** | Campaign Labours 1–7 + Damavand; **Campaign Run** (primary roguelite); Horde; Brothers in Arms; Defend the Throne; Haft-Khan Gauntlet; Endless + Hunt (7 seals); Equipment + Daily Missions panels |
+| 4 | **Battle** | Shared `battle.tscn` for all modes; victory/defeat → rewards → return to map or run graph |
 
 ### Campaign — Seven Khans + Damavand Binding (8 battlefields)
 
@@ -58,26 +59,32 @@ Rostam’s seven labors plus a finale binding map ([design/02](../design/02-game
 
 | # | Level ID | Display name (design) | Grid | Boss |
 |---|----------|----------------------|------|------|
-| 1 | `level_01` | Khan 1 — Lion and Rakhsh | 32×18 | Lion of the First Khan |
-| 2 | `level_02` | Khan 2 — Desert of Thirst | 36×20 | Manifestation of Thirst |
-| 3 | `level_03` | Khan 3 — Azhdaha Canyon | 40×22 | Azhdaha |
-| 4 | `level_04` | Khan 4 — Sorceress Feast | 42×24 | Sorceress (illusion + revealed) |
-| 5 | `level_05` | Khan 5 — Olad Camp | 48×27 | Olad champion |
-| 6 | `level_06` | Khan 6 — Arzhang Fortress | 52×30 | Arzhang Div |
-| 7 | `level_07` | Khan 7 — White Div Cavern | 56×32 | Div-e Sepid |
+| 1 | `level_01` | Labour 1 — Lion and Rakhsh | 32×18 | Lion of the First Khan |
+| 2 | `level_02` | Labour 2 — Desert of Thirst | 36×20 | Manifestation of Thirst |
+| 3 | `level_03` | Labour 3 — Azhdaha Canyon | 40×22 | Azhdaha |
+| 4 | `level_04` | Labour 4 — Sorceress Feast | 42×24 | Sorceress (illusion + revealed) |
+| 5 | `level_05` | Labour 5 — Olad Camp | 48×27 | Olad champion |
+| 6 | `level_06` | Labour 6 — Arzhang Fortress | 52×30 | Arzhang Div |
+| 7 | `level_07` | Labour 7 — White Div Cavern | 56×32 | Div-e Sepid |
 | 8 | (finale) | Damavand Binding | 64×36 | Zahhak binding sequence |
 
 **Progression:** Only `level_01` unlocked at start. Win → soft currency + unlock next level. Each Labour first-clear grants one **Labour seal** (7-piece mosaic). All 7 seals unlock **Hunt for Zahhak** and **`tower_rostam_barracks`**. **Damavand Binding** is the authored campaign finale (separate from repeatable Hunt mode in code today).
 
 **Starter towers (design):** Archer, Sacred Fire, Heavy, Control. **Starter hero:** Rostam.
 
-### Post-campaign modes
+### Post-campaign and side modes
 
 | Mode | Unlock | Gameplay |
 |------|--------|----------|
-| **Endless** | All 7 Khans cleared | Procedural waves until defeat; best wave saved |
-| **Hunt for Zahhak** | 7 Khan seals (+ First Talisman from Khan 7) | Survival; earn Star Iron → Damavand anchors; bind Zahhak at mountain with Forge towers |
-| **Roguelite** | Separate entry on world map | Node graph with blessing picks between fights (partially wired) |
+| **Campaign Run** | After tutorial | Primary roguelite graph — tower draft, scavenging, shrine/anvil nodes, Damavand finale |
+| **Horde** | After tutorial | 15-wave survival per map; 8/8 clears → Serpent Spire |
+| **Brothers in Arms** | After tutorial | Local co-op — Zal + Sohrab; split SF/loot |
+| **Defend the Throne** | After tutorial | Radial arena (`level_throne_arena`), 15 waves |
+| **Haft-Khan Gauntlet** | 7 Labour seals | 7-boss rush; timer + ghost PB; no Pardeh/Vow |
+| **Endless** | 7 Labour seals | Procedural waves on Labour 1 until defeat |
+| **Hunt for Zahhak** | 7 seals + Elite forge | Damavand hunt binding sequence |
+| **Daily Tale** | Main menu | Seeded Labour 1 daily challenge |
+| **Roguelite (legacy)** | Deprecated | Save migrates to Campaign Run |
 
 ---
 
@@ -87,9 +94,9 @@ This is the heart of the game. Every mode uses the same battle scene with differ
 
 ### Standard tower defense (every battle)
 
-1. **Prepare** — Enemies will follow waypoint paths toward your **gate**.
-2. **Build** — Tap empty **build spot** → pick tower from bottom cards → spend **gold**.
-3. **Upgrade/sell** — Tap occupied spot for upgrade or sell panel.
+1. **Prepare** — Enemies follow waypoint paths toward your **gate**.
+2. **Build** — Tap empty **build pad** → **build radial** (afford-gated) → spend **gold**.
+3. **Upgrade/sell** — Tap occupied pad → **manage radial** (upgrade, sell, purify, Sacred Tether); **range ring** on select.
 4. **Start wave** — Enemies spawn in waves and walk the path.
 5. **Defend** — Towers auto-target; **hero** moves and uses skills.
 6. **Win** — All waves cleared with lives remaining.
@@ -104,31 +111,35 @@ This is the heart of the game. Every mode uses the same battle scene with differ
 | Drag hero → tower | **Sacred Tether** — attack-speed buff; drains energy |
 | Drag hero → Zahhak | Offensive tether (Hunt finale) — slow + energy drain |
 | Cleanse / Brazier buttons | Spend **Sacred Fire** on selected region |
-| Hold Rewind | **Zervan Dial** — rewind recent battle state |
+| Naft button | Rostam path oil trap + Sacred Fire ignition (campaign) |
 
 ### Signature battle systems (player-facing)
 
 | System | Effect |
 |--------|--------|
-| **Regional light / corruption** | Corruptors darken regions; towers weaken; at **light 0** towers **hijack** and attack allies until hero purges |
-| **Sacred Fire** | Earned from corruptor kills; spend to cleanse regions or light braziers |
-| **Morale** | High morale buffs towers/hero; low morale penalizes |
-| **Fate weaving** | Pre-battle draft on some levels; boon + curse modifiers |
-| **Ancestral Forge** | Adjacent tower families may unlock hybrid towers |
-| **Zervan Dial** | Hold rewind to restore enemies + region lights (tower HP/hero energy restore incomplete) |
-| **Khan phases** | Bosses trigger phase events every ~15% HP |
-| **Blood Oath** | Milestone waves: accept/decline risky oath for rewards |
-| **Ahriman Director** | Boss adapts resistances to your most-used tower family |
+| **Regional light / corruption** | Corruptors darken regions; towers weaken; at **light 0** towers **hijack** until cleansed or purified (SF) |
+| **Sacred Fire** | Earned from corruptor kills; spend to cleanse regions |
+| **Morale** | 0–100 momentum; applied at battle start; vow honor/break |
+| **Pardeh / Fate** | Every 5 cleared waves — pick 1 of 3 Fate cards (boon + curse) or alternate relic Pardeh |
+| **Hero's Vow** | Every 10 cleared waves — optional Accept/Decline challenge (never fails battle) |
+| **Tower Resonance** | Adjacent tower combos (Fire+String burn, Quake+Bind AoE slow) |
+| **Active scavenging** | Physical Star Iron drops; unbanked HUD; defeat clears 100% |
+| **Sacred Tether** | Tower panel button when hero in range — attack-speed buff |
+| **Labour Modes** | Per-map campaign story overlays (`scripts/battle/labours/`) |
+| **Equipment sets** | 7 themed 4-piece sets modify hero/tower stats in battle |
+| **Boss phases** | Per-boss controllers (Lion roar, Thirst drought, Azhdaha burrow, etc.) |
+
+**Deferred:** Zervan Dial rewind, Simorgh continue, Ancestral Forge hybrids, Ahriman Director.
 
 ### Battle HUD (mobile landscape)
 
 | Zone | Elements |
 |------|----------|
-| Top left | Lives, gold, wave, Sacred Fire, morale |
-| Top right | Pause, 1×/2×, settings, cleanse, brazier, qanat, rewind |
-| Bottom left | Hero portrait + skill |
-| Bottom center | Tower build cards |
-| Bottom right | Relics / context actions |
+| Top bar | Lives, gold, wave, Sacred Fire, morale, unbanked materials |
+| Pad tap | Build radial (empty) or manage radial (occupied) + range ring |
+| Hero | Portrait + skill; tap ground to move |
+| Actions | Cleanse, Naft, spell bar, early call, pause / speed |
+| Overlays | Pardeh, vow chip, gauntlet timer/ghost, co-op row |
 
 ### Resources in battle
 
@@ -250,6 +261,14 @@ All battle systems receive the same `BattleContext` reference:
 | `hunt_director` | Hunt finale / shard pacing |
 | `labour_mode` | Campaign-only story overlay (`LabourMode` node) |
 | `active_allies` | Barracks-summoned melee units |
+| `run_modifiers` | Fate cards, relic slots, run-scoped buffs |
+| `tower_resonance` | Adjacent tower combo buffs |
+| `loot_drops` | Material scavenging pickups |
+| `equipment_battle` | Equipped set rules in battle |
+| `naft_traps` | Rostam path oil + SF ignition |
+| `coop_players` | Brothers in Arms split economy |
+| `spell_controller` | Forge Token spells |
+| `companion_manager` / `rakhsh_mount` | Run companions + Rostam mount |
 
 UI listens via `BattleContextBridge` (Node wrapper with signals).
 
@@ -309,16 +328,25 @@ repo root/
   docs/                  Design specs (this file + others)
 ```
 
-### Autoloads
+### Autoloads (15)
 
 | Name | Role |
 |------|------|
-| `SaveSystem` | JSON save at `user://shahnamehtd_save.json` |
-| `SceneFlowController` | Async scene load + fade |
-| `ContentRegistry` | Loads bootstrap content + level catalog |
+| `SaveSystem` | JSON save v9 at `user://shahnamehtd_save.json` |
+| `ForgeService` | Star Iron forge, elite gate, soft difficulty curve |
+| `SceneFlowController` | Async scene load + fade + battle preload overlay |
+| `ContentRegistry` | Runtime catalog (`content_catalog.gd` + `resources/data/` merge) |
 | `SettingsService` | Audio/settings prefs |
 | `AudioManager` | SFX placeholder |
 | `CombatEvents` | Global combat signal bus |
+| `AnalyticsService` | In-memory session events |
+| `LocalizationService` | Stub (~7 English keys) |
+| `DailyTaleService` | Daily battle launch flag |
+| `EquipmentService` | 7 sets × 4 pieces, equip loadout |
+| `DailyMissionService` | 3/day from 10-mission pool |
+| `MissionProgressTracker` | Lifetime mission stats |
+| `StoreService` | Stub IAP — instant grant to save |
+| `CrashReporter` | Stub — warns + analytics event |
 
 ### Key scripts (start here)
 
@@ -363,25 +391,26 @@ Content IDs must stay stable once players have saves.
 
 ## 6. What works today
 
-See [engineering/project-status.md](engineering/project-status.md) for the live checklist.
+See [engineering/project-status.md](engineering/project-status.md) and [implementation-tracker.md](implementation-tracker.md) for the live checklist.
 
 | Area | Status |
 |------|--------|
-| Boot → Menu → World Map → Battle | ✅ Playable |
-| Core TD (waves, build, shoot, lives, win/loss) | ✅ |
-| 7 Khan levels on world map | ✅ |
-| Identity pillars (Fate, Morale, MapLight, Tether) | 🟡 HUD wired; polish needed |
-| Deep modules (Forge, Zervan, Hunt, Khan phases) | 🟡 Partial |
-| Roguelite node graph | 🟡 Minimal |
-| Final art / VFX / mobile export | ❌ Placeholders; export not device-tested |
+| Boot → Menu → World Map → Battle | ✅ All modes |
+| Core TD + signature systems | ✅ Corruption, hijack, SF, Pardeh, Morale, Tether, Resonance, Vow |
+| Full campaign (Tutorial + Labours 1–7 + Damavand) | ✅ Procedural waves + Labour modes |
+| Campaign Run, Horde, Hunt, Endless, Gauntlet, co-op, Throne | ✅ |
+| Meta: Forge, equipment, daily missions, relics, spells, stub store | ✅ |
+| Khan 1 production map art + fit-locked HUD | ✅ |
+| GUT tests + ContentValidator + CI | ✅ |
+| Production art beyond Khan 1 / platform IAP SDK | 🟡 Placeholders / stub |
 
 **Quick test**
 
-1. Open repo root in Godot 4.6
-2. Press **F5** (Boot)
-3. Main Menu → World Map → **Khan 1**
-4. Tap build spot → choose tower → **Start Wave**
-5. Clear waves → victory → return to map
+1. Open repo root in Godot 4.6 → **F5**
+2. Tutorial → World Map → **Labour 1**
+3. Tap build pad → build radial → **Start Wave**
+4. Exercise cleanse / hijack / Pardeh on campaign
+5. Try **Campaign Run**, **Horde**, or **Haft-Khan Gauntlet** (after unlocks)
 
 Headless checks:
 

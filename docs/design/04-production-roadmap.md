@@ -1,6 +1,6 @@
 # Design 04 — Development and Production Roadmap
 
-**Last updated:** 2026-06-04  
+**Last updated:** 2026-06-09  
 **Design canon** — Godot 4.6 mobile implementation plan.  
 **Implementation truth:** [engineering/project-status.md](../engineering/project-status.md) · [engineering/architecture.md](../engineering/architecture.md)  
 **Project root:** repository folder containing `project.godot`

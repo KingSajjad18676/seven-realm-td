@@ -1,6 +1,8 @@
 # Design 02 — Gameplay, Visual UX, and Replayability
 
-**Last updated:** 2026-06-04  
+**Last updated:** 2026-06-09  
+
+**Implemented today:** Player-facing subset in [product/main-gameplay.md](../product/main-gameplay.md). This doc remains the full UX design target.  
 **Design canon** — senior game-design specification.  
 **Implementation truth:** [engineering/implementation-tracker.md](../engineering/implementation-tracker.md) · [spec/gameplay.md](../spec/gameplay.md)  
 **Source:** `Shahnameh TD Gameplay Design.pdf` (extract: [\_source/design/02_extracted.txt](_source/design/02_extracted.txt))

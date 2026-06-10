@@ -1,9 +1,11 @@
 # Rostam 7 Labours: Shahname TD — Documentation
 
-**Last updated:** 2026-06-06  
+**Last updated:** 2026-06-09  
 **Repo:** Godot 4.6 at repository root (`project.godot`)
 
-**One-line pitch:** Active 2D tower-defense roguelite — build towers, move Rostam, cleanse corruption, survive procedural campaign **Labours**, unlock reward towers (Serpent Spire, Rostam Barracks).
+**One-line pitch:** Active 2D tower-defense roguelite — build towers, move Rostam, cleanse corruption, survive procedural **Labours** campaign, **Campaign Run** roguelite graph, Horde, co-op, **Haft-Khan Gauntlet**, equipment sets, and daily missions — unlock reward towers (Serpent Spire, Rostam Barracks).
+
+**Full game inventory (player-facing):** [product/main-gameplay.md](product/main-gameplay.md) · **All content IDs:** [spec/entities-and-gameplay.md](spec/entities-and-gameplay.md)
 
 Start with **[design/00-project-index.md](design/00-project-index.md)** for product identity and locked decisions.  
 For **what exists in the repo today**, read **[engineering/project-status.md](engineering/project-status.md)** first.
@@ -68,7 +70,8 @@ For **what exists in the repo today**, read **[engineering/project-status.md](en
 
 | Role | Path |
 |------|------|
-| Anyone new | `design/00` → `engineering/project-status` → `engineering/handoff` |
+| Anyone new | `design/00` → `engineering/project-status` → `product/main-gameplay` |
+| **What the game has today** | `product/main-gameplay` + `spec/entities-and-gameplay` + `engineering/implementation-tracker` |
 | Gameplay / design | `product/main-gameplay` → `design/02` → `spec/entities-and-gameplay` → `spec/gameplay` |
 | Programmer | `engineering/architecture` → `engineering/game-logic` → `design/04` |
 | Artist | `design/01` → `prompts/README` → `spec/entities-and-gameplay` → `art/pipeline` → `art/visual-vfx` |

@@ -1,13 +1,13 @@
 # Gameplay Specification
 
-**Last updated:** 2026-06-06  
+**Last updated:** 2026-06-09  
 **Design canon:** [design/02-gameplay-ux.md](../design/02-gameplay-ux.md) · [design/00-project-index.md](../design/00-project-index.md)  
 **Developer quick start:** [engineering/game-logic.md](../engineering/game-logic.md)  
-**What works today:** [engineering/implementation-tracker.md](../engineering/implementation-tracker.md)
+**What works today:** [engineering/implementation-tracker.md](../engineering/implementation-tracker.md) · **Built entities:** [entities-and-gameplay.md](entities-and-gameplay.md) §7 · **Modes/maps:** [main-gameplay.md](../product/main-gameplay.md)
 
-**Shipped (2026-06-06):** Campaign **Labour Modes** (`mode_lion` … `mode_zahhak`) layer story hazards on the core loop; **Serpent Spire** (twin venom + Hunger) and **Rostam Tahmtan Barracks** (ally blockers) unlock by mission or store IAP — see [game-logic.md](../engineering/game-logic.md) §9 and [entities-and-gameplay.md](entities-and-gameplay.md) §5–7.
+**Built (repo):** Full campaign (Labours 1–7 + Damavand), 10+ play modes, 8 towers, 22 enemies, Labour Modes, Pardeh/Fate, equipment, daily missions, Campaign Run, Gauntlet, co-op — see [main-gameplay.md](../product/main-gameplay.md).
 
-This document includes **advanced and post-launch** systems (rewind, tribute, premium stubs). **Khan 1 launch scope** is defined in design/02 §20 and [PRD.md](../product/prd.md) §5 — do not treat every section here as required for the first vertical slice.
+This document includes **advanced and post-launch** systems (rewind, tribute, premium stubs) that may not be coded yet. **Khan 1 production gate** is defined in design/02 §20 and [PRD.md](../product/prd.md) §5 — do not treat every section here as required for the first vertical slice.
 
 ## 1. Core Battle Loop
 
@@ -35,7 +35,7 @@ This document includes **advanced and post-launch** systems (rewind, tribute, pr
 | Elite forge | After level 30, 5 elite levels; large bonus at elite 5 |
 | Damavand | `level_08_damavand` launch blocked unless `ForgeService.can_enter_damavand()` (≥1 elite tower) |
 
-**Material mapping (Khan 1 slice):** Jackal → Falcon (Archer); Corruptor → Ember (Sacred Fire); Boar → Anvil (Heavy); Lion boss → Frost (Control).
+**Material mapping (Labour 1 baseline):** Jackal → Falcon (Archer); Corruptor → Ember (Sacred Fire); Boar → Anvil (Heavy); Lion boss → Frost (Control). Per-Labour enemies drop themed Star Iron — see [entities-and-gameplay.md](entities-and-gameplay.md) §13.
 
 **Not the same as:** Ancestral Forge (adjacent tower hybrids in battle).
 
