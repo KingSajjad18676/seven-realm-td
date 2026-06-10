@@ -11,6 +11,10 @@ func _init() -> void:
 	for err in validation_errors:
 		push_error("smoke_test: %s" % err)
 	ok = ok and validation_errors.is_empty()
+	var wave_errors := WaveSpawnValidator.validate(catalog)
+	for err in wave_errors:
+		push_error("smoke_test wave: %s" % err)
+	ok = ok and wave_errors.is_empty()
 	ok = ok and _catalog_has_tower(catalog, "tower_flame_archer")
 	ok = ok and _catalog_has_tower(catalog, "tower_rostam_barracks")
 	ok = ok and _campaign_levels_have_labour_modes(catalog)

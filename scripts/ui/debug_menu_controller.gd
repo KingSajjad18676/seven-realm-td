@@ -40,6 +40,7 @@ func _build_actions() -> void:
 	_register_action("Skip wave", _on_skip)
 	_register_action("Force victory", _on_win)
 	_register_action("Force defeat", _on_defeat)
+	_register_action("Validate wave spawns", _on_validate_waves)
 	_register_action("+100 gold", _on_gold)
 	_register_action("+5 Sacred Fire", _on_add_sf)
 	_register_action("Reset lives", _on_reset_lives)
@@ -88,6 +89,14 @@ func _on_defeat() -> void:
 	var ctx := _find_battle()
 	if ctx and ctx.state_controller:
 		ctx.state_controller.trigger_defeat("debug")
+
+
+func _on_validate_waves() -> void:
+	var passed := WaveSpawnValidator.validate_and_report()
+	var ctx := _find_battle()
+	if ctx and ctx.bridge:
+		var msg := "Wave spawn validation PASS" if passed else "Wave spawn validation FAIL — see console"
+		ctx.bridge.alert_message.emit(msg, 120 if passed else 180)
 
 
 func _on_gold() -> void:

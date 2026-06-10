@@ -1,6 +1,6 @@
 # Project Status (Godot)
 
-**Last updated:** 2026-06-11 (wave spawn fixes + hero XP leveling + skill loadout)  
+**Last updated:** 2026-06-11 (wave spawn audit + WaveSpawnValidator + ContentValidator fix)  
 **Milestones:** [design/04-production-roadmap.md](../design/04-production-roadmap.md) · **Identity:** [design/00-project-index.md](../design/00-project-index.md)
 
 ---
@@ -44,7 +44,7 @@
 | Horde mode                     | ✅ 15 waves per Khan; act progression in horde/endless slices; clear all 8 unlocks Serpent Spire tower                                                                                                     |
 | Forge Tokens + Spells          | ✅ Earn on victory; buy in Kaveh's Forge; cast in battle HUD                                                                                                      |
 | Paid power store (stub IAP)    | ✅ Tower, spells, token packs via StoreService                                                                                                                      |
-| Automated tests                | ✅ GUT v9.6.0 (`tests/`), ContentValidator, SaveMigration, GitHub Actions CI                                                                                      |
+| Automated tests                | ✅ GUT v9.6.0 (`tests/`), ContentValidator, **WaveSpawnValidator**, SaveMigration, GitHub Actions CI                                                                                      |
 | Khan 1 map art                 | ✅ `art/maps/level_01.jpg` + geometry override in `resources/data/levels/level_01.tres`; battle hides green Terrain fallback when map sprite loads                |
 | **Hero action controls**       | ✅ Virtual joystick (left); Attack / Heavy / Dodge / Skill (right); manual combat — no auto-attack; enemy telegraphed melee when lane-blocked |
 | **In-battle hero leveling**    | ✅ `HeroLevelService` — XP per kill, Lv 1–10, +8% dmg / +10% HP per level; HUD level + XP bar |
@@ -109,6 +109,7 @@ In the editor: **Project → Tools → GUT** (bottom panel) → Run All.
 - **Reward towers:** Barracks (7 seals / IAP); Serpent Spire twin venom + Hunger (8 horde clears / IAP); neither uses Star Iron forge materials
 - **10-wave master block campaign waves:** `CampaignWaveTemplates` — Bait/Trap/Hijack/Push roles per 10-wave block; act progression per Labour; Pardeh every 5 cleared waves; Hero's Vow every 10 cleared waves
 - **Forge progression gate:** `ForgeService.expected_forge_level_for()` drives Labour 3+ / Damavand / Horde HP+count scaling; replay earlier Labours for Star Iron; no hard map locks
+- **Wave spawn audit:** [WAVE_SPAWN_AUDIT.md](../WAVE_SPAWN_AUDIT.md) — mode × map matrix; `WaveSpawnValidator` in smoke_test + debug menu (F3)
 
 ## Known deferrals
 

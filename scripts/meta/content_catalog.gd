@@ -902,10 +902,15 @@ static func _default_objective_for(level_id: String) -> String:
 
 
 static func wave_count_for(level_id: String) -> int:
-	var idx := khan_index(level_id)
-	if idx <= 0:
-		return 5
-	return 20 + idx * 10
+	match level_id:
+		"level_00_tutorial":
+			return 2
+		THRONE_ARENA_LEVEL_ID:
+			return 0
+		"level_01", "level_02", "level_03", "level_04", "level_05", "level_06", "level_07", "level_08_damavand":
+			return 20 + khan_index(level_id) * 10
+		_:
+			return 0
 
 
 ## Extra multipliers applied on the campaign final wave boss spawn (after Khan difficulty).

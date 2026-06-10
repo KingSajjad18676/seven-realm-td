@@ -235,9 +235,14 @@ sequenceDiagram
 
 | Mode | Trigger | Behavior |
 |------|---------|----------|
-| **Campaign** | Default `LevelData.waves[]` | Fixed wave list; victory when all cleared |
-| **Endless** | `BattleLaunchData.is_endless_mode` | `EndlessWaveGenerator` loops until defeat |
-| **Hunt** | `BattleLaunchData.is_hunt_mode` | `HuntWaveGenerator` milestones; finale at wave 50 + seals/anchors |
+| **Campaign** | Default `LevelData.waves[]` | Fixed wave list (2 tutorial / 30–100 campaign); victory when all cleared |
+| **Horde** | `BattleLaunchData.is_horde_mode` | 15 procedural slices via `CampaignWaveTemplates.generate_horde_slice()` |
+| **Endless** | `BattleLaunchData.is_endless_mode` | Infinite horde slices + scaling after wave 15; defeat only |
+| **Throne** | `BattleLaunchData.is_throne_defense_mode` | 15 radial `generate_throne_slice()` waves toward center |
+| **Brothers / Run skirmish** | `enable_skirmish_mode(n)` | Horde slice loop (20 / 15 waves) |
+| **Gauntlet** | `BattleLaunchData.is_gauntlet_mode` | Full authored waves per Labour; no Pardeh/Vow |
+| **Hunt** | `BattleLaunchData.is_hunt_mode` | Full Damavand authored waves + `HuntController` binding shards |
+| **Daily Tale** | `BattleLaunchData.is_daily_tale` | Labour 1 authored waves; daily completion flag |
 
 ### `BattleContext` — service map
 

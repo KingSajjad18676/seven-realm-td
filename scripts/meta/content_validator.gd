@@ -7,7 +7,6 @@ const MIN_FATE_CARDS := 8
 const MIN_TOWERS := 6
 const MIN_SPELLS := 6
 const MIN_HEROES := 2
-const WAVES_PER_LEVEL := 5
 
 
 static func validate(catalog: BootstrapContent) -> Array[String]:
@@ -84,6 +83,16 @@ static func _check_unique_forge_materials(catalog: BootstrapContent) -> Array[St
 	return errors
 
 
+static func _expected_authored_wave_count(level_id: String) -> int:
+	match level_id:
+		"level_00_tutorial":
+			return 2
+		ContentCatalog.THRONE_ARENA_LEVEL_ID:
+			return 0
+		_:
+			return ContentCatalog.wave_count_for(level_id)
+
+
 static func _check_level_waves(catalog: BootstrapContent) -> Array[String]:
 	var errors: Array[String] = []
 	var enemy_ids := {}
@@ -93,10 +102,11 @@ static func _check_level_waves(catalog: BootstrapContent) -> Array[String]:
 	for level in catalog.levels:
 		if not (level is LevelData):
 			continue
-		if level.waves.size() != WAVES_PER_LEVEL:
-			errors.append("level %s has %d waves, expected %d" % [
-				level.level_id, level.waves.size(), WAVES_PER_LEVEL
-			])
+		var expected := _expected_authored_wave_count(level.level_id)
+		if level.waves.size() != expected:
+			errors.append(
+				"level %s has %d waves, expected %d" % [level.level_id, level.waves.size(), expected]
+			)
 		for wave in level.waves:
 			for group in wave.spawn_groups:
 				var eid := str(group.get("enemy_id", ""))
@@ -110,22 +120,58 @@ static func _check_spot_levels(catalog: BootstrapContent) -> Array[String]:
 	var level_01 := _find_level(catalog.levels, "level_01")
 	var level_02 := _find_level(catalog.levels, "level_02")
 	var level_08 := _find_level(catalog.levels, "level_08_damavand")
+	var tutorial := _find_level(catalog.levels, "level_00_tutorial")
+	var throne := _find_level(catalog.levels, ContentCatalog.THRONE_ARENA_LEVEL_ID)
+
+	if tutorial == null:
+		errors.append("missing level_00_tutorial")
+	elif tutorial.waves.size() != 2:
+		errors.append("tutorial should have exactly 2 waves")
+
 	if level_01 == null:
 		errors.append("missing level_01")
-	elif level_01.waves.size() != WAVES_PER_LEVEL:
+	elif level_01.waves.size() != ContentCatalog.wave_count_for("level_01"):
 		errors.append("level_01 wave count mismatch")
+
 	if level_02 == null:
 		errors.append("missing level_02")
-	elif level_02.waves.size() < 2 or level_02.waves[1].spawn_groups.size() < 2:
-		errors.append("level_02 wave 2 should have multiple spawn groups")
+	elif level_02.waves.size() < 5:
+		errors.append("level_02 should have at least 5 waves")
+	elif level_02.waves[4].spawn_groups.size() < 2:
+		errors.append("level_02 wave 5 (trap) should have multiple spawn groups")
+
 	if level_08 == null:
 		errors.append("missing level_08_damavand")
 	elif level_08.waves.is_empty():
 		errors.append("level_08_damavand has no waves")
 	elif level_08.waves[0].spawn_groups.is_empty():
 		errors.append("level_08_damavand wave 1 has no spawn groups")
-	elif level_08.waves[0].spawn_groups[0].get("enemy_id") != "enemy_zahhak_serpent_guard":
-		errors.append("level_08_damavand wave 1 should start with enemy_zahhak_serpent_guard")
+	elif level_08.waves[0].spawn_groups[0].get("enemy_id") != "enemy_jackal":
+		errors.append("level_08_damavand wave 1 should start with gauntlet bait (enemy_jackal)")
+	else:
+		var final := level_08.waves[level_08.waves.size() - 1]
+		if not final.is_boss_wave:
+			errors.append("level_08_damavand final wave should be boss wave")
+		elif final.spawn_groups[0].get("enemy_id") != "enemy_zahhak":
+			errors.append("level_08_damavand final boss should be enemy_zahhak")
+		var has_chainbreaker := false
+		for wave in level_08.waves:
+			for group in wave.spawn_groups:
+				if str(group.get("enemy_id", "")) == "enemy_chainbreaker_div":
+					has_chainbreaker = true
+					break
+			if has_chainbreaker:
+				break
+		if not has_chainbreaker:
+			errors.append("level_08_damavand should include enemy_chainbreaker_div waves")
+
+	if throne == null:
+		errors.append("missing level_throne_arena")
+	elif not throne.waves.is_empty():
+		errors.append("level_throne_arena should have 0 authored waves (procedural throne slices)")
+	elif throne.path_routes.size() < ContentCatalog.THRONE_SPAWN_COUNT:
+		errors.append("level_throne_arena needs %d radial routes" % ContentCatalog.THRONE_SPAWN_COUNT)
+
 	return errors
 
 

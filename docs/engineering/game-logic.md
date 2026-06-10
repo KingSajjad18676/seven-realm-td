@@ -151,11 +151,14 @@ sequenceDiagram
 
 | Mode | When | Behavior |
 |------|------|----------|
-| **Campaign** | `is_campaign_mode()` | Procedural waves via `CampaignWaveTemplates` — 10-wave master blocks; 30–100 waves per map |
-| **Endless** | `is_endless_mode` | `EndlessWaveGenerator` loops until defeat |
-| **Hunt** | `is_hunt_mode` | `HuntWaveGenerator` + `HuntController` binding sequence |
-| **Horde** | `is_horde_mode` | 15 fixed waves per map |
-| **Gauntlet** | `is_gauntlet_mode` | 7-boss chain; no Pardeh/Vow |
+| **Campaign** | `is_campaign_mode()` | Authored waves via `CampaignWaveTemplates.generate()` — 2 tutorial / 30–100 per map |
+| **Horde** | `is_horde_mode` | 15 fixed procedural slices per selected map |
+| **Endless** | `is_endless_mode` | Infinite horde slices + post-wave-15 scaling; defeat only |
+| **Throne** | `is_throne_defense_mode` | 15 radial throne slices toward center gate |
+| **Brothers / Run skirmish** | `enable_skirmish_mode(n)` | Horde slice loop (20 / 15 waves) |
+| **Gauntlet** | `is_gauntlet_mode` | 7-Labour boss chain; no Pardeh/Vow |
+| **Hunt** | `is_hunt_mode` | Full Damavand waves + `HuntController` binding shards |
+| **Daily Tale** | `is_daily_tale` | Labour 1 layout; completion tracked by date seed |
 
 **Campaign wave cadence:**
 - **Pardeh Break** every **5 cleared waves** (`_should_offer_pardeh()`); waits for enemy clear before offering.
