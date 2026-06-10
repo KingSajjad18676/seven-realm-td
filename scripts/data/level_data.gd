@@ -135,6 +135,12 @@ func resolve_enemy_route(spawn_group: Dictionary) -> Dictionary:
 	var spawn_id := str(spawn_group.get("spawn_id", ""))
 	var spawn_info := get_spawn(spawn_id)
 	if route_id != "":
-		spawn_info["route_id"] = route_id
-		spawn_info["path"] = get_route(route_id)
+		var route_pts := get_route(route_id)
+		if route_pts.size() > 0:
+			spawn_info["route_id"] = route_id
+			spawn_info["path"] = route_pts
+			spawn_info["position"] = route_pts[0]
+		else:
+			spawn_info["route_id"] = spawn_info.get("route_id", get_primary_route_id())
+			spawn_info["path"] = get_route(str(spawn_info["route_id"]))
 	return spawn_info

@@ -1,11 +1,11 @@
 extends Control
 
-## Equipment loadout screen — 4 slots + owned collection.
-
+## Equipment loadout screen — 4 slots + owned collection + hero skill picker.
 
 var _panel: Panel = null
 var _slot_labels: Dictionary = {}
 var _owned_list: ItemList = null
+var _skill_list: ItemList = null
 var _set_info: Label = null
 
 
@@ -40,7 +40,7 @@ func _build_ui(parent: Control) -> void:
 	_panel.add_child(root)
 
 	var title := Label.new()
-	title.text = "Haft-Khan Equipment"
+	title.text = "Haft-Khan Loadout"
 	root.add_child(title)
 
 	var slots := HBoxContainer.new()
@@ -55,6 +55,15 @@ func _build_ui(parent: Control) -> void:
 		col.add_child(lbl)
 		_slot_labels[slot_key] = lbl
 		slots.add_child(col)
+
+	var skill_title := Label.new()
+	skill_title.text = "Hero Skill (before battle)"
+	root.add_child(skill_title)
+
+	_skill_list = ItemList.new()
+	_skill_list.custom_minimum_size = Vector2(0, 96)
+	_skill_list.item_selected.connect(_on_skill_selected)
+	root.add_child(_skill_list)
 
 	_set_info = Label.new()
 	_set_info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -80,6 +89,8 @@ func _refresh() -> void:
 		var piece := ContentRegistry.get_equipment_piece(pid) if pid != "" else null
 		_slot_labels[slot_key].text = piece.display_name if piece else "(empty)"
 
+	_refresh_skills()
+
 	_owned_list.clear()
 	for pid in EquipmentService.get_owned_piece_ids():
 		var piece := ContentRegistry.get_equipment_piece(pid)
@@ -100,6 +111,41 @@ func _refresh() -> void:
 		if count >= 4:
 			lines.append("  4pc: %s" % set_data.four_piece_description)
 	_set_info.text = "\n".join(lines)
+
+
+func _refresh_skills() -> void:
+	if _skill_list == null or SaveSystem == null:
+		return
+	_skill_list.clear()
+	var selected := SaveSystem.get_hero_skill_selected()
+	for entry in ContentCatalog.get_hero_skill_catalog():
+		var skill_id := str(entry.get("skill_id", ""))
+		var display_name := str(entry.get("display_name", skill_id))
+		var unlocked := SaveSystem.is_hero_skill_unlocked(skill_id)
+		var suffix := ""
+		if not unlocked:
+			var unlock_level := str(entry.get("unlock_level_id", ""))
+			suffix = " (locked — clear %s)" % unlock_level if unlock_level != "" else " (locked)"
+		var marker := " *" if skill_id == selected else ""
+		_skill_list.add_item("%s%s%s" % [display_name, suffix, marker])
+		var idx := _skill_list.item_count - 1
+		if not unlocked:
+			_skill_list.set_item_disabled(idx, true)
+		elif skill_id == selected:
+			_skill_list.select(idx)
+
+
+func _on_skill_selected(index: int) -> void:
+	if SaveSystem == null or _skill_list == null or index < 0:
+		return
+	var catalog := ContentCatalog.get_hero_skill_catalog()
+	if index >= catalog.size():
+		return
+	var skill_id := str(catalog[index].get("skill_id", ""))
+	if not SaveSystem.is_hero_skill_unlocked(skill_id):
+		return
+	SaveSystem.set_hero_skill_selected(skill_id)
+	_refresh_skills()
 
 
 func _on_owned_selected(index: int) -> void:

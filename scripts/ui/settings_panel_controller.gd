@@ -66,6 +66,10 @@ func _save(_v: Variant = null) -> void:
 		SaveSystem.set_accessibility("high_contrast", _contrast.button_pressed)
 	if _shake:
 		SaveSystem.set_accessibility("reduced_shake", _shake.button_pressed)
+	if SettingsService:
+		SettingsService.load_from_save()
+	if AudioManager and AudioManager.has_method("apply_settings_volumes"):
+		AudioManager.apply_settings_volumes()
 
 
 func _on_restore() -> void:

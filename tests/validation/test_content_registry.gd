@@ -13,10 +13,10 @@ func test_get_enemy_lion_boss() -> void:
 	assert_true(enemy.is_boss)
 
 
-func test_get_level_01_has_five_waves() -> void:
+func test_get_level_01_has_campaign_waves() -> void:
 	var level := ContentRegistry.get_level("level_01")
 	assert_not_null(level)
-	assert_eq(level.waves.size(), 5)
+	assert_eq(level.waves.size(), ContentCatalog.wave_count_for("level_01"))
 
 
 func test_get_level_01_merges_map_override() -> void:

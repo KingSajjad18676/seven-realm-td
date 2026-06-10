@@ -1,9 +1,9 @@
 # Rostam 7 Labours: Shahname TD — Documentation
 
-**Last updated:** 2026-06-09  
+**Last updated:** 2026-06-11  
 **Repo:** Godot 4.6 at repository root (`project.godot`)
 
-**One-line pitch:** Active 2D tower-defense roguelite — build towers, move Rostam, cleanse corruption, survive procedural **Labours** campaign, **Campaign Run** roguelite graph, Horde, co-op, **Haft-Khan Gauntlet**, equipment sets, and daily missions — unlock reward towers (Serpent Spire, Rostam Barracks).
+**One-line pitch:** Active 2D tower-defense roguelite — build towers, **virtual-stick hero combat** (Attack / Heavy / Dodge / Skill), cleanse corruption, survive procedural **Labours** campaign, **Campaign Run** roguelite graph, Horde, co-op, **Haft-Khan Gauntlet**, equipment sets, and daily missions — unlock reward towers (Serpent Spire, Rostam Barracks).
 
 **Full game inventory (player-facing):** [product/main-gameplay.md](product/main-gameplay.md) · **All content IDs:** [spec/entities-and-gameplay.md](spec/entities-and-gameplay.md)
 

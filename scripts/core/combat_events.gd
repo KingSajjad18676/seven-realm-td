@@ -17,6 +17,8 @@ signal fate_card_selected(card_id: String)
 signal cleanse_used(region_id: String)
 signal hero_moved
 signal hero_skill_used(skill_id: String)
+signal hero_melee_used(action_id: String)
+signal hero_dodged
 signal hero_damaged(amount: float)
 signal hero_melee_kill(enemy_id: String)
 signal tower_damage_dealt(tower_id: String, amount: float, enemy_id: String)

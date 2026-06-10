@@ -1,6 +1,6 @@
 # Design 02 — Gameplay, Visual UX, and Replayability
 
-**Last updated:** 2026-06-09  
+**Last updated:** 2026-06-11  
 
 **Implemented today:** Player-facing subset in [product/main-gameplay.md](../product/main-gameplay.md). This doc remains the full UX design target.  
 **Design canon** — senior game-design specification.  
@@ -71,6 +71,17 @@ read the next threat
 ```
 
 Meaningful decision every **15–30 seconds** without overwhelm.
+
+### Hero action controls (mobile)
+
+The hero is an **action character**, not a passive leak-plug:
+
+- **Left virtual stick** — move (joystick-only; battlefield taps are for towers/pads/Naft placement only).
+- **Attack / Heavy / Dodge / Skill** — bottom-right cluster; **no auto-attack**.
+- **Dodge** grants brief invulnerability — enemies telegraph melee swings when blocked on the path.
+- **Sacred Tether** — manage radial on a placed tower when Rostam is in range.
+
+Co-op uses **focused hero** control (portrait row swaps who receives stick + buttons).
 
 ---
 

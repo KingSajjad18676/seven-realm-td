@@ -1,6 +1,6 @@
 # Technical Design Document
 
-**Last updated:** 2026-06-09  
+**Last updated:** 2026-06-11  
 **Design canon:** [design/04-production-roadmap.md](../design/04-production-roadmap.md)  
 **Logic overview:** [engineering/game-logic.md](engineering/game-logic.md) · **Implementation truth:** [engineering/implementation-tracker.md](engineering/implementation-tracker.md) · [engineering/project-status.md](engineering/project-status.md)
 
@@ -206,19 +206,17 @@ Pool:
 
 ## 7. Input
 
-Mobile input:
+Mobile input (implemented):
 
-- tap build spot → build / upgrade / sell UI
-- tap max-level tower during tribute → sacrifice
-- **drag hero → tower** → Sacred Tether (`HeroSacredTetherDrag`; separate from tap)
-- drag hero → Zahhak → offensive tether
-- tap ground → hero move (`HeroManager.HandleGroundTap`)
-- hold rewind UI → `ZervanDialController` (`RewindButtonHandler` + `BattleOverlayUI` pulse)
-- Khan organ drop → drag `OrganMutationDragUI` onto tower → `OrganMutationManager`
-- rhyme / couplet / tribute / director banners → `BattleOverlayUI`
-- tap cleanse / brazier → Sacred Fire spend on selected spot
-- tap Qanat (when hero at well) → select destination node → SF teleport
-- tap ability → hero skill (Rhyme Window synergy)
+- **virtual stick** → hero move (`VirtualJoystick` → `HeroManager`)
+- **Attack / Heavy / Dodge / Skill** → `HeroActionHud` → `HeroController` (manual combat, no auto-attack)
+- tap build spot → build radial (empty) or manage radial (occupied) + range ring
+- manage radial → **Tether** when hero in range
+- tap path when Naft armed → `NaftTrapController.try_place_at()`
+- tap cleanse → Sacred Fire spend on selected region
+- co-op → focused hero receives stick + buttons (`CoopPlayerManager.focused_player_index`)
+
+**Deferred (design target):** drag hero → Zahhak offensive tether, hold rewind (`ZervanDialController`), Rhyme Window synergy, organ mutation drag, sacrifice tribute tap.
 
 Use `Physics2D.OverlapCircleNonAlloc` for forge adjacency; no 3D physics.
 

@@ -21,6 +21,7 @@ var loot_drops: LootDropManager = null
 var companion_manager: CompanionManager = null
 var rakhsh_mount: RakhshMountController = null
 var equipment_battle: EquipmentBattleService = null
+var hero_level: HeroLevelService = null
 var naft_traps: NaftTrapController = null
 var labour_mode: LabourMode = null
 var coop_players: CoopPlayerManager = null

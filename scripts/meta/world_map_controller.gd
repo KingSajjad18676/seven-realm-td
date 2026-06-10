@@ -751,6 +751,19 @@ func _setup_meta_panels() -> void:
 			_daily_missions_ui.open(self)
 	)
 	add_child(missions_btn)
+	var settings_scene := load("res://scenes/ui/settings_panel.tscn") as PackedScene
+	if settings_scene:
+		var settings_btn := Button.new()
+		settings_btn.text = "Settings"
+		settings_btn.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+		settings_btn.position = Vector2(420, 12)
+		var settings_panel := settings_scene.instantiate() as Control
+		settings_panel.visible = false
+		add_child(settings_panel)
+		settings_btn.pressed.connect(func() -> void:
+			settings_panel.visible = not settings_panel.visible
+		)
+		add_child(settings_btn)
 
 
 func _on_forge() -> void:

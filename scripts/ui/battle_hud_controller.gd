@@ -58,13 +58,22 @@ var _coop_skill_buttons: Array[Button] = []
 var _coop_portrait_buttons: Array[Button] = []
 var _gauntlet_timer: GauntletTimerController = null
 var _gauntlet_handling: bool = false
+var _hero_action_hud: HeroActionHud = null
+var _objective_chip: Label = null
+var _boss_hp_panel: PanelContainer = null
+var _boss_hp_bar: ProgressBar = null
+var _boss_name_label: Label = null
+var _pause_restart_btn: Button = null
+var _pause_settings_btn: Button = null
+var _settings_panel: Control = null
+var _settings_scene: PackedScene = preload("res://scenes/ui/settings_panel.tscn")
 func initialize(ctx: BattleContext, fate_draft: FateDraftController, vow_offer: VowOfferController = null) -> void:
 	context = ctx
 	_fate_draft = fate_draft
 	_vow_offer = vow_offer
 	_tower_spot_panel = get_node_or_null("%TowerSpotPanel") as TowerSpotPanelController
 	if _tower_spot_panel:
-		_tower_spot_panel.initialize(ctx)
+		_tower_spot_panel.visible = false
 	if ctx.tower_manager:
 		ctx.tower_manager.tower_opened.connect(_on_tower_opened)
 		ctx.tower_manager.build_radial_requested.connect(_on_build_radial_requested)
@@ -104,6 +113,11 @@ func initialize(ctx: BattleContext, fate_draft: FateDraftController, vow_offer: 
 	if _pardeh_panel:
 		_pardeh_panel.visible = false
 	_setup_vow_label()
+	_setup_hero_action_hud()
+	_setup_objective_chip()
+	_setup_boss_hp_bar()
+	_setup_pause_extras()
+	_apply_accessibility_scale()
 	if _replay_btn:
 		_replay_btn.visible = false
 	if _map_btn:
@@ -152,6 +166,13 @@ func setup_brothers_hud() -> void:
 		_coop_row.add_child(col)
 	if _skill_btn:
 		_skill_btn.visible = false
+	if _naft_btn:
+		_naft_btn.visible = false
+	if _forge_btn:
+		_forge_btn.visible = false
+	var bottom := get_node_or_null("BottomBar") as Control
+	if bottom:
+		bottom.visible = false
 	if _sf_label:
 		_sf_label.visible = false
 	if _materials_label:
@@ -272,15 +293,19 @@ func _on_gauntlet_rush() -> void:
 
 
 func get_highlight_target(key: String) -> Control:
+	if _hero_action_hud:
+		var action_target := _hero_action_hud.get_highlight_control(key)
+		if action_target:
+			return action_target
 	match key:
 		"build_pads":
 			return _start_btn
 		"start_wave":
 			return _start_btn
 		"skill":
-			return _skill_btn
+			return _skill_btn if _skill_btn and _skill_btn.visible else null
 		"naft":
-			return _naft_btn
+			return _naft_btn if _naft_btn and _naft_btn.visible else null
 		"cleanse":
 			return _cleanse_btn
 		"gold":
@@ -352,6 +377,10 @@ func _on_spell_pressed(spell_id: String) -> void:
 
 func _process(_delta: float) -> void:
 	_refresh_naft_button()
+	if _hero_action_hud:
+		_hero_action_hud.refresh_action_buttons()
+		_hero_action_hud.refresh_hero_chip()
+	_refresh_boss_hp()
 	if context == null or context.spell_controller == null or _spell_buttons.is_empty():
 		return
 	for i in _spell_buttons.size():
@@ -441,8 +470,8 @@ func apply_tutorial_gating(allowed: PackedStringArray) -> void:
 	_set_control_enabled(_pause_btn, allow.get("pause", false) or allow.get("pause_speed", false))
 	_set_control_enabled(_speed_btn, allow.get("speed", false) or allow.get("pause_speed", false))
 	_set_control_enabled(_cleanse_btn, allow.get("cleanse", false))
-	_set_control_enabled(_skill_btn, allow.get("skill", false))
-	_set_control_enabled(_naft_btn, allow.get("skill", false))
+	if _hero_action_hud:
+		_hero_action_hud.apply_tutorial_gating(allow)
 func clear_tutorial_gating() -> void:
 	_tutorial_gating = false
 	_last_tutorial_allowed = PackedStringArray()
@@ -450,9 +479,157 @@ func clear_tutorial_gating() -> void:
 	_set_control_enabled(_pause_btn, true)
 	_set_control_enabled(_speed_btn, true)
 	_set_control_enabled(_cleanse_btn, true)
-	_set_control_enabled(_skill_btn, true)
-	if _naft_btn and _naft_has_hero_skill():
-		_set_control_enabled(_naft_btn, true)
+	if _hero_action_hud:
+		_hero_action_hud.clear_tutorial_gating()
+
+
+func get_move_vector() -> Vector2:
+	if _hero_action_hud:
+		return _hero_action_hud.get_move_vector()
+	return Vector2.ZERO
+
+
+func _setup_hero_action_hud() -> void:
+	if _hero_action_hud != null or context == null:
+		return
+	_hero_action_hud = HeroActionHud.new()
+	_hero_action_hud.name = "HeroActionHud"
+	add_child(_hero_action_hud)
+	_hero_action_hud.setup(context)
+	_hero_action_hud.attack_pressed.connect(_on_attack)
+	_hero_action_hud.heavy_pressed.connect(_on_heavy)
+	_hero_action_hud.dodge_pressed.connect(_on_dodge)
+	_hero_action_hud.skill_pressed.connect(_on_skill)
+	_hero_action_hud.naft_pressed.connect(_on_naft)
+	if _spell_row and _spell_row.get_parent():
+		_spell_row.get_parent().remove_child(_spell_row)
+		var cluster := _hero_action_hud.get_node_or_null("ActionCluster") as VBoxContainer
+		if cluster:
+			cluster.add_child(_spell_row)
+			cluster.move_child(_spell_row, 0)
+
+
+func _setup_objective_chip() -> void:
+	if _objective_chip != null or context == null:
+		return
+	_objective_chip = Label.new()
+	_objective_chip.name = "ObjectiveChip"
+	_objective_chip.add_theme_font_size_override("font_size", 11)
+	_objective_chip.add_theme_color_override("font_color", Color(0.85, 0.92, 1.0))
+	var top := get_node_or_null("TopBarPanel/TopBar") as HBoxContainer
+	if top:
+		top.add_child(_objective_chip)
+	if context.objectives and context.objectives.active_objective:
+		_objective_chip.text = "Goal: %s" % context.objectives.active_objective.title
+
+
+func _setup_boss_hp_bar() -> void:
+	if _boss_hp_panel != null:
+		return
+	_boss_hp_panel = PanelContainer.new()
+	_boss_hp_panel.name = "BossHpPanel"
+	_boss_hp_panel.visible = false
+	_boss_hp_panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+	_boss_hp_panel.offset_top = 52.0
+	_boss_hp_panel.offset_bottom = 82.0
+	_boss_hp_panel.offset_left = 280.0
+	_boss_hp_panel.offset_right = -280.0
+	add_child(_boss_hp_panel)
+	var box := VBoxContainer.new()
+	_boss_hp_panel.add_child(box)
+	_boss_name_label = Label.new()
+	_boss_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_boss_name_label.add_theme_font_size_override("font_size", 12)
+	box.add_child(_boss_name_label)
+	_boss_hp_bar = ProgressBar.new()
+	_boss_hp_bar.custom_minimum_size = Vector2(400, 16)
+	_boss_hp_bar.show_percentage = false
+	box.add_child(_boss_hp_bar)
+
+
+func _setup_pause_extras() -> void:
+	var row := _pause_panel.get_node_or_null("MarginContainer/VBoxContainer/ButtonRow") as HBoxContainer
+	if row == null:
+		return
+	_pause_restart_btn = Button.new()
+	_pause_restart_btn.text = "Restart"
+	_pause_restart_btn.custom_minimum_size = Vector2(120, 40)
+	_pause_restart_btn.pressed.connect(_on_pause_restart)
+	row.add_child(_pause_restart_btn)
+	_pause_settings_btn = Button.new()
+	_pause_settings_btn.text = "Settings"
+	_pause_settings_btn.custom_minimum_size = Vector2(120, 40)
+	_pause_settings_btn.pressed.connect(_on_pause_settings)
+	row.add_child(_pause_settings_btn)
+
+
+func _apply_accessibility_scale() -> void:
+	if SettingsService == null:
+		return
+	var ui_scale := clampf(float(SettingsService.ui_scale), 0.8, 1.4)
+	scale = Vector2(ui_scale, ui_scale)
+
+
+func _get_controlled_hero() -> HeroController:
+	if context == null or context.hero_manager == null:
+		return null
+	return context.hero_manager.get_controlled_hero()
+
+
+func _on_attack() -> void:
+	var hero := _get_controlled_hero()
+	if hero:
+		hero.attack()
+
+
+func _on_heavy() -> void:
+	var hero := _get_controlled_hero()
+	if hero:
+		hero.heavy_attack()
+
+
+func _on_dodge() -> void:
+	var hero := _get_controlled_hero()
+	if hero:
+		hero.dodge()
+
+
+func _on_pause_restart() -> void:
+	_hide_pause_modal()
+	if context and context.state_controller:
+		context.state_controller.resume_battle()
+	var launch := _get_current_launch()
+	if launch:
+		SceneFlowController.go_to_battle(launch.duplicate_launch())
+
+
+func _on_pause_settings() -> void:
+	if _settings_panel == null and _settings_scene:
+		_settings_panel = _settings_scene.instantiate() as Control
+		if _settings_panel:
+			add_child(_settings_panel)
+			_settings_panel.visible = false
+	if _settings_panel:
+		_settings_panel.visible = not _settings_panel.visible
+
+
+func _refresh_boss_hp() -> void:
+	if _boss_hp_panel == null or context == null:
+		return
+	var boss: EnemyController = null
+	for e in context.active_enemies:
+		if e is EnemyController and e.data and e.data.is_boss and e.current_hp > 0.0:
+			boss = e
+			break
+	if boss == null:
+		_boss_hp_panel.visible = false
+		return
+	_boss_hp_panel.visible = true
+	if _boss_name_label and boss.data:
+		_boss_name_label.text = boss.data.display_name
+	if _boss_hp_bar:
+		_boss_hp_bar.max_value = boss.get_effective_max_hp()
+		_boss_hp_bar.value = boss.current_hp
 func _set_control_enabled(control: Control, enabled: bool) -> void:
 	if control == null:
 		return
@@ -631,8 +808,9 @@ func _on_cleanse() -> void:
 	if context and context.map_light:
 		context.map_light.try_cleanse_selected()
 func _on_skill() -> void:
-	if context and context.hero_manager and context.hero_manager.hero:
-		context.hero_manager.hero.use_skill()
+	var hero := _get_controlled_hero()
+	if hero:
+		hero.use_skill()
 
 
 func _on_replay() -> void:
@@ -886,6 +1064,7 @@ func _on_results(victory: bool, reason: String) -> void:
 	var is_tutorial := context and context.level_data and context.level_data.is_tutorial
 	if _results_title_label:
 		_results_title_label.text = "Victory!" if victory else "Defeat"
+	AudioManager.play_sfx("victory" if victory else "defeat")
 	if _results_reason_label:
 		_results_reason_label.text = BattleResultsFormatter.format_reason(reason)
 	if _results_rewards_label:

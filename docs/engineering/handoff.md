@@ -1,6 +1,6 @@
 # Engineering Handoff
 
-**Last updated:** 2026-06-09  
+**Last updated:** 2026-06-11  
 **Audience:** New designers, programmers, artists, or collaborators  
 **Purpose:** What the game is, how it plays, and **where Godot code lives**.
 
@@ -98,7 +98,7 @@ This is the heart of the game. Every mode uses the same battle scene with differ
 2. **Build** — Tap empty **build pad** → **build radial** (afford-gated) → spend **gold**.
 3. **Upgrade/sell** — Tap occupied pad → **manage radial** (upgrade, sell, purify, Sacred Tether); **range ring** on select.
 4. **Start wave** — Enemies spawn in waves and walk the path.
-5. **Defend** — Towers auto-target; **hero** moves and uses skills.
+5. **Defend** — Towers auto-target; **hero** moves via virtual stick and fights manually (Attack / Heavy / Dodge / Skill).
 6. **Win** — All waves cleared with lives remaining.
 7. **Lose** — Enemies leak until **lives = 0** (optional one-time **Simorgh Feather** continue).
 
@@ -106,12 +106,14 @@ This is the heart of the game. Every mode uses the same battle scene with differ
 
 | Input | Action |
 |-------|--------|
-| Tap ground | Move hero |
-| Tap skill button | Use hero ability (bonus inside Rhyme Window) |
-| Drag hero → tower | **Sacred Tether** — attack-speed buff; drains energy |
-| Drag hero → Zahhak | Offensive tether (Hunt finale) — slow + energy drain |
-| Cleanse / Brazier buttons | Spend **Sacred Fire** on selected region |
-| Naft button | Rostam path oil trap + Sacred Fire ignition (campaign) |
+| **Virtual stick (left)** | Move hero — joystick-only |
+| **Attack / Heavy / Dodge / Skill (right)** | Manual combat; no auto-attack |
+| Tap occupied tower → manage radial | Upgrade, sell, purify, **Sacred Tether** when in range |
+| Naft button | Rostam: arm → tap path to place oil slick |
+| Cleanse button | Spend **Sacred Fire** on selected region |
+| Co-op | Stick + buttons control **focused** hero (portrait row) |
+
+**Deferred:** drag offensive tether to Zahhak (Hunt finale), Rhyme Window skill bonus, `HeroSacredTetherDrag`.
 
 ### Signature battle systems (player-facing)
 
@@ -124,7 +126,7 @@ This is the heart of the game. Every mode uses the same battle scene with differ
 | **Hero's Vow** | Every 10 cleared waves — optional Accept/Decline challenge (never fails battle) |
 | **Tower Resonance** | Adjacent tower combos (Fire+String burn, Quake+Bind AoE slow) |
 | **Active scavenging** | Physical Star Iron drops; unbanked HUD; defeat clears 100% |
-| **Sacred Tether** | Tower panel button when hero in range — attack-speed buff |
+| **Sacred Tether** | Manage radial **Tether** when hero in range — attack-speed buff |
 | **Labour Modes** | Per-map campaign story overlays (`scripts/battle/labours/`) |
 | **Equipment sets** | 7 themed 4-piece sets modify hero/tower stats in battle |
 | **Boss phases** | Per-boss controllers (Lion roar, Thirst drought, Azhdaha burrow, etc.) |
@@ -135,10 +137,12 @@ This is the heart of the game. Every mode uses the same battle scene with differ
 
 | Zone | Elements |
 |------|----------|
-| Top bar | Lives, gold, wave, Sacred Fire, morale, unbanked materials |
+| Top bar | Lives, gold, wave, Sacred Fire, morale, unbanked materials, **objective chip** |
+| Left | **Virtual stick** + **hero chip** (HP, tether energy) |
+| Right | **Attack / Heavy / Dodge / Skill** cluster; Naft; spell bar |
 | Pad tap | Build radial (empty) or manage radial (occupied) + range ring |
-| Hero | Portrait + skill; tap ground to move |
-| Actions | Cleanse, Naft, spell bar, early call, pause / speed |
+| Top center | **Boss HP bar** during boss waves |
+| Actions | Cleanse, early call, pause / Restart / Settings / speed |
 | Overlays | Pardeh, vow chip, gauntlet timer/ghost, co-op row |
 
 ### Resources in battle
@@ -169,7 +173,7 @@ Each system has one job. Battle code must respect these boundaries:
 | `ProjectileController` | Fly to target, hit resolution | Wave state |
 | `BattleStateController` | PreBattle / WaveActive / Paused / Victory / Defeat | Tower targeting |
 | `BattleEconomy` | Gold + Sacred Fire in battle | Meta shop prices |
-| `HeroController` | Move, attack, skills, tether, energy | Wave spawning |
+| `HeroController` | Joystick move, manual attack/heavy/dodge/skill, tether, energy | Wave spawning |
 
 **Hub object:** `BattleContext` wires all battle services. Created in `BattleBootstrap`.
 
@@ -291,10 +295,12 @@ UI listens via `BattleContextBridge` (Node wrapper with signals).
 
 **Hero**
 
-1. Tap ground → move.
-2. Drag to tower → Sacred Tether (attack speed, energy drain).
-3. Passive cleanse ticks in current map region.
-4. Skills via HUD; bonus in Rhyme Window.
+1. Virtual stick → move (`HeroManager.apply_move_input()`).
+2. Manage radial → **Tether** when hero in range (attack speed, energy drain).
+3. Manual **Attack / Heavy / Dodge / Skill** — no auto-attack; blocked enemies telegraph melee.
+4. Skills via action cluster (`HeroActionHud`).
+
+**Deferred:** Rhyme Window bonus, drag offensive tether to Zahhak.
 
 **Victory paths (multiple)**
 

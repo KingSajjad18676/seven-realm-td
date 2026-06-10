@@ -4,6 +4,7 @@ extends RefCounted
 ## Runtime design data for M4–M8 campaign and roguelite content.
 
 const HORDE_WAVES_TO_CLEAR := 15
+const BROTHERS_WAVES_TO_CLEAR := 20
 const KHAN_HORDE_LEVELS: Array[String] = [
 	"level_01", "level_02", "level_03", "level_04",
 	"level_05", "level_06", "level_07", "level_08_damavand",
@@ -453,7 +454,14 @@ static func build_heroes() -> Array[HeroData]:
 	rostam.display_name = "Rostam"
 	rostam.max_hp = 220.0
 	rostam.move_speed = 190.0
-	rostam.attack_damage = 28.0
+	rostam.attack_damage = 32.0
+	rostam.attack_rate = 1.35
+	rostam.attack_arc_range = 64.0
+	rostam.heavy_damage = 52.0
+	rostam.heavy_cooldown = 4.5
+	rostam.heavy_radius = 82.0
+	rostam.dodge_cooldown = 2.2
+	rostam.dodge_distance = 100.0
 	rostam.skill_damage = 60.0
 	rostam.tether_radius = 120.0
 	rostam.secondary_skill_id = "rostam_naft"
@@ -474,7 +482,13 @@ static func build_heroes() -> Array[HeroData]:
 	zal.display_name = "Zal"
 	zal.max_hp = 180.0
 	zal.move_speed = 200.0
-	zal.attack_damage = 22.0
+	zal.attack_damage = 26.0
+	zal.attack_rate = 1.5
+	zal.attack_arc_range = 58.0
+	zal.heavy_damage = 40.0
+	zal.heavy_cooldown = 4.0
+	zal.dodge_cooldown = 2.0
+	zal.dodge_distance = 110.0
 	zal.skill_id = "zal_foresight"
 	zal.skill_cooldown = 10.0
 	zal.skill_damage = 45.0
@@ -486,7 +500,13 @@ static func build_heroes() -> Array[HeroData]:
 	sohrab.display_name = "Sohrab"
 	sohrab.max_hp = 200.0
 	sohrab.move_speed = 205.0
-	sohrab.attack_damage = 30.0
+	sohrab.attack_damage = 34.0
+	sohrab.attack_rate = 1.25
+	sohrab.attack_arc_range = 60.0
+	sohrab.heavy_damage = 58.0
+	sohrab.heavy_cooldown = 5.5
+	sohrab.dodge_cooldown = 2.8
+	sohrab.dodge_distance = 90.0
 	sohrab.skill_id = "sohrab_rage"
 	sohrab.skill_cooldown = 12.0
 	sohrab.skill_damage = 70.0
@@ -697,7 +717,54 @@ static func build_khan_level(
 	level.default_objective_id = _default_objective_for(id)
 	level.labour_mode_id = LabourModeFactory.labour_mode_id_for_level(id)
 	level.minimap_bounds = MapCameraUtils.compute_world_bounds(level)
+	if id in ["level_05", "level_06", "level_07", "level_08_damavand"]:
+		_add_secondary_lane(level, path, 70.0)
 	return level
+
+
+static func _add_secondary_lane(level: LevelData, path: Array[Vector2], lateral_offset: float) -> void:
+	level.ensure_routes_migrated()
+	level.ensure_spawns_migrated()
+	var route2 := PathRouteData.new()
+	route2.route_id = "route_2"
+	for pt in path:
+		route2.points.append(pt + Vector2(lateral_offset * 0.35, lateral_offset))
+	level.path_routes.append(route2)
+	var spawn2 := SpawnPointData.new()
+	spawn2.spawn_id = "spawn_2"
+	spawn2.position = route2.points[0]
+	spawn2.route_id = "route_2"
+	level.spawn_points.append(spawn2)
+
+
+static func get_hero_skill_catalog() -> Array[Dictionary]:
+	return [
+		{
+			"skill_id": "rostam_charge",
+			"display_name": "Rostam Charge",
+			"description": "Dash strike — damage and slow nearby foes.",
+			"unlock_level_id": "",
+		},
+		{
+			"skill_id": "zal_foresight",
+			"display_name": "Zal Foresight",
+			"description": "Mark enemies and boost hero and tower damage briefly.",
+			"unlock_level_id": "level_02",
+		},
+		{
+			"skill_id": "sohrab_rage",
+			"display_name": "Sohrab Rage",
+			"description": "Furious burst — heavy damage at a health cost.",
+			"unlock_level_id": "level_03",
+		},
+	]
+
+
+static func is_valid_hero_skill_id(skill_id: String) -> bool:
+	for entry in get_hero_skill_catalog():
+		if str(entry.get("skill_id", "")) == skill_id:
+			return true
+	return false
 
 
 static func _starter_towers() -> Array[String]:

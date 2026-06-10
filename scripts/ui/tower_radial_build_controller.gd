@@ -234,6 +234,11 @@ func _rebuild_manage_options() -> void:
 		_option_buttons.append(purify)
 		return
 
+	var tether := _make_option_button("Tether")
+	tether.disabled = not actions_enabled or not _hero_can_tether(tower)
+	tether.pressed.connect(_on_tether_pressed)
+	_option_buttons.append(tether)
+
 	if tower.can_upgrade():
 		var cost := tower.get_upgrade_cost()
 		var upgrade := _make_option_button(
@@ -384,6 +389,25 @@ func _on_purify_pressed() -> void:
 		_rebuild_manage_options()
 		_position_options()
 		_position_center_label()
+
+
+func _hero_can_tether(tower: TowerController) -> bool:
+	if context == null or context.hero_manager == null or tower == null:
+		return false
+	var hero := context.hero_manager.get_controlled_hero()
+	if hero == null or hero.is_dead() or hero.data == null:
+		return false
+	return hero.global_position.distance_to(tower.global_position) <= hero.data.tether_radius
+
+
+func _on_tether_pressed() -> void:
+	if _selected_tower == null or context == null or context.hero_manager == null:
+		hide_menu()
+		return
+	var hero := context.hero_manager.get_controlled_hero()
+	if hero:
+		hero.tether_to_tower(_selected_tower)
+	hide_menu()
 
 
 func _gui_input(event: InputEvent) -> void:

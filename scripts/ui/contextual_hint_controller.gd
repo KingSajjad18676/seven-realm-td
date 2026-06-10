@@ -103,7 +103,7 @@ func _on_intermission_started(_preview_text: String, _max_bonus_gold: int) -> vo
 func _on_tower_opened(_tower: TowerController) -> void:
 	_enqueue_hint(
 		HINT_TETHER,
-		"Use Sacred Tether to bond Rostam to a nearby tower for a damage boost."
+		"Tap a placed tower → Tether to bond Rostam for a damage boost while you stay nearby."
 	)
 
 

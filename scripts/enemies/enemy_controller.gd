@@ -25,6 +25,9 @@ var _venom_dps: float = 0.0
 var _damage_taken_mult: float = 1.0
 var _venom_source: TowerController = null
 var _route_id: String = ""
+var _melee_cooldown: float = 0.0
+var _melee_telegraph: float = 0.0
+var _melee_damage: float = 8.0
 
 @onready var _sprite: ColorRect = $Sprite
 @onready var _hp_bar: ProgressBar = $HPBar
@@ -46,6 +49,8 @@ func initialize(ctx: BattleContext, enemy_data: EnemyData, path: PackedVector2Ar
 	_venom_dps = 0.0
 	_damage_taken_mult = 1.0
 	_venom_source = null
+	_melee_cooldown = 0.0
+	_melee_telegraph = 0.0
 	current_hp = _effective_max_hp()
 	_follower.setup(path)
 	_burn_timer = 0.0
@@ -78,6 +83,8 @@ func _process(delta: float) -> void:
 	if context.state_controller.current_state != GameEnums.BattleState.WAVE_ACTIVE:
 		return
 	if _is_blocked_by_hero():
+		_melee_cooldown = maxf(0.0, _melee_cooldown - delta)
+		_process_hero_melee(delta)
 		if _is_boss and _boss_controller and _boss_controller.has_method("tick"):
 			_boss_controller.tick(delta)
 		_apply_corruption_trail()
@@ -322,3 +329,48 @@ func _hp_multiplier() -> float:
 	if context:
 		return float(context.runtime_modifiers.get("enemy_hp_mult", 1.0))
 	return 1.0
+
+
+func _process_hero_melee(delta: float) -> void:
+	if context == null or context.hero_manager == null or _decoy:
+		return
+	if _melee_cooldown > 0.0:
+		return
+	var target := _find_melee_target()
+	if target == null:
+		_melee_telegraph = 0.0
+		if _sprite:
+			_sprite.modulate = Color.WHITE
+		return
+	if _melee_telegraph <= 0.0:
+		_melee_telegraph = 0.35
+		if _sprite:
+			_sprite.modulate = Color(1.0, 0.55, 0.45, 1.0)
+		return
+	_melee_telegraph -= delta
+	if _melee_telegraph > 0.0:
+		return
+	_melee_cooldown = 1.4 if not _is_boss else 2.2
+	var dmg := _melee_damage
+	if _is_boss:
+		dmg = scaled_boss_damage(14.0)
+	target.take_damage(dmg)
+	if _sprite:
+		_sprite.modulate = Color.WHITE
+
+
+func _find_melee_target() -> HeroController:
+	if context == null or context.hero_manager == null:
+		return null
+	var best: HeroController = null
+	var best_dist := 99999.0
+	for h in context.hero_manager.get_living_heroes():
+		if h == null or not is_instance_valid(h):
+			continue
+		if not h.should_block_enemy(self):
+			continue
+		var d := global_position.distance_to(h.global_position)
+		if d < best_dist:
+			best_dist = d
+			best = h
+	return best

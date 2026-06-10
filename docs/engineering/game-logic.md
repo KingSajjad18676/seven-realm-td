@@ -1,6 +1,6 @@
 # Game Logic & Essentials
 
-**Last updated:** 2026-06-09  
+**Last updated:** 2026-06-11  
 **Audience:** Developers and AI agents working in this repo  
 **Purpose:** Fast onboarding — how the game thinks, who owns what, and where to look in code.
 
@@ -225,11 +225,13 @@ All battle systems receive the same `BattleContext` reference (set in `BattleBoo
 
 ### Hero
 
-1. Tap ground → move (`HeroManager`).
-2. Drag to tower → **Sacred Tether** (`HeroSacredTetherDrag`): attack-speed bonus, energy drain.
-3. Passive cleanse ticks in current `MapRegion`.
-4. Skills via HUD; bonus inside **Rhyme Window** from `CoupletComboManager`.
-5. Offensive tether to Zahhak (Hunt finale) slows boss and drains energy.
+1. **Virtual stick** → move (`VirtualJoystick` → `HeroManager.apply_move_input()` → `HeroController.set_move_input()`). Battlefield taps are for towers/pads/Naft only — **no tap-to-move**.
+2. **Attack / Heavy / Dodge / Skill** → manual combat (`HeroController`; **no auto-attack**). Blocked enemies telegraph melee swings; dodge grants i-frames.
+3. Tap occupied tower → manage radial → **Tether** when hero in range (`HeroController.tether_to_tower()`).
+4. Skills via action cluster; equipment hooks on melee hits/kills.
+5. Offensive tether to Zahhak (Hunt finale) — design target; deferred separate from manage radial.
+
+**Code:** `scripts/ui/virtual_joystick.gd`, `scripts/ui/hero_action_hud.gd`, `scripts/heroes/hero_controller.gd`, `scripts/heroes/hero_manager.gd`.
 
 ### Damage
 

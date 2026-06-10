@@ -1,6 +1,6 @@
 # Godot Architecture
 
-**Last updated:** 2026-06-09  
+**Last updated:** 2026-06-11  
 **Design canon:** [design/04-production-roadmap.md](../design/04-production-roadmap.md)  
 **Engine:** Godot 4.6 Mobile  
 **Project root:** repository folder containing `project.godot`  
@@ -24,7 +24,7 @@ repo root/
     units/          AllyUnitController (barracks summons)
     projectiles/
     status_effects/
-    ui/             Battle HUD + meta panels (29 controllers)
+    ui/             Battle HUD, VirtualJoystick, HeroActionHud, meta panels
     meta/           SaveSystem, WorldMap, content catalog, liveops services
     tools/          Map editor (dev)
     utilities/      ObjectPool, AudioManager, VisualAssetLoader, LevelAssetCollector
@@ -44,8 +44,8 @@ repo root/
 | `ForgeService` | Star Iron forge, elite gate, soft difficulty curve L3+ |
 | `SceneFlowController` | Async scene load + fade + battle preload overlay |
 | `ContentRegistry` | Runtime catalog from `content_catalog.gd` + `resources/data/` merge |
-| `SettingsService` | Audio/settings prefs |
-| `AudioManager` | Placeholder SFX |
+| `SettingsService` | Audio/settings prefs; UI scale |
+| `AudioManager` | Music/SFX buses; procedural tone SFX |
 | `CombatEvents` | Global combat signal bus |
 | `AnalyticsService` | In-memory session events |
 | `LocalizationService` | Stub (~7 English keys) |
@@ -64,7 +64,7 @@ repo root/
 
 ## Battle wiring
 
-- **`BattleBootstrap`** — scene root; builds `BattleContext`, map, managers; attaches **`LabourMode`** on campaign launches; wires equipment, co-op, gauntlet as needed
+- **`BattleBootstrap`** — scene root; builds `BattleContext`, map, managers; wires `NaftTrapController`, hero stick input via HUD; attaches **`LabourMode`** on campaign launches
 - **`BattleContext`** — RefCounted service locator; see [game-logic.md](game-logic.md) §6
 - **`LabourMode` + `LabourModeFactory`** — `scripts/battle/labours/`; per-map additive hazards
 - **`AllyUnitController`** — barracks melee blockers on `BattleContext.active_allies`

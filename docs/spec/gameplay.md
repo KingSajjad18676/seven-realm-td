@@ -41,15 +41,16 @@ This document includes **advanced and post-launch** systems (rewind, tribute, pr
 
 ### Input rules (mobile)
 
-| Gesture | Action |
-|---------|--------|
-| Tap build spot | Open build / upgrade / sell UI |
-| Tap tower (tribute active) | Sacrifice max-level tower to feed serpents |
-| Drag hero → tower | Establish Sacred Tether (separate from tap UI) |
-| Drag hero → Zahhak | Offensive tether (slow + energy drain) |
-| Hold Rewind button | Zervan Dial playback |
-| Tap Cleanse / Brazier | Spend Sacred Fire on selected region |
-| Tap hero skill | Ability; bonus if inside Rhyme Window |
+| Input | Action |
+|-------|--------|
+| **Virtual stick (left)** | Move hero — joystick-only |
+| **Attack / Heavy / Dodge / Skill (right)** | Manual hero combat |
+| Tap build spot (empty) | Build radial |
+| Tap tower (occupied) | Manage radial — upgrade, sell, purify, **Tether** |
+| Tap path (Naft armed) | Place Rostam oil slick |
+| Tap Cleanse | Spend Sacred Fire on selected region |
+
+**Deferred (design target, not built):** drag offensive tether to Zahhak, Hold Rewind (Zervan Dial), Rhyme Window skill bonus, sacrifice max-level tower tribute gesture.
 
 ## 2. Battle Entities
 
@@ -83,12 +84,15 @@ Required runtime state:
 Required runtime state:
 
 - current HP, max HP (reducible by Serpent tribute failure)
-- position, attack cooldown
+- position, **facing direction** (for attack arc)
+- **attack / heavy / dodge / skill cooldowns**
+- **dodge i-frame window**
+- **move input vector** from virtual stick
 - **currentEnergy / maxEnergy** (tether drain)
 - **tetherRange**, cleanse radius
-- skill cooldown, revive timer
-- active tether target (tower or Zahhak offensive tether)
-- invulnerability / infinite energy (Epic Couplet Fate boon)
+- revive timer
+- active tether target (tower)
+- invulnerability / infinite energy (Epic Couplet Fate boon — deferred)
 
 ### Enemy (extended)
 

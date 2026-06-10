@@ -121,7 +121,7 @@ A tester should answer:
 
 - What do the four starter towers do?  
 - Where will enemies travel?  
-- What is Rostam useful for?  
+- What is Rostam useful for? (block path, manual attacks, dodge telegraphed swings, collect Star Iron)
 - What does Sacred Fire do?  
 - What does corruption look like before collapse?  
 - How do I rescue a hijacked tower?  

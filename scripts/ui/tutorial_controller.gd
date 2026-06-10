@@ -13,6 +13,8 @@ enum StepAdvance {
 	TOWER_BUILT,
 	WAVE_STARTED,
 	HERO_MOVED,
+	HERO_ATTACK,
+	HERO_DODGE,
 	HERO_SKILL,
 	CLEANSE,
 	HIJACK_RECOVERED,
@@ -216,9 +218,25 @@ func _build_steps() -> Array[Dictionary]:
 		},
 		{
 			"id": "move_hero",
-			"text": "Tap the battlefield to move Rostam. Use him to plug leaks, pressure elites, and pick up Star Iron drops.",
-			"highlight": "",
+			"text": "Hold the left stick to move Rostam. Block the path, collect Star Iron, and dodge enemy swings.",
+			"highlight": "joystick",
 			"advance": StepAdvance.HERO_MOVED,
+			"pause": false,
+			"allowed": ["battlefield"],
+		},
+		{
+			"id": "hero_attack",
+			"text": "Tap Attack to strike foes in front of you. Heavy Attack hits harder with a short wind-up.",
+			"highlight": "attack",
+			"advance": StepAdvance.HERO_ATTACK,
+			"pause": false,
+			"allowed": ["battlefield"],
+		},
+		{
+			"id": "hero_dodge",
+			"text": "Tap Dodge to roll away with brief invulnerability — use it when enemies flash red before a swing.",
+			"highlight": "dodge",
+			"advance": StepAdvance.HERO_DODGE,
 			"pause": false,
 			"allowed": ["battlefield"],
 		},
@@ -241,7 +259,7 @@ func _build_steps() -> Array[Dictionary]:
 		},
 		{
 			"id": "hero_skill",
-			"text": "Press Rostam Skill for a powerful area strike on nearby foes.",
+			"text": "Press Skill for Rostam's area charge — your big cooldown ability.",
 			"highlight": "skill",
 			"advance": StepAdvance.HERO_SKILL,
 			"pause": false,
@@ -315,6 +333,8 @@ func _connect_events() -> void:
 	CombatEvents.tower_built.connect(_on_tower_built)
 	CombatEvents.wave_started.connect(_on_wave_started)
 	CombatEvents.hero_moved.connect(_on_hero_moved)
+	CombatEvents.hero_melee_used.connect(_on_hero_melee_used)
+	CombatEvents.hero_dodged.connect(_on_hero_dodged)
 	CombatEvents.hero_skill_used.connect(_on_hero_skill_used)
 	CombatEvents.cleanse_used.connect(_on_cleanse_used)
 	CombatEvents.tower_hijack_recovered.connect(_on_hijack_recovered)
@@ -369,6 +389,8 @@ func _update_dim_for_step(step: Dictionary) -> void:
 	var needs_map: bool = step.advance in [
 		StepAdvance.TOWER_BUILT,
 		StepAdvance.HERO_MOVED,
+		StepAdvance.HERO_ATTACK,
+		StepAdvance.HERO_DODGE,
 		StepAdvance.MATERIAL_COLLECTED,
 	]
 	_dim.visible = not needs_map
@@ -471,6 +493,17 @@ func _on_wave_started(_wave_index: int) -> void:
 
 func _on_hero_moved() -> void:
 	_try_advance(StepAdvance.HERO_MOVED)
+
+
+func _on_hero_melee_used(action_id: String) -> void:
+	if action_id == "attack":
+		_try_advance(StepAdvance.HERO_ATTACK)
+	elif action_id == "heavy":
+		_try_advance(StepAdvance.HERO_ATTACK)
+
+
+func _on_hero_dodged() -> void:
+	_try_advance(StepAdvance.HERO_DODGE)
 
 
 func _on_hero_skill_used(_skill_id: String) -> void:

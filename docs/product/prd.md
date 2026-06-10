@@ -1,6 +1,6 @@
 # Product Requirements Document — Shahnameh Mobile Landscape TD
 
-**Last updated:** 2026-06-09  
+**Last updated:** 2026-06-11  
 **Design canon:** [design/00-project-index.md](../design/00-project-index.md) · [design/02-gameplay-ux.md](../design/02-gameplay-ux.md)  
 **Monetization canon:** [design/03-monetization.md](../design/03-monetization.md)  
 **Implementation truth:** [engineering/project-status.md](../engineering/project-status.md) · [engineering/implementation-tracker.md](../engineering/implementation-tracker.md)
@@ -58,7 +58,8 @@ Per [design/00](../design/00-project-index.md) — **do not expand campaign art 
 | Boss | Lion of the First Khan |
 | Resources | Gold, Lives, Sacred Fire |
 | Systems | Corruption states, hijack/recovery, 5 waves, one Pardeh Break, small Fate pool |
-| UX | One-tap replay, clear defeat explanation, analytics stub |
+| Hero controls | Virtual stick move; Attack / Heavy / Dodge / Skill (manual combat) |
+| UX | One-tap replay, clear defeat explanation, hero chip + boss bar, analytics stub |
 
 **Not required for Khan 1 gate:** production art on maps 2–8, platform IAP SDK, battle pass — logic for many modes is already coded (see §5b).
 
@@ -72,7 +73,7 @@ Per [implementation-tracker.md](../engineering/implementation-tracker.md) — co
 | **Modes** | Campaign Run, Horde, Endless, Hunt, Daily Tale, Brothers in Arms, Defend the Throne, Haft-Khan Gauntlet |
 | **Content** | 8 towers, 3 heroes, 22 enemies, 8 Fate cards, 6 spells, 7 relics, 28 equipment pieces |
 | **Meta** | Kaveh's Forge, equipment sets, daily missions, relic slots, stub IAP store |
-| **Signature** | Corruption/hijack, Pardeh, Morale, Vow, Resonance, scavenging, Naft traps |
+| **Signature** | Corruption/hijack, Pardeh, Morale, Vow, Resonance, scavenging, Naft traps, **hero action controls** |
 | **Tests** | GUT + ContentValidator + CI |
 
 **Full inventory:** [main-gameplay.md](main-gameplay.md) · [entities-and-gameplay.md](../spec/entities-and-gameplay.md)
@@ -101,7 +102,7 @@ Per [implementation-tracker.md](../engineering/implementation-tracker.md) — co
 
 **Prototype (M0–M1):**
 
-- Battle playable start to win/loss; towers target correctly; waves path reliably; hero moves and uses ability
+- Battle playable start to win/loss; towers target correctly; waves path reliably; hero moves via stick and fights manually (Attack / Heavy / Dodge / Skill)
 
 **Soft launch:**
 

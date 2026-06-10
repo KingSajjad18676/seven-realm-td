@@ -26,6 +26,7 @@ func spawn_wave(wave: WaveData) -> void:
 		var count: int = int(group.get("count", 1))
 		var catalog_data := ContentRegistry.get_enemy(enemy_id)
 		if catalog_data == null:
+			push_warning("EnemySpawner: unknown enemy_id '%s' — skipping spawn group" % enemy_id)
 			continue
 		for i in count:
 			var data := catalog_data.duplicate(true) as EnemyData
@@ -33,14 +34,18 @@ func spawn_wave(wave: WaveData) -> void:
 				data = _scale_final_boss_data(data)
 			_spawn_enemy(data, group)
 			if wave.spawn_interval > 0.0:
-				await get_tree().create_timer(wave.spawn_interval).timeout
+				var interval_scale := 1.0
+				if context.wave_manager and context.wave_manager.has_method("get_battle_time_scale"):
+					interval_scale = context.wave_manager.get_battle_time_scale()
+				await get_tree().create_timer(wave.spawn_interval / interval_scale).timeout
 
 
 func _scale_final_boss_data(data: EnemyData) -> EnemyData:
 	if context == null or context.level_data == null:
 		return data
 	var hp_mult := ContentCatalog.final_boss_hp_mult(context.level_data.level_id)
-	data.max_hp *= hp_mult
+	var khan_mult := float(context.runtime_modifiers.get("enemy_hp_mult", 1.0))
+	data.max_hp *= hp_mult / maxf(khan_mult, 0.001)
 	data.armor *= 1.0 + (hp_mult - 1.0) * 0.5
 	return data
 

@@ -99,6 +99,7 @@ func _default_data() -> Dictionary:
 			"helm": "",
 			"talisman": "",
 		},
+		"hero_skill_selected": "rostam_charge",
 		"daily_missions": {},
 		"mission_lifetime": {
 			"total_div_kills": 0,
@@ -609,6 +610,42 @@ func get_equipment_equipped() -> Dictionary:
 func set_equipment_equipped(slots: Dictionary) -> void:
 	_data["equipment_equipped"] = slots.duplicate()
 	save_game()
+
+
+func get_hero_skill_selected() -> String:
+	var skill := str(_data.get("hero_skill_selected", "rostam_charge"))
+	if not ContentCatalog.is_valid_hero_skill_id(skill):
+		return "rostam_charge"
+	return skill
+
+
+func set_hero_skill_selected(skill_id: String) -> void:
+	if not ContentCatalog.is_valid_hero_skill_id(skill_id):
+		return
+	if not is_hero_skill_unlocked(skill_id):
+		return
+	_data["hero_skill_selected"] = skill_id
+	save_game()
+
+
+func is_hero_skill_unlocked(skill_id: String) -> bool:
+	for entry in ContentCatalog.get_hero_skill_catalog():
+		if str(entry.get("skill_id", "")) != skill_id:
+			continue
+		var unlock_level := str(entry.get("unlock_level_id", ""))
+		if unlock_level == "":
+			return true
+		return is_level_cleared(unlock_level)
+	return false
+
+
+func get_unlocked_hero_skill_ids() -> Array[String]:
+	var ids: Array[String] = []
+	for entry in ContentCatalog.get_hero_skill_catalog():
+		var skill_id := str(entry.get("skill_id", ""))
+		if is_hero_skill_unlocked(skill_id):
+			ids.append(skill_id)
+	return ids
 
 
 func get_daily_missions_state() -> Dictionary:

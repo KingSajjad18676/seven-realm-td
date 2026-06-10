@@ -37,6 +37,8 @@ func _setup_battle() -> void:
 	if level == null:
 		push_error("BattleBootstrap: missing level %s" % launch.level_id)
 		return
+	if level.level_id == ContentCatalog.THRONE_ARENA_LEVEL_ID and not launch.is_throne_defense_mode:
+		launch.is_throne_defense_mode = true
 
 	_context = BattleContext.new()
 	_context.level_data = level
@@ -135,6 +137,20 @@ func _setup_battle() -> void:
 	_context.hero_manager.name = "HeroManager"
 	add_child(_context.hero_manager)
 	_context.hero_manager.initialize(_context, _heroes_root)
+
+	_context.hero_level = HeroLevelService.new()
+	_context.hero_level.name = "HeroLevelService"
+	add_child(_context.hero_level)
+	_context.hero_level.initialize(_context)
+
+	if _context.hero_manager and _context.hero_manager.hero:
+		var hero_data := _context.hero_manager.hero.data
+		if hero_data and hero_data.secondary_skill_id == "rostam_naft":
+			var naft := NaftTrapController.new()
+			naft.name = "NaftTrapController"
+			add_child(naft)
+			naft.initialize(_context, _units_root)
+			_context.naft_traps = naft
 
 	_context.companion_manager = CompanionManager.new()
 	_context.companion_manager.name = "CompanionManager"
@@ -416,12 +432,18 @@ func _apply_battlefield_tap(world: Vector2, screen_x: float = -1.0) -> void:
 	if _context.naft_traps and _context.naft_traps.is_armed():
 		_context.naft_traps.try_place_at(world)
 		return
-	var x_ratio := 0.5
-	if screen_x >= 0.0:
-		var vp := get_viewport().get_visible_rect().size
-		if vp.x > 0.0:
-			x_ratio = screen_x / vp.x
-	_context.hero_manager.handle_ground_tap(world, x_ratio)
+
+
+func _process(delta: float) -> void:
+	if _context == null:
+		return
+	if _context.hero_manager and _hud and _hud.has_method("get_move_vector"):
+		_context.hero_manager.apply_move_input(_hud.get_move_vector())
+	if _context.map_light:
+		_context.map_light.tick_decay(delta)
+		_context.map_light.process_hijack_timers(delta)
+	if _context.spell_controller:
+		_context.spell_controller.tick(delta)
 
 
 func _apply_campaign_run(launch: BattleLaunchData, level: LevelData) -> void:
@@ -530,9 +552,11 @@ func _attach_brothers_mode(launch: BattleLaunchData, level: LevelData) -> void:
 	_context.coop_players.initialize(hero_ids, starting_sf)
 	if _context.hero_manager:
 		_context.hero_manager.initialize_brothers(hero_ids)
+	if _context.wave_manager:
+		_context.wave_manager.enable_skirmish_mode(ContentCatalog.BROTHERS_WAVES_TO_CLEAR)
 	if _context.bridge:
 		_context.bridge.alert_message.emit(
-			"Brothers in Arms — shared gold and lives, separate Sacred Fire!",
+			"Brothers in Arms — %d waves, shared gold and lives!" % ContentCatalog.BROTHERS_WAVES_TO_CLEAR,
 			95
 		)
 
@@ -600,11 +624,3 @@ func _on_damavand_enemy_died(enemy_id: String) -> void:
 	if progress >= 1.0 and _context.bridge:
 		_context.bridge.alert_message.emit("Binding anchors shattered — Zahhak is vulnerable!", 90)
 	_context.runtime_modifiers["damavand_binding_progress"] = progress
-
-
-func _process(delta: float) -> void:
-	if _context and _context.map_light:
-		_context.map_light.tick_decay(delta)
-		_context.map_light.process_hijack_timers(delta)
-	if _context and _context.spell_controller:
-		_context.spell_controller.tick(delta)

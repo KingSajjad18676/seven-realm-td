@@ -334,10 +334,14 @@ func _spawn_single_ally(index: int) -> void:
 	var unit_data := ContentCatalog.get_ally_unit(unit_id)
 	if unit_data == null:
 		return
+	var scaled := unit_data.duplicate(true) as AllyUnitData
+	var level_mult := 1.0 + float(level - 1) * 0.25
+	scaled.max_hp *= level_mult
+	scaled.damage *= level_mult
 	var ally := AllyUnitController.new()
 	context.tower_manager.units_root.add_child(ally)
 	var offset := data.rally_offset + Vector2(index * 24 - 12, 0)
-	ally.initialize(context, unit_data, global_position + offset, self)
+	ally.initialize(context, scaled, global_position + offset, self)
 	ally.rally_position = global_position + offset
 	while _allies.size() <= index:
 		_allies.append(null)

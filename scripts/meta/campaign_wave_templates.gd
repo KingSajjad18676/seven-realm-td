@@ -81,7 +81,7 @@ static func generate(level_id: String, boss_id: String) -> Array[WaveData]:
 
 
 static func generate_horde_slice(level_id: String, wave_num: int) -> WaveData:
-	var act_index := 0
+	var act_index := (wave_num - 1) / MACRO_BLOCK_SIZE
 	var slot := (wave_num - 1) % MACRO_BLOCK_SIZE
 	var block_index := (wave_num - 1) / MACRO_BLOCK_SIZE
 	var diff := ContentCatalog.khan_difficulty(level_id)
@@ -110,6 +110,7 @@ static func generate_horde_slice(level_id: String, wave_num: int) -> WaveData:
 	wave.pre_wave_delay = float(template.get("delay", 1.8))
 	wave.spawn_interval = float(template.get("interval", 0.0))
 	wave.spawn_groups = _scale_groups(template.get("groups", []), float(template.get("scale_mult", 1.0)))
+	wave.spawn_groups = _apply_route_tags(level_id, role, wave.spawn_groups)
 	wave.wave_phase = str(template.get("phase", _phase_for_role(role)))
 	wave.material_drop_mult = float(template.get("material_drop_mult", 1.0))
 	wave.suppress_material_drops = bool(template.get("suppress_material_drops", false))

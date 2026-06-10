@@ -75,8 +75,7 @@ func _find_battle() -> BattleContext:
 func _on_skip() -> void:
 	var ctx := _find_battle()
 	if ctx and ctx.wave_manager:
-		ctx.wave_manager.current_wave_index = ctx.level_data.waves.size() - 2
-		ctx.wave_manager._spawn_next_wave()
+		ctx.wave_manager.debug_force_wave_advance()
 
 
 func _on_win() -> void:

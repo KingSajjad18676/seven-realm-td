@@ -1,6 +1,6 @@
 # Project Status (Godot)
 
-**Last updated:** 2026-06-09 (full doc sync)  
+**Last updated:** 2026-06-11 (wave spawn fixes + hero XP leveling + skill loadout)  
 **Milestones:** [design/04-production-roadmap.md](../design/04-production-roadmap.md) · **Identity:** [design/00-project-index.md](../design/00-project-index.md)
 
 ---
@@ -41,12 +41,18 @@
 | **Haft-Khan Equipment Sets**   | ✅ 7 sets × 4 pieces; boss + daily drops; set rules in battle; Equipment + Daily Missions UI on world map                                                         |
 | **Daily Missions**             | ✅ 3/day rotation; 10-mission pool; Royal Bounty +3; loot chest → helm/talisman                                                                                   |
 | Khan difficulty scaling        | ✅ Per-Khan HP/speed/count mults; **10-wave master block generator** (`CampaignWaveTemplates`) |
-| Horde mode                     | ✅ 15 waves per Khan; clear all 8 unlocks Serpent Spire tower                                                                                                     |
+| Horde mode                     | ✅ 15 waves per Khan; act progression in horde/endless slices; clear all 8 unlocks Serpent Spire tower                                                                                                     |
 | Forge Tokens + Spells          | ✅ Earn on victory; buy in Kaveh's Forge; cast in battle HUD                                                                                                      |
 | Paid power store (stub IAP)    | ✅ Tower, spells, token packs via StoreService                                                                                                                      |
 | Automated tests                | ✅ GUT v9.6.0 (`tests/`), ContentValidator, SaveMigration, GitHub Actions CI                                                                                      |
 | Khan 1 map art                 | ✅ `art/maps/level_01.jpg` + geometry override in `resources/data/levels/level_01.tres`; battle hides green Terrain fallback when map sprite loads                |
-| Battle camera / HUD (Khan 1)   | ✅ Full-map fit-locked view; compact HUD; build radial (afford-gated) + manage radial on pad tap; **range ring** on pad select (build preview + manage, resizes on upgrade); bottom tower bar removed; **back navigation** from battle HUD |
+| **Hero action controls**       | ✅ Virtual joystick (left); Attack / Heavy / Dodge / Skill (right); manual combat — no auto-attack; enemy telegraphed melee when lane-blocked |
+| **In-battle hero leveling**    | ✅ `HeroLevelService` — XP per kill, Lv 1–10, +8% dmg / +10% HP per level; HUD level + XP bar |
+| **Hero skill loadout**         | ✅ Pre-battle skill select on Equipment screen (`rostam_charge`, `zal_foresight`, `sohrab_rage` unlocks); persisted in save |
+| **Battle HUD (Khan 1 polish)** | ✅ Hero chip (HP + tether); objective chip; boss HP bar; action cluster; pause Restart + Settings; world-map Settings button |
+| **Audio (placeholder tones)**  | ✅ Procedural SFX + menu loop; Music/SFX buses; settings sliders wired |
+| **Naft traps wiring**          | ✅ `NaftTrapController` instantiated in `battle_bootstrap` for Rostam |
+| Battle camera / HUD (Khan 1)   | ✅ Full-map fit-locked view; compact HUD; build/manage radial; range ring; virtual stick + action buttons; back navigation |
 | Map editor (dev)               | ✅ Multi-route + multi-spawn editor; `PathRouteData` / `SpawnPointData` in level `.tres`; battle resolves `route_id` / `spawn_id` per wave group |
 | Per-map battle preload         | ✅ `LevelAssetCollector` + threaded preload overlay before battle; map/enemy/hero/tower sprites + `battle.tscn` warmed per `level_id` |
 
@@ -106,7 +112,7 @@ In the editor: **Project → Tools → GUT** (bottom panel) → Run All.
 
 ## Known deferrals
 
-- Production art/audio (placeholders sufficient for logic QA)
+- Production art (circle sprite fallbacks in `VisualAssetLoader`; run `tools/generate_khan1_placeholders.gd` for PNGs)
 - Projectile-on-impact damage (instant damage today; cosmetic projectiles)
 - Full 43 Fate card pool; extra heroes (Gordafarid, Esfandiyar, …)
 - Company splash scene (boot → menu directly today)

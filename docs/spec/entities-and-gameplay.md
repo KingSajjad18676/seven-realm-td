@@ -1,6 +1,6 @@
 # Entities, Gameplay & Assets — Shahnameh TD
 
-**Last updated:** 2026-06-09  
+**Last updated:** 2026-06-11  
 **Purpose:** **All towers (every phase)**, **all campaign maps/tilesets**, entities in the repo, gameplay rules, and gameplay assets still needed. **AI image prompts:** [prompts/README.md](../../prompts/README.md) (per-asset specs by phase). Style canon: [design/01-art-phases.md](../design/01-art-phases.md) · [art/pipeline.md](../art/pipeline.md).
 
 **Repo truth:** [engineering/project-status.md](../engineering/project-status.md) · [engineering/implementation-tracker.md](../engineering/implementation-tracker.md)
@@ -45,10 +45,10 @@
 ## 3. Core battle loop (implemented today)
 
 1. Load `LevelData` → path, build spots, regions, waves.
-2. **PreBattle:** place towers (gold), move hero (tap ground), optional cleanse (Sacred Fire).
+2. **PreBattle:** place towers (gold), move hero (**virtual stick**), manual combat, optional cleanse (Sacred Fire).
 3. **Start wave** → enemies spawn, path to gate.
 4. Towers attack; corruptors pressure regions; at light **0** tower **hijacks** (attacks allies) until cleansed.
-5. Hero fights + skill; leaks reduce **lives**.
+5. Hero fights manually (Attack / Heavy / Dodge / Skill); leaks reduce **lives**.
 6. Every **5 cleared waves** → **Pardeh Break** → pick 1 of 3 **Fate cards** (campaign; tutorial uses a scripted break).
 7. Mini-boss every 10th wave; campaign boss on final wave → **Replay** or return to world map.
 
@@ -321,7 +321,10 @@ Detail: [product/main-gameplay.md](../product/main-gameplay.md) §4–6.
 | Gold, lives, Sacred Fire, materials | `BattleEconomy`, `LootDropManager` |
 | Regional light & corruption | `MapLightManager` |
 | Tower hijack + purify | `TowerController` |
-| Sacred Tether | Tower spot panel when hero in range |
+| Sacred Tether | Manage radial **Tether** when hero in range (`tower_radial_build_controller.gd`) |
+| Hero action controls | `VirtualJoystick`, `HeroActionHud`, manual combat in `HeroController` |
+| Battle HUD polish | Hero chip, objective chip, boss HP bar, pause Restart/Settings |
+| Audio (placeholder tones) | `AudioManager` — Music/SFX buses, procedural tones |
 | Morale + Hero's Vow | `MoraleController`, `VowOfferController` |
 | Pardeh / Fate + relic alternation | `FateDraftController` — every 5 cleared waves |
 | Tower Resonance | `TowerResonanceController` — adjacent combos |

@@ -332,17 +332,15 @@ func _build_throne_wave_data(wave_num: int) -> WaveData:
 
 
 func _build_endless_wave_data(wave_num: int) -> WaveData:
-	var wave := WaveData.new()
+	var level_id := context.level_data.level_id if context and context.level_data else "level_01"
+	var wave := CampaignWaveTemplates.generate_horde_slice(level_id, wave_num)
 	wave.wave_id = "endless_%d" % wave_num
-	wave.pre_wave_delay = 2.0
-	var count := int(6 + wave_num * 1.5)
-	var groups: Array[Dictionary] = []
-	groups.append({"enemy_id": "enemy_jackal", "count": count})
-	if wave_num % 3 == 0:
-		groups.append({"enemy_id": "enemy_boar", "count": int(1 + wave_num / 3)})
-	if wave_num % 5 == 0:
-		groups.append({"enemy_id": "enemy_corruptor", "count": 2})
-	wave.spawn_groups = groups
+	if wave_num > ContentCatalog.HORDE_WAVES_TO_CLEAR:
+		var extra_blocks := (wave_num - 1) / CampaignWaveTemplates.MACRO_BLOCK_SIZE
+		var extra_scale := 1.0 + float(extra_blocks - 1) * 0.08
+		if extra_scale > 1.0:
+			for group in wave.spawn_groups:
+				group["count"] = maxi(1, int(round(float(group.get("count", 1)) * extra_scale)))
 	return wave
 
 
@@ -427,6 +425,18 @@ func _format_wave_preview(wave: WaveData, wave_number: int) -> String:
 	if wave.display_name != "":
 		return "Wave %d — %s: %s" % [wave_number, wave.display_name, enemy_line]
 	return "Next: %s" % enemy_line
+
+
+func get_battle_time_scale() -> float:
+	return _time_scale()
+
+
+func debug_force_wave_advance() -> void:
+	if context == null:
+		return
+	for enemy in context.active_enemies.duplicate():
+		if enemy is EnemyController and is_instance_valid(enemy):
+			(enemy as EnemyController).take_damage(999999.0, true)
 
 
 func _time_scale() -> float:

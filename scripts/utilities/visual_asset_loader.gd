@@ -8,25 +8,49 @@ static func apply_sprite(node: Node2D, sprite_path: String, fallback_color: Colo
 	if sprite_path != "" and ResourceLoader.exists(sprite_path):
 		var tex := load(sprite_path) as Texture2D
 		if tex != null:
-			var spr := node.get_node_or_null("ArtSprite") as Sprite2D
-			if spr == null:
-				spr = Sprite2D.new()
-				spr.name = "ArtSprite"
-				node.add_child(spr)
-			spr.texture = tex
-			spr.centered = true
-			var scale_factor := size / tex.get_size()
-			spr.scale = Vector2(scale_factor.x, scale_factor.y)
-			var rect := node.get_node_or_null("Sprite") as ColorRect
-			if rect:
-				rect.visible = false
+			_apply_texture_sprite(node, tex, size)
 			return
+	var generated := _make_circle_texture(fallback_color, int(maxf(size.x, size.y)))
+	if generated:
+		_apply_texture_sprite(node, generated, size)
+		return
 	var rect := node.get_node_or_null("Sprite") as ColorRect
 	if rect:
 		rect.visible = true
 		rect.color = fallback_color
 		rect.size = size
 		rect.position = -size * 0.5
+
+
+static func _apply_texture_sprite(node: Node2D, tex: Texture2D, size: Vector2) -> void:
+	var spr := node.get_node_or_null("ArtSprite") as Sprite2D
+	if spr == null:
+		spr = Sprite2D.new()
+		spr.name = "ArtSprite"
+		node.add_child(spr)
+	spr.texture = tex
+	spr.centered = true
+	var scale_factor := size / tex.get_size()
+	spr.scale = Vector2(scale_factor.x, scale_factor.y)
+	var rect := node.get_node_or_null("Sprite") as ColorRect
+	if rect:
+		rect.visible = false
+
+
+static func _make_circle_texture(color: Color, diameter: int) -> ImageTexture:
+	var d := maxi(diameter, 8)
+	var img := Image.create(d, d, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+	var r := d * 0.5
+	var r2 := r * r
+	for y in d:
+		for x in d:
+			var dx := float(x) - r + 0.5
+			var dy := float(y) - r + 0.5
+			if dx * dx + dy * dy <= r2:
+				img.set_pixel(x, y, color)
+	var tex := ImageTexture.create_from_image(img)
+	return tex
 
 
 static func khan1_sprite(entity_id: String) -> String:

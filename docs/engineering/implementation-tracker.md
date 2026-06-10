@@ -1,6 +1,6 @@
 # Implementation Tracker
 
-**Last updated:** 2026-06-09 (full doc sync)  
+**Last updated:** 2026-06-11 (wave spawn fixes + hero progression)  
 **Repo truth:** [project-status.md](project-status.md)
 
 ---
@@ -16,8 +16,13 @@
 | Waves + spawner + win/loss | ✅ | [spec/gameplay.md](../spec/gameplay.md) |
 | **Scaled campaign waves** | ✅ | 10-wave master block templates per map; Pardeh every 5 cleared waves; mini-boss every 10th; Hero's Vow after block end; final boss wave |
 | **Hero's Vow (10-wave blocks)** | ✅ | `VowOfferController`, `ObjectiveController` vow types, HUD chip, results tally |
-| Hero move + skill | ✅ | Rostam + Zal (Khans 2–3) |
-| **Rostam Naft traps** | ✅ | `NaftTrapController` — path oil slow + Sacred Fire ignition AoE |
+| Hero move + manual combat | ✅ | Virtual stick; Attack / Heavy / Dodge / Skill; equipment/morale/level mults on all hero damage |
+| **In-battle hero XP** | ✅ | `HeroLevelService` — kill XP, Lv 1–10, HUD XP bar |
+| **Hero skill loadout** | ✅ | Equipment screen skill picker; save `hero_skill_selected`; applied in `HeroManager` |
+| **Rostam Naft traps** | ✅ | Wired in `battle_bootstrap`; `NaftTrapController` |
+| Sacred Tether via radial | ✅ | Manage radial **Tether** option (tower spot panel deprecated) |
+| Battle HUD polish | ✅ | Hero chip, objective chip, boss HP bar, pause Restart/Settings |
+| Procedural SFX + menu tone | ✅ | `AudioManager` tone cache; settings drive Music/SFX buses |
 | Lion boss (Khan 1 finale) | ✅ | Wave 30 of Khan 1 |
 | Voluntary replay + analytics | ✅ | Mode-aware `BattleLaunchData.duplicate_launch()` |
 
@@ -30,7 +35,7 @@
 | Regional light + corruption | ✅ | `MapLightManager` |
 | Sacred Fire + cleanse | ✅ | |
 | Tower hijack | ✅ | |
-| Sacred Tether | ✅ | Tower spot panel button when hero in range |
+| Sacred Tether | ✅ | Manage radial **Tether** when hero in range |
 | Morale meter | ✅ | Multiplier applied at battle start |
 | Pardeh Break / Fate | ✅ | Pick or skip every 5 cleared waves; 8 cards with catalog-aligned effects |
 | Tower Resonance | ✅ | `TowerResonanceController` — Fire+String burn, Quake+Bind AoE slow; hybrids remain Kaveh meta unlocks only |
@@ -56,9 +61,9 @@
 | Campaign Run | ✅ Save v6 `campaign_run`; branching world map UI |
 | Ahriman's Shroud | ✅ Optional Campaign Run toggle after Damavand clear |
 | Endless mode | ✅ No campaign progress on victory |
-| **Horde mode** | ✅ Per-Khan 15-wave survival; progress tracked separately from campaign seals |
-| **Brothers in Arms** | ✅ Local co-op (`CoopPlayerManager`); Zal + Sohrab hero pick; split SF/loot; shared gold/lives |
-| **Defend the Throne** | ✅ `level_throne_arena`; radial spawns; 15-wave survival; no campaign seals |
+| **Horde mode** | ✅ Per-Khan 15-wave survival; horde/endless use map rosters + act progression |
+| **Brothers in Arms** | ✅ Local co-op; 20-wave skirmish slice; shared gold/lives |
+| **Defend the Throne** | ✅ `level_throne_arena`; radial spawns; 15-wave survival; auto-enables throne mode if mis-launched |
 | **Haft-Khan Gauntlet** | ✅ Labours 1–7 chain; timer + ghost PB; no Pardeh/Vow; Rush / early-call overwhelm |
 | Hunt Zahhak | ✅ Elite forge + **7 Labour seals** in UI and `go_to_battle()` gate |
 

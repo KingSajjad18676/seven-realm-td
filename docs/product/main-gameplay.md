@@ -1,6 +1,6 @@
 # Main Gameplay Overview
 
-**Last updated:** 2026-06-09 (full game inventory sync)  
+**Last updated:** 2026-06-11 (full game inventory sync)  
 **Purpose:** Quick reference for how the whole game works — play modes, maps, and what each Labour adds.  
 **Repo truth:** [engineering/project-status.md](../engineering/project-status.md) · **Deep mechanics:** [spec/gameplay.md](../spec/gameplay.md)
 
@@ -52,8 +52,9 @@ This is the shared foundation. Labour Modes and side modes add rules on top.
 
 ```
 Pre-battle
-  → tap build pads → place / upgrade / sell towers (Gold)
-  → move hero (tap ground)
+  → build towers (Gold) on pad tap
+  → move hero (left virtual stick)
+  → manual combat: Attack / Heavy / Dodge / Skill (right action cluster)
   → optional: cleanse corruption (Sacred Fire)
 
 Start wave
@@ -75,7 +76,21 @@ Defeat → unbanked materials lost (100%)
 Pardeh (campaign / horde / run) → optional Retreat to Forge banks materials and ends battle safely
 ```
 
-**Scavenging:** Enemies may drop physical Star Iron on the map. Move **Rostam** over drops to collect into an **unbanked** tally (10s despawn). Pads still cost **Gold** only; materials are spent at **Kaveh's Forge** for unlock + upgrade.
+**Scavenging:** Enemies may drop physical Star Iron on the map. Walk **Rostam** over drops with the joystick to collect into an **unbanked** tally (10s despawn). Pads still cost **Gold** only; materials are spent at **Kaveh's Forge** for unlock + upgrade.
+
+### Hero action controls (landscape mobile)
+
+| Input | Action |
+|-------|--------|
+| **Left virtual stick** | Move hero (joystick-only — no tap-to-move) |
+| **Attack** | Fast front-arc strike (manual — no auto-attack) |
+| **Heavy** | Wind-up AOE knockback |
+| **Dodge** | Dash with brief invulnerability vs enemy swings |
+| **Skill** | Hero signature ability (Rostam charge, Zal foresight, Sohrab rage) |
+| **Naft** (Rostam) | Arm → tap path to place oil slick |
+| **Pad / tower tap** | Build radial or manage radial (upgrade, sell, purify, **Tether**) |
+
+Co-op (**Brothers in Arms**): stick + buttons control the **focused** hero (portrait row swaps focus).
 
 ### Battle HUD (landscape mobile)
 
@@ -83,10 +98,11 @@ Pardeh (campaign / horde / run) → optional Retreat to Forge banks materials an
 |------|----------|
 | Top bar | Lives, gold, wave, Sacred Fire, morale, unbanked materials |
 | Pad tap (empty) | **Build radial** — afford-gated tower picks at world position |
-| Pad tap (occupied) | **Manage radial** — upgrade, sell, purify (SF), Sacred Tether when hero in range |
+| Pad tap (occupied) | **Manage radial** — upgrade, sell, purify (SF), **Sacred Tether** when hero in range |
 | Pad select | **Attack-range ring** — preview on build, live on manage, grows on upgrade |
-| Hero | Portrait + skill button; tap ground to move |
-| Actions | Cleanse, Naft trap (Rostam), spell bar, early call, pause / 1× / 2× |
+| Hero chip | HP + tether energy above left stick |
+| Actions | Attack / Heavy / Dodge / Skill (right cluster); Cleanse; Naft; spell bar; pause / 1× / 2× |
+| Objective / Boss | Level goal chip (top bar); boss HP bar during boss waves |
 | Overlays | Pardeh panel, Hero's Vow chip, gauntlet timer + ghost PB, co-op HUD row |
 | Map fit | Medium maps (e.g. Labour 1) lock full-map view; minimap/threat hidden when map fully visible |
 
@@ -453,6 +469,10 @@ Unlocked after clearing **campaign Damavand** (`level_08_damavand`) once. On **C
 | Forge-scaled difficulty (L3+) | `scripts/meta/content_catalog.gd` → `khan_difficulty()` |
 | Equipment sets + battle rules | `equipment_service.gd`, `equipment_battle_service.gd`, `equipment_set_rules.gd` |
 | Daily missions | `daily_mission_service.gd`, `mission_progress_tracker.gd` |
+| Hero action HUD | `scripts/ui/hero_action_hud.gd`, `scripts/ui/virtual_joystick.gd` |
+| Hero combat | `scripts/heroes/hero_controller.gd`, `scripts/heroes/hero_manager.gd` |
+| Battle HUD | `scripts/ui/battle_hud_controller.gd`, `scenes/battle/battle.tscn` |
+| Audio | `scripts/utilities/audio_manager.gd` |
 | Gauntlet timer + ghost PB | `gauntlet_run_state.gd`, gauntlet HUD in `battle_hud_controller.gd` |
 | Co-op split economy | `coop_player_manager.gd` |
 

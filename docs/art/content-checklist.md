@@ -1,6 +1,6 @@
 # Gameplay, Mechanics & Asset Requirements
 
-**Last updated:** 2026-06-09  
+**Last updated:** 2026-06-11  
 **Purpose:** Player-facing overview of how the game works today, what is implemented in code, and which art/audio assets are still needed.  
 **Design canon:** [design/02](../design/02-gameplay-ux.md) · [design/01](../design/01-art-phases.md)  
 **Related:** [engineering/game-logic.md](../engineering/game-logic.md) · [spec/gameplay.md](../spec/gameplay.md) · [engineering/implementation-tracker.md](../engineering/implementation-tracker.md) · [engineering/project-status.md](../engineering/project-status.md) · [art/pipeline.md](../art/pipeline.md) · [art/visual-vfx.md](../art/visual-vfx.md)
@@ -75,13 +75,16 @@ Full detail: [product/main-gameplay.md](../product/main-gameplay.md) §6–7.
 4. **Lives** decrease when enemies leak; **0 lives** → defeat (optional **Simorgh Feather** continue once).
 5. Clear all waves → **Victory** (results panel: waves, lives, coins, hero XP, veterancy souls).
 
-### Hero (Rostam / Zal)
+### Hero (Rostam / Zal / Sohrab)
 
-- **Tap ground** to move.
-- **Skill button** (bottom-left cluster with portrait placeholder).
-- **Sacred Tether:** drag hero to tower for attack-speed buff; drains energy.
-- **Sacred Fire:** spend on **Cleanse** / **Brazier** for selected build spot region.
-- **Qanat** (levels with qanat nodes): fast-travel network when hero is near a node.
+- **Virtual stick (left)** to move — joystick-only; no tap-to-move.
+- **Attack / Heavy / Dodge / Skill (right cluster)** — manual combat; enemies telegraph melee when lane-blocked.
+- **Hero chip** above stick — HP + tether energy.
+- **Sacred Tether:** tap placed tower → manage radial → **Tether** when in range.
+- **Naft (Rostam):** arm → tap path to place oil slick.
+- **Sacred Fire:** **Cleanse** for selected build-spot region.
+
+**Deferred:** Qanat fast-travel, drag offensive tether to Zahhak, Rhyme Window skill bonus.
 
 ### Signature systems (identity)
 
@@ -101,13 +104,15 @@ Full detail: [product/main-gameplay.md](../product/main-gameplay.md) §6–7.
 
 | Zone | Elements |
 |------|----------|
-| Top left | Lives, gold, wave, Sacred Fire, morale |
-| Top right | Pause (with overlay), 1×/2×, settings, cleanse, brazier, qanat, rewind |
-| Center banners | Khan phase, director warning, tribute hunger |
-| Bottom left | Hero portrait (placeholder) + skill |
-| Bottom center | Tower build cards |
-| Bottom right | Relics / organ drag / energy (runtime overlay) |
-| Full screen | Victory/defeat results, Simorgh continue, blood oath, fate draft |
+| Top left | Lives, gold, wave, Sacred Fire, morale, **objective chip** |
+| Top right | Pause (Resume / Restart / Settings / Exit), 1×/2×, Cleanse |
+| Top center | **Boss HP bar** during boss waves |
+| Bottom left | **Virtual stick** + **hero chip** (name, HP, tether) |
+| Bottom right | **Attack / Heavy / Dodge / Skill** cluster; Naft; spell bar |
+| Pad tap | Build radial (empty) or manage radial (occupied) + range ring |
+| Full screen | Victory/defeat results, Pardeh, fate draft |
+
+**Deferred UI:** Simorgh continue, brazier/qanat/rewind buttons, organ drag, bottom tower bar (removed).
 
 ---
 
@@ -143,8 +148,8 @@ Available from **Main Menu** and **World Map** toolbars:
 | Hunt unlock (Khan 7 talisman) | ✅ | Existing Damavand quest |
 | Async loading + fade | ✅ | `SceneFlowController` |
 | Main menu all meta panels | ✅ | Shared generator with world map |
-| Battle HUD (pause overlay, portrait, results, Simorgh, hunt label) | 🟡 | Wire in `scenes/battle/` + HUD scripts |
-| Real splash/menu/Khan art | 🎨 | Placeholders / colored UI |
+| Battle HUD (pause overlay, hero chip, action cluster, boss bar) | ✅ | `HeroActionHud`, `VirtualJoystick`, `battle_hud_controller.gd` |
+| Real splash/menu/Khan art | 🎨 | Circle sprite fallbacks in `VisualAssetLoader`; optional `tools/generate_khan1_placeholders.gd` |
 | Tower families on `.tres` | 🟡 | Assign in resources or validate script |
 | Organ / boss modifier / combo `.tres` | 🟡 | Folders may be empty until authored |
 | Zervan full rewind (tower HP, hero energy) | 🟡 | Partial |
