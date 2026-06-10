@@ -22,6 +22,8 @@ var _world_bounds: Rect2 = Rect2(Vector2.ZERO, MapCameraUtils.VIEWPORT_SIZE)
 var _focus_tween: Tween = null
 var _camera_locked: bool = false
 var _fit_zoom: float = 1.0
+var _shake_strength: float = 0.0
+var _shake_decay: float = 10.0
 
 
 func configure_from_level(level: LevelData) -> void:
@@ -101,11 +103,24 @@ func get_touch_count() -> int:
 	return _touch_count
 
 
+func request_shake(strength: float = 6.0) -> void:
+	strength *= AccessibilityHelper.shake_strength_multiplier()
+	if strength <= 0.01:
+		return
+	_shake_strength = maxf(_shake_strength, strength)
+
+
 func _process(delta: float) -> void:
 	if _pinch_cooldown > 0.0:
 		_pinch_cooldown = maxf(0.0, _pinch_cooldown - delta)
 		if _pinch_cooldown <= 0.0:
 			_pinch_active = false
+	if _shake_strength > 0.05:
+		offset = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * _shake_strength
+		_shake_strength = move_toward(_shake_strength, 0.0, _shake_decay * delta)
+	else:
+		offset = Vector2.ZERO
+		_shake_strength = 0.0
 
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -100,7 +100,7 @@ This is the heart of the game. Every mode uses the same battle scene with differ
 4. **Start wave** — Enemies spawn in waves and walk the path.
 5. **Defend** — Towers auto-target; **hero** moves via virtual stick and fights manually (Attack / Heavy / Dodge / Skill).
 6. **Win** — All waves cleared with lives remaining.
-7. **Lose** — Enemies leak until **lives = 0** (optional one-time **Simorgh Feather** continue).
+7. **Lose** — Enemies leak until **lives = 0** (Simorgh Feather continue — **deferred**, not implemented).
 
 ### Hero controls
 
@@ -261,13 +261,7 @@ All battle systems receive the same `BattleContext` reference:
 | `blessings` | Fate/boon modifiers this run |
 | `corruption` / `map_light_manager` | Regional light, cleanse, hijack |
 | `morale` | 0–100 momentum |
-| `chrono` / `zervan_dial` | Rewind snapshots |
-| `couplet` | Rhyme Window timing |
-| `khan` | Boss HP phases |
-| `forge` | Adjacent tower hybrids |
-| `director` / `ahriman_director` | Counter-pick boss modifiers |
-| `tribute` | Zahhak serpent sacrifice timer |
-| `hunt_director` | Hunt finale / shard pacing |
+| `hunt` | Hunt binding shards (`HuntController`) |
 | `labour_mode` | Campaign-only story overlay (`LabourMode` node) |
 | `active_allies` | Barracks-summoned melee units |
 | `run_modifiers` | Fate cards, relic slots, run-scoped buffs |

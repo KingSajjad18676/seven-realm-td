@@ -60,6 +60,15 @@ static func khan1_sprite(entity_id: String) -> String:
 	return ""
 
 
+static func make_portrait_texture(entity_id: String, fallback_color: Color, diameter: int = 48) -> Texture2D:
+	var path := khan1_sprite(entity_id)
+	if path != "" and ResourceLoader.exists(path):
+		var tex := load(path) as Texture2D
+		if tex != null:
+			return tex
+	return _make_circle_texture(fallback_color, diameter)
+
+
 static func map_sprite(level_id: String) -> String:
 	var base := "res://art/_placeholders/maps/%s.png" % level_id
 	if ResourceLoader.exists(base):

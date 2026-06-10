@@ -120,13 +120,14 @@ func _show_impact_vfx(strike_pos: Vector2) -> void:
 	var flash := ColorRect.new()
 	flash.size = Vector2(BLAST_RADIUS * 2.0, BLAST_RADIUS * 2.0)
 	flash.position = strike_pos - flash.size * 0.5
-	flash.color = Color(1.0, 0.45, 0.1, 0.55)
+	flash.color = Color(1.0, 0.45, 0.1, 0.55 * AccessibilityHelper.flash_alpha_multiplier())
 	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	flash.z_index = 49
 	_vfx_root.add_child(flash)
 	var tree := get_tree()
+	var lifetime := 0.35 if not AccessibilityHelper.should_reduce_flashes() else 0.15
 	if tree:
-		tree.create_timer(0.35).timeout.connect(func() -> void:
+		tree.create_timer(lifetime).timeout.connect(func() -> void:
 			if is_instance_valid(flash):
 				flash.queue_free()
 		, CONNECT_ONE_SHOT)

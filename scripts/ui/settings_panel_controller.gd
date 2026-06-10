@@ -1,11 +1,17 @@
 extends Panel
 
+signal settings_changed
+
 @onready var _music: HSlider = %MusicSlider
 @onready var _sfx: HSlider = %SfxSlider
 @onready var _ui_scale: HSlider = %UiScaleSlider
 @onready var _particles: CheckBox = %ReducedParticles
 @onready var _contrast: CheckBox = %HighContrast
 @onready var _shake: CheckBox = %ReducedShake
+@onready var _flashes: CheckBox = %ReducedFlashes
+@onready var _subtitles: CheckBox = %Subtitles
+@onready var _left_hand: CheckBox = %LeftHanded
+@onready var _vibration: CheckBox = %Vibration
 @onready var _restore: Button = %RestorePurchases
 @onready var _close: Button = %CloseButton
 
@@ -29,6 +35,14 @@ func _ready() -> void:
 		_contrast.toggled.connect(_save)
 	if _shake:
 		_shake.toggled.connect(_save)
+	if _flashes:
+		_flashes.toggled.connect(_save)
+	if _subtitles:
+		_subtitles.toggled.connect(_save)
+	if _left_hand:
+		_left_hand.toggled.connect(_save)
+	if _vibration:
+		_vibration.toggled.connect(_save)
 
 
 func _load() -> void:
@@ -46,6 +60,14 @@ func _load() -> void:
 		_contrast.button_pressed = bool(SaveSystem.get_accessibility("high_contrast", false))
 	if _shake:
 		_shake.button_pressed = bool(SaveSystem.get_accessibility("reduced_shake", false))
+	if _flashes:
+		_flashes.button_pressed = bool(SaveSystem.get_accessibility("reduced_flashes", false))
+	if _subtitles:
+		_subtitles.button_pressed = bool(SaveSystem.get_accessibility("subtitles", true))
+	if _left_hand:
+		_left_hand.button_pressed = bool(SaveSystem.get_accessibility("left_handed", false))
+	if _vibration:
+		_vibration.button_pressed = bool(SaveSystem.get_accessibility("vibration", true))
 
 
 func _save(_v: Variant = null) -> void:
@@ -66,10 +88,19 @@ func _save(_v: Variant = null) -> void:
 		SaveSystem.set_accessibility("high_contrast", _contrast.button_pressed)
 	if _shake:
 		SaveSystem.set_accessibility("reduced_shake", _shake.button_pressed)
+	if _flashes:
+		SaveSystem.set_accessibility("reduced_flashes", _flashes.button_pressed)
+	if _subtitles:
+		SaveSystem.set_accessibility("subtitles", _subtitles.button_pressed)
+	if _left_hand:
+		SaveSystem.set_accessibility("left_handed", _left_hand.button_pressed)
+	if _vibration:
+		SaveSystem.set_accessibility("vibration", _vibration.button_pressed)
 	if SettingsService:
 		SettingsService.load_from_save()
 	if AudioManager and AudioManager.has_method("apply_settings_volumes"):
 		AudioManager.apply_settings_volumes()
+	settings_changed.emit()
 
 
 func _on_restore() -> void:

@@ -7,7 +7,10 @@ static func default_accessibility() -> Dictionary:
 		"ui_scale": 1.0,
 		"high_contrast": false,
 		"reduced_shake": false,
+		"reduced_flashes": false,
 		"subtitles": true,
+		"left_handed": false,
+		"vibration": true,
 	}
 
 

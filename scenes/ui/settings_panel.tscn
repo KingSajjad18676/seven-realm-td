@@ -8,10 +8,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -220.0
-offset_top = -180.0
-offset_right = 220.0
-offset_bottom = 180.0
+offset_left = -240.0
+offset_top = -260.0
+offset_right = 240.0
+offset_bottom = 260.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
@@ -33,6 +33,10 @@ layout_mode = 2
 text = "Settings & Accessibility"
 horizontal_alignment = 1
 
+[node name="MusicLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "Music volume"
+
 [node name="MusicSlider" type="HSlider" parent="VBox"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -40,12 +44,20 @@ max_value = 1.0
 step = 0.05
 value = 0.8
 
+[node name="SfxLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "SFX volume"
+
 [node name="SfxSlider" type="HSlider" parent="VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 1.0
 step = 0.05
 value = 0.8
+
+[node name="UiScaleLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "UI scale"
 
 [node name="UiScaleSlider" type="HSlider" parent="VBox"]
 unique_name_in_owner = true
@@ -63,12 +75,34 @@ text = "Reduced particles"
 [node name="HighContrast" type="CheckBox" parent="VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "High contrast"
+text = "High contrast (HUD + region icons)"
 
 [node name="ReducedShake" type="CheckBox" parent="VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Reduced screen shake"
+
+[node name="ReducedFlashes" type="CheckBox" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Reduced screen flashes"
+
+[node name="Subtitles" type="CheckBox" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Narrative subtitles"
+
+[node name="LeftHanded" type="CheckBox" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Left-handed layout"
+
+[node name="Vibration" type="CheckBox" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Vibration feedback"
 
 [node name="RestorePurchases" type="Button" parent="VBox"]
 unique_name_in_owner = true

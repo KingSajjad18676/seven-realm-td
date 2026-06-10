@@ -1,10 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://battle_scene"]
+[gd_scene load_steps=9 format=3 uid="uid://battle_scene"]
 
 [ext_resource type="Script" path="res://scripts/battle/battle_bootstrap.gd" id="1_battle"]
 [ext_resource type="Script" path="res://scripts/ui/touch_camera.gd" id="2_camera"]
 [ext_resource type="Script" path="res://scripts/ui/battle_hud_controller.gd" id="3_hud"]
 [ext_resource type="PackedScene" uid="uid://fps_overlay" path="res://scenes/ui/fps_overlay.tscn" id="4_fps"]
-[ext_resource type="Script" path="res://scripts/ui/tower_spot_panel_controller.gd" id="5_tower_panel"]
 [ext_resource type="Script" path="res://scripts/ui/minimap_controller.gd" id="6_minimap"]
 [ext_resource type="Script" path="res://scripts/ui/threat_indicator_controller.gd" id="7_threat"]
 [ext_resource type="Script" path="res://scripts/ui/gauntlet_hud_widget.gd" id="8_gauntlet_hud"]
@@ -253,80 +252,6 @@ offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 8
-
-[node name="SkillButton" type="Button" parent="CanvasLayer/BottomBar"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 36)
-layout_mode = 2
-text = "Rostam Skill"
-
-[node name="NaftButton" type="Button" parent="CanvasLayer/BottomBar"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(88, 36)
-layout_mode = 2
-text = "Naft 2/2"
-
-[node name="ForgeButton" type="Button" parent="CanvasLayer/BottomBar"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 36)
-layout_mode = 2
-text = "Ancestral Forge"
-
-[node name="TowerSpotPanel" type="Panel" parent="CanvasLayer"]
-unique_name_in_owner = true
-visible = false
-offset_left = 1020.0
-offset_top = 560.0
-offset_right = 1260.0
-offset_bottom = 708.0
-script = ExtResource("5_tower_panel")
-
-[node name="TitleLabel" type="Label" parent="CanvasLayer/TowerSpotPanel"]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 8.0
-offset_top = 8.0
-offset_right = 232.0
-offset_bottom = 32.0
-text = "Tower"
-horizontal_alignment = 1
-
-[node name="UpgradeButton" type="Button" parent="CanvasLayer/TowerSpotPanel"]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 8.0
-offset_top = 40.0
-offset_right = 232.0
-offset_bottom = 72.0
-text = "Upgrade"
-
-[node name="SellButton" type="Button" parent="CanvasLayer/TowerSpotPanel"]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 8.0
-offset_top = 80.0
-offset_right = 232.0
-offset_bottom = 112.0
-text = "Sell"
-
-[node name="PurifyButton" type="Button" parent="CanvasLayer/TowerSpotPanel"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 0
-offset_left = 8.0
-offset_top = 40.0
-offset_right = 232.0
-offset_bottom = 72.0
-text = "Purify (2 SF)"
-
-[node name="CloseButton" type="Button" parent="CanvasLayer/TowerSpotPanel"]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 8.0
-offset_top = 128.0
-offset_right = 232.0
-offset_bottom = 160.0
-text = "Close"
 
 [node name="ResultsPanel" type="Panel" parent="CanvasLayer"]
 unique_name_in_owner = true

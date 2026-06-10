@@ -8,18 +8,22 @@ signal skill_pressed
 signal naft_pressed
 
 var _joystick: VirtualJoystick = null
+var _action_cluster: VBoxContainer = null
 var _attack_btn: Button = null
 var _heavy_btn: Button = null
 var _dodge_btn: Button = null
 var _skill_btn: Button = null
 var _naft_btn: Button = null
 var _hero_chip: PanelContainer = null
+var _hero_portrait: TextureRect = null
 var _hero_hp_bar: ProgressBar = null
 var _hero_name_label: Label = null
 var _hero_level_label: Label = null
 var _hero_xp_bar: ProgressBar = null
+var _skill_readiness_bar: ProgressBar = null
 var _tether_label: Label = null
 var _context: BattleContext = null
+var _left_handed: bool = false
 
 
 func setup(ctx: BattleContext) -> void:
@@ -29,12 +33,39 @@ func setup(ctx: BattleContext) -> void:
 	_build_joystick()
 	_build_action_cluster()
 	_build_hero_chip()
+	apply_layout(AccessibilityHelper.is_left_handed())
 
 
 func get_move_vector() -> Vector2:
 	if _joystick:
 		return _joystick.get_direction()
 	return Vector2.ZERO
+
+
+func apply_layout(left_handed: bool) -> void:
+	_left_handed = left_handed
+	if _joystick:
+		_joystick.set_corner(left_handed)
+	if _action_cluster:
+		if left_handed:
+			_action_cluster.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+			_action_cluster.offset_left = 12.0
+			_action_cluster.offset_top = -220.0
+			_action_cluster.offset_right = 220.0
+			_action_cluster.offset_bottom = -12.0
+		else:
+			_action_cluster.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+			_action_cluster.offset_left = -220.0
+			_action_cluster.offset_top = -220.0
+			_action_cluster.offset_right = -12.0
+			_action_cluster.offset_bottom = -12.0
+	if _hero_chip:
+		if left_handed:
+			_hero_chip.offset_left = 12.0
+			_hero_chip.offset_right = 222.0
+		else:
+			_hero_chip.offset_left = 150.0
+			_hero_chip.offset_right = 360.0
 
 
 func refresh_hero_chip() -> void:
@@ -61,6 +92,23 @@ func refresh_hero_chip() -> void:
 			_tether_label.text = "Tether: %d" % int(hero.tether_energy)
 		else:
 			_tether_label.text = "Tether: —"
+	if _skill_readiness_bar and hero.data:
+		var max_cd := maxf(hero.data.skill_cooldown, 0.01)
+		var ready := 1.0 - clampf(hero.get_skill_cooldown_remaining() / max_cd, 0.0, 1.0)
+		_skill_readiness_bar.value = ready
+	_refresh_portrait(hero)
+
+
+func refresh_skill_button_label() -> void:
+	if _context == null or _context.hero_manager == null or _skill_btn == null:
+		return
+	var hero := _context.hero_manager.get_controlled_hero()
+	if hero:
+		var cd := hero.get_skill_cooldown_remaining()
+		if cd > 0.05:
+			_skill_btn.text = "%.1f" % cd
+		else:
+			_skill_btn.text = _skill_label(hero)
 
 
 func refresh_action_buttons() -> void:
@@ -103,21 +151,22 @@ func _build_joystick() -> void:
 
 
 func _build_action_cluster() -> void:
-	var cluster := VBoxContainer.new()
-	cluster.name = "ActionCluster"
-	cluster.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
-	cluster.offset_left = -220.0
-	cluster.offset_top = -220.0
-	cluster.offset_right = -12.0
-	cluster.offset_bottom = -12.0
-	cluster.add_theme_constant_override("separation", 6)
-	cluster.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(cluster)
+	_action_cluster = VBoxContainer.new()
+	_action_cluster.name = "ActionCluster"
+	_action_cluster.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	_action_cluster.offset_left = -220.0
+	_action_cluster.offset_top = -220.0
+	_action_cluster.offset_right = -12.0
+	_action_cluster.offset_bottom = -12.0
+	_action_cluster.add_theme_constant_override("separation", 6)
+	_action_cluster.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_action_cluster)
 
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
-	row.alignment = BoxContainer.ALIGNMENT_END
-	cluster.add_child(row)
+	row.alignment = BoxContainer.ALIGNMENT_END if not _left_handed else BoxContainer.ALIGNMENT_BEGIN
+	row.name = "ActionRow"
+	_action_cluster.add_child(row)
 
 	_dodge_btn = _make_action_btn("Dodge", Vector2(56, 56))
 	_dodge_btn.pressed.connect(func() -> void: dodge_pressed.emit())
@@ -137,7 +186,7 @@ func _build_action_cluster() -> void:
 
 	_naft_btn = _make_action_btn("Naft", Vector2(56, 40))
 	_naft_btn.pressed.connect(func() -> void: naft_pressed.emit())
-	cluster.add_child(_naft_btn)
+	_action_cluster.add_child(_naft_btn)
 	_naft_btn.visible = false
 
 
@@ -150,33 +199,73 @@ func _build_hero_chip() -> void:
 	_hero_chip.offset_right = 360.0
 	_hero_chip.offset_bottom = -12.0
 	add_child(_hero_chip)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	_hero_chip.add_child(row)
+
+	_hero_portrait = TextureRect.new()
+	_hero_portrait.custom_minimum_size = Vector2(48, 48)
+	_hero_portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_hero_portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	row.add_child(_hero_portrait)
+
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 4)
-	_hero_chip.add_child(box)
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(box)
+
 	_hero_name_label = Label.new()
 	_hero_name_label.add_theme_font_size_override("font_size", 12)
 	_hero_name_label.text = "Rostam"
 	box.add_child(_hero_name_label)
+
 	_hero_level_label = Label.new()
 	_hero_level_label.add_theme_font_size_override("font_size", 10)
 	_hero_level_label.text = "Lv 1"
 	box.add_child(_hero_level_label)
+
 	_hero_hp_bar = ProgressBar.new()
-	_hero_hp_bar.custom_minimum_size = Vector2(180, 14)
+	_hero_hp_bar.custom_minimum_size = Vector2(140, 14)
 	_hero_hp_bar.max_value = 220.0
 	_hero_hp_bar.value = 220.0
 	_hero_hp_bar.show_percentage = false
 	box.add_child(_hero_hp_bar)
+
 	_hero_xp_bar = ProgressBar.new()
-	_hero_xp_bar.custom_minimum_size = Vector2(180, 6)
+	_hero_xp_bar.custom_minimum_size = Vector2(140, 6)
 	_hero_xp_bar.max_value = 1.0
 	_hero_xp_bar.value = 0.0
 	_hero_xp_bar.show_percentage = false
 	box.add_child(_hero_xp_bar)
+
+	_skill_readiness_bar = ProgressBar.new()
+	_skill_readiness_bar.custom_minimum_size = Vector2(140, 6)
+	_skill_readiness_bar.max_value = 1.0
+	_skill_readiness_bar.value = 1.0
+	_skill_readiness_bar.show_percentage = false
+	_skill_readiness_bar.tooltip_text = "Skill readiness"
+	box.add_child(_skill_readiness_bar)
+
 	_tether_label = Label.new()
 	_tether_label.add_theme_font_size_override("font_size", 10)
 	_tether_label.text = "Tether: —"
 	box.add_child(_tether_label)
+
+
+func _refresh_portrait(hero: HeroController) -> void:
+	if _hero_portrait == null or hero == null or hero.data == null:
+		return
+	var sprite_path := hero.data.sprite_path
+	if sprite_path == "":
+		sprite_path = VisualAssetLoader.khan1_sprite(hero.data.hero_id)
+	if sprite_path != "" and ResourceLoader.exists(sprite_path):
+		var tex := load(sprite_path) as Texture2D
+		if tex:
+			_hero_portrait.texture = tex
+			return
+	var fallback := VisualAssetLoader.make_portrait_texture(hero.data.hero_id, hero.data.color, 48)
+	_hero_portrait.texture = fallback
 
 
 func _make_action_btn(text: String, size: Vector2) -> Button:

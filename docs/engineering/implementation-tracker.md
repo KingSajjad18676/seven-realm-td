@@ -1,6 +1,6 @@
 # Implementation Tracker
 
-**Last updated:** 2026-06-11 (wave spawn fixes + hero progression)  
+**Last updated:** 2026-06-11 (N1 HUD completion + N1–N5 milestone plan)  
 **Repo truth:** [project-status.md](project-status.md)
 
 ---
@@ -21,7 +21,7 @@
 | **Hero skill loadout** | ✅ | Equipment screen skill picker; save `hero_skill_selected`; applied in `HeroManager` |
 | **Rostam Naft traps** | ✅ | Wired in `battle_bootstrap`; `NaftTrapController` |
 | Sacred Tether via radial | ✅ | Manage radial **Tether** option (tower spot panel deprecated) |
-| Battle HUD polish | ✅ | Hero chip, objective chip, boss HP bar, pause Restart/Settings |
+| Battle HUD polish | ✅ | Hero chip (portrait, skill readiness); alert priority; gate-hit feedback; region status chips; subtitles; objective/boss chips |
 | Procedural SFX + menu tone | ✅ | `AudioManager` tone cache; settings drive Music/SFX buses |
 | Lion boss (Khan 1 finale) | ✅ | Wave 30 of Khan 1 |
 | Voluntary replay + analytics | ✅ | Mode-aware `BattleLaunchData.duplicate_launch()` |
@@ -138,3 +138,41 @@
 | Extra hero roster | Rostam + Zal only |
 | Company splash | Optional stub scene |
 | Per-map loading screens | 🟡 Functional preload overlay + progress (`battle_loading_overlay`); illustrated splash art still placeholder via `VisualAssetLoader.loading_sprite()` |
+
+---
+
+## Next milestones (N1–N5)
+
+Post–M8 backlog after Khan 1 replay gate. **N1** is pure code; **N3–N5** are gated on device replay proof or release scope.
+
+| Milestone | Scope | Status |
+|-----------|-------|--------|
+| **N1 — Battle HUD completion** | Alert priority queue; remove legacy bottom-bar Skill/Naft + `TowerSpotPanel`; hero portrait chip; gate-hit feedback; accessibility wiring (contrast/shake/particles/flashes/left-hand/vibration/subtitles); color-safe corruption region chips | ✅ |
+| **N2 — Combat feel & perf** | Projectile-on-impact damage; performance overlay; large-map threat-jump | ❌ |
+| **N3 — Content depth** | Farr meta currency + HUD; Fate cards 8→~16; Simorgh Feather continue; Gordafarid or Esfandiyar hero | ❌ (post replay-gate) |
+| **N4 — Production maps & art** | Author `level_02`–`level_08` geometry via map editor; unit sprites; loading splash art per `01-art-phases.md` | 🟡 L1 only |
+| **N5 — Release plumbing** | Platform IAP + real restore; crash SDK; privacy/consent; cosmetics-first store catalog; production analytics | 🟡 stubs |
+
+### N1 gap rows (was missing)
+
+| Item | Target |
+|------|--------|
+| Alert priority (gate > hijack > collapse > boss > objective > wave) | `battle_hud_controller.gd` queue |
+| Hero portrait + skill readiness on chip | `hero_action_hud.gd` |
+| Lives-hit flash + optional camera shake | HUD overlay + `TouchCamera.request_shake` |
+| Accessibility consumers | `AccessibilityHelper`, settings → VFX/shake/HUD |
+| Color-safe corruption HUD | `region_status_hud.gd` when high contrast |
+| Legacy UI removal | `battle.tscn` bottom Skill/Naft/Forge; `TowerSpotPanel` |
+
+### N2–N5 gap rows (deferred)
+
+| Item | Notes |
+|------|-------|
+| Projectile impact timing | Cosmetic fly today in `tower_controller.gd` |
+| Performance overlay | Roadmap §12 backlog |
+| Full ~43 Fate cards | 8 wired in `content_catalog.gd` |
+| Farr + collection UI | Locked product decision; not in save |
+| Extra heroes | Rostam / Zal / Sohrab only |
+| Simorgh continue / Forge hybrids / Memory Div nodes | Design canon; not in `scripts/` |
+| Maps 2–8 art + geometry | Procedural paths + placeholder PNGs |
+| IAP / crash / privacy / cosmetics store | M8 stubs in `store_service.gd`, `crash_reporter.gd` |

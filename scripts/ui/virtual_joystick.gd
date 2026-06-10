@@ -15,13 +15,24 @@ var _base_color := Color(0.08, 0.1, 0.12, 0.45)
 var _knob_color := Color(0.85, 0.75, 0.45, 0.85)
 
 
+func set_corner(left_handed: bool) -> void:
+	if left_handed:
+		set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+		offset_left = -140.0
+		offset_top = -200.0
+		offset_right = -12.0
+		offset_bottom = -12.0
+	else:
+		set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+		offset_left = 12.0
+		offset_top = -200.0
+		offset_right = 140.0
+		offset_bottom = -12.0
+
+
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
-	offset_left = 12.0
-	offset_top = -200.0
-	offset_right = 140.0
-	offset_bottom = -12.0
+	set_corner(false)
 
 
 func get_direction() -> Vector2:

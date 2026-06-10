@@ -1,6 +1,6 @@
 # Project Status (Godot)
 
-**Last updated:** 2026-06-11 (wave spawn audit + WaveSpawnValidator + ContentValidator fix)  
+**Last updated:** 2026-06-11 (N1 battle HUD completion + N1–N5 milestone plan)  
 **Milestones:** [design/04-production-roadmap.md](../design/04-production-roadmap.md) · **Identity:** [design/00-project-index.md](../design/00-project-index.md)
 
 ---
@@ -49,7 +49,7 @@
 | **Hero action controls**       | ✅ Virtual joystick (left); Attack / Heavy / Dodge / Skill (right); manual combat — no auto-attack; enemy telegraphed melee when lane-blocked |
 | **In-battle hero leveling**    | ✅ `HeroLevelService` — XP per kill, Lv 1–10, +8% dmg / +10% HP per level; HUD level + XP bar |
 | **Hero skill loadout**         | ✅ Pre-battle skill select on Equipment screen (`rostam_charge`, `zal_foresight`, `sohrab_rage` unlocks); persisted in save |
-| **Battle HUD (Khan 1 polish)** | ✅ Hero chip (HP + tether); objective chip; boss HP bar; action cluster; pause Restart + Settings; world-map Settings button |
+| **Battle HUD (Khan 1 polish)** | ✅ Hero chip (portrait + HP/XP/tether + skill readiness); alert priority queue; gate-hit feedback; region status chips (high contrast); subtitle overlay; objective/boss chips; action cluster; pause Restart + Settings |
 | **Audio (placeholder tones)**  | ✅ Procedural SFX + menu loop; Music/SFX buses; settings sliders wired |
 | **Naft traps wiring**          | ✅ `NaftTrapController` instantiated in `battle_bootstrap` for Rostam |
 | Battle camera / HUD (Khan 1)   | ✅ Full-map fit-locked view; compact HUD; build/manage radial; range ring; virtual stick + action buttons; back navigation |
@@ -113,8 +113,12 @@ In the editor: **Project → Tools → GUT** (bottom panel) → Run All.
 
 ## Known deferrals
 
+- **N2–N5 milestones** — see [implementation-tracker.md](implementation-tracker.md) §Next milestones
 - Production art (circle sprite fallbacks in `VisualAssetLoader`; run `tools/generate_khan1_placeholders.gd` for PNGs)
+- Maps 2–8 authored geometry + illustrated art (only `level_01` production map today)
 - Projectile-on-impact damage (instant damage today; cosmetic projectiles)
-- Full 43 Fate card pool; extra heroes (Gordafarid, Esfandiyar, …)
+- Performance overlay (roadmap backlog)
+- Full ~43 Fate card pool (8 wired); Farr meta currency; extra heroes (Gordafarid, Esfandiyar, …)
+- Simorgh Feather continue; Forge hybrids; Memory Div / Blood Oath run nodes; Zervan Dial rewind (not in codebase)
 - Company splash scene (boot → menu directly today)
-- Platform IAP, crash SDK, Simorgh continue, Zervan Dial rewind
+- Platform IAP, crash SDK, privacy disclosures, cosmetics-first store catalog, production analytics SDK
