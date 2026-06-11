@@ -62,6 +62,8 @@ var _region_status_hud: RegionStatusHud = null
 var _subtitle_overlay: SubtitleOverlay = null
 var _gate_flash: ColorRect = null
 var _battle_camera: TouchCamera = null
+var _last_playable_cam_pos: Vector2 = Vector2(-99999.0, -99999.0)
+var _last_playable_cam_zoom: float = -1.0
 var _last_lives: int = -1
 var _gate_flash_tween: Tween = null
 var _lives_flash_tween: Tween = null
@@ -377,6 +379,7 @@ func _on_spell_pressed(spell_id: String) -> void:
 
 func _process(_delta: float) -> void:
 	_tick_alert_queue(_delta)
+	_tick_playable_hud_layout()
 	if _hero_action_hud:
 		_hero_action_hud.refresh_action_buttons()
 		_hero_action_hud.refresh_hero_chip()
@@ -410,6 +413,32 @@ func setup_camera_ui(camera: TouchCamera) -> void:
 		_threat_indicator.visible = not camera.is_camera_locked()
 	if _tower_radial:
 		_tower_radial.camera = camera
+	_last_playable_cam_pos = Vector2(-99999.0, -99999.0)
+	_last_playable_cam_zoom = -1.0
+	_update_playable_hud_layout()
+
+
+func _update_playable_hud_layout() -> void:
+	if _hero_action_hud == null:
+		return
+	var vp := get_viewport()
+	if _battle_camera and vp:
+		var rect := MapCameraUtils.playable_screen_rect(vp, _battle_camera)
+		_hero_action_hud.apply_playable_rect(rect)
+	elif vp:
+		_hero_action_hud.apply_playable_rect(Rect2(Vector2.ZERO, vp.get_visible_rect().size))
+
+
+func _tick_playable_hud_layout() -> void:
+	if _battle_camera == null or _hero_action_hud == null:
+		return
+	var pos := _battle_camera.global_position
+	var z := _battle_camera.zoom.x
+	if pos.is_equal_approx(_last_playable_cam_pos) and is_equal_approx(z, _last_playable_cam_zoom):
+		return
+	_last_playable_cam_pos = pos
+	_last_playable_cam_zoom = z
+	_update_playable_hud_layout()
 
 
 func _apply_hud_layout() -> void:
@@ -682,6 +711,7 @@ func _on_settings_changed() -> void:
 	_apply_accessibility_scale()
 	_apply_accessibility_theme()
 	_apply_hud_layout()
+	_update_playable_hud_layout()
 	if _region_status_hud:
 		_region_status_hud.refresh_accessibility()
 
@@ -792,7 +822,9 @@ func _hide_pause_modal() -> void:
 
 
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
+	if what == NOTIFICATION_WM_SIZE_CHANGED:
+		_update_playable_hud_layout()
+	elif what == NOTIFICATION_WM_GO_BACK_REQUEST:
 		_handle_back_pressed()
 
 

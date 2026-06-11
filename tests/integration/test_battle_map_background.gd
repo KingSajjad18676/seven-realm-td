@@ -47,6 +47,9 @@ func test_level_01_camera_is_fit_locked() -> void:
 	assert_almost_eq(camera.global_position.x, 640.0, 1.0)
 	assert_almost_eq(camera.global_position.y, 360.0, 1.0)
 	assert_almost_eq(camera.zoom.x, 1.0, 0.01)
+	camera._apply_zoom_at(Vector2(640, 360), 0.01)
+	assert_gte(camera.zoom.x, camera.min_zoom)
+	assert_almost_eq(camera.zoom.x, camera.min_zoom, 0.01)
 	var minimap := battle.get_node_or_null("CanvasLayer/TopRightStack/MinimapPanel") as MinimapController
 	assert_not_null(minimap)
 	assert_true(minimap.visible, "Khan 1 should show static route minimap top-right")

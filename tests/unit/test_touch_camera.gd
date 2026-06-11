@@ -19,19 +19,26 @@ func test_configure_from_level_uses_fit_center_for_medium_maps() -> void:
 	level.camera_anchors = [Vector2(500, 320), Vector2(900, 360)]
 	level.minimap_bounds = MapCameraUtils.compute_world_bounds(level)
 	_camera.configure_from_level(level)
-	var fit := MapCameraUtils.compute_fit_to_view(MapCameraUtils.compute_battle_view_bounds(level))
+	var fit := MapCameraUtils.compute_fit_to_view(
+		MapCameraUtils.compute_battle_view_bounds(level),
+		MapCameraUtils.VIEWPORT_SIZE,
+		MapCameraUtils.FitMode.COVER
+	)
 	assert_eq(_camera.global_position, fit.center)
 	assert_true(_camera.is_camera_locked())
+	assert_almost_eq(_camera.min_zoom, _camera.get_fit_zoom(), 0.001)
 	assert_gt(_camera.get_world_bounds().size.x, 0.0)
 
 
 func test_zoom_clamps_between_min_and_max() -> void:
 	var level := _sample_level()
 	_camera.configure_from_level(level)
+	assert_almost_eq(_camera.min_zoom, _camera.get_fit_zoom(), 0.001)
 	_camera._apply_zoom_at(Vector2(640, 360), 10.0)
 	assert_lte(_camera.zoom.x, _camera.max_zoom)
 	_camera._apply_zoom_at(Vector2(640, 360), 0.01)
 	assert_gte(_camera.zoom.x, _camera.min_zoom)
+	assert_almost_eq(_camera.zoom.x, _camera.min_zoom, 0.001)
 
 
 func test_should_block_battlefield_tap_when_multi_touch_on_large_map() -> void:
@@ -78,6 +85,44 @@ func test_magnify_gesture_zooms_locked_camera() -> void:
 	ev.factor = 1.15
 	ev.position = Vector2(640, 360)
 	_camera._unhandled_input(ev)
+	assert_gt(_camera.zoom.x, start_z)
+
+
+func test_magnify_cannot_zoom_out_locked_camera() -> void:
+	var level := LevelData.new()
+	level.path_points = [Vector2(80, 360), Vector2(1180, 360)]
+	_camera.configure_from_level(level)
+	var start_z := _camera.zoom.x
+	var ev := InputEventMagnifyGesture.new()
+	ev.factor = 0.85
+	ev.position = Vector2(640, 360)
+	_camera._unhandled_input(ev)
+	assert_almost_eq(_camera.zoom.x, start_z, 0.001)
+
+
+func test_locked_min_zoom_equals_fit_zoom() -> void:
+	var level := LevelData.new()
+	level.path_points = [Vector2(80, 360), Vector2(1180, 360)]
+	_camera.configure_from_level(level)
+	assert_almost_eq(_camera.min_zoom, _camera.get_fit_zoom(), 0.001)
+	assert_almost_eq(_camera.zoom.x, _camera.get_fit_zoom(), 0.001)
+
+
+func test_large_map_pan_and_zoom_in() -> void:
+	var level := _sample_level()
+	_camera.configure_from_level(level)
+	assert_false(_camera.is_camera_locked())
+	var start_pos := _camera.global_position
+	var drag := InputEventScreenDrag.new()
+	drag.position = Vector2(400, 400)
+	drag.relative = Vector2(-80, 0)
+	_camera._dragging = true
+	_camera._touch_count = 1
+	_camera._last_pos = drag.position - drag.relative
+	_camera._handle_screen_drag(drag)
+	assert_ne(_camera.global_position, start_pos)
+	var start_z := _camera.zoom.x
+	_camera._apply_zoom_at(Vector2(640, 360), 1.2)
 	assert_gt(_camera.zoom.x, start_z)
 
 

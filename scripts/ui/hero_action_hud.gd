@@ -2,6 +2,13 @@ class_name HeroActionHud
 extends Control
 
 const SPELL_BAR_CLEARANCE := 56.0
+const PLAYABLE_MARGIN := 12.0
+const CLUSTER_WIDTH := 220.0
+const CLUSTER_HEIGHT := 220.0
+const JOYSTICK_WIDTH := 128.0
+const JOYSTICK_HEIGHT := 200.0
+const HERO_CHIP_WIDTH := 210.0
+const HERO_CHIP_HEIGHT := 96.0
 
 signal attack_pressed
 signal heavy_pressed
@@ -26,6 +33,8 @@ var _skill_readiness_bar: ProgressBar = null
 var _tether_label: Label = null
 var _context: BattleContext = null
 var _left_handed: bool = false
+var _playable_rect: Rect2 = Rect2()
+var _has_playable_rect: bool = false
 
 
 func setup(ctx: BattleContext) -> void:
@@ -44,35 +53,117 @@ func get_move_vector() -> Vector2:
 	return Vector2.ZERO
 
 
+func apply_playable_rect(screen_rect: Rect2) -> void:
+	_playable_rect = screen_rect
+	_has_playable_rect = screen_rect.size.x > 0.0 and screen_rect.size.y > 0.0
+	_layout_controls()
+
+
 func apply_layout(left_handed: bool) -> void:
 	_left_handed = left_handed
+	_layout_controls()
+
+
+func _layout_controls() -> void:
+	if _has_playable_rect:
+		_layout_playable_rect()
+	else:
+		_layout_viewport_anchors()
+
+
+func _layout_playable_rect() -> void:
+	var rect := _playable_rect
+	var bottom := SPELL_BAR_CLEARANCE
+	var cluster_top := rect.end.y - CLUSTER_HEIGHT - PLAYABLE_MARGIN - bottom
+	var joystick_top := rect.end.y - JOYSTICK_HEIGHT - PLAYABLE_MARGIN - bottom
+	if _left_handed:
+		if _joystick:
+			_position_control(
+				_joystick,
+				rect.end.x - JOYSTICK_WIDTH - PLAYABLE_MARGIN,
+				joystick_top,
+				JOYSTICK_WIDTH,
+				JOYSTICK_HEIGHT
+			)
+		if _action_cluster:
+			_position_control(
+				_action_cluster,
+				rect.position.x + PLAYABLE_MARGIN,
+				cluster_top,
+				CLUSTER_WIDTH,
+				CLUSTER_HEIGHT
+			)
+		if _hero_chip:
+			_position_control(
+				_hero_chip,
+				rect.end.x - JOYSTICK_WIDTH - HERO_CHIP_WIDTH - PLAYABLE_MARGIN * 3.0,
+				rect.end.y - HERO_CHIP_HEIGHT - bottom,
+				HERO_CHIP_WIDTH,
+				HERO_CHIP_HEIGHT
+			)
+	else:
+		if _joystick:
+			_position_control(
+				_joystick,
+				rect.position.x + PLAYABLE_MARGIN,
+				joystick_top,
+				JOYSTICK_WIDTH,
+				JOYSTICK_HEIGHT
+			)
+		if _action_cluster:
+			_position_control(
+				_action_cluster,
+				rect.end.x - CLUSTER_WIDTH - PLAYABLE_MARGIN,
+				cluster_top,
+				CLUSTER_WIDTH,
+				CLUSTER_HEIGHT
+			)
+		if _hero_chip:
+			_position_control(
+				_hero_chip,
+				rect.position.x + JOYSTICK_WIDTH + PLAYABLE_MARGIN * 2.0,
+				rect.end.y - HERO_CHIP_HEIGHT - bottom,
+				HERO_CHIP_WIDTH,
+				HERO_CHIP_HEIGHT
+			)
+
+
+func _layout_viewport_anchors() -> void:
 	if _joystick:
-		_joystick.set_corner(left_handed)
+		_joystick.set_corner(_left_handed)
 	if _action_cluster:
 		var bottom := SPELL_BAR_CLEARANCE
-		var cluster_height := 220.0
-		if left_handed:
+		if _left_handed:
 			_action_cluster.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
-			_action_cluster.offset_left = 12.0
-			_action_cluster.offset_top = -(cluster_height + bottom)
-			_action_cluster.offset_right = 220.0
+			_action_cluster.offset_left = PLAYABLE_MARGIN
+			_action_cluster.offset_top = -(CLUSTER_HEIGHT + bottom)
+			_action_cluster.offset_right = CLUSTER_WIDTH
 			_action_cluster.offset_bottom = -bottom
 		else:
 			_action_cluster.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
-			_action_cluster.offset_left = -220.0
-			_action_cluster.offset_top = -(cluster_height + bottom)
-			_action_cluster.offset_right = -12.0
+			_action_cluster.offset_left = -CLUSTER_WIDTH
+			_action_cluster.offset_top = -(CLUSTER_HEIGHT + bottom)
+			_action_cluster.offset_right = -PLAYABLE_MARGIN
 			_action_cluster.offset_bottom = -bottom
 	if _hero_chip:
 		var chip_bottom := SPELL_BAR_CLEARANCE
-		if left_handed:
-			_hero_chip.offset_left = 12.0
-			_hero_chip.offset_right = 222.0
+		_hero_chip.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+		if _left_handed:
+			_hero_chip.offset_left = PLAYABLE_MARGIN
+			_hero_chip.offset_right = PLAYABLE_MARGIN + HERO_CHIP_WIDTH
 		else:
 			_hero_chip.offset_left = 150.0
-			_hero_chip.offset_right = 360.0
-		_hero_chip.offset_top = -(96.0 + chip_bottom)
+			_hero_chip.offset_right = 150.0 + HERO_CHIP_WIDTH
+		_hero_chip.offset_top = -(HERO_CHIP_HEIGHT + chip_bottom)
 		_hero_chip.offset_bottom = -chip_bottom
+
+
+func _position_control(ctrl: Control, x: float, y: float, w: float, h: float) -> void:
+	ctrl.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	ctrl.offset_left = x
+	ctrl.offset_top = y
+	ctrl.offset_right = x + w
+	ctrl.offset_bottom = y + h
 
 
 func refresh_hero_chip() -> void:

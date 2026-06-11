@@ -87,3 +87,13 @@ func test_compute_fit_to_view_scales_up_for_smaller_bounds() -> void:
 	var bounds := Rect2(0, 0, 640, 360)
 	var fit := MapCameraUtils.compute_fit_to_view(bounds)
 	assert_almost_eq(fit.zoom, 2.0, 0.001)
+
+
+func test_cover_fit_fills_wide_viewport() -> void:
+	var bounds := Rect2(0, 0, 1280, 720)
+	var wide := Vector2(1920.0, 720.0)
+	var contain := MapCameraUtils.compute_fit_to_view(bounds, wide, MapCameraUtils.FitMode.CONTAIN)
+	var cover := MapCameraUtils.compute_fit_to_view(bounds, wide, MapCameraUtils.FitMode.COVER)
+	assert_almost_eq(contain.zoom, 1.0, 0.001)
+	assert_almost_eq(cover.zoom, 1.5, 0.001)
+	assert_gt(cover.zoom, contain.zoom)

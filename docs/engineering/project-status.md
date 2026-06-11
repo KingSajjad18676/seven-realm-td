@@ -102,7 +102,8 @@ In the editor: **Project → Tools → GUT** (bottom panel) → Run All.
 ## Logic fixes (2026-06-05 audit)
 
 - Battle map art: opaque `Terrain` ColorRect no longer covers `MapBackground` when `map_sprite_path` resolves
-- Battle camera: medium maps fit-lock to full 1280×720 canvas; pan/zoom disabled until `uses_large_map_camera`
+- Battle camera: medium maps fit-lock to full 1280×720 canvas; pan disabled; zoom-in only (min zoom = map fit, COVER on locked maps); large maps pan/zoom with min zoom = full map bounds
+- Battle HUD: hero joystick and attack cluster anchor to playable screen rect from camera bounds
 - Battle HUD: compact top/bottom bars; minimap/threat hidden when map fully visible; build radial disables unaffordable towers; occupied pad opens manage radial (level, upgrade, sell, purify); **attack-range ring** on pad select (preview on build, live on manage, grows on upgrade)
 - Build pads: circular hammer-style markers; path/gate dev overlays hidden when map art loads
 - Map editor: multi-route polylines + multi-spawn markers; optional wave `route_id` / `spawn_id`; legacy `path_points` synced on save

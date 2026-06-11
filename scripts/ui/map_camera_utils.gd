@@ -4,6 +4,11 @@ extends RefCounted
 const VIEWPORT_SIZE := Vector2(1280.0, 720.0)
 const BASE_GRID := Vector2(32.0, 18.0)
 
+enum FitMode {
+	CONTAIN,
+	COVER,
+}
+
 
 static func compute_world_bounds(level: LevelData) -> Rect2:
 	if level == null:
@@ -72,8 +77,47 @@ static func compute_battle_view_bounds(level: LevelData) -> Rect2:
 	return compute_world_bounds(level)
 
 
-static func compute_fit_to_view(world_bounds: Rect2, viewport: Vector2 = VIEWPORT_SIZE) -> Dictionary:
+static func compute_fit_to_view(
+	world_bounds: Rect2,
+	viewport: Vector2 = VIEWPORT_SIZE,
+	mode: FitMode = FitMode.CONTAIN
+) -> Dictionary:
 	if world_bounds.size.x <= 0.0 or world_bounds.size.y <= 0.0:
 		return {"center": viewport * 0.5, "zoom": 1.0}
-	var fit_zoom := minf(viewport.x / world_bounds.size.x, viewport.y / world_bounds.size.y)
+	var ratio_x := viewport.x / world_bounds.size.x
+	var ratio_y := viewport.y / world_bounds.size.y
+	var fit_zoom := maxf(ratio_x, ratio_y) if mode == FitMode.COVER else minf(ratio_x, ratio_y)
 	return {"center": world_bounds.get_center(), "zoom": fit_zoom}
+
+
+static func playable_screen_rect(viewport: Viewport, camera: TouchCamera) -> Rect2:
+	if viewport == null or camera == null:
+		return Rect2(Vector2.ZERO, VIEWPORT_SIZE)
+	var world := _rect_intersection(camera.get_visible_world_rect(), camera.get_world_bounds())
+	if world.size.x <= 0.0 or world.size.y <= 0.0:
+		world = camera.get_world_bounds()
+	var xf := viewport.get_canvas_transform()
+	var corners: Array[Vector2] = [
+		world.position,
+		world.position + Vector2(world.size.x, 0.0),
+		world.end,
+		world.position + Vector2(0.0, world.size.y),
+	]
+	var min_p := Vector2(INF, INF)
+	var max_p := Vector2(-INF, -INF)
+	for corner in corners:
+		var screen := xf * corner
+		min_p.x = minf(min_p.x, screen.x)
+		min_p.y = minf(min_p.y, screen.y)
+		max_p.x = maxf(max_p.x, screen.x)
+		max_p.y = maxf(max_p.y, screen.y)
+	return Rect2(min_p, max_p - min_p)
+
+
+static func _rect_intersection(a: Rect2, b: Rect2) -> Rect2:
+	var pos := Vector2(maxi(a.position.x, b.position.x), maxi(a.position.y, b.position.y))
+	var end := Vector2(mini(a.end.x, b.end.x), mini(a.end.y, b.end.y))
+	var size := end - pos
+	if size.x <= 0.0 or size.y <= 0.0:
+		return Rect2()
+	return Rect2(pos, size)

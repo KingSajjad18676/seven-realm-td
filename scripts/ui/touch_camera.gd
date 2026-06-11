@@ -7,7 +7,7 @@ const PINCH_COOLDOWN := 0.15
 @export var pan_speed: float = 1.0
 @export var min_zoom: float = 0.65
 @export var max_zoom: float = 1.2
-@export var locked_zoom_out_factor: float = 0.65
+@export var locked_zoom_out_factor: float = 1.0
 @export var locked_zoom_in_factor: float = 1.2
 
 var _dragging: bool = false
@@ -24,26 +24,22 @@ var _camera_locked: bool = false
 var _fit_zoom: float = 1.0
 var _shake_strength: float = 0.0
 var _shake_decay: float = 10.0
+var _level: LevelData = null
 
 
 func configure_from_level(level: LevelData) -> void:
+	_level = level
 	_anchors = level.camera_anchors.duplicate()
 	if level.minimap_bounds.size.length_squared() > 0.0 and level.uses_large_map_camera:
 		_world_bounds = level.minimap_bounds
 	else:
 		_world_bounds = MapCameraUtils.compute_battle_view_bounds(level)
-	var fit := MapCameraUtils.compute_fit_to_view(_world_bounds, _viewport_size())
-	_fit_zoom = fit.zoom
 	_camera_locked = not level.uses_large_map_camera
-	if _camera_locked:
-		min_zoom = _fit_zoom * locked_zoom_out_factor
-		max_zoom = _fit_zoom * locked_zoom_in_factor
-	else:
-		min_zoom = _fit_zoom
-		max_zoom = maxf(_fit_zoom, max_zoom)
-	global_position = fit.center
-	zoom = Vector2(_fit_zoom, _fit_zoom)
-	_clamp_position()
+	_apply_fit_zoom(true)
+
+
+func get_fit_zoom() -> float:
+	return _fit_zoom
 
 
 func is_camera_locked() -> bool:
@@ -110,6 +106,11 @@ func request_shake(strength: float = 6.0) -> void:
 	_shake_strength = maxf(_shake_strength, strength)
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_SIZE_CHANGED and _level != null:
+		_apply_fit_zoom(false)
+
+
 func _process(delta: float) -> void:
 	if _pinch_cooldown > 0.0:
 		_pinch_cooldown = maxf(0.0, _pinch_cooldown - delta)
@@ -129,10 +130,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		_handle_screen_touch(event as InputEventScreenTouch)
 	elif event is InputEventMagnifyGesture:
+		var magnify := event as InputEventMagnifyGesture
+		if _camera_locked and magnify.factor < 1.0:
+			return
 		_pinch_active = true
 		_pinch_cooldown = PINCH_COOLDOWN
 		_dragging = false
-		_apply_zoom_at(event.position, event.factor)
+		_apply_zoom_at(magnify.position, magnify.factor)
 	elif not _camera_locked:
 		if event is InputEventScreenDrag:
 			_handle_screen_drag(event as InputEventScreenDrag)
@@ -202,7 +206,7 @@ func _handle_desktop_zoom(event: InputEvent) -> bool:
 		factor = 1.0 / 1.05
 	else:
 		return false
-	if _camera_locked and not Input.is_key_pressed(KEY_CTRL):
+	if _camera_locked and factor < 1.0:
 		return false
 	_apply_zoom_at(event.position, factor)
 	get_viewport().set_input_as_handled()
@@ -219,6 +223,29 @@ func _apply_zoom_at(screen_pos: Vector2, factor: float) -> void:
 	var world_at_cursor := global_position + pan_offset / old_z
 	zoom = Vector2(new_z, new_z)
 	global_position = world_at_cursor - pan_offset / new_z
+	if zoom.x < min_zoom:
+		zoom = Vector2(min_zoom, min_zoom)
+	_clamp_position()
+
+
+func _apply_fit_zoom(initial: bool) -> void:
+	var fit_mode := MapCameraUtils.FitMode.COVER if _camera_locked else MapCameraUtils.FitMode.CONTAIN
+	var fit := MapCameraUtils.compute_fit_to_view(_world_bounds, _viewport_size(), fit_mode)
+	_fit_zoom = fit.zoom
+	if _camera_locked:
+		min_zoom = _fit_zoom
+		max_zoom = _fit_zoom * locked_zoom_in_factor
+	else:
+		min_zoom = _fit_zoom
+		max_zoom = maxf(_fit_zoom, max_zoom)
+	if initial:
+		global_position = fit.center
+		zoom = Vector2(_fit_zoom, _fit_zoom)
+	else:
+		var new_z := clampf(zoom.x, min_zoom, max_zoom)
+		zoom = Vector2(new_z, new_z)
+		if _camera_locked:
+			global_position = fit.center
 	_clamp_position()
 
 
