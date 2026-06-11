@@ -29,7 +29,7 @@ repo root/
     tools/          Map editor (dev)
     utilities/      ObjectPool, AudioManager, VisualAssetLoader, LevelAssetCollector
   resources/data/   Sparse .tres overrides (levels, relics, companions)
-  art/_placeholders/ + art/maps/level_01.jpg
+  art/_placeholders/ + art/maps/campaign/ + art/maps/tutorial/ + art/heroes/rostam/
   addons/gut/       GUT v9.6.0
   tests/            unit, integration, validation
   tools/            validate_resources.ps1, smoke_test.gd

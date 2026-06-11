@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="LevelData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/level_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/path_route_data.gd" id="1_74gue"]
+[ext_resource type="Script" path="res://scripts/data/spawn_point_data.gd" id="3_c3s2c"]
+
+[sub_resource type="Resource" id="Resource_5w4u3"]
+script = ExtResource("1_74gue")
+route_id = "route_main"
+points = Array[Vector2]([Vector2(0, 720), Vector2(210, 620), Vector2(440, 500), Vector2(490, 460), Vector2(460, 410), Vector2(480, 350), Vector2(560, 310), Vector2(670, 300), Vector2(760, 300), Vector2(840, 300), Vector2(950, 220), Vector2(1000, 150), Vector2(1190, 90), Vector2(1220, 30)])
+
+[sub_resource type="Resource" id="Resource_8eo7w"]
+script = ExtResource("1_74gue")
+route_id = "route_2"
+points = Array[Vector2]([Vector2(20, 710), Vector2(260, 590), Vector2(420, 510), Vector2(500, 470), Vector2(590, 470), Vector2(740, 470), Vector2(820, 440), Vector2(840, 380), Vector2(800, 330), Vector2(830, 270), Vector2(960, 200), Vector2(1110, 150), Vector2(1180, 30), Vector2(1270, 0)])
+
+[sub_resource type="Resource" id="Resource_ogexw"]
+script = ExtResource("3_c3s2c")
+spawn_id = "spawn_1"
+position = Vector2(-10, 720)
+route_id = "route_main"
+
+[resource]
+script = ExtResource("1")
+level_id = "level_00_tutorial"
+build_spot_positions = Array[Vector2]([Vector2(1150, 580), Vector2(290, 410), Vector2(430, 250), Vector2(640, 200), Vector2(640, 560), Vector2(880, 510), Vector2(990, 360)])
+path_routes = Array[ExtResource("1_74gue")]([SubResource("Resource_5w4u3"), SubResource("Resource_8eo7w")])
+spawn_points = Array[ExtResource("3_c3s2c")]([SubResource("Resource_ogexw")])
+path_points = Array[Vector2]([Vector2(0, 720), Vector2(210, 620), Vector2(440, 500), Vector2(490, 460), Vector2(460, 410), Vector2(480, 350), Vector2(560, 310), Vector2(670, 300), Vector2(760, 300), Vector2(840, 300), Vector2(950, 220), Vector2(1000, 150), Vector2(1190, 90), Vector2(1220, 30)])
+gate_position = Vector2(1250, 20)
+spawn_position = Vector2(-10, 720)
+region_ids = Array[String](["region_north", "region_south"])
+map_sprite_path = "res://art/maps/tutorial/toturial_map.png"

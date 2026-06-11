@@ -124,7 +124,7 @@ Eight campaign battlefields + tutorial graybox ([design/00](../design/00-project
 | Art phase | `level_id` (gameplay) | `map_id` (art package) | Display name | Grid | Scale | `tileset_id` | Boss (campaign) | Labour mode | In repo |
 |-----------|----------------------|--------------------------|--------------|------|-------|--------------|-----------------|-------------|---------|
 | **0–1** | `level_00_tutorial` | `map_khan_01_lion_rakhsh` *(shared layout)* | Sacred Fire Training | 32×18 | Medium | `tileset_woodland` | — (tutorial waves) | — | ✅ level only |
-| **1** | `level_01` | `map_khan_01_lion_rakhsh` | Labour 1 — Lion and Rakhsh | 32×18 | Medium | `tileset_woodland` | Lion of the First Khan | `mode_lion` | ✅ logic + map art (`level_01.tres`, `art/maps/level_01.jpg`) |
+| **1** | `level_01` | `map_khan_01_lion_rakhsh` | Labour 1 — Lion and Rakhsh | 32×18 | Medium | `tileset_woodland` | Lion of the First Khan | `mode_lion` | ✅ logic + map art (`level_01.tres`, `art/maps/campaign/khan_01_map.png`) |
 | **2** | `level_02` | `map_khan_02_desert_thirst` | Labour 2 — Desert of Thirst | 36×20 | Medium | `tileset_desert` | Manifestation of Thirst | `mode_thirst` | ✅ logic; 🟡 art |
 | **2** | `level_03` | `map_khan_03_azhdaha_canyon` | Labour 3 — Azhdaha Canyon | 40×22 | Medium-large | `tileset_dragon_canyon` | Azhdaha | `mode_dragon` | ✅ logic; 🟡 art |
 | **2** | `level_04` | `map_khan_04_sorceress_feast` | Labour 4 — Sorceress Feast | 42×24 | Medium-large | `tileset_enchanted_glade` | Sorceress (illusion + fiend) | `mode_temptress` | ✅ logic; 🟡 art |

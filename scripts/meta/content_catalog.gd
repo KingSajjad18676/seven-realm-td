@@ -448,6 +448,29 @@ static func build_enemies() -> Array[EnemyData]:
 	]
 
 
+static func build_rostam_anim() -> HeroAnimData:
+	var anim := HeroAnimData.new()
+	anim.portrait_path = "res://art/heroes/rostam/rostam_circle_icon.png"
+	anim.display_size = Vector2(68, 68)
+	var defs: Array = [
+		["idle", "res://art/heroes/rostam/rostam_idle.png", 3, 6.0, true],
+		["attack", "res://art/heroes/rostam/rostam_attack.png", 8, 12.0, false],
+		["heavy", "res://art/heroes/rostam/rostam_heavy_attack.png", 2, 8.0, false],
+		["dodge", "res://art/heroes/rostam/rostam_doge.png", 2, 10.0, false],
+		["charge", "res://art/heroes/rostam/rostam_charge.png", 2, 8.0, false],
+		["hit", "res://art/heroes/rostam/rostam_hit.png", 2, 10.0, false],
+	]
+	for row in defs:
+		var strip := HeroAnimStripDef.new()
+		strip.anim_name = row[0]
+		strip.strip_path = row[1]
+		strip.frame_count = row[2]
+		strip.fps = row[3]
+		strip.loop = row[4]
+		anim.strips.append(strip)
+	return anim
+
+
 static func build_heroes() -> Array[HeroData]:
 	var rostam := HeroData.new()
 	rostam.hero_id = "rostam"
@@ -475,7 +498,7 @@ static func build_heroes() -> Array[HeroData]:
 	rostam.naft_blaze_burst_damage = 40.0
 	rostam.naft_blaze_dps = 22.0
 	rostam.color = Color(0.2, 0.45, 0.85)
-	rostam.sprite_path = VisualAssetLoader.khan1_sprite("rostam")
+	rostam.anim_data = build_rostam_anim()
 
 	var zal := HeroData.new()
 	zal.hero_id = "zal"

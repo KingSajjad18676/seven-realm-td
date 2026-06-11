@@ -354,6 +354,14 @@ func _build_hero_chip() -> void:
 func _refresh_portrait(hero: HeroController) -> void:
 	if _hero_portrait == null or hero == null or hero.data == null:
 		return
+	var portrait_path := ""
+	if hero.data.anim_data != null:
+		portrait_path = hero.data.anim_data.portrait_path
+	if portrait_path != "" and ResourceLoader.exists(portrait_path):
+		var portrait_tex := load(portrait_path) as Texture2D
+		if portrait_tex:
+			_hero_portrait.texture = portrait_tex
+			return
 	var sprite_path := hero.data.sprite_path
 	if sprite_path == "":
 		sprite_path = VisualAssetLoader.khan1_sprite(hero.data.hero_id)
@@ -362,7 +370,9 @@ func _refresh_portrait(hero: HeroController) -> void:
 		if tex:
 			_hero_portrait.texture = tex
 			return
-	var fallback := VisualAssetLoader.make_portrait_texture(hero.data.hero_id, hero.data.color, 48)
+	var fallback := VisualAssetLoader.make_portrait_texture(
+		hero.data.hero_id, hero.data.color, 48, portrait_path
+	)
 	_hero_portrait.texture = fallback
 
 

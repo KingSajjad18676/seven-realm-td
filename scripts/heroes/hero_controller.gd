@@ -34,6 +34,8 @@ var _spawn_position: Vector2 = Vector2.ZERO
 var _dead: bool = false
 var _respawn_remaining: float = 0.0
 var _was_moving: bool = false
+var _anim_sprite: AnimatedSprite2D = null
+var _one_shot_anim: bool = false
 
 @onready var _sprite: ColorRect = $Sprite
 @onready var _hp_bar: ProgressBar = $HPBar
@@ -49,12 +51,17 @@ func initialize(ctx: BattleContext, hero_data: HeroData, start_pos: Vector2) -> 
 	_respawn_remaining = 0.0
 	z_index = 10
 	_last_real_usec = Time.get_ticks_usec()
-	var sprite_path := hero_data.sprite_path
-	if sprite_path == "":
-		sprite_path = VisualAssetLoader.khan1_sprite(hero_data.hero_id)
-	VisualAssetLoader.apply_sprite(
-		self, sprite_path, hero_data.color, Vector2(28, 28), hero_data.hero_id
-	)
+	if hero_data.anim_data != null and hero_data.anim_data.has_strips():
+		_anim_sprite = VisualAssetLoader.apply_hero_visual(self, hero_data.anim_data)
+		if _anim_sprite:
+			_anim_sprite.animation_finished.connect(_on_hero_anim_finished)
+	else:
+		var sprite_path := hero_data.sprite_path
+		if sprite_path == "":
+			sprite_path = VisualAssetLoader.khan1_sprite(hero_data.hero_id)
+		VisualAssetLoader.apply_sprite(
+			self, sprite_path, hero_data.color, Vector2(28, 28), hero_data.hero_id
+		)
 	_refresh_hp_bar()
 
 
@@ -203,9 +210,10 @@ func attack() -> void:
 		data.attack_max_targets,
 		false
 	)
+	_play_hero_anim("attack")
 	if hits > 0:
 		AudioManager.play_sfx("hero_attack")
-	CombatEvents.hero_melee_used.emit("attack")
+		CombatEvents.hero_melee_used.emit("attack")
 
 
 func heavy_attack() -> void:
@@ -235,6 +243,7 @@ func dodge() -> void:
 	_dodge_remaining = DODGE_DURATION_SEC
 	_dodge_cooldown = data.dodge_cooldown
 	_iframe_remaining = data.dodge_iframe_sec
+	_play_hero_anim("dodge")
 	AudioManager.play_sfx("hero_dodge")
 	CombatEvents.hero_dodged.emit()
 
@@ -270,6 +279,7 @@ func _can_use_manual_action() -> bool:
 
 
 func _use_rostam_charge() -> void:
+	_play_hero_anim("charge")
 	var hit_radius := 90.0
 	var skill_dmg := data.skill_damage * _hero_damage_mult()
 	for e in context.active_enemies:
@@ -360,6 +370,7 @@ func take_damage(amount: float) -> void:
 			return
 	if _is_mounted():
 		_dismount_rakhsh("Dismounted — Rostam struck!")
+	_play_hero_anim("hit")
 	var old_hp := current_hp
 	current_hp -= amount
 	CombatEvents.hero_damaged.emit(amount)
@@ -428,10 +439,12 @@ func _physics_process(delta: float) -> void:
 	_process_dodge(step)
 	_process_tether(step)
 	_process_movement(step)
-	if _iframe_remaining > 0.0 and _sprite:
-		_sprite.modulate = Color(0.7, 0.85, 1.0, 0.75)
-	elif _sprite:
-		_sprite.modulate = Color.WHITE
+	var visual: CanvasItem = _anim_sprite if _anim_sprite else _sprite
+	if _iframe_remaining > 0.0 and visual:
+		visual.modulate = Color(0.7, 0.85, 1.0, 0.75)
+	elif visual:
+		visual.modulate = Color.WHITE
+	_update_facing_flip()
 
 
 func _process_heavy_windup(delta: float) -> void:
@@ -440,6 +453,7 @@ func _process_heavy_windup(delta: float) -> void:
 	_heavy_windup -= delta
 	if _heavy_windup > 0.0:
 		return
+	_play_hero_anim("heavy")
 	var dmg := data.heavy_damage * _hero_damage_mult()
 	var hits := _deal_arc_damage(dmg, data.heavy_radius, 360.0, 99, true)
 	if hits > 0:
@@ -597,3 +611,33 @@ func _is_mounted() -> bool:
 func _dismount_rakhsh(reason: String) -> void:
 	if context and context.rakhsh_mount:
 		context.rakhsh_mount.dismount(reason)
+
+
+func _play_hero_anim(anim_name: String) -> void:
+	if _anim_sprite == null or _anim_sprite.sprite_frames == null:
+		return
+	if not _anim_sprite.sprite_frames.has_animation(anim_name):
+		return
+	if anim_name == "idle":
+		if _one_shot_anim:
+			return
+	else:
+		_one_shot_anim = true
+	_anim_sprite.play(anim_name)
+
+
+func _on_hero_anim_finished() -> void:
+	if _anim_sprite == null:
+		return
+	if _anim_sprite.animation == "idle":
+		_one_shot_anim = false
+		return
+	_one_shot_anim = false
+	if _anim_sprite.sprite_frames.has_animation("idle"):
+		_anim_sprite.play("idle")
+
+
+func _update_facing_flip() -> void:
+	if _anim_sprite == null:
+		return
+	_anim_sprite.flip_h = _facing.x < -0.01

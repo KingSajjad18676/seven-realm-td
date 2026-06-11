@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-06-09
 
-**Wired today:** `resources/data/levels/level_01.tres` — dual routes/spawns, build pads, `map_sprite_path` → `art/maps/level_01.jpg`. Other levels: catalog graybox + placeholder sprites.  
+**Wired today:** `resources/data/levels/level_01.tres` — dual routes/spawns, build pads, `map_sprite_path` → `art/maps/campaign/khan_01_map.png`; tutorial override `level_00_tutorial.tres` → `art/maps/tutorial/toturial_map.png`; Rostam strip anims in `art/heroes/rostam/`. Other levels: catalog graybox + placeholder sprites.  
 **Design canon:** [design/01-art-phases.md](../design/01-art-phases.md)  
 **Readability checklist:** [art/visual-vfx.md](../art/visual-vfx.md)  
 **Active engine:** Godot 4.6 — `art/_placeholders/`

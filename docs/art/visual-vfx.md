@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-06-09
 
-**Map art status:** Labour 1 production map wired (`art/maps/level_01.jpg` via `level_01.tres`). Labours 2–8 use placeholder map sprites.  
+**Map art status:** Labour 1 production map wired (`art/maps/campaign/khan_01_map.png` via `level_01.tres`); tutorial uses `art/maps/tutorial/toturial_map.png`. Labours 2–8 use placeholder map sprites.  
 **Design canon:** [design/01-art-phases.md](../design/01-art-phases.md) · [design/02-gameplay-ux.md](../design/02-gameplay-ux.md)
 
 This document defines **what art and UI must exist** so gameplay reads clearly on mobile landscape. Code can run without these assets, but the game will not feel premium until this checklist is satisfied.

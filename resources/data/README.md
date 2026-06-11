@@ -9,7 +9,8 @@ Map layout fields (`path_points`, `build_spot_positions`, `spawn_position`, `gat
 
 - Scene: `res://scenes/tools/map_editor.tscn` (F6 in Godot, or main menu **[DEV] Map Editor** in debug builds)
 - Output: `resources/data/levels/{level_id}.tres` (partial `LevelData` override)
-- Khan 1 production background: `res://art/maps/level_01.jpg`
+- Khan 1 production background: `res://art/maps/campaign/khan_01_map.png`
+- Tutorial production background: `res://art/maps/tutorial/toturial_map.png`
 
 Validate with:
 

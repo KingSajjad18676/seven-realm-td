@@ -31,4 +31,4 @@ path_points = Array[Vector2]([Vector2(0, 720), Vector2(210, 620), Vector2(440, 5
 gate_position = Vector2(1250, 20)
 spawn_position = Vector2(-10, 720)
 region_ids = Array[String](["region_north", "region_south"])
-map_sprite_path = "res://art/maps/level_01.jpg"
+map_sprite_path = "res://art/maps/campaign/khan_01_map.png"

@@ -24,6 +24,7 @@ extends Resource
 @export var color: Color = Color.DODGER_BLUE
 @export var scene_path: String = "res://scenes/prefabs/hero.tscn"
 @export var sprite_path: String = ""
+@export var anim_data: HeroAnimData = null
 @export var secondary_skill_id: String = ""
 @export var naft_max_charges: int = 0
 @export var naft_refill_sec: float = 20.0

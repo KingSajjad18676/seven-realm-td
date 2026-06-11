@@ -22,7 +22,22 @@ func test_get_level_01_has_campaign_waves() -> void:
 func test_get_level_01_merges_map_override() -> void:
 	var level := ContentRegistry.get_level("level_01")
 	assert_not_null(level)
-	assert_eq(level.map_sprite_path, "res://art/maps/level_01.jpg")
+	assert_eq(level.map_sprite_path, "res://art/maps/campaign/khan_01_map.png")
+
+
+func test_get_tutorial_merges_map_override() -> void:
+	var level := ContentRegistry.get_level("level_00_tutorial")
+	assert_not_null(level)
+	assert_eq(level.map_sprite_path, "res://art/maps/tutorial/toturial_map.png")
+	assert_true(level.is_tutorial)
+
+
+func test_get_rostam_has_anim_data() -> void:
+	var hero := ContentRegistry.get_hero("rostam")
+	assert_not_null(hero)
+	assert_not_null(hero.anim_data)
+	assert_true(hero.anim_data.has_strips())
+	assert_eq(hero.anim_data.portrait_path, "res://art/heroes/rostam/rostam_circle_icon.png")
 	assert_gte(level.path_points.size(), 3)
 	level.ensure_routes_migrated()
 	assert_gte(level.get_all_route_points().size(), 2)

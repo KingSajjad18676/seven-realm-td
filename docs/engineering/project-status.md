@@ -52,7 +52,8 @@
 | **Privacy + consent**          | ✅ Boot gate + settings link; `legal_links.gd`; analytics consent in save                                                                                         |
 | **Cosmetics store**            | ✅ Cosmetics tab in Kaveh's Forge; `CosmeticService` tint overrides                                                                                                 |
 | Automated tests                | ✅ GUT v9.6.0 (`tests/`), ContentValidator, **WaveSpawnValidator**, SaveMigration, GitHub Actions CI; camera/HUD: `test_touch_camera`, `test_map_camera_utils`, `test_battle_map_background` |
-| Khan 1 map art                 | ✅ `art/maps/level_01.jpg` + geometry override in `resources/data/levels/level_01.tres`; battle hides green Terrain fallback when map sprite loads                |
+| Khan 1 map art                 | ✅ `art/maps/campaign/khan_01_map.png` + geometry override in `resources/data/levels/level_01.tres`; tutorial map `art/maps/tutorial/toturial_map.png` via `level_00_tutorial.tres` |
+| Rostam production art          | ✅ Strip animations (`art/heroes/rostam/`) + HUD portrait; `HeroAnimData` + `AnimatedSprite2D` in battle (idle/attack/heavy/dodge/charge/hit)                    |
 | **Hero action controls**       | ✅ Virtual joystick (left); Attack / Heavy / Dodge / Skill (right); manual combat — no auto-attack; enemy telegraphed melee when lane-blocked |
 | **In-battle hero leveling**    | ✅ `HeroLevelService` — XP per kill, Lv 1–10, +8% dmg / +10% HP per level; HUD level + XP bar |
 | **Hero skill loadout**         | ✅ Pre-battle skill select on Equipment screen (5 skills incl. Gordafarid/Esfandiyar); persisted in save |
