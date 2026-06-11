@@ -21,7 +21,7 @@ flowchart LR
 
 | Step | Scene | What happens |
 |------|-------|----------------|
-| 1 | **Boot** | Loads save v9, autoloads, `SceneFlowController` → Main Menu (no company splash). |
+| 1 | **Boot** | Loads save v10, autoloads, `SceneFlowController` → Main Menu (no company splash). |
 | 2 | **MainMenu** | **Play** → World Map; **Daily Tale**; **Kaveh's Forge**; settings. Store UI is stub IAP ([design/03](../design/03-monetization.md)). |
 | 3 | **WorldMap** | Campaign **Labours** 1–7 + Damavand; **Campaign Run**; Horde; Brothers; Throne; Gauntlet; Endless + Hunt (7 seals); **Equipment** + **Daily Missions** panels. |
 | 4 | **Battle** | Shared battle scene. Victory → rewards → return to map or Campaign Run graph. |
@@ -112,7 +112,7 @@ Full detail: [product/main-gameplay.md](../product/main-gameplay.md) §6–7.
 | Pad tap | Build radial (empty) or manage radial (occupied) + range ring |
 | Full screen | Victory/defeat results, Pardeh, fate draft |
 
-**Deferred UI:** Simorgh continue, brazier/qanat/rewind buttons, organ drag, bottom tower bar (removed).
+**Deferred UI:** brazier/qanat/rewind buttons, organ drag, bottom tower bar (removed).
 
 ---
 
@@ -148,7 +148,7 @@ Available from **Main Menu** and **World Map** toolbars:
 | Hunt unlock (Khan 7 talisman) | ✅ | Existing Damavand quest |
 | Async loading + fade | ✅ | `SceneFlowController` |
 | Main menu all meta panels | ✅ | Shared generator with world map |
-| Battle HUD (pause overlay, hero chip, action cluster, boss bar) | ✅ | `HeroActionHud`, `VirtualJoystick`, `battle_hud_controller.gd` |
+| Battle HUD (pause overlay, hero chip, action cluster, boss bar) | ✅ | `HeroActionHud`, `VirtualJoystick`, `battle_hud_controller.gd`; stick/actions anchor via `MapCameraUtils.playable_screen_rect` |
 | Real splash/menu/Khan art | 🎨 | Circle sprite fallbacks in `VisualAssetLoader`; optional `tools/generate_khan1_placeholders.gd` |
 | Tower families on `.tres` | 🟡 | Assign in resources or validate script |
 | Organ / boss modifier / combo `.tres` | 🟡 | Folders may be empty until authored |

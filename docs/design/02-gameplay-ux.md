@@ -281,7 +281,7 @@ Every boss needs: readable entrance, recognizable silhouette, new battlefield qu
 
 ## 16. UI hierarchy
 
-**Always visible:** Lives/gate, Gold, Sacred Fire, wave, pause, speed, hero portrait/HP/energy/skill, tower cards, selected-object context.
+**Always visible:** Lives/gate, Gold, Sacred Fire, wave, pause, speed, hero portrait/HP/energy/skill, build radial / tower picker at pad, selected-object context.
 
 **Contextual:** cleanse, Qanat, Forge, purge, repair, sell, reposition, tower/objective/boss details, Morale/Farr expansion, relic explanation.
 

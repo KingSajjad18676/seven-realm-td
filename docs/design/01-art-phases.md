@@ -91,7 +91,7 @@ Large maps use layered TileMaps and staged sectors — not single giant empty bi
 |----------|---------|
 | `hero_rostam` | Style anchor; 256×256 animation cells |
 | `hero_rostam_idle` / `walk` / `basic_attack` | 8-frame strips |
-| `ui_battle_hud_prototype` | Lives, Gold, Sacred Fire, Wave; pause/speed/cleanse; hero + 4 tower cards |
+| `ui_battle_hud_prototype` | Lives, Gold, Sacred Fire, Wave; pause/speed/cleanse; hero stick + build radial at pad |
 | `map_khan_01_lion_rakhsh` | 32×18; entrance upper-right, gate lower-left; lion arena; 8 build pads; 3 light sectors |
 
 **Phase 0 gate:** Rostam readable at mobile zoom; animations fit cells; route understandable in 2s; pads visible; HUD thumb-friendly; Sacred Fire identifiable without tutorial wall.

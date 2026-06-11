@@ -1,6 +1,6 @@
 # Godot Architecture
 
-**Last updated:** 2026-06-11  
+**Last updated:** 2026-06-11 (camera/HUD + save v10 sync)  
 **Design canon:** [design/04-production-roadmap.md](../design/04-production-roadmap.md)  
 **Engine:** Godot 4.6 Mobile  
 **Project root:** repository folder containing `project.godot`  
@@ -24,7 +24,7 @@ repo root/
     units/          AllyUnitController (barracks summons)
     projectiles/
     status_effects/
-    ui/             Battle HUD, VirtualJoystick, HeroActionHud, meta panels
+    ui/             Battle HUD, TouchCamera, MapCameraUtils, VirtualJoystick, HeroActionHud, meta panels
     meta/           SaveSystem, WorldMap, content catalog, liveops services
     tools/          Map editor (dev)
     utilities/      ObjectPool, AudioManager, VisualAssetLoader, LevelAssetCollector
@@ -36,11 +36,11 @@ repo root/
   docs/
 ```
 
-## Autoloads (15)
+## Autoloads (17)
 
 | Name | Role |
 |------|------|
-| `SaveSystem` | JSON save v9 at `user://shahnamehtd_save.json` |
+| `SaveSystem` | JSON save v10 at `user://shahnamehtd_save.json` |
 | `ForgeService` | Star Iron forge, elite gate, soft difficulty curve L3+ |
 | `SceneFlowController` | Async scene load + fade + battle preload overlay |
 | `ContentRegistry` | Runtime catalog from `content_catalog.gd` + `resources/data/` merge |
@@ -54,6 +54,8 @@ repo root/
 | `DailyMissionService` | 3/day from 10-mission pool |
 | `MissionProgressTracker` | Lifetime mission stats |
 | `StoreService` | Stub IAP — instant grant to save |
+| `FarrService` | Meta Farr currency earn/spend |
+| `CosmeticService` | Cosmetic tint overrides |
 | `CrashReporter` | Stub — warns + analytics event |
 
 ## Content pipeline
@@ -65,6 +67,9 @@ repo root/
 ## Battle wiring
 
 - **`BattleBootstrap`** — scene root; builds `BattleContext`, map, managers; wires `NaftTrapController`, hero stick input via HUD; attaches **`LabourMode`** on campaign launches
+- **`TouchCamera`** (`touch_camera.gd` on `Camera2D`) — `configure_from_level(level)` sets locked COVER fit (medium maps) or pan/zoom (large maps via `LevelData.uses_large_map_camera`); `should_block_battlefield_tap()` defers pad taps after pan/pinch
+- **`MapCameraUtils`** — bounds, fit CONTAIN/COVER, `playable_screen_rect()` for HUD anchoring; bakes `minimap_bounds` in catalog / `bake_level_geometry.py`
+- **Camera → HUD chain** — `_camera.configure_from_level(level)` → `_hud.setup_camera_ui(_camera)` → each frame `_hud.get_move_vector()` → `HeroManager.apply_move_input()`; `HeroActionHud` repositions stick/actions against `playable_screen_rect`
 - **`BattleContext`** — RefCounted service locator; see [game-logic.md](game-logic.md) §6
 - **`LabourMode` + `LabourModeFactory`** — `scripts/battle/labours/`; per-map additive hazards
 - **`AllyUnitController`** — barracks melee blockers on `BattleContext.active_allies`

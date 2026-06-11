@@ -1,6 +1,6 @@
 # Implementation Tracker
 
-**Last updated:** 2026-06-11 (N2 combat feel + perf overlay)  
+**Last updated:** 2026-06-11 (camera/HUD + save v10 sync)  
 **Repo truth:** [project-status.md](project-status.md)
 
 ---
@@ -163,6 +163,8 @@ Post–M8 backlog after Khan 1 replay gate. **N1** is pure code; **N3–N5** are
 | Accessibility consumers | `AccessibilityHelper`, settings → VFX/shake/HUD |
 | Color-safe corruption HUD | `region_status_hud.gd` when high contrast |
 | Legacy UI removal | `battle.tscn` bottom Skill/Naft/Forge; `TowerSpotPanel` |
+| Camera unit tests | `test_touch_camera.gd`, `test_map_camera_utils.gd` |
+| Map background integration test | `test_battle_map_background.gd` — Terrain fallback, locked camera, legacy bottom bar removed |
 
 ### N2–N5 gap rows (deferred)
 

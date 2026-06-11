@@ -1,6 +1,6 @@
 # Rostam 7 Labours: Shahname TD — Documentation
 
-**Last updated:** 2026-06-11  
+**Last updated:** 2026-06-11 (camera/HUD + save v10 sync)  
 **Repo:** Godot 4.6 at repository root (`project.godot`)
 
 **One-line pitch:** Active 2D tower-defense roguelite — build towers, **virtual-stick hero combat** (Attack / Heavy / Dodge / Skill), cleanse corruption, survive procedural **Labours** campaign, **Campaign Run** roguelite graph, Horde, co-op, **Haft-Khan Gauntlet**, equipment sets, and daily missions — unlock reward towers (Serpent Spire, Rostam Barracks).

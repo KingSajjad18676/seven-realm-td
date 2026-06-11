@@ -323,6 +323,7 @@ Detail: [product/main-gameplay.md](../product/main-gameplay.md) §4–6.
 | Tower hijack + purify | `TowerController` |
 | Sacred Tether | Manage radial **Tether** when hero in range (`tower_radial_build_controller.gd`) |
 | Hero action controls | `VirtualJoystick`, `HeroActionHud`, manual combat in `HeroController` |
+| Battle camera | `TouchCamera`, `MapCameraUtils` — locked COVER (medium) vs pan/zoom (large); `playable_screen_rect` HUD anchoring |
 | Battle HUD polish | Hero chip, objective chip, boss HP bar, pause Restart/Settings |
 | Audio (placeholder tones) | `AudioManager` — Music/SFX buses, procedural tones |
 | Morale + Hero's Vow | `MoraleController`, `VowOfferController` |
@@ -524,7 +525,7 @@ Full map list: **§6**.
 | Asset ID | Use | Priority | Scene / notes |
 |----------|-----|----------|---------------|
 | `ui_battle_hud_prototype` | Phase 0 layout proof | P0 | validate zones |
-| `ui_battle_hud` | Production HUD | P1 | `battle_hud` — lives, gold, SF, wave, tower cards |
+| `ui_battle_hud` | Production HUD | P1 | `battle_hud` — lives, gold, SF, wave, build/manage radial + hero action cluster |
 | HUD icon set | pause, 1×/2×, settings, cleanse, brazier | P1 | replaces text buttons |
 | Hero portrait | Rostam HUD | P1 | bottom-left |
 | Pardeh / Fate UI | 3 card frames + `card_*` art | P1 | every 5-wave block break |

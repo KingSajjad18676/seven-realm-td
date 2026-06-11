@@ -1,6 +1,6 @@
 # Main Gameplay Overview
 
-**Last updated:** 2026-06-11 (full game inventory sync)  
+**Last updated:** 2026-06-11 (camera/HUD + save v10 sync)  
 **Purpose:** Quick reference for how the whole game works — play modes, maps, and what each Labour adds.  
 **Repo truth:** [engineering/project-status.md](../engineering/project-status.md) · **Deep mechanics:** [spec/gameplay.md](../spec/gameplay.md)
 
@@ -471,6 +471,8 @@ Unlocked after clearing **campaign Damavand** (`level_08_damavand`) once. On **C
 | Daily missions | `daily_mission_service.gd`, `mission_progress_tracker.gd` |
 | Hero action HUD | `scripts/ui/hero_action_hud.gd`, `scripts/ui/virtual_joystick.gd` |
 | Hero combat | `scripts/heroes/hero_controller.gd`, `scripts/heroes/hero_manager.gd` |
+| Battle camera | `scripts/ui/touch_camera.gd`, `scripts/ui/map_camera_utils.gd` |
+| Radial build/manage | `scripts/ui/tower_radial_build_controller.gd` |
 | Battle HUD | `scripts/ui/battle_hud_controller.gd`, `scenes/battle/battle.tscn` |
 | Audio | `scripts/utilities/audio_manager.gd` |
 | Gauntlet timer + ghost PB | `gauntlet_run_state.gd`, gauntlet HUD in `battle_hud_controller.gd` |

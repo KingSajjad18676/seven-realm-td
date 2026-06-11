@@ -1,6 +1,6 @@
 # Technical Design Document
 
-**Last updated:** 2026-06-11  
+**Last updated:** 2026-06-11 (camera/HUD + save v10 sync)  
 **Design canon:** [design/04-production-roadmap.md](../design/04-production-roadmap.md)  
 **Logic overview:** [engineering/game-logic.md](engineering/game-logic.md) · **Implementation truth:** [engineering/implementation-tracker.md](engineering/implementation-tracker.md) · [engineering/project-status.md](engineering/project-status.md)
 
@@ -15,11 +15,11 @@ Shared product constraints:
 - Scene-based gameplay entities (PackedScene)
 - Object pooling for runtime performance
 
-### Godot autoloads (15)
+### Godot autoloads (17)
 
 | Autoload | Role |
 |----------|------|
-| `SaveSystem` | JSON save **v9** at `user://shahnamehtd_save.json` |
+| `SaveSystem` | JSON save **v10** at `user://shahnamehtd_save.json` |
 | `ForgeService` | Star Iron forge, elite gate, soft difficulty |
 | `SceneFlowController` | Async scene load + fade + battle preload |
 | `ContentRegistry` | Runtime catalog + `resources/data/` merge |
@@ -33,6 +33,8 @@ Shared product constraints:
 | `DailyMissionService` | 3/day mission rotation |
 | `MissionProgressTracker` | Lifetime mission stats |
 | `StoreService` | Stub IAP |
+| `FarrService` | Meta Farr currency earn/spend |
+| `CosmeticService` | Cosmetic tint overrides |
 | `CrashReporter` | Stub crash reporting |
 
 ### Godot scene paths
@@ -147,7 +149,7 @@ Applies, ticks, and removes effects.
 | Manager | Role |
 |---------|------|
 | `ZervanDialController` | Rewind snapshots — **not built** |
-| `SimorghContinueService` | Feather continue — **not built** |
+| `SimorghContinueService` | Feather continue — **built** (`simorgh_continue_controller.gd`; skipped in gauntlet/tutorial/throne) |
 | `AncestralForgeManager` | Hybrid tower recipes — **deferred** |
 | `AhrimanDirector` | Adaptive boss modifiers — **partial/stub** |
 | Platform IAP / crash SDK | Wire at soft launch |
@@ -176,9 +178,9 @@ Use Resources:
 - ChroniclePageData
 - JinnEncounterData
 
-## 5. Save System (v9)
+## 5. Save System (v10)
 
-Migration chain: `scripts/meta/save_migration.gd` (v4→v9).
+Migration chain: `scripts/meta/save_migration.gd` (v4→v10).
 
 | Version | Key fields added |
 |---------|------------------|
@@ -188,8 +190,9 @@ Migration chain: `scripts/meta/save_migration.gd` (v4→v9).
 | v7 | `tower_relic_slots`, `active_relic_ids` (migrates legacy `relic_ids`) |
 | v8 | `gauntlet_best` personal-best splits + ghost trace |
 | v9 | Haft-Khan equipment loadout, daily missions, mission lifetime stats |
+| v10 | `farr_balance`, `farr_lifetime`, `privacy_accepted_at`, `equipped_cosmetics`, `simorgh_feather_used_run` |
 
-**Core persisted fields:** tutorial gate, level unlock chain, `khan_seals` (7), Star Iron + per-tower forge levels, `campaign_run`, equipment owned/equipped, accessibility, analytics consent, replay stats, seen hints.
+**Core persisted fields:** tutorial gate, level unlock chain, `khan_seals` (7), Star Iron + per-tower forge levels, `campaign_run`, equipment owned/equipped, Farr balance, accessibility, analytics consent, replay stats, seen hints.
 
 Use stable IDs, not display names.
 
@@ -215,6 +218,7 @@ Mobile input (implemented):
 - tap path when Naft armed → `NaftTrapController.try_place_at()`
 - tap cleanse → Sacred Fire spend on selected region
 - co-op → focused hero receives stick + buttons (`CoopPlayerManager.focused_player_index`)
+- camera pan/pinch on large maps → `TouchCamera.should_block_battlefield_tap()` defers pad/tower taps until gesture ends
 
 **Deferred (design target):** drag hero → Zahhak offensive tether, hold rewind (`ZervanDialController`), Rhyme Window synergy, organ mutation drag, sacrifice tribute tap.
 

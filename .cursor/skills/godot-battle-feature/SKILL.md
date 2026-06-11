@@ -66,7 +66,7 @@ scripts/battle/     WaveManager, BattleBootstrap, objectives, hunt, forge, …
 scripts/enemies/    EnemyController, PathFollower
 scripts/towers/     TowerController, TowerManager
 scripts/heroes/     HeroController, HeroManager
-scripts/ui/         battle_hud_controller, fate_draft, tower_spot_panel
+scripts/ui/         battle_hud_controller, hero_action_hud, touch_camera, map_camera_utils, tower_radial_build_controller, fate_draft
 scenes/battle/      battle.tscn
 ```
 

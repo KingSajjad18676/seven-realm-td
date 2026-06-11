@@ -1,6 +1,6 @@
 # Engineering Handoff
 
-**Last updated:** 2026-06-11  
+**Last updated:** 2026-06-11 (camera/HUD + save v10 sync)  
 **Audience:** New designers, programmers, artists, or collaborators  
 **Purpose:** What the game is, how it plays, and **where Godot code lives**.
 
@@ -131,7 +131,7 @@ This is the heart of the game. Every mode uses the same battle scene with differ
 | **Equipment sets** | 7 themed 4-piece sets modify hero/tower stats in battle |
 | **Boss phases** | Per-boss controllers (Lion roar, Thirst drought, Azhdaha burrow, etc.) |
 
-**Deferred:** Zervan Dial rewind, Simorgh continue, Ancestral Forge hybrids, Ahriman Director.
+**Deferred:** Zervan Dial rewind, Ancestral Forge hybrids, Ahriman Director.
 
 ### Battle HUD (mobile landscape)
 
@@ -287,7 +287,7 @@ UI listens via `BattleContextBridge` (Node wrapper with signals).
 
 **Towers**
 
-1. Tap build spot → `TowerBuildPanel`.
+1. Tap build spot → **`TowerRadialBuildController`** (build radial on empty pad, manage radial on occupied pad + range ring).
 2. `TowerController` picks targets by mode; respects range and cooldown.
 3. Damage scales with regional light (below 30, efficiency = light/30).
 4. Projectiles from pool; on-hit may apply status effects.
@@ -333,11 +333,11 @@ repo root/
   docs/                  Design specs (this file + others)
 ```
 
-### Autoloads (15)
+### Autoloads (17)
 
 | Name | Role |
 |------|------|
-| `SaveSystem` | JSON save v9 at `user://shahnamehtd_save.json` |
+| `SaveSystem` | JSON save v10 at `user://shahnamehtd_save.json` |
 | `ForgeService` | Star Iron forge, elite gate, soft difficulty curve |
 | `SceneFlowController` | Async scene load + fade + battle preload overlay |
 | `ContentRegistry` | Runtime catalog (`content_catalog.gd` + `resources/data/` merge) |
@@ -351,6 +351,8 @@ repo root/
 | `DailyMissionService` | 3/day from 10-mission pool |
 | `MissionProgressTracker` | Lifetime mission stats |
 | `StoreService` | Stub IAP — instant grant to save |
+| `FarrService` | Meta Farr currency earn/spend |
+| `CosmeticService` | Cosmetic tint overrides |
 | `CrashReporter` | Stub — warns + analytics event |
 
 ### Key scripts (start here)
@@ -374,6 +376,9 @@ repo root/
 | Save | `scripts/meta/save_system.gd` |
 | Store (IAP stub) | `scripts/meta/store_service.gd` — Serpent + Barracks SKUs |
 | Battle HUD | `scripts/ui/battle_hud_controller.gd` |
+| Battle camera | `scripts/ui/touch_camera.gd`, `scripts/ui/map_camera_utils.gd` |
+| Hero action HUD | `scripts/ui/hero_action_hud.gd` |
+| Radial build/manage | `scripts/ui/tower_radial_build_controller.gd` |
 
 ### Data pipeline
 

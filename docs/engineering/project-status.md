@@ -1,6 +1,6 @@
 # Project Status (Godot)
 
-**Last updated:** 2026-06-11 (N2 projectile impact + perf overlay + threat-jump)  
+**Last updated:** 2026-06-11 (camera/HUD + save v10 sync)  
 **Milestones:** [design/04-production-roadmap.md](../design/04-production-roadmap.md) · **Identity:** [design/00-project-index.md](../design/00-project-index.md)
 
 ---
@@ -51,7 +51,7 @@
 | **Maps 2–8 geometry**          | ✅ `resources/data/levels/level_02.tres` … `level_08_damavand.tres` baked; placeholder map/loading generators                                                     |
 | **Privacy + consent**          | ✅ Boot gate + settings link; `legal_links.gd`; analytics consent in save                                                                                         |
 | **Cosmetics store**            | ✅ Cosmetics tab in Kaveh's Forge; `CosmeticService` tint overrides                                                                                                 |
-| Automated tests                | ✅ GUT v9.6.0 (`tests/`), ContentValidator, **WaveSpawnValidator**, SaveMigration, GitHub Actions CI                                                                                      |
+| Automated tests                | ✅ GUT v9.6.0 (`tests/`), ContentValidator, **WaveSpawnValidator**, SaveMigration, GitHub Actions CI; camera/HUD: `test_touch_camera`, `test_map_camera_utils`, `test_battle_map_background` |
 | Khan 1 map art                 | ✅ `art/maps/level_01.jpg` + geometry override in `resources/data/levels/level_01.tres`; battle hides green Terrain fallback when map sprite loads                |
 | **Hero action controls**       | ✅ Virtual joystick (left); Attack / Heavy / Dodge / Skill (right); manual combat — no auto-attack; enemy telegraphed melee when lane-blocked |
 | **In-battle hero leveling**    | ✅ `HeroLevelService` — XP per kill, Lv 1–10, +8% dmg / +10% HP per level; HUD level + XP bar |
@@ -59,7 +59,7 @@
 | **Battle HUD (Khan 1 polish)** | ✅ Hero chip (portrait + HP/XP/tether + skill readiness); alert priority queue; gate-hit feedback; region status chips (high contrast); subtitle overlay; objective/boss chips; action cluster; pause Restart + Settings |
 | **Audio (placeholder tones)**  | ✅ Procedural SFX + menu loop; Music/SFX buses; settings sliders wired |
 | **Naft traps wiring**          | ✅ `NaftTrapController` instantiated in `battle_bootstrap` for Rostam |
-| Battle camera / HUD (Khan 1)   | ✅ Full-map fit-locked view; compact HUD; build/manage radial; range ring; virtual stick + action buttons; back navigation |
+| Battle camera / HUD (Khan 1)   | ✅ `TouchCamera` + `MapCameraUtils`; full-map COVER fit-lock; `playable_screen_rect` HUD anchoring; build/manage radial; range ring; virtual stick + action buttons; back navigation |
 | Map editor (dev)               | ✅ Multi-route + multi-spawn editor; `PathRouteData` / `SpawnPointData` in level `.tres`; battle resolves `route_id` / `spawn_id` per wave group |
 | Per-map battle preload         | ✅ `LevelAssetCollector` + threaded preload overlay before battle; map/enemy/hero/tower sprites + `battle.tscn` warmed per `level_id` |
 

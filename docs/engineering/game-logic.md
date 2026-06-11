@@ -1,6 +1,6 @@
 # Game Logic & Essentials
 
-**Last updated:** 2026-06-11  
+**Last updated:** 2026-06-11 (camera/HUD + save v10 sync)  
 **Audience:** Developers and AI agents working in this repo  
 **Purpose:** Fast onboarding — how the game thinks, who owns what, and where to look in code.
 
@@ -203,7 +203,7 @@ All battle systems receive the same `BattleContext` reference (set in `BattleBoo
 | `active_allies` | Barracks-summoned units |
 | `bridge` | `BattleContextBridge` signals for UI |
 
-**Deferred (not on BattleContext today):** Zervan Dial, Ancestral Forge hybrids, Simorgh continue, Ahriman Director.
+**Deferred (not on BattleContext today):** Zervan Dial, Ancestral Forge hybrids, Ahriman Director.
 
 ---
 
@@ -235,6 +235,20 @@ All battle systems receive the same `BattleContext` reference (set in `BattleBoo
 5. Offensive tether to Zahhak (Hunt finale) — design target; deferred separate from manage radial.
 
 **Code:** `scripts/ui/virtual_joystick.gd`, `scripts/ui/hero_action_hud.gd`, `scripts/heroes/hero_controller.gd`, `scripts/heroes/hero_manager.gd`.
+
+**HUD pipeline:** `BattleHudController.get_move_vector()` → `HeroActionHud` → `VirtualJoystick`; spawned at runtime in `battle_hud_controller.initialize()`.
+
+### Battle camera
+
+1. **`TouchCamera`** (`scripts/ui/touch_camera.gd` on battle `Camera2D`) — `configure_from_level(level)` at bootstrap.
+2. **Medium maps** (`uses_large_map_camera == false`, e.g. Khan 1): COVER fit-lock to full 1280×720; pan disabled; zoom-in only (`min_zoom = fit`, `max_zoom = fit × 1.2`).
+3. **Large maps** (`uses_large_map_camera == true`): CONTAIN fit + pan/pinch zoom; `jump_to_anchor()` / `focus_on()` for minimap and threat-jump.
+4. **`MapCameraUtils`** — world bounds from routes/spawns/gate; `playable_screen_rect()` returns screen-space visible map area for HUD anchoring.
+5. **Bootstrap chain:** `_camera.configure_from_level(level)` → `_hud.setup_camera_ui(_camera)` → each frame `_hud.get_move_vector()` → `HeroManager.apply_move_input()`.
+6. **`should_block_battlefield_tap()`** — suppresses pad/tower taps after pan, multi-touch, or pinch (still blocks multi-touch when locked).
+7. **`request_shake()`** — gate-hit feedback; scaled by accessibility `reduced_shake`.
+
+**Level contract:** `LevelData.uses_large_map_camera`, baked `minimap_bounds` (catalog bake / `bake_level_geometry.py`).
 
 ### Damage
 
@@ -367,8 +381,11 @@ flowchart LR
 | Light/corruption | `scripts/battle/map_light_manager.gd` |
 | Design data | `scripts/data/*.gd` + `resources/*.tres` |
 | Meta / map | `scripts/meta/world_map_controller.gd`, autoload `SceneFlowController` |
-| Save | autoload `SaveSystem` |
+| Save | autoload `SaveSystem` (v10) |
 | HUD | `scripts/ui/battle_hud_controller.gd` |
+| Battle camera | `scripts/ui/touch_camera.gd`, `scripts/ui/map_camera_utils.gd` |
+| Hero action HUD | `scripts/ui/hero_action_hud.gd` |
+| Radial build/manage | `scripts/ui/tower_radial_build_controller.gd` |
 
 **Script layout:** `scripts/battle/`, `scripts/enemies/`, `scripts/towers/`, `scripts/heroes/`, `scripts/data/`, `scripts/ui/`, `scripts/meta/`, `scripts/core/`.
 
@@ -392,8 +409,9 @@ flowchart LR
 1. Godot: run `tools/validate_resources.ps1` after pulling archive changes, or regenerate levels via `tools/generate_levels.ps1`.
 2. Open **Boot** → Play → Main Menu → World Map → **Khan 1**.
 3. Place tower → **Start Wave** → enemies path → leak reduces lives → clear waves → victory.
-4. **level_03:** pre-battle fate draft; test tether drag, Sacred Fire cleanse, rewind hold.
-5. After Khan 7: verify Hunt button unlock; Hunt battle for shard milestones (if setup committed).
+4. **Khan 1:** pad tap → build/manage radial + range ring; pinch zoom-in only (locked camera); hero stick/actions stay on visible map via `playable_screen_rect`.
+5. **level_03:** pre-battle fate draft; test manage radial **Tether**, Sacred Fire cleanse.
+6. After Khan 7: verify Hunt button unlock; Hunt battle for shard milestones (if setup committed).
 
 Edge cases: pause at 2× speed, hijacked tower at light 0, sell tower refund, daily challenge once-per-day claim.
 
