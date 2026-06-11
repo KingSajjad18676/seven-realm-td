@@ -23,6 +23,7 @@ var rakhsh_mount: RakhshMountController = null
 var equipment_battle: EquipmentBattleService = null
 var hero_level: HeroLevelService = null
 var naft_traps: NaftTrapController = null
+var simorgh_continue: SimorghContinueController = null
 var labour_mode: LabourMode = null
 var coop_players: CoopPlayerManager = null
 var bridge: BattleContextBridge = null

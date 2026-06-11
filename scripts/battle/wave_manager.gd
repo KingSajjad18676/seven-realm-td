@@ -392,8 +392,9 @@ func _wait_intermission(preview_text: String) -> void:
 			else:
 				var bonus := int(round(timer.time_left * EARLY_CALL_GOLD_PER_SECOND))
 				bonus = maxi(0, bonus)
-				if bonus > 0 and context.economy:
-					context.economy.add_gold(bonus)
+				if not bool(context.runtime_modifiers.get("block_intermission_gold", false)):
+					if bonus > 0 and context.economy:
+						context.economy.add_gold(bonus)
 				if context.bridge:
 					context.bridge.alert_message.emit("Early call! +%d gold" % bonus, 60)
 			break

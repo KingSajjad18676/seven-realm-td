@@ -12,6 +12,7 @@ var _check_timer: float = 0.0
 var _nudge_cooldown: float = 0.0
 var _edge_panels: Dictionary = {}
 var _pulse: float = 0.0
+var _current_threat: Node2D = null
 
 
 func initialize(ctx: BattleContext, cam: TouchCamera) -> void:
@@ -29,19 +30,20 @@ func _build_edge_indicators() -> void:
 		panel.visible = false
 		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		panel.color = Color(0.95, 0.35, 0.25, 0.75)
+		panel.gui_input.connect(_on_edge_input.bind(edge))
 		match edge:
 			"top":
 				panel.set_anchors_preset(Control.PRESET_TOP_WIDE)
-				panel.offset_bottom = 10.0
+				panel.offset_bottom = 18.0
 			"bottom":
 				panel.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-				panel.offset_top = -10.0
+				panel.offset_top = -18.0
 			"left":
 				panel.set_anchors_preset(Control.PRESET_LEFT_WIDE)
-				panel.offset_right = 10.0
+				panel.offset_right = 18.0
 			"right":
 				panel.set_anchors_preset(Control.PRESET_RIGHT_WIDE)
-				panel.offset_left = -10.0
+				panel.offset_left = -18.0
 		add_child(panel)
 		_edge_panels[edge] = panel
 
@@ -59,21 +61,46 @@ func _process(delta: float) -> void:
 
 
 func _update_threats() -> void:
-	var threat := _find_top_threat()
+	_current_threat = _find_top_threat()
 	for edge in _edge_panels:
-		(_edge_panels[edge] as ColorRect).visible = false
-	if threat == null:
+		var panel := _edge_panels[edge] as ColorRect
+		panel.visible = false
+		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if _current_threat == null:
 		return
-	var world_pos: Vector2 = threat.global_position
+	var world_pos: Vector2 = _current_threat.global_position
 	if camera.is_world_visible(world_pos):
 		return
 	var edge_name := _edge_for_world(world_pos)
 	if _edge_panels.has(edge_name):
 		var panel := _edge_panels[edge_name] as ColorRect
 		panel.visible = true
+		panel.mouse_filter = Control.MOUSE_FILTER_STOP
 		var alpha := 0.45 + 0.35 * (0.5 + 0.5 * sin(_pulse))
 		panel.color = Color(0.95, 0.35, 0.25, alpha)
 	_maybe_nudge_camera(world_pos)
+
+
+func _on_edge_input(_edge: String, event: InputEvent) -> void:
+	if _current_threat == null or camera == null:
+		return
+	var pressed := false
+	if event is InputEventScreenTouch and event.pressed:
+		pressed = true
+	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		pressed = true
+	if not pressed:
+		return
+	_jump_to_threat()
+	get_viewport().set_input_as_handled()
+
+
+func _jump_to_threat() -> void:
+	if _current_threat == null or camera == null:
+		return
+	camera.focus_on(_current_threat.global_position, true)
+	if context and context.bridge:
+		context.bridge.alert_message.emit("Threat jump", 35)
 
 
 func _find_top_threat() -> Node2D:

@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="LevelData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/level_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/path_route_data.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/data/spawn_point_data.gd" id="3"]
+
+[sub_resource type="Resource" id="Route_0"]
+script = ExtResource("2")
+route_id = "route_main"
+points = Array[Vector2]([Vector2(48, 193.7), Vector2(321.2, 193.7), Vector2(503.4, 48), Vector2(685.5, 48), Vector2(867.7, 193.7), Vector2(1049.8, 193.7), Vector2(1232, 120.9)])
+
+[sub_resource type="Resource" id="Route_1"]
+script = ExtResource("2")
+route_id = "route_2"
+points = Array[Vector2]([Vector2(79.5, 283.7), Vector2(352.7, 283.7), Vector2(534.9, 138), Vector2(717, 138), Vector2(899.2, 283.7), Vector2(1081.3, 283.7), Vector2(1263.5, 210.9)])
+
+[sub_resource type="Resource" id="Spawn_0"]
+script = ExtResource("3")
+spawn_id = "spawn_main"
+position = Vector2(28, 193.7)
+route_id = "route_main"
+
+[sub_resource type="Resource" id="Spawn_1"]
+script = ExtResource("3")
+spawn_id = "spawn_2"
+position = Vector2(59.5, 283.7)
+route_id = "route_2"
+
+[resource]
+script = ExtResource("1")
+level_id = "level_08_damavand"
+path_routes = Array[ExtResource("2")]([SubResource("Route_0"), SubResource("Route_1")])
+spawn_points = Array[ExtResource("3")]([SubResource("Spawn_0"), SubResource("Spawn_1")])
+build_spot_positions = Array[Vector2]([Vector2(361.2, 133.7), Vector2(281.2, 133.7), Vector2(543.4, -12), Vector2(645.5, -12), Vector2(725.5, -12), Vector2(827.7, 133.7), Vector2(1089.8, 133.7), Vector2(1009.8, 133.7)])
+path_points = Array[Vector2]([Vector2(48, 193.7), Vector2(321.2, 193.7), Vector2(503.4, 48), Vector2(685.5, 48), Vector2(867.7, 193.7), Vector2(1049.8, 193.7), Vector2(1232, 120.9)])
+gate_position = Vector2(1252, 110.9)
+spawn_position = Vector2(28, 193.7)
+map_sprite_path = "res://art/_placeholders/maps/level_08_damavand.png"
+
+

@@ -251,7 +251,8 @@ func _refresh_mode_buttons() -> void:
 		var forge_text := ""
 		if ForgeService:
 			forge_text = " | Avg forge: Lv %d" % ForgeService.get_average_forge_level_floor()
-		_seals_label.text = "Labour seals: %d/7 | Horde cleared: %d/8%s" % [seals, horde_clears, forge_text]
+		var farr := FarrService.get_balance() if FarrService else 0
+		_seals_label.text = "Farr: %d | Labour seals: %d/7 | Horde: %d/8%s" % [farr, seals, horde_clears, forge_text]
 	if _endless_btn:
 		_endless_btn.disabled = seals < 7
 	if _gauntlet_btn:
@@ -326,6 +327,8 @@ func _on_draft_confirmed(tower_ids: Array[String], ahrimans_shroud_enabled: bool
 		_persist_and_refresh()
 		return
 	_run = CampaignRunState.new()
+	if SaveSystem:
+		SaveSystem.reset_simorgh_feather_run()
 	if ahrimans_shroud_enabled:
 		_run.enable_ahrimans_shroud()
 	_run.generate_run()

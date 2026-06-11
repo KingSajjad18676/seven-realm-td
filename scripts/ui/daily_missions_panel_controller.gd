@@ -1,3 +1,4 @@
+class_name DailyMissionsPanelController
 extends Control
 
 ## Daily missions panel — 3 daily quests + Royal Bounty bonus slots.

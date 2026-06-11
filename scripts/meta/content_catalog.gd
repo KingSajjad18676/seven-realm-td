@@ -453,7 +453,7 @@ static func build_heroes() -> Array[HeroData]:
 	rostam.hero_id = "rostam"
 	rostam.display_name = "Rostam"
 	rostam.max_hp = 220.0
-	rostam.move_speed = 190.0
+	rostam.move_speed = 155.0
 	rostam.attack_damage = 32.0
 	rostam.attack_rate = 1.35
 	rostam.attack_arc_range = 64.0
@@ -514,7 +514,45 @@ static func build_heroes() -> Array[HeroData]:
 	sohrab.color = Color(0.9, 0.45, 0.25)
 	sohrab.sprite_path = VisualAssetLoader.khan1_sprite("sohrab")
 
-	return [rostam, zal, sohrab]
+	var gordafarid := HeroData.new()
+	gordafarid.hero_id = "gordafarid"
+	gordafarid.display_name = "Gordafarid"
+	gordafarid.max_hp = 170.0
+	gordafarid.move_speed = 215.0
+	gordafarid.attack_damage = 28.0
+	gordafarid.attack_rate = 1.6
+	gordafarid.attack_arc_range = 72.0
+	gordafarid.heavy_damage = 38.0
+	gordafarid.heavy_cooldown = 4.0
+	gordafarid.dodge_cooldown = 2.0
+	gordafarid.dodge_distance = 115.0
+	gordafarid.skill_id = "gordafarid_volley"
+	gordafarid.skill_cooldown = 9.0
+	gordafarid.skill_damage = 55.0
+	gordafarid.tether_radius = 130.0
+	gordafarid.color = Color(0.75, 0.35, 0.65)
+	gordafarid.sprite_path = VisualAssetLoader.khan1_sprite("gordafarid")
+
+	var esfandiyar := HeroData.new()
+	esfandiyar.hero_id = "esfandiyar"
+	esfandiyar.display_name = "Esfandiyar"
+	esfandiyar.max_hp = 280.0
+	esfandiyar.move_speed = 165.0
+	esfandiyar.attack_damage = 30.0
+	esfandiyar.attack_rate = 1.0
+	esfandiyar.attack_arc_range = 58.0
+	esfandiyar.heavy_damage = 65.0
+	esfandiyar.heavy_cooldown = 6.0
+	esfandiyar.dodge_cooldown = 3.5
+	esfandiyar.dodge_distance = 70.0
+	esfandiyar.skill_id = "esfandiyar_bulwark"
+	esfandiyar.skill_cooldown = 14.0
+	esfandiyar.skill_damage = 40.0
+	esfandiyar.tether_radius = 100.0
+	esfandiyar.color = Color(0.55, 0.55, 0.7)
+	esfandiyar.sprite_path = VisualAssetLoader.khan1_sprite("esfandiyar")
+
+	return [rostam, zal, sohrab, gordafarid, esfandiyar]
 
 
 static func build_fate_cards() -> Array[FateCardData]:
@@ -528,6 +566,14 @@ static func build_fate_cards() -> Array[FateCardData]:
 		["card_qanat_blessing", "Qanat Blessing", "Control towers +slow. Gold -10 next waves.", 1.0, 1.0, -10, 0, 0.0],
 		["card_lion_s_legacy", "Lion's Legacy", "+40 gold if boss wave next.", 1.0, 1.0, 40, 0, 0.0],
 		["card_twilight_pact", "Twilight Pact", "+3 Sacred Fire. Enemy HP +12%.", 1.0, 1.12, 0, 3, 0.0],
+		["card_sacred_aegis", "Sacred Aegis", "+1 max life this battle. Enemies +5% speed.", 1.0, 1.0, 0, 0, 0.0],
+		["card_corruption_embrace", "Corruption Embrace", "+25% tower damage in collapsed regions. Corruption +15%.", 1.25, 1.0, 0, 0, 0.15],
+		["card_merchant_caravan", "Merchant Caravan", "+50 gold. Next wave +10% enemies.", 1.0, 1.0, 50, 0, 0.0],
+		["card_divine_wind", "Divine Wind", "+20 Morale. Cleanse costs +1 SF.", 1.0, 1.0, 0, 0, 0.0],
+		["card_binders_oath", "Binder's Oath", "Stronger control slow. Hero move speed -8%.", 1.0, 1.0, 0, 0, 0.0],
+		["card_farr_echo", "Farr Echo", "+8 Farr on victory. Enemy HP +8%.", 1.0, 1.08, 0, 0, 0.0],
+		["card_gate_warden", "Gate Warden", "Gate leaks -1 life (min 1). Tower range -8%.", 1.0, 1.0, 0, 0, 0.0],
+		["card_shahnameh_thread", "Shahnameh Thread", "Next Pardeh reroll free. No intermission gold bonus.", 1.0, 1.0, 0, 0, 0.0],
 	]
 	for d in defs:
 		var c := FateCardData.new()
@@ -756,6 +802,18 @@ static func get_hero_skill_catalog() -> Array[Dictionary]:
 			"display_name": "Sohrab Rage",
 			"description": "Furious burst — heavy damage at a health cost.",
 			"unlock_level_id": "level_03",
+		},
+		{
+			"skill_id": "gordafarid_volley",
+			"display_name": "Gordafarid Volley",
+			"description": "Ranged burst — damage and slow in an arc.",
+			"unlock_level_id": "level_02",
+		},
+		{
+			"skill_id": "esfandiyar_bulwark",
+			"display_name": "Esfandiyar Bulwark",
+			"description": "Armored stance — damage reduction and empowered heavy strike.",
+			"unlock_level_id": "level_04",
 		},
 	]
 

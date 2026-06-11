@@ -5,7 +5,7 @@ func test_mount_and_dismount() -> void:
 	var mount := RakhshMountController.new()
 	mount.mounted = true
 	assert_true(mount.is_mounted())
-	assert_eq(mount.get_speed_mult(), 3.0)
+	assert_eq(mount.get_speed_mult(), 2.2)
 	mount.dismount()
 	assert_false(mount.is_mounted())
 	assert_eq(mount.get_speed_mult(), 1.0)

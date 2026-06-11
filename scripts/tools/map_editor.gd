@@ -274,12 +274,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			KEY_1:
 				_set_tool(MapEditorCanvas.Tool.ROAD)
 			KEY_2:
-				_set_tool(MapEditorCanvas.Tool.PADS)
-			KEY_3:
 				_set_tool(MapEditorCanvas.Tool.SPAWN)
-			KEY_4:
+			KEY_3:
 				_set_tool(MapEditorCanvas.Tool.GATE)
-			KEY_5:
+			KEY_4:
 				_set_tool(MapEditorCanvas.Tool.SELECT)
 	elif event is InputEventKey and event.keycode == KEY_SPACE and _canvas:
 		_canvas.input_blocked = event.pressed

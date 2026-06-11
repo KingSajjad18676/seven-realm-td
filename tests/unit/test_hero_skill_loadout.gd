@@ -28,3 +28,19 @@ func test_hero_manager_applies_selected_skill() -> void:
 	manager.initialize(ctx, Node2D.new())
 	assert_not_null(manager.hero)
 	assert_eq(manager.hero.data.skill_id, "rostam_charge")
+
+
+func test_gordafarid_volley_in_catalog() -> void:
+	assert_true(ContentCatalog.is_valid_hero_skill_id("gordafarid_volley"))
+
+
+func test_esfandiyar_bulwark_in_catalog() -> void:
+	assert_true(ContentCatalog.is_valid_hero_skill_id("esfandiyar_bulwark"))
+
+
+func test_new_heroes_in_catalog() -> void:
+	var ids: Array[String] = []
+	for hero in ContentCatalog.build_heroes():
+		ids.append(hero.hero_id)
+	assert_true("gordafarid" in ids)
+	assert_true("esfandiyar" in ids)

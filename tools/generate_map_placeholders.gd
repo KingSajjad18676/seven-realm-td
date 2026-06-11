@@ -1,82 +1,39 @@
-extends SceneTree
+@tool
+extends EditorScript
 
-## Generate map placeholder PNGs (1280×720) under art/_placeholders/maps/.
-##
-## From repo root (Godot on PATH):
-##   godot --headless --path . --script res://tools/generate_map_placeholders.gd
-##
-## Or run: powershell -File tools/generate_map_placeholders.ps1
+## Run: godot --headless --path . --script res://tools/generate_map_placeholders.gd
 
-const BRIGHTEN_AMOUNT := 0.08
-const PATH_COLOR := Color(0.72, 0.58, 0.38, 1.0)
-const PATH_WIDTH := 12
-const SPAWN_COLOR := Color(0.35, 0.55, 0.9, 1.0)
-const GATE_COLOR := Color(0.85, 0.72, 0.35, 1.0)
+const MAP_DIR := "res://art/_placeholders/maps/"
+const LOADING_DIR := "res://art/_placeholders/loading/"
+const LEVEL_IDS: Array[String] = [
+	"level_00_tutorial", "level_01", "level_02", "level_03", "level_04",
+	"level_05", "level_06", "level_07", "level_08_damavand",
+]
 
 
-func _init() -> void:
-	var dir := "res://art/_placeholders/maps/"
-	var abs_dir := ProjectSettings.globalize_path(dir)
-	var mkdir_err := DirAccess.make_dir_recursive_absolute(abs_dir)
-	if mkdir_err != OK:
-		push_error("Failed to create %s (error %d)" % [dir, mkdir_err])
-		quit(1)
+func _run() -> void:
+	var root := DirAccess.open("res://art/_placeholders/")
+	if root:
+		root.make_dir_recursive("maps")
+		root.make_dir_recursive("loading")
+	for level_id in LEVEL_IDS:
+		var tint := VisualAssetLoader.map_terrain_color(level_id)
+		_write_map_png(MAP_DIR + level_id + ".png", tint, false)
+		_write_map_png(LOADING_DIR + level_id + ".png", tint.lightened(0.15), true)
+		print("Wrote placeholders for ", level_id)
+
+
+func _write_map_png(path: String, base: Color, loading: bool) -> void:
+	if ResourceLoader.exists(path):
 		return
-
-	for level in ContentCatalog.build_levels():
-		var img := _build_map_image(level)
-		var path := dir + level.level_id + ".png"
-		var save_err := img.save_png(ProjectSettings.globalize_path(path))
-		if save_err != OK:
-			push_error("Failed to write %s (error %d)" % [path, save_err])
-			quit(1)
-			return
-		print("Wrote ", path)
-	print("Map placeholders generated.")
-	quit(0)
-
-
-func _build_map_image(level: LevelData) -> Image:
-	var base := VisualAssetLoader.map_terrain_color(level.level_id)
-	var img := Image.create(1280, 720, false, Image.FORMAT_RGBA8)
-	img.fill(_brighten(base))
-	_draw_path(img, level.path_points)
-	_draw_marker(img, level.spawn_position, SPAWN_COLOR, Vector2i(28, 56))
-	_draw_marker(img, level.gate_position, GATE_COLOR, Vector2i(40, 80))
-	return img
-
-
-func _brighten(color: Color) -> Color:
-	return Color(
-		clampf(color.r + BRIGHTEN_AMOUNT, 0.0, 1.0),
-		clampf(color.g + BRIGHTEN_AMOUNT, 0.0, 1.0),
-		clampf(color.b + BRIGHTEN_AMOUNT, 0.0, 1.0),
-		1.0
-	)
-
-
-func _draw_path(img: Image, points: Array[Vector2]) -> void:
-	if points.size() < 2:
-		return
-	for i in range(points.size() - 1):
-		_draw_thick_line(img, points[i], points[i + 1], PATH_COLOR, PATH_WIDTH)
-
-
-func _draw_thick_line(img: Image, from: Vector2, to: Vector2, color: Color, width: int) -> void:
-	var steps := int(from.distance_to(to))
-	for step in range(steps + 1):
-		var t := float(step) / float(maxi(1, steps))
-		var point := from.lerp(to, t)
-		var half := width / 2
-		img.fill_rect(
-			Rect2i(int(point.x - half), int(point.y - half), width, width),
-			color
-		)
-
-
-func _draw_marker(img: Image, center: Vector2, color: Color, size: Vector2i) -> void:
-	var top_left := Vector2i(
-		int(center.x - size.x / 2),
-		int(center.y - size.y / 2)
-	)
-	img.fill_rect(Rect2i(top_left, size), color)
+	var w := 640 if loading else 1280
+	var h := 360 if loading else 720
+	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	for y in h:
+		for x in w:
+			var t := float(y) / float(h)
+			var c := base.lerp(base.darkened(0.25), t)
+			if loading:
+				c = c.lerp(Color(0.08, 0.1, 0.14), 0.35)
+			img.set_pixel(x, y, c)
+	img.save_png(ProjectSettings.globalize_path(path))

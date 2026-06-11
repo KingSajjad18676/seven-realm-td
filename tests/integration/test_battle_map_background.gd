@@ -47,8 +47,9 @@ func test_level_01_camera_is_fit_locked() -> void:
 	assert_almost_eq(camera.global_position.x, 640.0, 1.0)
 	assert_almost_eq(camera.global_position.y, 360.0, 1.0)
 	assert_almost_eq(camera.zoom.x, 1.0, 0.01)
-	var minimap := battle.get_node_or_null("CanvasLayer/MinimapPanel") as Control
+	var minimap := battle.get_node_or_null("CanvasLayer/TopRightStack/MinimapPanel") as MinimapController
 	assert_not_null(minimap)
-	assert_false(minimap.visible)
+	assert_true(minimap.visible, "Khan 1 should show static route minimap top-right")
+	assert_eq(minimap.mouse_filter, Control.MOUSE_FILTER_IGNORE, "Locked camera minimap is read-only")
 	var tower_buttons := battle.get_node_or_null("CanvasLayer/BottomBar/TowerButtons")
 	assert_null(tower_buttons, "Bottom tower bar removed; build via radial on pad tap")

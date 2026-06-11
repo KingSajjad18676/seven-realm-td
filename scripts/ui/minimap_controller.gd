@@ -9,6 +9,8 @@ var camera: TouchCamera = null
 var _world_bounds: Rect2 = Rect2()
 var _route_paths: Array[PackedVector2Array] = []
 var _anchors: Array[Vector2] = []
+var _interactive: bool = true
+var _gui_connected: bool = false
 
 
 func initialize(ctx: BattleContext, cam: TouchCamera) -> void:
@@ -31,8 +33,17 @@ func initialize(ctx: BattleContext, cam: TouchCamera) -> void:
 	elif cam:
 		_world_bounds = cam.get_world_bounds()
 		_anchors = cam.get_anchors()
-	mouse_filter = Control.MOUSE_FILTER_STOP
-	gui_input.connect(_on_gui_input)
+	custom_minimum_size = PANEL_SIZE
+	if not _gui_connected:
+		gui_input.connect(_on_gui_input)
+		_gui_connected = true
+	set_interactive(_interactive)
+	queue_redraw()
+
+
+func set_interactive(enabled: bool) -> void:
+	_interactive = enabled
+	mouse_filter = Control.MOUSE_FILTER_STOP if enabled else Control.MOUSE_FILTER_IGNORE
 	queue_redraw()
 
 
@@ -63,18 +74,29 @@ func _draw() -> void:
 		var anchor_pos := _world_to_minimap(_anchors[i])
 		draw_circle(anchor_pos, 5.0, Color(0.35, 0.7, 0.95, 0.95))
 		draw_arc(anchor_pos, 5.0, 0.0, TAU, 12, Color(0.9, 0.95, 1.0, 0.8), 1.5)
-	if camera:
+	_draw_hero_marker()
+	if _interactive and camera:
 		var cam_rect := _world_rect_to_minimap(camera.get_visible_world_rect())
 		draw_rect(cam_rect, Color(1.0, 1.0, 1.0, 0.25), false, 1.5)
 
 
+func _draw_hero_marker() -> void:
+	if context == null or context.hero_manager == null:
+		return
+	var hero := context.hero_manager.get_controlled_hero()
+	if hero == null or not is_instance_valid(hero) or hero.is_dead():
+		return
+	var hero_pos := _world_to_minimap(hero.global_position)
+	draw_circle(hero_pos, 4.0, Color(0.95, 0.25, 0.2, 0.95))
+
+
 func _process(_delta: float) -> void:
-	if camera:
+	if camera or (context and context.hero_manager):
 		queue_redraw()
 
 
 func _on_gui_input(event: InputEvent) -> void:
-	if camera == null:
+	if not _interactive or camera == null:
 		return
 	var local_pos := Vector2.ZERO
 	var pressed := false

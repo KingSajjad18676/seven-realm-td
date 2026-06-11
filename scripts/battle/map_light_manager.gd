@@ -77,6 +77,8 @@ func get_cleanse_cost() -> int:
 	var cost := CLEANSE_COST
 	if context and context.runtime_modifiers.has("cleanse_cost_mult"):
 		cost = maxi(1, int(roundf(float(CLEANSE_COST) * float(context.runtime_modifiers["cleanse_cost_mult"]))))
+	if context and context.runtime_modifiers.has("cleanse_cost_bonus"):
+		cost += int(context.runtime_modifiers["cleanse_cost_bonus"])
 	return cost
 
 

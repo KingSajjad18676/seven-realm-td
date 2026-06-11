@@ -8,6 +8,7 @@ extends Control
 var _tabs: TabContainer = null
 var _spell_list: VBoxContainer = null
 var _store_list: VBoxContainer = null
+var _cosmetics_list: VBoxContainer = null
 
 
 func _ready() -> void:
@@ -56,11 +57,20 @@ func _setup_tabs() -> void:
 	store_tab.add_child(_store_list)
 	_tabs.add_child(store_tab)
 
+	var cosmetics_tab := ScrollContainer.new()
+	cosmetics_tab.name = "Cosmetics"
+	_cosmetics_list = VBoxContainer.new()
+	_cosmetics_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_cosmetics_list.add_theme_constant_override("separation", 12)
+	cosmetics_tab.add_child(_cosmetics_list)
+	_tabs.add_child(cosmetics_tab)
+
 
 func _refresh() -> void:
 	_refresh_towers()
 	_refresh_spells()
 	_refresh_store()
+	_refresh_cosmetics()
 
 
 func _refresh_towers() -> void:
@@ -101,8 +111,19 @@ func _refresh_store() -> void:
 		return
 	for child in _store_list.get_children():
 		child.queue_free()
-	for product_id in StoreService.get_product_ids():
+	for product_id in StoreService.get_combat_product_ids():
 		_store_list.add_child(_build_store_row(product_id))
+	AnalyticsService.store_viewed("combat")
+
+
+func _refresh_cosmetics() -> void:
+	if _cosmetics_list == null or StoreService == null:
+		return
+	for child in _cosmetics_list.get_children():
+		child.queue_free()
+	for product_id in StoreService.get_cosmetic_product_ids():
+		_cosmetics_list.add_child(_build_store_row(product_id))
+	AnalyticsService.store_viewed("cosmetics")
 
 
 func _build_unlock_row(tower_id: String) -> PanelContainer:

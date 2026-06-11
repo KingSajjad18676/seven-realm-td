@@ -1,6 +1,20 @@
 extends Node
 
 var _session_events: Array[Dictionary] = []
+var _backend: AnalyticsBackend = null
+
+
+func _ready() -> void:
+	_backend = _create_backend()
+
+
+func _create_backend() -> AnalyticsBackend:
+	if OS.is_debug_build():
+		return AnalyticsBackend.FileAnalyticsBackend.new()
+	var url := str(ProjectSettings.get_setting("shahnameh/analytics_url", ""))
+	if url != "":
+		return AnalyticsBackend.HttpAnalyticsBackend.new(url)
+	return AnalyticsBackend.FileAnalyticsBackend.new()
 
 
 func track_event(event_name: String, fields: Dictionary = {}) -> void:
@@ -12,10 +26,20 @@ func track_event(event_name: String, fields: Dictionary = {}) -> void:
 	_session_events.append(entry)
 	if OS.is_debug_build():
 		print("[Analytics] ", event_name, " ", fields)
+	if SaveSystem and not SaveSystem.get_analytics_consent():
+		return
+	if _backend:
+		_backend.track_event(event_name, fields)
 
 
 func session_start() -> void:
 	track_event("session_start")
+
+
+func session_end() -> void:
+	track_event("session_end")
+	if _backend:
+		_backend.flush()
 
 
 func battle_started(level_id: String) -> void:
@@ -84,6 +108,22 @@ func gauntlet_completed(total_ms: int) -> void:
 
 func gauntlet_pb_beaten(total_ms: int) -> void:
 	track_event("gauntlet_pb_beaten", {"total_ms": total_ms})
+
+
+func farr_earned(amount: int, source: String) -> void:
+	track_event("farr_earned", {"amount": amount, "source": source})
+
+
+func store_viewed(tab: String) -> void:
+	track_event("store_viewed", {"tab": tab})
+
+
+func product_purchased(product_id: String) -> void:
+	track_event("product_purchased", {"product_id": product_id})
+
+
+func tutorial_step_completed(step_id: String) -> void:
+	track_event("tutorial_step_completed", {"step_id": step_id})
 
 
 func get_buffered_events() -> Array[Dictionary]:

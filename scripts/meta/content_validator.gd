@@ -3,7 +3,7 @@ extends RefCounted
 
 const MIN_LEVELS := 9
 const MIN_ENEMIES := 20
-const MIN_FATE_CARDS := 8
+const MIN_FATE_CARDS := 16
 const MIN_TOWERS := 6
 const MIN_SPELLS := 6
 const MIN_HEROES := 2

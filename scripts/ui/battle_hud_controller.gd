@@ -1,4 +1,4 @@
-﻿class_name BattleHudController
+class_name BattleHudController
 extends CanvasLayer
 const ALERT_DISPLAY_SEC := 2.5
 var context: BattleContext = null
@@ -40,12 +40,14 @@ var _user_pause_modal_visible: bool = false
 @onready var _results_summary_label: Label = %ResultsSummaryLabel
 @onready var _pardeh_panel: Panel = %PardehPanel
 @onready var _minimap: MinimapController = %MinimapPanel
+@onready var _spell_bar_anchor: Control = %SpellBarAnchor
 @onready var _threat_indicator: ThreatIndicatorController = %ThreatIndicators
 @onready var _pause_overlay: ColorRect = %PauseOverlay
 @onready var _pause_panel: Panel = %PausePanel
 @onready var _pause_resume_btn: Button = %PauseResumeButton
 @onready var _pause_exit_btn: Button = %PauseExitButton
 var _materials_label: Label = null
+var _farr_label: Label = null
 var _spell_row: HBoxContainer = null
 var _spell_buttons: Array[Button] = []
 var _coop_row: HBoxContainer = null
@@ -100,6 +102,7 @@ func initialize(ctx: BattleContext, fate_draft: FateDraftController, vow_offer: 
 		ctx.bridge.intermission_ended.connect(_on_intermission_ended)
 		ctx.bridge.materials_changed.connect(_on_materials)
 	_setup_materials_label()
+	_setup_farr_label()
 	_on_gold(ctx.economy.gold if ctx.economy else 0)
 	_on_sf(ctx.economy.sacred_fire if ctx.economy else 0)
 	_on_lives(ctx.lives.current_lives if ctx.lives else 0, ctx.lives.max_lives if ctx.lives else 0)
@@ -108,6 +111,7 @@ func initialize(ctx: BattleContext, fate_draft: FateDraftController, vow_offer: 
 	_setup_tower_radial()
 	setup_spell_bar(ctx)
 	_setup_hero_action_hud()
+	_apply_hud_layout()
 	_setup_region_status_hud()
 	_setup_subtitle_overlay()
 	_setup_gate_feedback()
@@ -118,7 +122,6 @@ func initialize(ctx: BattleContext, fate_draft: FateDraftController, vow_offer: 
 	if _pardeh_panel:
 		_pardeh_panel.visible = false
 	_setup_vow_label()
-	_setup_hero_action_hud()
 	_setup_objective_chip()
 	_setup_boss_hp_bar()
 	_setup_pause_extras()
@@ -290,7 +293,7 @@ func _on_gauntlet_rush() -> void:
 
 func get_highlight_target(key: String) -> Control:
 	if _hero_action_hud:
-		var action_target := _hero_action_hud.get_highlight_control(key)
+		var action_target: Control = _hero_action_hud.get_highlight_control(key)
 		if action_target:
 			return action_target
 	match key:
@@ -326,14 +329,17 @@ func get_highlight_target(key: String) -> Control:
 func setup_spell_bar(ctx: BattleContext) -> void:
 	if _spell_row != null:
 		return
-	var bottom := get_node_or_null("BottomBar") as Control
-	if bottom == null:
+	var anchor := _spell_bar_anchor
+	if anchor == null:
+		anchor = get_node_or_null("SpellBarAnchor") as Control
+	if anchor == null:
 		return
 	_spell_row = HBoxContainer.new()
 	_spell_row.name = "SpellBar"
+	_spell_row.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_spell_row.alignment = BoxContainer.ALIGNMENT_CENTER
 	_spell_row.add_theme_constant_override("separation", 6)
-	bottom.add_child(_spell_row)
-	bottom.move_child(_spell_row, 0)
+	anchor.add_child(_spell_row)
 	_refresh_spell_buttons(ctx)
 
 
@@ -397,12 +403,29 @@ func setup_camera_ui(camera: TouchCamera) -> void:
 	_battle_camera = camera
 	if _minimap and camera:
 		_minimap.initialize(context, camera)
-		_minimap.visible = not camera.is_camera_locked()
+		_minimap.visible = true
+		_minimap.set_interactive(not camera.is_camera_locked())
 	if _threat_indicator and camera:
 		_threat_indicator.initialize(context, camera)
 		_threat_indicator.visible = not camera.is_camera_locked()
 	if _tower_radial:
 		_tower_radial.camera = camera
+
+
+func _apply_hud_layout() -> void:
+	if _spell_bar_anchor:
+		_spell_bar_anchor.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
+		_spell_bar_anchor.offset_left = -320.0
+		_spell_bar_anchor.offset_top = -48.0
+		_spell_bar_anchor.offset_right = 320.0
+		_spell_bar_anchor.offset_bottom = -8.0
+	if _minimap:
+		_minimap.custom_minimum_size = MinimapController.PANEL_SIZE
+	if _hero_action_hud:
+		_hero_action_hud.apply_layout(AccessibilityHelper.is_left_handed())
+	if _cleanse_hint:
+		_cleanse_hint.offset_left = 480.0
+		_cleanse_hint.offset_right = 1000.0
 
 
 func _apply_compact_hud_styles() -> void:
@@ -485,12 +508,6 @@ func _setup_hero_action_hud() -> void:
 	_hero_action_hud.dodge_pressed.connect(_on_dodge)
 	_hero_action_hud.skill_pressed.connect(_on_skill)
 	_hero_action_hud.naft_pressed.connect(_on_naft)
-	if _spell_row and _spell_row.get_parent():
-		_spell_row.get_parent().remove_child(_spell_row)
-		var cluster := _hero_action_hud.get_node_or_null("ActionCluster") as VBoxContainer
-		if cluster:
-			cluster.add_child(_spell_row)
-			cluster.move_child(_spell_row, 0)
 
 
 func _setup_objective_chip() -> void:
@@ -664,8 +681,7 @@ func _on_pause_settings() -> void:
 func _on_settings_changed() -> void:
 	_apply_accessibility_scale()
 	_apply_accessibility_theme()
-	if _hero_action_hud:
-		_hero_action_hud.apply_layout(AccessibilityHelper.is_left_handed())
+	_apply_hud_layout()
 	if _region_status_hud:
 		_region_status_hud.refresh_accessibility()
 
@@ -907,6 +923,27 @@ func _on_gold(v: int) -> void:
 func _on_sf(v: int) -> void:
 	if _sf_label:
 		_sf_label.text = "Sacred Fire: %d" % v
+
+
+func _setup_farr_label() -> void:
+	if _gold_label == null or _gold_label.get_parent() == null:
+		return
+	_farr_label = Label.new()
+	_farr_label.name = "FarrLabel"
+	_farr_label.add_theme_font_size_override("font_size", 11)
+	_gold_label.get_parent().add_child(_farr_label)
+	_refresh_farr_label()
+
+
+func _refresh_farr_label() -> void:
+	if _farr_label == null:
+		return
+	var bal := FarrService.get_balance() if FarrService else 0
+	_farr_label.text = "Farr: %d" % bal
+	var show_farr := bal > 0
+	if not show_farr and context != null and context.launch_data != null:
+		show_farr = context.launch_data.is_campaign_mode()
+	_farr_label.visible = show_farr
 
 
 func _setup_materials_label() -> void:
@@ -1162,16 +1199,13 @@ func _chain_next_gauntlet_labour(elapsed_ms: int) -> void:
 		)
 	if _results_panel:
 		_results_panel.visible = false
-	get_tree().create_timer(1.5).timeout.connect(
-		func() -> void:
-			if _gauntlet_chain_overlay:
-				_gauntlet_chain_overlay.visible = false
-			if SceneFlowController:
-				SceneFlowController.advance_gauntlet_after_victory(elapsed_ms)
-			_gauntlet_handling = false
-		,
-		CONNECT_ONE_SHOT
-	)
+	get_tree().create_timer(1.5).timeout.connect(func() -> void:
+		if _gauntlet_chain_overlay:
+			_gauntlet_chain_overlay.visible = false
+		if SceneFlowController:
+			SceneFlowController.advance_gauntlet_after_victory(elapsed_ms)
+		_gauntlet_handling = false
+	, CONNECT_ONE_SHOT)
 
 
 func _show_gauntlet_final(victory: bool, elapsed_ms: int) -> void:

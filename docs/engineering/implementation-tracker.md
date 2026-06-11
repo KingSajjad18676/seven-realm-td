@@ -1,6 +1,6 @@
 # Implementation Tracker
 
-**Last updated:** 2026-06-11 (N1 HUD completion + N1–N5 milestone plan)  
+**Last updated:** 2026-06-11 (N2 combat feel + perf overlay)  
 **Repo truth:** [project-status.md](project-status.md)
 
 ---
@@ -148,10 +148,10 @@ Post–M8 backlog after Khan 1 replay gate. **N1** is pure code; **N3–N5** are
 | Milestone | Scope | Status |
 |-----------|-------|--------|
 | **N1 — Battle HUD completion** | Alert priority queue; remove legacy bottom-bar Skill/Naft + `TowerSpotPanel`; hero portrait chip; gate-hit feedback; accessibility wiring (contrast/shake/particles/flashes/left-hand/vibration/subtitles); color-safe corruption region chips | ✅ |
-| **N2 — Combat feel & perf** | Projectile-on-impact damage; performance overlay; large-map threat-jump | ❌ |
-| **N3 — Content depth** | Farr meta currency + HUD; Fate cards 8→~16; Simorgh Feather continue; Gordafarid or Esfandiyar hero | ❌ (post replay-gate) |
-| **N4 — Production maps & art** | Author `level_02`–`level_08` geometry via map editor; unit sprites; loading splash art per `01-art-phases.md` | 🟡 L1 only |
-| **N5 — Release plumbing** | Platform IAP + real restore; crash SDK; privacy/consent; cosmetics-first store catalog; production analytics | 🟡 stubs |
+| **N2 — Combat feel & perf** | Projectile-on-impact damage; performance overlay; large-map threat-jump | ✅ |
+| **N3 — Content depth** | Farr meta currency + HUD; Fate cards 8→16; Simorgh Feather continue; Gordafarid + Esfandiyar heroes | ✅ |
+| **N4 — Production maps & art** | Baked `level_02`–`level_08_damavand` geometry; placeholder unit/map/loading generators | ✅ (illustrated art still placeholder per `01-art-phases.md`) |
+| **N5 — Release plumbing** | IapProvider + restore; privacy/consent gate; cosmetics store tab; analytics/crash backends (file/HTTP stubs) | ✅ (live platform SDK credentials deferred) |
 
 ### N1 gap rows (was missing)
 
@@ -168,11 +168,12 @@ Post–M8 backlog after Khan 1 replay gate. **N1** is pure code; **N3–N5** are
 
 | Item | Notes |
 |------|-------|
-| Projectile impact timing | Cosmetic fly today in `tower_controller.gd` |
-| Performance overlay | Roadmap §12 backlog |
-| Full ~43 Fate cards | 8 wired in `content_catalog.gd` |
-| Farr + collection UI | Locked product decision; not in save |
-| Extra heroes | Rostam / Zal / Sohrab only |
-| Simorgh continue / Forge hybrids / Memory Div nodes | Design canon; not in `scripts/` |
-| Maps 2–8 art + geometry | Procedural paths + placeholder PNGs |
-| IAP / crash / privacy / cosmetics store | M8 stubs in `store_service.gd`, `crash_reporter.gd` |
+| Projectile impact timing | ✅ Damage on `ProjectileController` hit in `tower_manager.gd` |
+| Performance overlay | ✅ `PerformanceOverlay` — FPS + enemy/tower/proj counts (debug); tap to expand |
+| Large-map threat-jump | ✅ Tap off-screen edge indicator in `threat_indicator_controller.gd` |
+| Full ~43 Fate cards | 16 wired in `content_catalog.gd`; pool expansion post-N5 |
+| Farr + collection UI | ✅ Save v10 + `FarrService`; world map + battle HUD chip |
+| Extra heroes | ✅ Gordafarid + Esfandiyar + skills in catalog |
+| Simorgh continue | ✅ `simorgh_continue_controller.gd` + modal; Forge hybrids / Memory Div nodes still deferred |
+| Maps 2–8 art + geometry | ✅ Baked `.tres` geometry + placeholder pipeline tools |
+| IAP / crash / privacy / cosmetics store | ✅ `IapProvider`, `privacy_panel`, Cosmetics tab, analytics/crash backends |

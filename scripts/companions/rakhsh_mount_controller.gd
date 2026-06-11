@@ -34,7 +34,7 @@ func _spawn_rakhsh(root: Node2D) -> void:
 	data.behavior = CompanionData.Behavior.RAKHSH_MOUNT
 	data.color = Color(0.72, 0.42, 0.18)
 	data.mount_stand_sec = 1.0
-	data.mount_speed_mult = 3.0
+	data.mount_speed_mult = 2.2
 	data.knockback_distance = 28.0
 	data.knockback_radius = 35.0
 	_entity.setup(context, data)
@@ -48,7 +48,7 @@ func is_mounted() -> bool:
 func get_speed_mult() -> float:
 	if not mounted or _entity == null:
 		return 1.0
-	return _entity.data.mount_speed_mult if _entity.data else 3.0
+	return _entity.data.mount_speed_mult if _entity.data else 2.2
 
 
 func dismount(reason: String = "") -> void:

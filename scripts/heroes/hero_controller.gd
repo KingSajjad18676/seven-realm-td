@@ -9,6 +9,8 @@ const LANE_BLOCK_WINDOW_BACK := 32.0
 const LANE_BLOCK_WINDOW_AHEAD := 10.0
 const HEAVY_WINDUP_SEC := 0.18
 const DODGE_DURATION_SEC := 0.22
+const MOVE_ACCEL := 900.0
+const MOVE_DECEL := 1200.0
 
 var context: BattleContext = null
 var data: HeroData = null
@@ -50,7 +52,9 @@ func initialize(ctx: BattleContext, hero_data: HeroData, start_pos: Vector2) -> 
 	var sprite_path := hero_data.sprite_path
 	if sprite_path == "":
 		sprite_path = VisualAssetLoader.khan1_sprite(hero_data.hero_id)
-	VisualAssetLoader.apply_sprite(self, sprite_path, hero_data.color, Vector2(28, 28))
+	VisualAssetLoader.apply_sprite(
+		self, sprite_path, hero_data.color, Vector2(28, 28), hero_data.hero_id
+	)
 	_refresh_hp_bar()
 
 
@@ -249,6 +253,10 @@ func use_skill() -> void:
 			_use_zal_foresight()
 		"sohrab_rage":
 			_use_sohrab_rage()
+		"gordafarid_volley":
+			_use_gordafarid_volley()
+		"esfandiyar_bulwark":
+			_use_esfandiyar_bulwark()
 		_:
 			if context and context.runtime_modifiers.get("equipment_spectral_horse", false):
 				EquipmentSetRules.spectral_horse_charge(context.equipment_battle, self)
@@ -295,6 +303,30 @@ func _use_zal_foresight() -> void:
 		context.bridge.alert_message.emit("Zal foresight — %d foes marked!" % marked, 45)
 
 
+func _use_gordafarid_volley() -> void:
+	var hit_radius := 120.0
+	var hits := 0
+	var skill_dmg := data.skill_damage * _hero_damage_mult()
+	for e in context.active_enemies:
+		if e is EnemyController and global_position.distance_to(e.global_position) <= hit_radius:
+			e.take_damage(skill_dmg, false)
+			e.apply_slow(0.5, 2.0)
+			hits += 1
+	if context.bridge:
+		context.bridge.alert_message.emit("Gordafarid volley — %d foes slowed!" % hits, 45)
+
+
+func _use_esfandiyar_bulwark() -> void:
+	context.runtime_modifiers["hero_damage_reduction"] = 0.35
+	get_tree().create_timer(5.0).timeout.connect(func() -> void:
+		if context:
+			context.runtime_modifiers.erase("hero_damage_reduction")
+	, CONNECT_ONE_SHOT)
+	heavy_attack()
+	if context.bridge:
+		context.bridge.alert_message.emit("Esfandiyar's bulwark!", 45)
+
+
 func _use_sohrab_rage() -> void:
 	var hit_radius := 110.0
 	var hits := 0
@@ -320,6 +352,8 @@ func take_damage(amount: float) -> void:
 		if context.bridge:
 			context.bridge.alert_message.emit("Evaded!", 25)
 		return
+	if context and context.runtime_modifiers.has("hero_damage_reduction"):
+		amount *= 1.0 - float(context.runtime_modifiers["hero_damage_reduction"])
 	if context and context.equipment_battle:
 		amount = context.equipment_battle.absorb_shield_damage(amount)
 		if amount <= 0.0:
@@ -430,15 +464,15 @@ func _process_movement(delta: float) -> void:
 	if not _can_move_by_tutorial():
 		cancel_move()
 		return
-	if _move_input.length_squared() < 0.01:
-		velocity = Vector2.ZERO
-		return
 	var speed := data.move_speed
 	if _is_mounted() and context.rakhsh_mount:
 		speed *= context.rakhsh_mount.get_speed_mult()
 	if context.runtime_modifiers.has("hero_move_speed_mult"):
 		speed *= float(context.runtime_modifiers["hero_move_speed_mult"])
-	velocity = _move_input.normalized() * speed
+	if _move_input.length_squared() < 0.01:
+		velocity = velocity.move_toward(Vector2.ZERO, MOVE_DECEL * delta)
+	else:
+		velocity = velocity.move_toward(_move_input * speed, MOVE_ACCEL * delta)
 	move_and_slide()
 	var moving := _move_input.length_squared() > 0.01
 	if moving and not _was_moving:

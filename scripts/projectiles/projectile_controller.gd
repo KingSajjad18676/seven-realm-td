@@ -22,7 +22,9 @@ func launch(from: Vector2, target: EnemyController, speed: float, color: Color) 
 
 
 func _process(delta: float) -> void:
-	if not _alive or _target == null or not is_instance_valid(_target):
+	if not _alive:
+		return
+	if _target == null or not is_instance_valid(_target):
 		_alive = false
 		hit_target.emit()
 		return

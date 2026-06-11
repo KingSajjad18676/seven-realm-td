@@ -6,6 +6,7 @@ signal direction_changed(direction: Vector2)
 const BASE_RADIUS := 56.0
 const KNOB_RADIUS := 24.0
 const DEADZONE := 0.12
+const RESPONSE_CURVE := 1.35
 
 var _active: bool = false
 var _touch_index: int = -1
@@ -90,7 +91,9 @@ func _update_knob(local_pos: Vector2) -> void:
 	if raw.length() < DEADZONE:
 		_direction = Vector2.ZERO
 	else:
-		_direction = raw.normalized() * clampf((raw.length() - DEADZONE) / (1.0 - DEADZONE), 0.0, 1.0)
+		var mag := clampf((raw.length() - DEADZONE) / (1.0 - DEADZONE), 0.0, 1.0)
+		mag = pow(mag, RESPONSE_CURVE)
+		_direction = raw.normalized() * mag
 	direction_changed.emit(_direction)
 	queue_redraw()
 

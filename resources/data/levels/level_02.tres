@@ -1,11 +1,32 @@
-[gd_resource type="Resource" script_class="LevelData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="LevelData" load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/data/level_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/path_route_data.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/data/spawn_point_data.gd" id="3"]
+
+[sub_resource type="Resource" id="Route_0"]
+script = ExtResource("2")
+route_id = "route_main"
+points = Array[Vector2]([Vector2(48, 131.1), Vector2(297.3, 131.1), Vector2(505, 48), Vector2(712.7, 48), Vector2(920.4, 131.1), Vector2(1232, 131.1)])
+
+[sub_resource type="Resource" id="Spawn_0"]
+script = ExtResource("3")
+spawn_id = "spawn_main"
+position = Vector2(28, 131.1)
+route_id = "route_main"
 
 [resource]
 script = ExtResource("1")
 level_id = "level_02"
-display_name = "Khan 2 — Desert of Thirst (data override)"
 starting_gold = 175
 starting_sacred_fire = 6
 default_objective_id = "obj_cleanse_twice"
+path_routes = Array[ExtResource("2")]([SubResource("Route_0")])
+spawn_points = Array[ExtResource("3")]([SubResource("Spawn_0")])
+build_spot_positions = Array[Vector2]([Vector2(337.3, 71.1), Vector2(257.3, 71.1), Vector2(545, -12), Vector2(672.7, -12), Vector2(960.4, 71.1), Vector2(880.4, 71.1)])
+path_points = Array[Vector2]([Vector2(48, 131.1), Vector2(297.3, 131.1), Vector2(505, 48), Vector2(712.7, 48), Vector2(920.4, 131.1), Vector2(1232, 131.1)])
+gate_position = Vector2(1252, 121.1)
+spawn_position = Vector2(28, 131.1)
+map_sprite_path = "res://art/_placeholders/maps/level_02.png"
+
+

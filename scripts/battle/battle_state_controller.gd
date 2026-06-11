@@ -75,6 +75,11 @@ func trigger_victory(reason: String = "waves_cleared") -> void:
 	if SaveSystem and context.level_data and launch and launch.is_campaign_mode():
 		var lid := context.level_data.level_id
 		SaveSystem.mark_level_cleared(lid)
+		if FarrService:
+			FarrService.on_campaign_victory(lid)
+			var bonus := int(context.runtime_modifiers.get("farr_victory_bonus", 0))
+			if bonus > 0:
+				FarrService.earn(bonus, "fate_card_farr_echo")
 	if launch and launch.is_endless_mode and context and context.wave_manager and SaveSystem:
 		SaveSystem.set_endless_best(context.wave_manager.get_endless_wave_count())
 	if launch and launch.is_horde_mode and SaveSystem and context and context.level_data:

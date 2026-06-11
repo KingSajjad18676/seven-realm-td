@@ -14,7 +14,7 @@ static func default_accessibility() -> Dictionary:
 	}
 
 
-static func migrate(data: Dictionary, target_version: int = 9) -> Dictionary:
+static func migrate(data: Dictionary, target_version: int = 10) -> Dictionary:
 	var result := data.duplicate(true)
 	var version := int(result.get("save_version", 1))
 	if version < 2 and target_version >= 2:
@@ -108,6 +108,19 @@ static func migrate(data: Dictionary, target_version: int = 9) -> Dictionary:
 			result["royal_bounty_tickets"] = 0
 		result["save_version"] = 9
 		version = 9
+	if version < 10 and target_version >= 10:
+		if not result.has("farr_balance"):
+			result["farr_balance"] = 0
+		if not result.has("farr_lifetime"):
+			result["farr_lifetime"] = 0
+		if not result.has("privacy_accepted_at"):
+			result["privacy_accepted_at"] = 0
+		if not result.has("equipped_cosmetics"):
+			result["equipped_cosmetics"] = {}
+		if not result.has("simorgh_feather_used_run"):
+			result["simorgh_feather_used_run"] = false
+		result["save_version"] = 10
+		version = 10
 	return result
 
 

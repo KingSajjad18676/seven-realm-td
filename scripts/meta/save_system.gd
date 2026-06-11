@@ -1,7 +1,7 @@
 extends Node
 
 const SAVE_PATH := "user://shahnamehtd_save.json"
-const SAVE_VERSION := 9
+const SAVE_VERSION := 10
 
 const STARTER_TOWER_IDS: Array[String] = [
 	"tower_archer",
@@ -107,6 +107,11 @@ func _default_data() -> Dictionary:
 			"total_forge_tokens_spent": 0,
 		},
 		"royal_bounty_tickets": 0,
+		"farr_balance": 0,
+		"farr_lifetime": 0,
+		"privacy_accepted_at": 0,
+		"equipped_cosmetics": {},
+		"simorgh_feather_used_run": false,
 	}
 	return data
 
@@ -556,6 +561,8 @@ func mark_level_cleared(level_id: String) -> void:
 	if level_id == "level_00_tutorial":
 		mark_tutorial_completed()
 	if first_clear:
+		if FarrService:
+			FarrService.on_first_labour_clear(level_id)
 		unlock_levels_after_clear(level_id)
 		if level_id in ["level_01", "level_02", "level_03", "level_04", "level_05", "level_06", "level_07"]:
 			entry["seal_awarded"] = true
@@ -632,10 +639,10 @@ func is_hero_skill_unlocked(skill_id: String) -> bool:
 	for entry in ContentCatalog.get_hero_skill_catalog():
 		if str(entry.get("skill_id", "")) != skill_id:
 			continue
-		var unlock_level := str(entry.get("unlock_level_id", ""))
-		if unlock_level == "":
+		var required_level_id := str(entry.get("unlock_level_id", ""))
+		if required_level_id == "":
 			return true
-		return is_level_cleared(unlock_level)
+		return is_level_cleared(required_level_id)
 	return false
 
 
@@ -689,3 +696,75 @@ func consume_royal_bounty_ticket() -> bool:
 	_data["royal_bounty_tickets"] = get_royal_bounty_tickets() - 1
 	save_game()
 	return true
+
+
+func get_farr_balance() -> int:
+	return int(_data.get("farr_balance", 0))
+
+
+func get_farr_lifetime() -> int:
+	return int(_data.get("farr_lifetime", 0))
+
+
+func add_farr(amount: int) -> void:
+	if amount <= 0:
+		return
+	_data["farr_balance"] = get_farr_balance() + amount
+	_data["farr_lifetime"] = get_farr_lifetime() + amount
+	save_game()
+
+
+func spend_farr(amount: int) -> bool:
+	if amount <= 0 or get_farr_balance() < amount:
+		return false
+	_data["farr_balance"] = get_farr_balance() - amount
+	save_game()
+	return true
+
+
+func get_privacy_accepted_at() -> int:
+	return int(_data.get("privacy_accepted_at", 0))
+
+
+func set_privacy_accepted() -> void:
+	_data["privacy_accepted_at"] = Time.get_unix_time_from_system()
+	save_game()
+
+
+func has_privacy_accepted() -> bool:
+	return get_privacy_accepted_at() > 0
+
+
+func get_analytics_consent() -> bool:
+	return bool(_data.get("analytics_consent", false))
+
+
+func set_analytics_consent(consented: bool) -> void:
+	_data["analytics_consent"] = consented
+	save_game()
+
+
+func get_equipped_cosmetics() -> Dictionary:
+	var raw: Variant = _data.get("equipped_cosmetics", {})
+	return raw if raw is Dictionary else {}
+
+
+func set_equipped_cosmetic(slot: String, cosmetic_id: String) -> void:
+	var equipped := get_equipped_cosmetics()
+	equipped[slot] = cosmetic_id
+	_data["equipped_cosmetics"] = equipped
+	save_game()
+
+
+func is_simorgh_feather_used_this_run() -> bool:
+	return bool(_data.get("simorgh_feather_used_run", false))
+
+
+func set_simorgh_feather_used() -> void:
+	_data["simorgh_feather_used_run"] = true
+	save_game()
+
+
+func reset_simorgh_feather_run() -> void:
+	_data["simorgh_feather_used_run"] = false
+	save_game()

@@ -4,7 +4,15 @@ extends RefCounted
 ## Loads sprites from art paths when present; falls back to ColorRect tinting.
 
 
-static func apply_sprite(node: Node2D, sprite_path: String, fallback_color: Color, size: Vector2 = Vector2(32, 32)) -> void:
+static func apply_sprite(
+	node: Node2D,
+	sprite_path: String,
+	fallback_color: Color,
+	size: Vector2 = Vector2(32, 32),
+	entity_key: String = ""
+) -> void:
+	if entity_key != "" and CosmeticService:
+		fallback_color = CosmeticService.get_entity_tint(entity_key, fallback_color)
 	if sprite_path != "" and ResourceLoader.exists(sprite_path):
 		var tex := load(sprite_path) as Texture2D
 		if tex != null:

@@ -24,6 +24,8 @@ func spawn_wave(wave: WaveData) -> void:
 	for group in wave.spawn_groups:
 		var enemy_id: String = str(group.get("enemy_id", ""))
 		var count: int = int(group.get("count", 1))
+		if context.runtime_modifiers.has("enemy_count_mult"):
+			count = maxi(1, int(round(count * float(context.runtime_modifiers["enemy_count_mult"]))))
 		var catalog_data := ContentRegistry.get_enemy(enemy_id)
 		if catalog_data == null:
 			push_warning("EnemySpawner: unknown enemy_id '%s' — skipping spawn group" % enemy_id)

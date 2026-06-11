@@ -7,7 +7,7 @@ const BEHIND_COLOR := Color(0.95, 0.4, 0.4)
 
 static func format_time_ms(ms: int) -> String:
 	var total_sec := maxf(0.0, float(ms) / 1000.0)
-	var minutes := int(total_sec) / 60
+	var minutes := int(total_sec / 60)
 	var seconds := int(total_sec) % 60
 	var millis := int(ms) % 1000
 	return "%02d:%02d.%03d" % [minutes, seconds, millis]
@@ -15,8 +15,8 @@ static func format_time_ms(ms: int) -> String:
 
 static func format_delta_sec(delta_ms: int) -> String:
 	var sec := absf(float(delta_ms) / 1000.0)
-	var sign := "-" if delta_ms < 0 else "+"
-	return "%s%.1fs" % [sign, sec]
+	var sign_prefix := "-" if delta_ms < 0 else "+"
+	return "%s%.1fs" % [sign_prefix, sec]
 
 
 static func delta_vs_pb(elapsed_ms: int, pb: Dictionary) -> int:

@@ -264,7 +264,7 @@ static func _validate_gauntlet_bosses(enemy_ids: Dictionary) -> Array[String]:
 	}
 	for i in GauntletRunState.GAUNTLET_LEVEL_IDS.size():
 		var level_id := GauntletRunState.GAUNTLET_LEVEL_IDS[i]
-		var boss_id := expected_bosses.get(level_id, "")
+		var boss_id: String = str(expected_bosses.get(level_id, ""))
 		if boss_id == "":
 			errors.append("gauntlet missing boss mapping for %s" % level_id)
 			continue

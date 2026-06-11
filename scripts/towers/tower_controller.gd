@@ -207,8 +207,16 @@ func _pick_target() -> EnemyController:
 
 
 func _fire_at(target: EnemyController) -> void:
+	var dmg := _compute_shot_damage(target)
+	var impact := func() -> void:
+		_apply_shot_impact(target, dmg)
 	if context and context.tower_manager:
-		context.tower_manager.spawn_projectile(self, target)
+		context.tower_manager.spawn_projectile(self, target, impact)
+	else:
+		_apply_shot_impact(target, dmg)
+
+
+func _compute_shot_damage(target: EnemyController) -> float:
 	var dmg := data.damage * _efficiency * _forge_damage_mult * _level_damage_mult() * _tether_mult
 	dmg *= MoraleController.get_damage_mult(context)
 	if context.runtime_modifiers.has("tower_damage_mult"):
@@ -223,6 +231,15 @@ func _fire_at(target: EnemyController) -> void:
 			dmg *= float(context.runtime_modifiers["tower_fire_damage_mult"])
 	if context.runtime_modifiers.has("equipment_heavy_brute_mult") and data.tower_id == "tower_heavy" and target.has_tag("div_brute"):
 		dmg *= float(context.runtime_modifiers["equipment_heavy_brute_mult"])
+	if context.map_light and region_id != "" and context.map_light.is_region_collapsed(region_id):
+		if context.runtime_modifiers.has("tower_damage_collapsed_mult"):
+			dmg *= float(context.runtime_modifiers["tower_damage_collapsed_mult"])
+	return dmg
+
+
+func _apply_shot_impact(target: EnemyController, dmg: float) -> void:
+	if target == null or not is_instance_valid(target) or target.current_hp <= 0.0:
+		return
 	target.take_damage(dmg)
 	CombatEvents.tower_damage_dealt.emit(data.tower_id, dmg, target.data.enemy_id if target.data else "")
 	if data.tower_id == "tower_archer" and context.runtime_modifiers.has("equipment_archer_armor_break"):
@@ -245,6 +262,7 @@ func _fire_at(target: EnemyController) -> void:
 		_apply_slow_to(target)
 	if data.armor_break:
 		target.apply_armor_break()
+	var relic := _get_tower_relic()
 	if relic and relic.gate_lives_per_attack > 0.0 and context and context.lives:
 		context.lives.restore_fraction(relic.gate_lives_per_attack)
 	if has_resonance("quake_bind") and data.tower_id == "tower_heavy":
@@ -254,18 +272,18 @@ func _fire_at(target: EnemyController) -> void:
 func _fire_twin_at(primary: EnemyController) -> void:
 	_fire_at(primary)
 	var secondary := _pick_second_target(primary)
-	if secondary:
-		if context and context.tower_manager:
-			context.tower_manager.spawn_projectile(self, secondary)
-		var dmg := data.damage * _efficiency * _forge_damage_mult * _level_damage_mult() * _tether_mult
-		dmg *= MoraleController.get_damage_mult(context)
-		if context.runtime_modifiers.has("tower_damage_mult"):
-			dmg *= float(context.runtime_modifiers["tower_damage_mult"])
-		var relic := _get_tower_relic()
-		if relic and relic.tower_damage_mult != 1.0:
-			dmg *= relic.tower_damage_mult
+	if secondary == null:
+		return
+	var dmg := _compute_shot_damage(secondary)
+	var impact := func() -> void:
+		if secondary == null or not is_instance_valid(secondary) or secondary.current_hp <= 0.0:
+			return
 		secondary.take_damage(dmg)
 		secondary.apply_venom(1, 5.0, 3.0, self)
+	if context and context.tower_manager:
+		context.tower_manager.spawn_projectile(self, secondary, impact)
+	else:
+		impact.call()
 
 
 func _apply_slow_to(target: EnemyController) -> void:
@@ -438,6 +456,8 @@ func _effective_range() -> float:
 	if context and context.runtime_modifiers.has("vision_radius_mult"):
 		mult = float(context.runtime_modifiers["vision_radius_mult"])
 	var range_val := data.range * _efficiency * _forge_range_mult * _level_range_mult() * mult
+	if context and context.runtime_modifiers.has("tower_range_mult"):
+		range_val *= float(context.runtime_modifiers["tower_range_mult"])
 	if context and context.equipment_battle:
 		range_val *= context.equipment_battle.get_tower_range_mult_near_hero(self)
 	return range_val

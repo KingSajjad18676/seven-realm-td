@@ -1,3 +1,4 @@
+class_name EquipmentScreenController
 extends Control
 
 ## Equipment loadout screen — 4 slots + owned collection + hero skill picker.

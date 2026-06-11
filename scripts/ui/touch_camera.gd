@@ -215,10 +215,10 @@ func _apply_zoom_at(screen_pos: Vector2, factor: float) -> void:
 	if is_equal_approx(old_z, new_z):
 		return
 	var viewport_size := _viewport_size()
-	var offset := screen_pos - viewport_size * 0.5
-	var world_at_cursor := global_position + offset / old_z
+	var pan_offset := screen_pos - viewport_size * 0.5
+	var world_at_cursor := global_position + pan_offset / old_z
 	zoom = Vector2(new_z, new_z)
-	global_position = world_at_cursor - offset / new_z
+	global_position = world_at_cursor - pan_offset / new_z
 	_clamp_position()
 
 

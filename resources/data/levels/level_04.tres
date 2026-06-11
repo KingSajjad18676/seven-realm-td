@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="LevelData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/level_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/path_route_data.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/data/spawn_point_data.gd" id="3"]
+
+[sub_resource type="Resource" id="Route_0"]
+script = ExtResource("2")
+route_id = "route_main"
+points = Array[Vector2]([Vector2(48, 183.3), Vector2(329.9, 318.6), Vector2(555.4, 183.3), Vector2(781, 48), Vector2(1006.5, 183.3), Vector2(1232, 183.3)])
+
+[sub_resource type="Resource" id="Route_1"]
+script = ExtResource("2")
+route_id = "route_2"
+points = Array[Vector2]([Vector2(72.5, 253.3), Vector2(354.4, 388.6), Vector2(579.9, 253.3), Vector2(805.5, 118), Vector2(1031, 253.3), Vector2(1256.5, 253.3)])
+
+[sub_resource type="Resource" id="Spawn_0"]
+script = ExtResource("3")
+spawn_id = "spawn_main"
+position = Vector2(28, 183.3)
+route_id = "route_main"
+
+[sub_resource type="Resource" id="Spawn_1"]
+script = ExtResource("3")
+spawn_id = "spawn_2"
+position = Vector2(52.5, 253.3)
+route_id = "route_2"
+
+[resource]
+script = ExtResource("1")
+level_id = "level_04"
+path_routes = Array[ExtResource("2")]([SubResource("Route_0"), SubResource("Route_1")])
+spawn_points = Array[ExtResource("3")]([SubResource("Spawn_0"), SubResource("Spawn_1")])
+build_spot_positions = Array[Vector2]([Vector2(369.9, 258.6), Vector2(289.9, 258.6), Vector2(595.4, 123.3), Vector2(741, -12), Vector2(1046.5, 123.3), Vector2(966.5, 123.3)])
+path_points = Array[Vector2]([Vector2(48, 183.3), Vector2(329.9, 318.6), Vector2(555.4, 183.3), Vector2(781, 48), Vector2(1006.5, 183.3), Vector2(1232, 183.3)])
+gate_position = Vector2(1252, 173.3)
+spawn_position = Vector2(28, 183.3)
+map_sprite_path = "res://art/_placeholders/maps/level_04.png"
+
+

@@ -26,6 +26,10 @@ func acquire() -> Node:
 	return node
 
 
+func in_use_count() -> int:
+	return _in_use.size()
+
+
 func release(node: Node) -> void:
 	if node == null:
 		return

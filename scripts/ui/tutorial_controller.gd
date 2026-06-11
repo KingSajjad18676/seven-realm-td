@@ -92,7 +92,7 @@ func _is_in_allowed_hud_rect(screen_pos: Vector2, allowed: Array) -> bool:
 	if _hud == null:
 		return false
 	for key in allowed:
-		var target := _hud.get_highlight_target(str(key))
+		var target: Control = _hud.get_highlight_target(str(key))
 		if target and target.get_global_rect().has_point(screen_pos):
 			return true
 	return false
@@ -573,7 +573,7 @@ func _update_highlight(key: String) -> void:
 			_highlight.size = Vector2(72, 72)
 			_highlight.visible = true
 			return
-	var target := _resolve_highlight_target(key)
+	var target: Control = _resolve_highlight_target(key)
 	if target == null:
 		_highlight.visible = false
 		return
@@ -585,7 +585,7 @@ func _update_highlight(key: String) -> void:
 
 func _resolve_highlight_target(key: String) -> Control:
 	if _hud:
-		var hud_target := _hud.get_highlight_target(key)
+		var hud_target: Control = _hud.get_highlight_target(key)
 		if hud_target:
 			return hud_target
 	return null

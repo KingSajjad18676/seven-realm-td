@@ -160,7 +160,10 @@ func _show_phase_two() -> void:
 func _on_reroll() -> void:
 	if _card_row == null or _reroll_used or context == null or context.economy == null:
 		return
-	if not context.economy.spend_sacred_fire(REROLL_SF_COST):
+	var free_reroll := bool(context.runtime_modifiers.get("free_pardeh_reroll", false))
+	if free_reroll:
+		context.runtime_modifiers.erase("free_pardeh_reroll")
+	elif not context.economy.spend_sacred_fire(REROLL_SF_COST):
 		if context.bridge:
 			context.bridge.alert_message.emit("Need Sacred Fire to reroll", 40)
 		return
@@ -243,6 +246,34 @@ func _apply_fate_effects(card: FateCardData) -> void:
 			context.runtime_modifiers["enemy_speed_mult"] = 1.05
 			if card.curse_enemy_hp_mult != 1.0:
 				context.runtime_modifiers["enemy_hp_mult"] = card.curse_enemy_hp_mult
+		"card_sacred_aegis":
+			if context.lives:
+				context.lives.max_lives += 1
+				context.lives.heal_life(1)
+			context.runtime_modifiers["enemy_speed_mult"] = 1.05
+		"card_corruption_embrace":
+			context.runtime_modifiers["tower_damage_collapsed_mult"] = 1.25
+			context.runtime_modifiers["corruption_rate_bonus"] = 0.15
+		"card_merchant_caravan":
+			if context.economy:
+				context.economy.add_gold(50)
+			context.runtime_modifiers["enemy_count_mult"] = 1.1
+		"card_divine_wind":
+			if context.morale:
+				context.morale.add(20)
+			context.runtime_modifiers["cleanse_cost_bonus"] = 1
+		"card_binders_oath":
+			context.runtime_modifiers["control_slow_mult"] = 0.35
+			context.runtime_modifiers["hero_move_speed_mult"] = 0.92
+		"card_farr_echo":
+			context.runtime_modifiers["farr_victory_bonus"] = 8
+			context.runtime_modifiers["enemy_hp_mult"] = 1.08
+		"card_gate_warden":
+			context.runtime_modifiers["gate_leak_reduction"] = 1
+			context.runtime_modifiers["tower_range_mult"] = 0.92
+		"card_shahnameh_thread":
+			context.runtime_modifiers["free_pardeh_reroll"] = true
+			context.runtime_modifiers["block_intermission_gold"] = true
 		_:
 			_apply_default_fate_effects(card)
 

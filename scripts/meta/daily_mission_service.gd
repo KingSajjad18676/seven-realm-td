@@ -128,6 +128,8 @@ func claim_mission(mission_id: String) -> Dictionary:
 			list[i] = e
 			state[key] = list
 			SaveSystem.set_daily_missions_state(state)
+			if FarrService:
+				FarrService.on_daily_mission_claimed()
 			if EquipmentService:
 				return EquipmentService.open_daily_loot_chest()
 			return {}

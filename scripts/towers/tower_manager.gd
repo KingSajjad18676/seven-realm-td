@@ -135,14 +135,26 @@ func destroy_tower(tower: TowerController, refund: bool = false) -> bool:
 	return true
 
 
-func spawn_projectile(tower: TowerController, target: EnemyController) -> void:
+func spawn_projectile(
+	tower: TowerController,
+	target: EnemyController,
+	on_impact: Callable = Callable()
+) -> void:
 	var proj := _projectile_pool.acquire() as ProjectileController
 	if proj == null:
+		if on_impact.is_valid():
+			on_impact.call()
 		return
 	proj.launch(tower.global_position, target, tower.data.projectile_speed, tower.data.color)
 	proj.hit_target.connect(func() -> void:
+		if on_impact.is_valid() and is_instance_valid(target) and target.current_hp > 0.0:
+			on_impact.call()
 		_projectile_pool.release(proj)
 	, CONNECT_ONE_SHOT)
+
+
+func get_active_projectile_count() -> int:
+	return _projectile_pool.in_use_count() if _projectile_pool else 0
 
 
 func _region_for_position(world_pos: Vector2) -> String:

@@ -45,6 +45,7 @@ func _build_actions() -> void:
 	_register_action("+5 Sacred Fire", _on_add_sf)
 	_register_action("Reset lives", _on_reset_lives)
 	_register_action("Collapse north region", _on_collapse)
+	_register_action("Toggle perf overlay", _on_toggle_perf)
 
 
 func _register_action(label: String, callback: Callable) -> void:
@@ -122,3 +123,12 @@ func _on_collapse() -> void:
 	var ctx := _find_battle()
 	if ctx and ctx.map_light:
 		ctx.map_light.apply_corruption_pressure("region_north", 120.0)
+
+
+func _on_toggle_perf() -> void:
+	var root := get_tree().get_first_node_in_group("battle_root")
+	if root == null:
+		return
+	var perf := root.get_node_or_null("FPSOverlay") as PerformanceOverlay
+	if perf:
+		perf.visible = not perf.visible

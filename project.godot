@@ -31,6 +31,8 @@ EquipmentService="*res://scripts/meta/equipment_service.gd"
 DailyMissionService="*res://scripts/meta/daily_mission_service.gd"
 MissionProgressTracker="*res://scripts/meta/mission_progress_tracker.gd"
 StoreService="*res://scripts/meta/store_service.gd"
+FarrService="*res://scripts/meta/farr_service.gd"
+CosmeticService="*res://scripts/meta/cosmetic_service.gd"
 CrashReporter="*res://scripts/meta/crash_reporter.gd"
 
 [display]
@@ -41,7 +43,6 @@ window/size/mode=3
 window/size/resizable=false
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
-window/handheld/orientation=0
 
 [editor_plugins]
 

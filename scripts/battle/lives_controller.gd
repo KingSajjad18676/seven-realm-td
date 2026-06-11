@@ -16,6 +16,8 @@ func initialize(ctx: BattleContext) -> void:
 
 
 func lose_life(amount: int = 1) -> void:
+	if context and context.runtime_modifiers.has("gate_leak_reduction"):
+		amount = maxi(1, amount - int(context.runtime_modifiers["gate_leak_reduction"]))
 	current_lives = maxi(0, current_lives - amount)
 	if context:
 		if context.objectives:
@@ -30,6 +32,8 @@ func lose_life(amount: int = 1) -> void:
 		context.bridge.alert_message.emit(breach_msg, 100)
 	if current_lives <= 0:
 		if context and context.equipment_battle and context.equipment_battle.try_gate_rebuild():
+			return
+		if context and context.simorgh_continue and context.simorgh_continue.try_offer_continue():
 			return
 		if context and context.state_controller:
 			var reason := "throne_breached" if (

@@ -1,6 +1,8 @@
 class_name HeroActionHud
 extends Control
 
+const SPELL_BAR_CLEARANCE := 56.0
+
 signal attack_pressed
 signal heavy_pressed
 signal dodge_pressed
@@ -47,25 +49,30 @@ func apply_layout(left_handed: bool) -> void:
 	if _joystick:
 		_joystick.set_corner(left_handed)
 	if _action_cluster:
+		var bottom := SPELL_BAR_CLEARANCE
+		var cluster_height := 220.0
 		if left_handed:
 			_action_cluster.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
 			_action_cluster.offset_left = 12.0
-			_action_cluster.offset_top = -220.0
+			_action_cluster.offset_top = -(cluster_height + bottom)
 			_action_cluster.offset_right = 220.0
-			_action_cluster.offset_bottom = -12.0
+			_action_cluster.offset_bottom = -bottom
 		else:
 			_action_cluster.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
 			_action_cluster.offset_left = -220.0
-			_action_cluster.offset_top = -220.0
+			_action_cluster.offset_top = -(cluster_height + bottom)
 			_action_cluster.offset_right = -12.0
-			_action_cluster.offset_bottom = -12.0
+			_action_cluster.offset_bottom = -bottom
 	if _hero_chip:
+		var chip_bottom := SPELL_BAR_CLEARANCE
 		if left_handed:
 			_hero_chip.offset_left = 12.0
 			_hero_chip.offset_right = 222.0
 		else:
 			_hero_chip.offset_left = 150.0
 			_hero_chip.offset_right = 360.0
+		_hero_chip.offset_top = -(96.0 + chip_bottom)
+		_hero_chip.offset_bottom = -chip_bottom
 
 
 func refresh_hero_chip() -> void:
@@ -125,10 +132,10 @@ func refresh_action_buttons() -> void:
 
 
 func apply_tutorial_gating(allowed: Dictionary) -> void:
-	var battlefield := allowed.get("battlefield", false)
+	var battlefield: bool = bool(allowed.get("battlefield", false))
 	if _joystick:
 		_joystick.mouse_filter = Control.MOUSE_FILTER_STOP if battlefield else Control.MOUSE_FILTER_IGNORE
-	var skill_ok := allowed.get("skill", false)
+	var skill_ok: bool = bool(allowed.get("skill", false))
 	for btn in [_attack_btn, _heavy_btn, _dodge_btn, _skill_btn]:
 		if btn:
 			btn.disabled = not (battlefield or skill_ok)
@@ -155,9 +162,9 @@ func _build_action_cluster() -> void:
 	_action_cluster.name = "ActionCluster"
 	_action_cluster.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
 	_action_cluster.offset_left = -220.0
-	_action_cluster.offset_top = -220.0
+	_action_cluster.offset_top = -(220.0 + SPELL_BAR_CLEARANCE)
 	_action_cluster.offset_right = -12.0
-	_action_cluster.offset_bottom = -12.0
+	_action_cluster.offset_bottom = -SPELL_BAR_CLEARANCE
 	_action_cluster.add_theme_constant_override("separation", 6)
 	_action_cluster.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_action_cluster)
@@ -195,9 +202,9 @@ func _build_hero_chip() -> void:
 	_hero_chip.name = "HeroChip"
 	_hero_chip.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
 	_hero_chip.offset_left = 150.0
-	_hero_chip.offset_top = -96.0
+	_hero_chip.offset_top = -(96.0 + SPELL_BAR_CLEARANCE)
 	_hero_chip.offset_right = 360.0
-	_hero_chip.offset_bottom = -12.0
+	_hero_chip.offset_bottom = -SPELL_BAR_CLEARANCE
 	add_child(_hero_chip)
 
 	var row := HBoxContainer.new()
@@ -285,6 +292,10 @@ func _skill_label(hero: HeroController) -> String:
 			return "Foresight"
 		"sohrab_rage":
 			return "Rage"
+		"gordafarid_volley":
+			return "Volley"
+		"esfandiyar_bulwark":
+			return "Bulwark"
 		_:
 			return "Charge"
 

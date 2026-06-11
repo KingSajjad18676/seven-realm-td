@@ -13,7 +13,10 @@ signal settings_changed
 @onready var _left_hand: CheckBox = %LeftHanded
 @onready var _vibration: CheckBox = %Vibration
 @onready var _restore: Button = %RestorePurchases
+@onready var _privacy: Button = %PrivacyButton
 @onready var _close: Button = %CloseButton
+
+const PRIVACY_PANEL_SCENE := preload("res://scenes/ui/privacy_panel.tscn")
 
 
 func _ready() -> void:
@@ -23,6 +26,8 @@ func _ready() -> void:
 		_close.pressed.connect(func() -> void: visible = false)
 	if _restore:
 		_restore.pressed.connect(_on_restore)
+	if _privacy:
+		_privacy.pressed.connect(_on_privacy)
 	if _music:
 		_music.value_changed.connect(_save)
 	if _sfx:
@@ -106,3 +111,15 @@ func _save(_v: Variant = null) -> void:
 func _on_restore() -> void:
 	if StoreService:
 		StoreService.restore_purchases()
+
+
+func _on_privacy() -> void:
+	var panel := PRIVACY_PANEL_SCENE.instantiate() as Control
+	if panel == null:
+		return
+	get_tree().root.add_child(panel)
+	panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	panel.offset_left = 0.0
+	panel.offset_top = 0.0
+	panel.offset_right = 0.0
+	panel.offset_bottom = 0.0

@@ -16,6 +16,7 @@ var _context: BattleContext = null
 var _bridge: BattleContextBridge = null
 var _tutorial_overlay_scene: PackedScene = preload("res://scenes/ui/tutorial_overlay.tscn")
 var _contextual_hint_scene: PackedScene = preload("res://scenes/ui/contextual_hint_overlay.tscn")
+var _simorgh_modal_scene: PackedScene = preload("res://scenes/ui/simorgh_continue_modal.tscn")
 var _touch_pending: bool = false
 var _touch_start_screen: Vector2 = Vector2.ZERO
 var _touch_start_world: Vector2 = Vector2.ZERO
@@ -173,6 +174,16 @@ func _setup_battle() -> void:
 	_assign_level_objective(level)
 	_context.tower_manager.initialize(_context, _towers_root, _projectiles_root, _units_root)
 
+	var simorgh_modal: SimorghContinueModal = null
+	if _hud and _simorgh_modal_scene:
+		simorgh_modal = _simorgh_modal_scene.instantiate() as SimorghContinueModal
+		if simorgh_modal:
+			_hud.add_child(simorgh_modal)
+	_context.simorgh_continue = SimorghContinueController.new()
+	_context.simorgh_continue.name = "SimorghContinueController"
+	add_child(_context.simorgh_continue)
+	_context.simorgh_continue.initialize(_context, simorgh_modal)
+
 	var fate_draft := FateDraftController.new()
 	fate_draft.name = "FateDraftController"
 	add_child(fate_draft)
@@ -191,6 +202,9 @@ func _setup_battle() -> void:
 		_map_root.add_child(range_ring)
 		if _hud.has_method("setup_tower_range_ring"):
 			_hud.setup_tower_range_ring(range_ring)
+	if _camera:
+		_camera.configure_from_level(level)
+	if _hud:
 		if _hud.has_method("setup_camera_ui"):
 			_hud.setup_camera_ui(_camera)
 	if level.is_tutorial:
@@ -207,8 +221,6 @@ func _setup_battle() -> void:
 		else:
 			add_child(hints)
 			hints.call_deferred("initialize", _context, _hud)
-	if _camera:
-		_camera.configure_from_level(level)
 
 	_connect_region_updates()
 	_apply_difficulty_and_unlocks(launch, level)
@@ -222,6 +234,9 @@ func _setup_battle() -> void:
 		_hud.refresh_skill_label()
 	if launch.is_brothers_mode and _hud and _hud.has_method("setup_brothers_hud"):
 		_hud.setup_brothers_hud()
+	var perf := get_node_or_null("FPSOverlay") as PerformanceOverlay
+	if perf:
+		perf.bind_context(_context)
 
 	if launch.auto_start:
 		_context.state_controller.start_battle()

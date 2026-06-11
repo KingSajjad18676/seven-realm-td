@@ -1,0 +1,101 @@
+[gd_scene load_steps=2 format=3 uid="uid://privacy_panel"]
+
+[ext_resource type="Script" path="res://scripts/ui/privacy_panel_controller.gd" id="1"]
+
+[node name="PrivacyPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+script = ExtResource("1")
+
+[node name="DimOverlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0.04, 0.06, 0.1, 0.88)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="DialogPanel" type="Panel" parent="CenterContainer"]
+custom_minimum_size = Vector2(560, 380)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/DialogPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 28
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/DialogPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/DialogPanel/MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Privacy & Data"
+horizontal_alignment = 1
+
+[node name="BodyLabel" type="Label" parent="CenterContainer/DialogPanel/MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "We use optional analytics to improve the game. You can change this later in Settings."
+autowrap_mode = 3
+horizontal_alignment = 1
+
+[node name="AnalyticsConsent" type="CheckBox" parent="CenterContainer/DialogPanel/MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Share anonymous gameplay analytics"
+
+[node name="LinkRow" type="HBoxContainer" parent="CenterContainer/DialogPanel/MarginContainer/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 20
+
+[node name="PrivacyPolicyButton" type="Button" parent="CenterContainer/DialogPanel/MarginContainer/VBox/LinkRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 40)
+layout_mode = 2
+text = "Privacy Policy"
+
+[node name="TermsButton" type="Button" parent="CenterContainer/DialogPanel/MarginContainer/VBox/LinkRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 40)
+layout_mode = 2
+text = "Terms of Service"
+
+[node name="Spacer" type="Control" parent="CenterContainer/DialogPanel/MarginContainer/VBox"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="AcceptButton" type="Button" parent="CenterContainer/DialogPanel/MarginContainer/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 44)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Continue"

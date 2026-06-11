@@ -1,6 +1,6 @@
 # Project Status (Godot)
 
-**Last updated:** 2026-06-11 (N1 battle HUD completion + N1–N5 milestone plan)  
+**Last updated:** 2026-06-11 (N2 projectile impact + perf overlay + threat-jump)  
 **Milestones:** [design/04-production-roadmap.md](../design/04-production-roadmap.md) · **Identity:** [design/00-project-index.md](../design/00-project-index.md)
 
 ---
@@ -43,12 +43,19 @@
 | Khan difficulty scaling        | ✅ Per-Khan HP/speed/count mults; **10-wave master block generator** (`CampaignWaveTemplates`) |
 | Horde mode                     | ✅ 15 waves per Khan; act progression in horde/endless slices; clear all 8 unlocks Serpent Spire tower                                                                                                     |
 | Forge Tokens + Spells          | ✅ Earn on victory; buy in Kaveh's Forge; cast in battle HUD                                                                                                      |
-| Paid power store (stub IAP)    | ✅ Tower, spells, token packs via StoreService                                                                                                                      |
+| Paid power store (IAP stub)    | ✅ `IapProvider` + combat/cosmetic SKUs via `StoreService`; restore flow wired                                                                                    |
+| **Farr meta currency**         | ✅ Save v10 + `FarrService`; first clear / victory / daily mission earn; world map + battle HUD                                                                     |
+| **Fate cards (16)**            | ✅ 8 new cards + effect wiring; `ContentValidator.MIN_FATE_CARDS = 16`                                                                                              |
+| **Simorgh Feather continue**   | ✅ Once per campaign run at 0 lives; skipped in gauntlet/tutorial/throne                                                                                            |
+| **Gordafarid + Esfandiyar**    | ✅ Heroes + `gordafarid_volley` / `esfandiyar_bulwark` skills; Labour 2 / 4 unlocks                                                                               |
+| **Maps 2–8 geometry**          | ✅ `resources/data/levels/level_02.tres` … `level_08_damavand.tres` baked; placeholder map/loading generators                                                     |
+| **Privacy + consent**          | ✅ Boot gate + settings link; `legal_links.gd`; analytics consent in save                                                                                         |
+| **Cosmetics store**            | ✅ Cosmetics tab in Kaveh's Forge; `CosmeticService` tint overrides                                                                                                 |
 | Automated tests                | ✅ GUT v9.6.0 (`tests/`), ContentValidator, **WaveSpawnValidator**, SaveMigration, GitHub Actions CI                                                                                      |
 | Khan 1 map art                 | ✅ `art/maps/level_01.jpg` + geometry override in `resources/data/levels/level_01.tres`; battle hides green Terrain fallback when map sprite loads                |
 | **Hero action controls**       | ✅ Virtual joystick (left); Attack / Heavy / Dodge / Skill (right); manual combat — no auto-attack; enemy telegraphed melee when lane-blocked |
 | **In-battle hero leveling**    | ✅ `HeroLevelService` — XP per kill, Lv 1–10, +8% dmg / +10% HP per level; HUD level + XP bar |
-| **Hero skill loadout**         | ✅ Pre-battle skill select on Equipment screen (`rostam_charge`, `zal_foresight`, `sohrab_rage` unlocks); persisted in save |
+| **Hero skill loadout**         | ✅ Pre-battle skill select on Equipment screen (5 skills incl. Gordafarid/Esfandiyar); persisted in save |
 | **Battle HUD (Khan 1 polish)** | ✅ Hero chip (portrait + HP/XP/tether + skill readiness); alert priority queue; gate-hit feedback; region status chips (high contrast); subtitle overlay; objective/boss chips; action cluster; pause Restart + Settings |
 | **Audio (placeholder tones)**  | ✅ Procedural SFX + menu loop; Music/SFX buses; settings sliders wired |
 | **Naft traps wiring**          | ✅ `NaftTrapController` instantiated in `battle_bootstrap` for Rostam |
@@ -63,11 +70,11 @@
 | Milestone | Status | Notes                                                                                                    |
 | --------- | ------ | -------------------------------------------------------------------------------------------------------- |
 | **M0–M3** | ✅     | Khan 1 slice, corruption, Lion boss telegraphs                                                           |
-| **M4**    | 🟡     | Khan 1 production map wired; multi-route/spawn map editor + battle routing; other maps still placeholders |
+| **M4**    | 🟡     | Khan 1 production map + L2–8 baked geometry; illustrated art still placeholder pipeline                   |
 | **M5**    | ✅     | Pardeh enforced, 8 Fate cards aligned, objectives on results, relics in roguelite                        |
 | **M6**    | ✅     | ContentCatalog, validators, smoke_test expanded, save v4                                                 |
 | **M7**    | ✅     | Per-Khan enemies/waves, boss phase logic, Zal on Khans 2–3                                               |
-| **M8**    | 🟡     | Accessibility + stubs; platform IAP/crash SDK deferred                                                   |
+| **M8**    | 🟡     | Accessibility ✅; IAP/privacy/cosmetics/analytics plumbing ✅; live store SDK credentials deferred        |
 
 **Product gate:** still validate voluntary **Khan 1 replay** on device before marketing scale.
 
@@ -113,12 +120,8 @@ In the editor: **Project → Tools → GUT** (bottom panel) → Run All.
 
 ## Known deferrals
 
-- **N2–N5 milestones** — see [implementation-tracker.md](implementation-tracker.md) §Next milestones
-- Production art (circle sprite fallbacks in `VisualAssetLoader`; run `tools/generate_khan1_placeholders.gd` for PNGs)
-- Maps 2–8 authored geometry + illustrated art (only `level_01` production map today)
-- Projectile-on-impact damage (instant damage today; cosmetic projectiles)
-- Performance overlay (roadmap backlog)
-- Full ~43 Fate card pool (8 wired); Farr meta currency; extra heroes (Gordafarid, Esfandiyar, …)
-- Simorgh Feather continue; Forge hybrids; Memory Div / Blood Oath run nodes; Zervan Dial rewind (not in codebase)
+- Production illustrated art (placeholder PNG generators: `generate_khan1_placeholders.gd`, `generate_map_placeholders.gd`)
+- Full ~43 Fate card pool (16 wired post-N3)
+- Forge hybrids; Memory Div / Blood Oath run nodes; Zervan Dial rewind (not in codebase)
 - Company splash scene (boot → menu directly today)
-- Platform IAP, crash SDK, privacy disclosures, cosmetics-first store catalog, production analytics SDK
+- Live Google Play Billing / StoreKit credentials and production analytics/crash HTTP endpoints

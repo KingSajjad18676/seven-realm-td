@@ -45,8 +45,8 @@ func _build_static_ui() -> void:
 	var desc := Label.new()
 	desc.text = (
 		"King Kay Kavus offers to aid you from his flying throne.\n"
-		"If you accept, his chariot will bombard the battlefield every 20 seconds — "
-		"massive damage to enemies and your towers alike."
+		+ "If you accept, his chariot will bombard the battlefield every 20 seconds - "
+		+ "massive damage to enemies and your towers alike."
 	)
 	desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
