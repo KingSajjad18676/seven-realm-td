@@ -45,6 +45,9 @@ func test_build_rostam_hero_sprite_frames() -> void:
 	assert_true(sf.has_animation("idle"))
 	assert_true(sf.has_animation("attack"))
 	assert_eq(sf.get_frame_count("attack"), 8)
+	if ResourceLoader.exists("res://art/heroes/rostam/rostam_walk.png"):
+		assert_true(sf.has_animation("walk"))
+		assert_gt(sf.get_frame_count("walk"), 0)
 
 
 func test_apply_hero_visual_creates_animated_sprite() -> void:

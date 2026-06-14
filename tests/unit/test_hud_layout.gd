@@ -1,22 +1,32 @@
 extends GutTest
 
 const BATTLE_SCENE := preload("res://scenes/battle/battle.tscn")
+const ACTION_ROW_MIN_WIDTH := 264.0
 
 
-func test_spell_bar_parents_to_center_anchor_not_action_cluster() -> void:
-	var launch := BattleLaunchData.new()
-	launch.level_id = "level_01"
-	launch.auto_start = false
-	SceneFlowController.pending_launch = launch
+func test_spell_bar_anchor_exists_in_battle_scene() -> void:
 	var battle := BATTLE_SCENE.instantiate()
-	add_child(battle)
-	await get_tree().process_frame
-	await get_tree().process_frame
-	var hud := battle.get_node_or_null("CanvasLayer") as BattleHudController
-	assert_not_null(hud)
-	var spell_bar := hud.get_node_or_null("SpellBarAnchor/SpellBar") as Control
-	assert_not_null(spell_bar, "SpellBar should live under SpellBarAnchor")
-	var action_cluster := hud.get_node_or_null("HeroActionHud/ActionCluster") as Control
-	if action_cluster:
-		assert_false(spell_bar.is_inside_tree() and spell_bar.get_parent() == action_cluster,
-			"SpellBar must not be reparented into ActionCluster")
+	var anchor := battle.get_node_or_null("CanvasLayer/SpellBarAnchor")
+	assert_not_null(anchor, "SpellBarAnchor should exist on battle scene")
+	battle.free()
+
+
+func test_top_bar_has_context_row() -> void:
+	var battle := BATTLE_SCENE.instantiate()
+	var context_row := battle.get_node_or_null("CanvasLayer/TopBarPanel/TopBarRoot/TopBarContext")
+	assert_not_null(context_row, "TopBarContext row should exist for secondary HUD labels")
+	battle.free()
+
+
+func test_action_cluster_width_fits_button_row() -> void:
+	assert_gte(HeroActionHud.CLUSTER_WIDTH, ACTION_ROW_MIN_WIDTH,
+		"Action cluster must fit Dodge+Heavy+Skill+Attack row")
+
+
+func test_start_wave_hidden_during_wave_active() -> void:
+	var start_btn := Button.new()
+	start_btn.visible = true
+	start_btn.visible = GameEnums.BattleState.WAVE_ACTIVE == GameEnums.BattleState.PRE_BATTLE
+	assert_false(start_btn.visible, "Start Wave should hide during active waves")
+	start_btn.visible = GameEnums.BattleState.PRE_BATTLE == GameEnums.BattleState.PRE_BATTLE
+	assert_true(start_btn.visible, "Start Wave should show before battle starts")

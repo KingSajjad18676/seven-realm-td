@@ -192,6 +192,14 @@ func apply_level_hp_bonus() -> void:
 	_refresh_hp_bar()
 
 
+func can_use_manual_actions() -> bool:
+	return _can_use_manual_action()
+
+
+func can_use_attack_heavy() -> bool:
+	return can_use_manual_actions() and not _is_mounted()
+
+
 func attack() -> void:
 	if not _can_use_manual_action():
 		return
@@ -225,6 +233,7 @@ func heavy_attack() -> void:
 		return
 	_heavy_windup = HEAVY_WINDUP_SEC
 	_heavy_cooldown = data.heavy_cooldown
+	_play_hero_anim("heavy")
 	if context and context.bridge:
 		context.bridge.alert_message.emit("Heavy strike!", 25)
 
@@ -395,6 +404,13 @@ func _die() -> void:
 	cancel_move()
 	_clear_tether()
 	_respawn_remaining = data.respawn_cooldown if data else 8.0
+	if _anim_sprite and _anim_sprite.sprite_frames.has_animation("dying"):
+		_play_hero_anim("dying")
+		if context and context.bridge:
+			context.bridge.alert_message.emit(
+				"Hero fallen — respawning in %ds" % int(ceilf(_respawn_remaining)), 50
+			)
+		return
 	visible = false
 	if context and context.bridge:
 		context.bridge.alert_message.emit(
@@ -453,7 +469,6 @@ func _process_heavy_windup(delta: float) -> void:
 	_heavy_windup -= delta
 	if _heavy_windup > 0.0:
 		return
-	_play_hero_anim("heavy")
 	var dmg := data.heavy_damage * _hero_damage_mult()
 	var hits := _deal_arc_damage(dmg, data.heavy_radius, 360.0, 99, true)
 	if hits > 0:
@@ -488,7 +503,8 @@ func _process_movement(delta: float) -> void:
 	else:
 		velocity = velocity.move_toward(_move_input * speed, MOVE_ACCEL * delta)
 	move_and_slide()
-	var moving := _move_input.length_squared() > 0.01
+	var moving := _move_input.length_squared() > 0.01 or velocity.length_squared() > 100.0
+	_update_locomotion_anim(moving)
 	if moving and not _was_moving:
 		CombatEvents.hero_moved.emit()
 	_was_moving = moving
@@ -621,13 +637,34 @@ func _play_hero_anim(anim_name: String) -> void:
 	if anim_name == "idle":
 		if _one_shot_anim:
 			return
+		_one_shot_anim = false
 	else:
 		_one_shot_anim = true
+	if _anim_sprite.animation == anim_name or _anim_sprite.is_playing():
+		_anim_sprite.stop()
+	_anim_sprite.frame = 0
 	_anim_sprite.play(anim_name)
+
+
+func _update_locomotion_anim(moving: bool) -> void:
+	if _anim_sprite == null or _anim_sprite.sprite_frames == null:
+		return
+	if _one_shot_anim or _dodge_remaining > 0.0:
+		return
+	if moving:
+		if _anim_sprite.sprite_frames.has_animation("walk") and _anim_sprite.animation != "walk":
+			_anim_sprite.play("walk")
+		return
+	if _anim_sprite.sprite_frames.has_animation("idle") and _anim_sprite.animation != "idle":
+		_anim_sprite.play("idle")
 
 
 func _on_hero_anim_finished() -> void:
 	if _anim_sprite == null:
+		return
+	if _anim_sprite.animation == "dying":
+		visible = false
+		_one_shot_anim = false
 		return
 	if _anim_sprite.animation == "idle":
 		_one_shot_anim = false

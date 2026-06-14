@@ -64,37 +64,48 @@ layer = 55
 script = ExtResource("3_hud")
 
 [node name="TopBarPanel" type="PanelContainer" parent="CanvasLayer"]
+anchors_preset = 10
+anchor_right = 1.0
 offset_left = 8.0
 offset_top = 8.0
-offset_right = 560.0
-offset_bottom = 44.0
+offset_right = -216.0
+offset_bottom = 68.0
+grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_topbar")
 
-[node name="TopBar" type="HBoxContainer" parent="CanvasLayer/TopBarPanel"]
+[node name="TopBarRoot" type="VBoxContainer" parent="CanvasLayer/TopBarPanel"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TopBar" type="HBoxContainer" parent="CanvasLayer/TopBarPanel/TopBarRoot"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="GoldLabel" type="Label" parent="CanvasLayer/TopBarPanel/TopBar"]
+[node name="TopBarContext" type="HBoxContainer" parent="CanvasLayer/TopBarPanel/TopBarRoot"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="GoldLabel" type="Label" parent="CanvasLayer/TopBarPanel/TopBarRoot/TopBar"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Gold: 0"
 
-[node name="SacredFireLabel" type="Label" parent="CanvasLayer/TopBarPanel/TopBar"]
+[node name="SacredFireLabel" type="Label" parent="CanvasLayer/TopBarPanel/TopBarRoot/TopBar"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Sacred Fire: 0"
 
-[node name="LivesLabel" type="Label" parent="CanvasLayer/TopBarPanel/TopBar"]
+[node name="LivesLabel" type="Label" parent="CanvasLayer/TopBarPanel/TopBarRoot/TopBar"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Lives: 0"
 
-[node name="WaveLabel" type="Label" parent="CanvasLayer/TopBarPanel/TopBar"]
+[node name="WaveLabel" type="Label" parent="CanvasLayer/TopBarPanel/TopBarRoot/TopBar"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Wave: 0/5"
 
-[node name="MoraleLabel" type="Label" parent="CanvasLayer/TopBarPanel/TopBar"]
+[node name="MoraleLabel" type="Label" parent="CanvasLayer/TopBarPanel/TopBarRoot/TopBar"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Morale: 50/100"
@@ -102,9 +113,9 @@ text = "Morale: 50/100"
 [node name="AlertLabel" type="Label" parent="CanvasLayer"]
 unique_name_in_owner = true
 offset_left = 200.0
-offset_top = 48.0
+offset_top = 56.0
 offset_right = 1080.0
-offset_bottom = 68.0
+offset_bottom = 76.0
 theme_override_colors/font_color = Color(1, 0.85, 0.4, 1)
 horizontal_alignment = 1
 
@@ -179,6 +190,15 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Cleanse"
 
+[node name="CleanseHintLabel" type="Label" parent="CanvasLayer/TopRightStack"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.9, 0.85, 1)
+theme_override_font_sizes/font_size = 10
+text = "Cleanse: auto"
+horizontal_alignment = 2
+autowrap_mode = 2
+
 [node name="MinimapPanel" type="Panel" parent="CanvasLayer/TopRightStack"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(168, 94)
@@ -188,23 +208,12 @@ mouse_filter = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_topbar")
 script = ExtResource("6_minimap")
 
-[node name="CleanseHintLabel" type="Label" parent="CanvasLayer"]
-unique_name_in_owner = true
-offset_left = 480.0
-offset_top = 8.0
-offset_right = 1000.0
-offset_bottom = 28.0
-theme_override_colors/font_color = Color(0.7, 0.9, 0.85, 1)
-theme_override_font_sizes/font_size = 11
-text = "Cleanse: auto"
-horizontal_alignment = 2
-
 [node name="StartWaveButton" type="Button" parent="CanvasLayer"]
 unique_name_in_owner = true
-offset_left = 520.0
-offset_top = 8.0
-offset_right = 760.0
-offset_bottom = 40.0
+offset_left = 8.0
+offset_top = 72.0
+offset_right = 148.0
+offset_bottom = 104.0
 text = "Start Wave"
 
 [node name="GauntletRushButton" type="Button" parent="CanvasLayer"]

@@ -19,8 +19,8 @@ func setup(ctx: BattleContext) -> void:
 	name = "RegionStatusHud"
 	add_theme_constant_override("separation", 6)
 	set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
-	offset_top = 28.0
-	offset_bottom = 48.0
+	offset_top = 48.0
+	offset_bottom = 68.0
 	offset_left = 200.0
 	offset_right = -200.0
 	alignment = BoxContainer.ALIGNMENT_CENTER

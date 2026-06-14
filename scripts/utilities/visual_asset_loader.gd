@@ -86,22 +86,34 @@ static func make_portrait_texture(
 	return _make_circle_texture(fallback_color, diameter)
 
 
+static func infer_square_strip_frame_count(tex: Texture2D) -> int:
+	if tex == null:
+		return 1
+	var full_size := tex.get_size()
+	if full_size.y <= 0.0:
+		return 1
+	return maxi(1, int(round(full_size.x / full_size.y)))
+
+
 static func build_sprite_frames_from_strip(strip: HeroAnimStripDef) -> SpriteFrames:
 	var sf := SpriteFrames.new()
-	if strip == null or strip.strip_path == "" or strip.frame_count <= 0:
+	if strip == null or strip.strip_path == "":
 		return sf
 	if not ResourceLoader.exists(strip.strip_path):
 		return sf
 	var tex := load(strip.strip_path) as Texture2D
 	if tex == null:
 		return sf
+	var frame_count := strip.frame_count
+	if frame_count <= 0:
+		frame_count = infer_square_strip_frame_count(tex)
 	var full_size := tex.get_size()
-	var cell_w := full_size.x / float(strip.frame_count)
+	var cell_w := full_size.x / float(frame_count)
 	var cell_h := full_size.y
 	sf.add_animation(strip.anim_name)
 	sf.set_animation_loop(strip.anim_name, strip.loop)
 	sf.set_animation_speed(strip.anim_name, strip.fps)
-	for i in strip.frame_count:
+	for i in frame_count:
 		var atlas := AtlasTexture.new()
 		atlas.atlas = tex
 		atlas.region = Rect2(i * cell_w, 0.0, cell_w, cell_h)

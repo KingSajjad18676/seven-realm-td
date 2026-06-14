@@ -459,6 +459,8 @@ static func build_rostam_anim() -> HeroAnimData:
 		["dodge", "res://art/heroes/rostam/rostam_doge.png", 2, 10.0, false],
 		["charge", "res://art/heroes/rostam/rostam_charge.png", 2, 8.0, false],
 		["hit", "res://art/heroes/rostam/rostam_hit.png", 2, 10.0, false],
+		["walk", "res://art/heroes/rostam/rostam_walk.png", 0, 8.0, true],
+		["dying", "res://art/heroes/rostam/rostam_dying.png", 0, 8.0, false],
 	]
 	for row in defs:
 		var strip := HeroAnimStripDef.new()

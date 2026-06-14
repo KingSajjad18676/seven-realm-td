@@ -9,10 +9,10 @@ var _timer: float = 0.0
 func _ready() -> void:
 	name = "SubtitleOverlay"
 	set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-	offset_top = -72.0
-	offset_bottom = -48.0
+	offset_top = -88.0
+	offset_bottom = -56.0
 	offset_left = 80.0
-	offset_right = -80.0
+	offset_right = -300.0
 	horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	add_theme_font_size_override("font_size", 13)

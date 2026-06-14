@@ -134,12 +134,17 @@ func initialize(ctx: BattleContext, fate_draft: FateDraftController, vow_offer: 
 	if _map_btn:
 		_map_btn.visible = false
 	_hide_pause_modal()
+	_update_start_wave_visibility(
+		context.state_controller.current_state if context and context.state_controller else GameEnums.BattleState.PRE_BATTLE
+	)
 func setup_brothers_hud() -> void:
 	if context == null or context.coop_players == null or not context.coop_players.is_active():
 		return
 	if _coop_row != null:
 		return
-	var top := get_node_or_null("TopBar") as Control
+	var top := get_node_or_null("TopBarPanel/TopBarRoot/TopBarContext") as Control
+	if top == null:
+		top = get_node_or_null("TopBarPanel/TopBarRoot/TopBar") as Control
 	if top == null:
 		return
 	_coop_row = HBoxContainer.new()
@@ -441,6 +446,23 @@ func _tick_playable_hud_layout() -> void:
 	_update_playable_hud_layout()
 
 
+func _get_top_bar_context() -> HBoxContainer:
+	return get_node_or_null("TopBarPanel/TopBarRoot/TopBarContext") as HBoxContainer
+
+
+func _apply_context_label_style(label: Label) -> void:
+	label.add_theme_font_size_override("font_size", 11)
+	label.clip_text = true
+	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+
+func _update_start_wave_visibility(state: GameEnums.BattleState) -> void:
+	if _start_btn == null:
+		return
+	_start_btn.visible = state == GameEnums.BattleState.PRE_BATTLE
+
+
 func _apply_hud_layout() -> void:
 	if _spell_bar_anchor:
 		_spell_bar_anchor.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
@@ -448,13 +470,17 @@ func _apply_hud_layout() -> void:
 		_spell_bar_anchor.offset_top = -48.0
 		_spell_bar_anchor.offset_right = 320.0
 		_spell_bar_anchor.offset_bottom = -8.0
+	var top_panel := get_node_or_null("TopBarPanel") as Control
+	if top_panel:
+		top_panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+		top_panel.offset_left = 8.0
+		top_panel.offset_top = 8.0
+		top_panel.offset_right = -216.0
+		top_panel.offset_bottom = 68.0
 	if _minimap:
 		_minimap.custom_minimum_size = MinimapController.PANEL_SIZE
 	if _hero_action_hud:
 		_hero_action_hud.apply_layout(AccessibilityHelper.is_left_handed())
-	if _cleanse_hint:
-		_cleanse_hint.offset_left = 480.0
-		_cleanse_hint.offset_right = 1000.0
 
 
 func _apply_compact_hud_styles() -> void:
@@ -537,6 +563,7 @@ func _setup_hero_action_hud() -> void:
 	_hero_action_hud.dodge_pressed.connect(_on_dodge)
 	_hero_action_hud.skill_pressed.connect(_on_skill)
 	_hero_action_hud.naft_pressed.connect(_on_naft)
+	_hero_action_hud.mount_pressed.connect(_on_mount)
 
 
 func _setup_objective_chip() -> void:
@@ -546,7 +573,10 @@ func _setup_objective_chip() -> void:
 	_objective_chip.name = "ObjectiveChip"
 	_objective_chip.add_theme_font_size_override("font_size", 11)
 	_objective_chip.add_theme_color_override("font_color", Color(0.85, 0.92, 1.0))
-	var top := get_node_or_null("TopBarPanel/TopBar") as HBoxContainer
+	_apply_context_label_style(_objective_chip)
+	var top := _get_top_bar_context()
+	if top == null:
+		top = get_node_or_null("TopBarPanel/TopBarRoot/TopBar") as HBoxContainer
 	if top:
 		top.add_child(_objective_chip)
 	if context.objectives and context.objectives.active_objective:
@@ -560,8 +590,8 @@ func _setup_boss_hp_bar() -> void:
 	_boss_hp_panel.name = "BossHpPanel"
 	_boss_hp_panel.visible = false
 	_boss_hp_panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
-	_boss_hp_panel.offset_top = 52.0
-	_boss_hp_panel.offset_bottom = 82.0
+	_boss_hp_panel.offset_top = 80.0
+	_boss_hp_panel.offset_bottom = 110.0
 	_boss_hp_panel.offset_left = 280.0
 	_boss_hp_panel.offset_right = -280.0
 	add_child(_boss_hp_panel)
@@ -597,7 +627,15 @@ func _apply_accessibility_scale() -> void:
 	if SettingsService == null:
 		return
 	var ui_scale := clampf(float(SettingsService.ui_scale), 0.8, 1.4)
-	scale = Vector2(ui_scale, ui_scale)
+	if is_equal_approx(ui_scale, 1.0):
+		transform = Transform2D.IDENTITY
+		scale = Vector2.ONE
+		return
+	var vp := get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
+	var pivot := vp * 0.5
+	var xform := Transform2D.IDENTITY.translated(pivot).scaled(Vector2(ui_scale, ui_scale)).translated(-pivot)
+	transform = xform
+	scale = Vector2.ONE
 
 
 func _apply_accessibility_theme() -> void:
@@ -753,6 +791,12 @@ func _on_naft() -> void:
 	context.naft_traps.toggle_arm()
 
 
+func _on_mount() -> void:
+	if context == null or context.rakhsh_mount == null:
+		return
+	context.rakhsh_mount.toggle_mount()
+
+
 func _on_region_selected(region_id: String, _light: int) -> void:
 	_refresh_cleanse_hint()
 func _on_region_light_changed(region_id: String, _light: int, _state: GameEnums.RegionLightState) -> void:
@@ -776,6 +820,7 @@ func _on_start() -> void:
 		context.state_controller.start_battle()
 		if _start_btn:
 			_start_btn.disabled = true
+			_start_btn.visible = false
 func _on_pause() -> void:
 	if context == null or context.state_controller == null:
 		return
@@ -958,12 +1003,13 @@ func _on_sf(v: int) -> void:
 
 
 func _setup_farr_label() -> void:
-	if _gold_label == null or _gold_label.get_parent() == null:
+	var top := _get_top_bar_context()
+	if top == null:
 		return
 	_farr_label = Label.new()
 	_farr_label.name = "FarrLabel"
-	_farr_label.add_theme_font_size_override("font_size", 11)
-	_gold_label.get_parent().add_child(_farr_label)
+	_apply_context_label_style(_farr_label)
+	top.add_child(_farr_label)
 	_refresh_farr_label()
 
 
@@ -979,12 +1025,13 @@ func _refresh_farr_label() -> void:
 
 
 func _setup_materials_label() -> void:
-	if _gold_label == null or _gold_label.get_parent() == null:
+	var top := _get_top_bar_context()
+	if top == null:
 		return
 	_materials_label = Label.new()
 	_materials_label.name = "MaterialsLabel"
-	_materials_label.add_theme_font_size_override("font_size", 14)
-	_gold_label.get_parent().add_child(_materials_label)
+	_apply_context_label_style(_materials_label)
+	top.add_child(_materials_label)
 	_on_materials(context.economy.get_unbanked_materials() if context and context.economy else {})
 
 
@@ -1097,6 +1144,7 @@ func _on_early_call() -> void:
 func _on_state(state: GameEnums.BattleState) -> void:
 	if state == GameEnums.BattleState.VICTORY or state == GameEnums.BattleState.DEFEAT:
 		_hide_pause_modal()
+	_update_start_wave_visibility(state)
 	if state == GameEnums.BattleState.PRE_BATTLE and _start_btn and not _tutorial_gating:
 		_start_btn.disabled = false
 		if _is_gauntlet_active() and _gauntlet_rush_btn:
@@ -1128,13 +1176,13 @@ func _on_vow_offer(vow_data: ObjectiveData, block_start: int, block_end: int) ->
 func _setup_vow_label() -> void:
 	if _vow_label != null:
 		return
-	var top_bar := get_node_or_null("TopBarPanel/TopBar") as HBoxContainer
+	var top_bar := _get_top_bar_context()
 	if top_bar == null:
 		return
 	_vow_label = Label.new()
 	_vow_label.name = "VowLabel"
 	_vow_label.text = ""
-	_vow_label.add_theme_font_size_override("font_size", 14)
+	_apply_context_label_style(_vow_label)
 	_vow_label.modulate = Color(0.85, 0.75, 0.45)
 	top_bar.add_child(_vow_label)
 

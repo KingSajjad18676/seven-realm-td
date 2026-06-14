@@ -3,8 +3,8 @@ extends Control
 
 const SPELL_BAR_CLEARANCE := 56.0
 const PLAYABLE_MARGIN := 12.0
-const CLUSTER_WIDTH := 220.0
-const CLUSTER_HEIGHT := 220.0
+const CLUSTER_WIDTH := 280.0
+const CLUSTER_HEIGHT := 240.0
 const JOYSTICK_WIDTH := 128.0
 const JOYSTICK_HEIGHT := 200.0
 const HERO_CHIP_WIDTH := 210.0
@@ -15,6 +15,7 @@ signal heavy_pressed
 signal dodge_pressed
 signal skill_pressed
 signal naft_pressed
+signal mount_pressed
 
 var _joystick: VirtualJoystick = null
 var _action_cluster: VBoxContainer = null
@@ -23,6 +24,7 @@ var _heavy_btn: Button = null
 var _dodge_btn: Button = null
 var _skill_btn: Button = null
 var _naft_btn: Button = null
+var _mount_btn: Button = null
 var _hero_chip: PanelContainer = null
 var _hero_portrait: TextureRect = null
 var _hero_hp_bar: ProgressBar = null
@@ -160,10 +162,27 @@ func _layout_viewport_anchors() -> void:
 
 func _position_control(ctrl: Control, x: float, y: float, w: float, h: float) -> void:
 	ctrl.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	ctrl.offset_left = x
-	ctrl.offset_top = y
-	ctrl.offset_right = x + w
-	ctrl.offset_bottom = y + h
+	var clamped := _clamp_rect_to_viewport(Rect2(x, y, w, h))
+	ctrl.offset_left = clamped.position.x
+	ctrl.offset_top = clamped.position.y
+	ctrl.offset_right = clamped.position.x + clamped.size.x
+	ctrl.offset_bottom = clamped.position.y + clamped.size.y
+
+
+func _clamp_rect_to_viewport(rect: Rect2) -> Rect2:
+	var vp := get_viewport()
+	if vp == null:
+		return rect
+	var bounds := vp.get_visible_rect()
+	var margin := PLAYABLE_MARGIN
+	var max_x := bounds.size.x - margin - rect.size.x
+	var max_y := bounds.size.y - margin - rect.size.y
+	return Rect2(
+		clampf(rect.position.x, margin, maxf(margin, max_x)),
+		clampf(rect.position.y, margin, maxf(margin, max_y)),
+		rect.size.x,
+		rect.size.y
+	)
 
 
 func refresh_hero_chip() -> void:
@@ -215,11 +234,14 @@ func refresh_action_buttons() -> void:
 	var hero := _context.hero_manager.get_controlled_hero()
 	if hero == null:
 		return
-	_set_cd_button(_attack_btn, hero.get_attack_cooldown_remaining(), "Attack")
-	_set_cd_button(_heavy_btn, hero.get_heavy_cooldown_remaining(), "Heavy")
-	_set_cd_button(_dodge_btn, hero.get_dodge_cooldown_remaining(), "Dodge")
-	_set_cd_button(_skill_btn, hero.get_skill_cooldown_remaining(), _skill_label(hero))
+	var can_act := hero.can_use_manual_actions() if hero.has_method("can_use_manual_actions") else true
+	var can_melee := hero.can_use_attack_heavy() if hero.has_method("can_use_attack_heavy") else can_act
+	_set_cd_button(_attack_btn, hero.get_attack_cooldown_remaining(), "Attack", can_melee)
+	_set_cd_button(_heavy_btn, hero.get_heavy_cooldown_remaining(), "Heavy", can_melee)
+	_set_cd_button(_dodge_btn, hero.get_dodge_cooldown_remaining(), "Dodge", can_act)
+	_set_cd_button(_skill_btn, hero.get_skill_cooldown_remaining(), _skill_label(hero), can_act)
 	_refresh_naft()
+	_refresh_mount()
 
 
 func apply_tutorial_gating(allowed: Dictionary) -> void:
@@ -232,12 +254,14 @@ func apply_tutorial_gating(allowed: Dictionary) -> void:
 			btn.disabled = not (battlefield or skill_ok)
 	if _naft_btn:
 		_naft_btn.disabled = not skill_ok
+	if _mount_btn:
+		_mount_btn.disabled = not battlefield
 
 
 func clear_tutorial_gating() -> void:
 	if _joystick:
 		_joystick.mouse_filter = Control.MOUSE_FILTER_STOP
-	for btn in [_attack_btn, _heavy_btn, _dodge_btn, _skill_btn, _naft_btn]:
+	for btn in [_attack_btn, _heavy_btn, _dodge_btn, _skill_btn, _naft_btn, _mount_btn]:
 		if btn:
 			btn.disabled = false
 
@@ -252,8 +276,8 @@ func _build_action_cluster() -> void:
 	_action_cluster = VBoxContainer.new()
 	_action_cluster.name = "ActionCluster"
 	_action_cluster.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
-	_action_cluster.offset_left = -220.0
-	_action_cluster.offset_top = -(220.0 + SPELL_BAR_CLEARANCE)
+	_action_cluster.offset_left = -280.0
+	_action_cluster.offset_top = -(240.0 + SPELL_BAR_CLEARANCE)
 	_action_cluster.offset_right = -12.0
 	_action_cluster.offset_bottom = -SPELL_BAR_CLEARANCE
 	_action_cluster.add_theme_constant_override("separation", 6)
@@ -286,6 +310,11 @@ func _build_action_cluster() -> void:
 	_naft_btn.pressed.connect(func() -> void: naft_pressed.emit())
 	_action_cluster.add_child(_naft_btn)
 	_naft_btn.visible = false
+
+	_mount_btn = _make_action_btn("Mount", Vector2(72, 40))
+	_mount_btn.pressed.connect(func() -> void: mount_pressed.emit())
+	_action_cluster.add_child(_mount_btn)
+	_mount_btn.visible = false
 
 
 func _build_hero_chip() -> void:
@@ -401,8 +430,12 @@ func _skill_label(hero: HeroController) -> String:
 			return "Charge"
 
 
-func _set_cd_button(btn: Button, cd: float, base_text: String) -> void:
+func _set_cd_button(btn: Button, cd: float, base_text: String, action_allowed: bool = true) -> void:
 	if btn == null:
+		return
+	if not action_allowed:
+		btn.text = base_text
+		btn.disabled = true
 		return
 	if cd > 0.05:
 		btn.text = "%.1f" % cd
@@ -426,6 +459,8 @@ func get_highlight_control(key: String) -> Control:
 			return _skill_btn
 		"naft":
 			return _naft_btn
+		"mount":
+			return _mount_btn
 	return null
 
 
@@ -443,3 +478,25 @@ func _refresh_naft() -> void:
 	var armed := traps.is_armed() if traps else false
 	_naft_btn.text = "Naft %d/%d" % [charges, max_c]
 	_naft_btn.modulate = Color(1.15, 1.0, 0.75) if armed else Color.WHITE
+
+
+func _refresh_mount() -> void:
+	if _mount_btn == null or _context == null:
+		return
+	var hero := _context.hero_manager.get_controlled_hero() if _context.hero_manager else null
+	var mount_ctrl := _context.rakhsh_mount
+	var has_mount := hero and hero.data and hero.data.hero_id == "rostam" and mount_ctrl != null
+	_mount_btn.visible = has_mount
+	if not has_mount:
+		return
+	if mount_ctrl.is_mounted():
+		_mount_btn.text = "Dismount"
+		_mount_btn.disabled = hero.is_dead()
+		return
+	_mount_btn.text = "Mount"
+	var can_act := hero.can_use_manual_actions() if hero.has_method("can_use_manual_actions") else true
+	_mount_btn.disabled = (
+		hero.is_dead()
+		or not can_act
+		or not mount_ctrl.is_within_mount_range()
+	)
